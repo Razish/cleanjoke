@@ -153,13 +153,13 @@ int	TIMER_Get( gentity_t *ent, const char *identifier )
 	return timer->time;
 }
 
-qboolean TIMER_Done( gentity_t *ent, const char *identifier )
+bool TIMER_Done( gentity_t *ent, const char *identifier )
 {
 	gtimer_t *timer = TIMER_GetExisting(ent->s.number, identifier);
 
 	if (!timer)
 	{
-		return qtrue;
+		return true;
 	}
 
 	return (timer->time < level.time);
@@ -194,14 +194,14 @@ void TIMER_RemoveHelper( int num, gtimer_t *timer )
 }
 
 // Returns false if timer has been started but is not done...or if timer was never started
-qboolean TIMER_Done2( gentity_t *ent, const char *identifier, qboolean remove )
+bool TIMER_Done2( gentity_t *ent, const char *identifier, bool remove )
 {
 	gtimer_t *timer = TIMER_GetExisting(ent->s.number, identifier);
-	qboolean res;
+	bool res;
 
 	if (!timer)
 	{
-		return qfalse;
+		return false;
 	}
 
 	res = (timer->time < level.time);
@@ -215,16 +215,16 @@ qboolean TIMER_Done2( gentity_t *ent, const char *identifier, qboolean remove )
 	return res;
 }
 
-qboolean TIMER_Exists( gentity_t *ent, const char *identifier )
+bool TIMER_Exists( gentity_t *ent, const char *identifier )
 {
 	gtimer_t *timer = TIMER_GetExisting(ent->s.number, identifier);
 
 	if (!timer)
 	{
-		return qfalse;
+		return false;
 	}
 
-	return qtrue;
+	return true;
 }
 
 // Utility to get rid of any timer
@@ -241,12 +241,12 @@ void TIMER_Remove( gentity_t *ent, const char *identifier )
 	TIMER_RemoveHelper(ent->s.number, timer);
 }
 
-qboolean TIMER_Start( gentity_t *self, const char *identifier, int duration )
+bool TIMER_Start( gentity_t *self, const char *identifier, int duration )
 {
 	if ( TIMER_Done( self, identifier ) )
 	{
 		TIMER_Set( self, identifier, duration );
-		return qtrue;
+		return true;
 	}
-	return qfalse;
+	return false;
 }

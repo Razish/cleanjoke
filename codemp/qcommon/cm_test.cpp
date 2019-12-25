@@ -69,7 +69,7 @@ void CM_StoreLeafs( leafList_t *ll, int nodenum ) {
 	}
 
 	if ( ll->count >= ll->maxcount) {
-		ll->overflowed = qtrue;
+		ll->overflowed = true;
 		return;
 	}
 	ll->list[ ll->count++ ] = leafNum;
@@ -102,7 +102,7 @@ void CM_StoreBrushes( leafList_t *ll, int nodenum ) {
 			continue;
 		}
 		if ( ll->count >= ll->maxcount) {
-			ll->overflowed = qtrue;
+			ll->overflowed = true;
 			return;
 		}
 		((cbrush_t **)ll->list)[ ll->count++ ] = b;
@@ -137,7 +137,9 @@ void CM_BoxLeafnums_r( leafList_t *ll, int nodenum ) {
 
 	}
 }
-
+// only returns non-solid leafs
+// overflow if return listsize and if *lastLeaf != list[listsize-1]
+//rwwRMG - changed to boxList to not conflict with list type
 int	CM_BoxLeafnums( const vec3_t mins, const vec3_t maxs, int *boxList, int listsize, int *lastLeaf) {
 	//rwwRMG - changed to boxList to not conflict with list type
 	leafList_t	ll;
@@ -151,7 +153,7 @@ int	CM_BoxLeafnums( const vec3_t mins, const vec3_t maxs, int *boxList, int list
 	ll.list = boxList;
 	ll.storeLeafs = CM_StoreLeafs;
 	ll.lastLeaf = 0;
-	ll.overflowed = qfalse;
+	ll.overflowed = false;
 
 	CM_BoxLeafnums_r( &ll, 0 );
 
@@ -159,6 +161,7 @@ int	CM_BoxLeafnums( const vec3_t mins, const vec3_t maxs, int *boxList, int list
 	return ll.count;
 }
 
+// returns an ORed contents mask
 int CM_PointContents( const vec3_t p, clipHandle_t model ) {
 	int			leafnum;
 	int			i, k;
@@ -297,7 +300,7 @@ void	CM_FloodAreaConnections( clipMap_t &cm ) {
 
 }
 
-void	CM_AdjustAreaPortalState( int area1, int area2, qboolean open ) {
+void	CM_AdjustAreaPortalState( int area1, int area2, bool open ) {
 	if ( area1 < 0 || area2 < 0 ) {
 		return;
 	}
@@ -320,13 +323,13 @@ void	CM_AdjustAreaPortalState( int area1, int area2, qboolean open ) {
 	CM_FloodAreaConnections (cmg);
 }
 
-qboolean	CM_AreasConnected( int area1, int area2 ) {
+bool	CM_AreasConnected( int area1, int area2 ) {
 	if ( cm_noAreas->integer ) {
-		return qtrue;
+		return true;
 	}
 
 	if ( area1 < 0 || area2 < 0 ) {
-		return qfalse;
+		return false;
 	}
 
 	if (area1 >= cmg.numAreas || area2 >= cmg.numAreas) {
@@ -334,9 +337,9 @@ qboolean	CM_AreasConnected( int area1, int area2 ) {
 	}
 
 	if (cmg.areas[area1].floodnum == cmg.areas[area2].floodnum) {
-		return qtrue;
+		return true;
 	}
-	return qfalse;
+	return false;
 }
 
 // Writes a bit vector of all the areas that are in the same flood as the area parameter

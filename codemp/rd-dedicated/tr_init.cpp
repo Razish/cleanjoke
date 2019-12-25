@@ -59,20 +59,20 @@ const vidmode_t r_vidModes[] = {
 };
 static const int	s_numVidModes = ( sizeof( r_vidModes ) / sizeof( r_vidModes[0] ) );
 
-qboolean R_GetModeInfo( int *width, int *height, int mode ) {
+bool R_GetModeInfo( int *width, int *height, int mode ) {
 	const vidmode_t	*vm;
 
     if ( mode < -1 ) {
-        return qfalse;
+        return false;
 	}
 	if ( mode >= s_numVidModes ) {
-		return qfalse;
+		return false;
 	}
 
 	if ( mode == -1 ) {
 		*width = r_customwidth->integer;
 		*height = r_customheight->integer;
-		return qtrue;
+		return true;
 	}
 
 	vm = &r_vidModes[mode];
@@ -80,7 +80,7 @@ qboolean R_GetModeInfo( int *width, int *height, int mode ) {
     *width  = vm->width;
     *height = vm->height;
 
-    return qtrue;
+    return true;
 }
 
 static void R_ModeList_f( void )
@@ -170,21 +170,21 @@ void R_Init( void ) {
 //	Com_Printf ("----- finished R_Init -----\n" );
 }
 
-void RE_Shutdown( qboolean destroyWindow, qboolean restarting ) {
+void RE_Shutdown( bool destroyWindow, bool restarting ) {
 
 //	Com_Printf ("RE_Shutdown( %i )\n", destroyWindow );
 
 	for ( size_t i = 0; i < numCommands; i++ )
 		ri.Cmd_RemoveCommand( commands[i].cmd );
 
-	tr.registered = qfalse;
+	tr.registered = false;
 }
 
-static void G2API_BoltMatrixReconstruction( qboolean reconstruct ) { gG2_GBMNoReconstruct = (qboolean)!reconstruct; }
-static void G2API_BoltMatrixSPMethod( qboolean spMethod ) { gG2_GBMUseSPMethod = spMethod; }
+static void G2API_BoltMatrixReconstruction( bool reconstruct ) { gG2_GBMNoReconstruct = (bool)!reconstruct; }
+static void G2API_BoltMatrixSPMethod( bool spMethod ) { gG2_GBMUseSPMethod = spMethod; }
 
-extern qboolean gG2_GBMNoReconstruct;
-extern qboolean gG2_GBMUseSPMethod;
+extern bool gG2_GBMNoReconstruct;
+extern bool gG2_GBMUseSPMethod;
 
 refexport_t *GetRefAPI ( int apiVersion, refimport_t *rimp ) {
 	static refexport_t re;

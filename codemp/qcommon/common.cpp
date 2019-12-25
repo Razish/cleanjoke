@@ -33,7 +33,7 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 #if defined(_WIN32)
 #define WIN32_LEAN_AND_MEAN
-#include <windows.h>
+#include <Windows.h>
 #endif
 
 FILE *debuglogfile;
@@ -49,8 +49,8 @@ int		time_backend;		// renderer backend time
 int			com_frameTime;
 int			com_frameNumber;
 
-qboolean	com_errorEntered = qfalse;
-qboolean	com_fullyInitialized = qfalse;
+bool	com_errorEntered = false;
+bool	com_fullyInitialized = false;
 
 char	com_errorMessage[MAXPRINTMSG] = {0};
 
@@ -85,7 +85,7 @@ void Com_EndRedirect (void)
 void QDECL Com_Printf( const char *fmt, ... ) {
 	va_list		argptr;
 	char		msg[MAXPRINTMSG];
-	static qboolean opening_qconsole = qfalse;
+	static bool opening_qconsole = false;
 
 	va_start (argptr,fmt);
 	Q_vsnprintf (msg, sizeof(msg), fmt, argptr);
@@ -118,7 +118,7 @@ void QDECL Com_Printf( const char *fmt, ... ) {
 			struct tm *newtime;
 			time_t aclock;
 
-			opening_qconsole = qtrue;
+			opening_qconsole = true;
 
 			time( &aclock );
 			newtime = localtime( &aclock );
@@ -138,7 +138,7 @@ void QDECL Com_Printf( const char *fmt, ... ) {
 				Cvar_SetValue( "logfile", 0 );
 			}
 		}
-		opening_qconsole = qfalse;
+		opening_qconsole = false;
 		if ( com_logfile && FS_Initialized()) {
 			FS_Write(msg, strlen(msg), com_logfile);
 		}
@@ -195,7 +195,7 @@ void NORETURN QDECL Com_Error( int code, const char *fmt, ... ) {
 	if ( com_errorEntered ) {
 		Sys_Error( "recursive error after: %s", com_errorMessage );
 	}
-	com_errorEntered = qtrue;
+	com_errorEntered = true;
 
 	// when we are running automated scripts, make sure we
 	// know if anything failed
@@ -249,7 +249,7 @@ void Com_Quit_f( void ) {
 		SV_Shutdown ("Server quit\n");
 		CL_Shutdown ();
 		Com_Shutdown ();
-		FS_Shutdown(qtrue);
+		FS_Shutdown(true);
 	}
 	Sys_Quit ();
 }
@@ -290,7 +290,7 @@ void Com_ParseCommandLine( char *commandLine ) {
 }
 
 // Check for "safe" on the command line, which will skip loading of jampconfig.cfg
-qboolean Com_SafeMode( void ) {
+bool Com_SafeMode( void ) {
 	int		i;
 
 	for ( i = 0 ; i < com_numConsoleLines ; i++ ) {
@@ -298,10 +298,10 @@ qboolean Com_SafeMode( void ) {
 		if ( !Q_stricmp( Cmd_Argv(0), "safe" )
 			|| !Q_stricmp( Cmd_Argv(0), "cvar_restart" ) ) {
 			com_consoleLines[i][0] = 0;
-			return qtrue;
+			return true;
 		}
 	}
-	return qfalse;
+	return false;
 }
 
 // Searches for command line parameters that are set commands.
@@ -324,12 +324,12 @@ void Com_StartupVariable( const char *match ) {
 
 // Adds command line parameters as script statements
 // Commands are seperated by + signs
-// Returns qtrue if any late commands were added, which will keep the demoloop from immediately starting
-qboolean Com_AddStartupCommands( void ) {
+// Returns true if any late commands were added, which will keep the demoloop from immediately starting
+bool Com_AddStartupCommands( void ) {
 	int		i;
-	qboolean	added;
+	bool	added;
 
-	added = qfalse;
+	added = false;
 	// quote every token, so args with semicolons can work
 	for (i=0 ; i < com_numConsoleLines ; i++) {
 		if ( !com_consoleLines[i] || !com_consoleLines[i][0] ) {
@@ -338,7 +338,7 @@ qboolean Com_AddStartupCommands( void ) {
 
 		// set commands won't override menu startup
 		if ( Q_stricmpn( com_consoleLines[i], "set", 3 ) ) {
-			added = qtrue;
+			added = true;
 		}
 		Cbuf_AddText( com_consoleLines[i] );
 		Cbuf_AddText( "\n" );
@@ -430,7 +430,7 @@ int Com_Filter(char *filter, char *name, int casesensitive)
 			buf[i] = '\0';
 			if (strlen(buf)) {
 				ptr = Com_StringContains(name, buf, casesensitive);
-				if (!ptr) return qfalse;
+				if (!ptr) return false;
 				name = ptr + strlen(buf);
 			}
 		}
@@ -443,30 +443,30 @@ int Com_Filter(char *filter, char *name, int casesensitive)
 		}
 		else if (*filter == '[') {
 			filter++;
-			found = qfalse;
+			found = false;
 			while(*filter && !found) {
 				if (*filter == ']' && *(filter+1) != ']') break;
 				if (*(filter+1) == '-' && *(filter+2) && (*(filter+2) != ']' || *(filter+3) == ']')) {
 					if (casesensitive) {
-						if (*name >= *filter && *name <= *(filter+2)) found = qtrue;
+						if (*name >= *filter && *name <= *(filter+2)) found = true;
 					}
 					else {
 						if (toupper(*name) >= toupper(*filter) &&
-							toupper(*name) <= toupper(*(filter+2))) found = qtrue;
+							toupper(*name) <= toupper(*(filter+2))) found = true;
 					}
 					filter += 3;
 				}
 				else {
 					if (casesensitive) {
-						if (*filter == *name) found = qtrue;
+						if (*filter == *name) found = true;
 					}
 					else {
-						if (toupper(*filter) == toupper(*name)) found = qtrue;
+						if (toupper(*filter) == toupper(*name)) found = true;
 					}
 					filter++;
 				}
 			}
-			if (!found) return qfalse;
+			if (!found) return false;
 			while(*filter) {
 				if (*filter == ']' && *(filter+1) != ']') break;
 				filter++;
@@ -476,16 +476,16 @@ int Com_Filter(char *filter, char *name, int casesensitive)
 		}
 		else {
 			if (casesensitive) {
-				if (*filter != *name) return qfalse;
+				if (*filter != *name) return false;
 			}
 			else {
-				if (toupper(*filter) != toupper(*name)) return qfalse;
+				if (toupper(*filter) != toupper(*name)) return false;
 			}
 			filter++;
 			name++;
 		}
 	}
-	return qtrue;
+	return true;
 }
 
 int Com_FilterPath(char *filter, char *name, int casesensitive)
@@ -568,8 +568,8 @@ void Com_InitJournaling( void ) {
 		com_journalDataFile = FS_FOpenFileWrite( "journaldata.dat" );
 	} else if ( com_journal->integer == 2 ) {
 		Com_Printf( "Replaying journaled events\n");
-		FS_FOpenFileRead( "journal.dat", &com_journalFile, qtrue );
-		FS_FOpenFileRead( "journaldata.dat", &com_journalDataFile, qtrue );
+		FS_FOpenFileRead( "journal.dat", &com_journalFile, true );
+		FS_FOpenFileRead( "journaldata.dat", &com_journalDataFile, true );
 	}
 
 	if ( !com_journalFile || !com_journalDataFile ) {
@@ -591,7 +591,7 @@ sysEvent_t	Com_GetRealEvent( void ) {
 			Com_Error( ERR_FATAL, "Error reading from journal file" );
 		}
 		if ( ev.evPtrLength ) {
-			ev.evPtr = Z_Malloc( ev.evPtrLength, TAG_EVENT, qtrue );
+			ev.evPtr = Z_Malloc( ev.evPtrLength, TAG_EVENT, true );
 			r = FS_Read( ev.evPtr, ev.evPtrLength, com_journalFile );
 			if ( r != ev.evPtrLength ) {
 				Com_Error( ERR_FATAL, "Error reading from journal file" );
@@ -638,7 +638,7 @@ void Com_PushEvent( sysEvent_t *event ) {
 
 		// don't print the warning constantly, or it can give time for more...
 		if ( !printedWarning ) {
-			printedWarning = qtrue;
+			printedWarning = true;
 			Com_Printf( "WARNING: Com_PushEvent overflow\n" );
 		}
 
@@ -647,7 +647,7 @@ void Com_PushEvent( sysEvent_t *event ) {
 		}
 		com_pushedEventsTail++;
 	} else {
-		printedWarning = qfalse;
+		printedWarning = false;
 	}
 
 	*ev = *event;
@@ -718,7 +718,7 @@ int Com_EventLoop( void ) {
         case SE_NONE:
             break;
 		case SE_KEY:
-			CL_KeyEvent( ev.evValue, (qboolean)ev.evValue2, ev.evTime );
+			CL_KeyEvent( ev.evValue, (bool)ev.evValue2, ev.evTime );
 			break;
 		case SE_CHAR:
 			CL_CharEvent( ev.evValue );
@@ -849,32 +849,32 @@ static void Com_CatchError ( int code )
 {
 	if ( code == ERR_DISCONNECT || code == ERR_SERVERDISCONNECT ) {
 		SV_Shutdown( "Server disconnected" );
-		CL_Disconnect( qtrue );
+		CL_Disconnect( true );
 		CL_FlushMemory(  );
 		// make sure we can get at our local stuff
 		FS_PureServerSetLoadedPaks( "", "" );
-		com_errorEntered = qfalse;
+		com_errorEntered = false;
 	} else if ( code == ERR_DROP ) {
 		Com_Printf ("********************\n"
 					"ERROR: %s\n"
 					"********************\n", com_errorMessage);
 		SV_Shutdown (va("Server crashed: %s\n",  com_errorMessage));
-		CL_Disconnect( qtrue );
+		CL_Disconnect( true );
 		CL_FlushMemory( );
 		// make sure we can get at our local stuff
 		FS_PureServerSetLoadedPaks( "", "" );
-		com_errorEntered = qfalse;
+		com_errorEntered = false;
 	} else if ( code == ERR_NEED_CD ) {
 		SV_Shutdown( "Server didn't have CD" );
 		if ( cl_running && cl_running->integer ) {
-			CL_Disconnect( qtrue );
+			CL_Disconnect( true );
 			CL_FlushMemory( );
 		} else {
 			Com_Printf("Server didn't have CD\n" );
 		}
 		// make sure we can get at our local stuff
 		FS_PureServerSetLoadedPaks( "", "" );
-		com_errorEntered = qfalse;
+		com_errorEntered = false;
 	}
 }
 
@@ -1001,7 +1001,7 @@ void Com_Init( char *commandLine ) {
 		VM_Init();
 		SV_Init();
 
-		dedicated->modified = qfalse;
+		dedicated->modified = false;
 		if ( !dedicated->integer ) {
 			CL_Init();
 		}
@@ -1021,7 +1021,7 @@ void Com_Init( char *commandLine ) {
 
 		// make sure single player is off by default
 
-		com_fullyInitialized = qtrue;
+		com_fullyInitialized = true;
 		Com_Printf ("--- Common Initialization Complete ---\n");
 	}
 	catch ( int code )
@@ -1203,7 +1203,7 @@ void Com_Frame( void ) {
 		if ( dedicated->modified ) {
 			// get the latched value
 			Cvar_Get( "dedicated", "0", 0 );
-			dedicated->modified = qfalse;
+			dedicated->modified = false;
 			if ( !dedicated->integer ) {
 				CL_Init();
 				CL_StartHunkUsers();	//fire up the UI!
@@ -1278,7 +1278,7 @@ void Com_Frame( void ) {
 
 		if ( com_affinity->modified )
 		{
-			com_affinity->modified = qfalse;
+			com_affinity->modified = false;
 			Sys_SetProcessorAffinity();
 		}
 
@@ -1402,11 +1402,11 @@ static char *Field_FindFirstSeparator( char *s ) {
 	return NULL;
 }
 
-static qboolean Field_Complete( void ) {
+static bool Field_Complete( void ) {
 	int completionOffset;
 
 	if ( matchCount == 0 )
-		return qtrue;
+		return true;
 
 	completionOffset = strlen( completionField->buffer ) - strlen( completionString );
 
@@ -1417,12 +1417,12 @@ static qboolean Field_Complete( void ) {
 	if ( matchCount == 1 ) {
 		Q_strcat( completionField->buffer, sizeof( completionField->buffer ), " " );
 		completionField->cursor++;
-		return qtrue;
+		return true;
 	}
 
 	Com_Printf( "%c%s\n", CONSOLE_PROMPT_CHAR, completionField->buffer );
 
-	return qfalse;
+	return false;
 }
 
 #ifndef DEDICATED
@@ -1438,7 +1438,7 @@ void Field_CompleteKeyname( void )
 }
 #endif
 
-void Field_CompleteFilename( const char *dir, const char *ext, qboolean stripExt, qboolean allowNonPureFilesOnDisk )
+void Field_CompleteFilename( const char *dir, const char *ext, bool stripExt, bool allowNonPureFilesOnDisk )
 {
 	matchCount = 0;
 	shortestMatch[ 0 ] = 0;
@@ -1449,7 +1449,7 @@ void Field_CompleteFilename( const char *dir, const char *ext, qboolean stripExt
 		FS_FilenameCompletion( dir, ext, stripExt, PrintFileMatches, allowNonPureFilesOnDisk );
 }
 
-void Field_CompleteCommand( char *cmd, qboolean doCommands, qboolean doCvars )
+void Field_CompleteCommand( char *cmd, bool doCommands, bool doCvars )
 {
 	int completionArgument = 0;
 
@@ -1477,7 +1477,7 @@ void Field_CompleteCommand( char *cmd, qboolean doCommands, qboolean doCvars )
 #endif
 
 		if( ( p = Field_FindFirstSeparator( cmd ) ) )
-			Field_CompleteCommand( p + 1, qtrue, qtrue ); // Compound command
+			Field_CompleteCommand( p + 1, true, true ); // Compound command
 		else
 			Cmd_CompleteArgument( baseCmd, cmd, completionArgument );
 	}
@@ -1515,7 +1515,7 @@ void Field_AutoComplete( field_t *field ) {
 
 	completionField = field;
 
-	Field_CompleteCommand( completionField->buffer, qtrue, qtrue );
+	Field_CompleteCommand( completionField->buffer, true, true );
 }
 
 // fills string array with len radom bytes, peferably from the OS randomizer

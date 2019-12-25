@@ -144,7 +144,7 @@ static client_t *SV_GetPlayerByNum( void ) {
 // Restart the server on a different map
 static void SV_Map_f( void ) {
 	char		*cmd = NULL, *map = NULL;
-	qboolean	killBots=qfalse, cheat=qfalse;
+	bool	killBots=false, cheat=false;
 	char		expanded[MAX_QPATH] = {0}, mapname[MAX_QPATH] = {0};
 
 	map = Cmd_Argv(1);
@@ -169,11 +169,11 @@ static void SV_Map_f( void ) {
 
 	cmd = Cmd_Argv(0);
 	if ( !Q_stricmpn( cmd, "devmap", 6 ) ) {
-		cheat = qtrue;
-		killBots = qtrue;
+		cheat = true;
+		killBots = true;
 	} else {
-		cheat = qfalse;
-		killBots = qfalse;
+		cheat = false;
+		killBots = false;
 	}
 
 	// save the map name here cause on a map restart we reload the jampconfig.cfg
@@ -210,7 +210,7 @@ static void SV_MapRestart_f( void ) {
 	int			i;
 	client_t	*client;
 	char		*denied;
-	qboolean	isBot;
+	bool	isBot;
 	int			delay;
 
 	// make sure we aren't restarting twice in the same frame
@@ -244,7 +244,7 @@ static void SV_MapRestart_f( void ) {
 	// check for maxclients change
 	if ( sv_maxclients->modified || g_gametype->modified ) {
 		Com_Printf( "variable change -- restarting.\n" );
-		SV_SpawnServer( mapname->string, qfalse, eForceReload_NOTHING );
+		SV_SpawnServer( mapname->string, false, eForceReload_NOTHING );
 		return;
 	}
 
@@ -260,7 +260,7 @@ static void SV_MapRestart_f( void ) {
 	Cvar_Set( "sv_serverid", va("%i", sv.serverId ) );
 
 	time( &sv.realMapTimeStarted );
-	sv.demosPruned = qfalse;
+	sv.demosPruned = false;
 
 	// if a map_restart occurs while a client is changing maps, we need
 	// to give them the correct time so that when they finish loading
@@ -275,7 +275,7 @@ static void SV_MapRestart_f( void ) {
 	// note that we do NOT set sv.state = SS_LOADING, so configstrings that
 	// had been changed from their default values will generate broadcast updates
 	sv.state = SS_LOADING;
-	sv.restarting = qtrue;
+	sv.restarting = true;
 
 	SV_RestartGame();
 
@@ -287,7 +287,7 @@ static void SV_MapRestart_f( void ) {
 	}
 
 	sv.state = SS_GAME;
-	sv.restarting = qfalse;
+	sv.restarting = false;
 
 	// connect and begin all the clients
 	for (i=0 ; i<sv_maxclients->integer ; i++) {
@@ -299,16 +299,16 @@ static void SV_MapRestart_f( void ) {
 		}
 
 		if ( client->netchan.remoteAddress.type == NA_BOT ) {
-			isBot = qtrue;
+			isBot = true;
 		} else {
-			isBot = qfalse;
+			isBot = false;
 		}
 
 		// add the map_restart command
 		SV_AddServerCommand( client, "map_restart\n" );
 
 		// connect the client again, without the firstTime flag
-		denied = GVM_ClientConnect( i, qfalse, isBot );
+		denied = GVM_ClientConnect( i, false, isBot );
 		if ( denied ) {
 			// this generally shouldn't happen, because the client
 			// was connected before the level change
@@ -563,7 +563,7 @@ static void SV_RehashBans_f( void )
 
 			if ( NET_StringToAdr( curpos + 2, &serverBans[index].ip ) )
 			{
-				serverBans[index].isexception = (qboolean)(curpos[0] != '0');
+				serverBans[index].isexception = (bool)(curpos[0] != '0');
 				serverBans[index].subnet = atoi( maskpos );
 
 				if ( serverBans[index].ip.type == NA_IP &&
@@ -613,7 +613,7 @@ static void SV_WriteBans( void )
 }
 
 // Remove a ban or an exception from the list.
-static qboolean SV_DelBanEntryFromList( int index ) {
+static bool SV_DelBanEntryFromList( int index ) {
 	if ( index == serverBansCount - 1 )
 		serverBansCount--;
 	else if ( index < (int)ARRAY_LEN( serverBans ) - 1 )
@@ -622,13 +622,13 @@ static qboolean SV_DelBanEntryFromList( int index ) {
 		serverBansCount--;
 	}
 	else
-		return qtrue;
+		return true;
 
-	return qfalse;
+	return false;
 }
 
 // Parse a CIDR notation type string and return a netadr_t and suffix by reference
-static qboolean SV_ParseCIDRNotation( netadr_t *dest, int *mask, char *adrstr )
+static bool SV_ParseCIDRNotation( netadr_t *dest, int *mask, char *adrstr )
 {
 	char *suffix;
 
@@ -640,7 +640,7 @@ static qboolean SV_ParseCIDRNotation( netadr_t *dest, int *mask, char *adrstr )
 	}
 
 	if ( !NET_StringToAdr( adrstr, dest ) )
-		return qtrue;
+		return true;
 
 	if ( suffix )
 	{
@@ -659,11 +659,11 @@ static qboolean SV_ParseCIDRNotation( netadr_t *dest, int *mask, char *adrstr )
 	else
 		*mask = 32;
 
-	return qfalse;
+	return false;
 }
 
 // Ban a user from being able to play on this server based on his ip address.
-static void SV_AddBanToList( qboolean isexception )
+static void SV_AddBanToList( bool isexception )
 {
 	char *banstring;
 	char addy2[NET_ADDRSTRMAXLEN];
@@ -797,7 +797,7 @@ static void SV_AddBanToList( qboolean isexception )
 }
 
 // Remove a ban or an exception from the list.
-static void SV_DelBanFromList( qboolean isexception )
+static void SV_DelBanFromList( bool isexception )
 {
 	int index, count = 0, todel, mask;
 	netadr_t ip;
@@ -937,22 +937,22 @@ static void SV_FlushBans_f( void )
 
 static void SV_BanAddr_f( void )
 {
-	SV_AddBanToList( qfalse );
+	SV_AddBanToList( false );
 }
 
 static void SV_ExceptAddr_f( void )
 {
-	SV_AddBanToList( qtrue );
+	SV_AddBanToList( true );
 }
 
 static void SV_BanDel_f( void )
 {
-	SV_DelBanFromList( qfalse );
+	SV_DelBanFromList( false );
 }
 
 static void SV_ExceptDel_f( void )
 {
-	SV_DelBanFromList( qtrue );
+	SV_DelBanFromList( true );
 }
 
 static const char *SV_CalcUptime( void ) {
@@ -992,7 +992,7 @@ static void SV_Status_f( void )
 	const char		*s;
 	int				ping;
 	char			state[32];
-	qboolean		avoidTruncation = qfalse;
+	bool		avoidTruncation = false;
 
 	// make sure server is running
 	if ( !sv_running->integer )
@@ -1005,7 +1005,7 @@ static void SV_Status_f( void )
 	{
 		if (!Q_stricmp("notrunc", Cmd_Argv(1)))
 		{
-			avoidTruncation = qtrue;
+			avoidTruncation = true;
 		}
 	}
 
@@ -1388,7 +1388,7 @@ void SV_StopRecordDemo( client_t *cl ) {
 	FS_Write (&len, 4, cl->demo.demofile);
 	FS_FCloseFile (cl->demo.demofile);
 	cl->demo.demofile = 0;
-	cl->demo.demorecording = qfalse;
+	cl->demo.demorecording = false;
 	Com_Printf ("Stopped demo for client %d.\n", cl - svs.clients);
 }
 
@@ -1465,12 +1465,12 @@ void SV_RecordDemo( client_t *cl, char *demoName ) {
 		Com_Printf ("ERROR: couldn't open.\n");
 		return;
 	}
-	cl->demo.demorecording = qtrue;
+	cl->demo.demorecording = true;
 
 	// don't start saving messages until a non-delta compressed message is received
-	cl->demo.demowaiting = qtrue;
+	cl->demo.demowaiting = true;
 
-	cl->demo.isBot = ( cl->netchan.remoteAddress.type == NA_BOT ) ? qtrue : qfalse;
+	cl->demo.isBot = ( cl->netchan.remoteAddress.type == NA_BOT ) ? true : false;
 	cl->demo.botReliableAcknowledge = cl->reliableSent;
 
 	// write out the gamestate message
@@ -1611,7 +1611,7 @@ void SV_BeginAutoRecordDemos() {
 				}
 			}
 		}
-		if ( sv_autoDemoMaxMaps->integer > 0 && sv.demosPruned == qfalse ) {
+		if ( sv_autoDemoMaxMaps->integer > 0 && sv.demosPruned == false ) {
 			char autorecordDirList[500 * MAX_OSPATH], tmpFileList[5 * MAX_OSPATH];
 			int autorecordDirListCount = SV_FindLeafFolders( "demos/autorecord", autorecordDirList, 500, MAX_OSPATH );
 			int i;
@@ -1619,7 +1619,7 @@ void SV_BeginAutoRecordDemos() {
 			qsort( autorecordDirList, autorecordDirListCount, MAX_OSPATH, SV_DemoFolderTimeComparator );
 			for ( i = sv_autoDemoMaxMaps->integer; i < autorecordDirListCount; i++ ) {
 				char *folder = &autorecordDirList[i * MAX_OSPATH], *slash = NULL;
-				FS_HomeRmdir( folder, qtrue );
+				FS_HomeRmdir( folder, true );
 				// if this folder was the last thing in its parent folder (and its parent isn't the root folder),
 				// also delete the parent.
 				for (;;) {
@@ -1636,13 +1636,13 @@ void SV_BeginAutoRecordDemos() {
 					// numFolders will include . and ..
 					if ( numFiles == 0 && numFolders == 2 ) {
 						// dangling empty folder, delete
-						FS_HomeRmdir( folder, qfalse );
+						FS_HomeRmdir( folder, false );
 					} else {
 						break;
 					}
 				}
 			}
-			sv.demosPruned = qtrue;
+			sv.demosPruned = true;
 		}
 	}
 }
@@ -1728,16 +1728,16 @@ static void SV_Record_f( void ) {
 
 static void SV_CompleteMapName( char *args, int argNum ) {
 	if ( argNum == 2 )
-		Field_CompleteFilename( "maps", "bsp", qtrue, qfalse );
+		Field_CompleteFilename( "maps", "bsp", true, false );
 }
 
 void SV_AddOperatorCommands( void ) {
-	static qboolean	initialized;
+	static bool	initialized;
 
 	if ( initialized ) {
 		return;
 	}
-	initialized = qtrue;
+	initialized = true;
 
 	Cmd_AddCommand ("heartbeat", SV_Heartbeat_f, "Sends a heartbeat to the masterserver" );
 	Cmd_AddCommand ("kick", SV_Kick_f, "Kick a user from the server" );

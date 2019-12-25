@@ -27,8 +27,8 @@ backEndData_t	*backEndData;
 backEndState_t	backEnd;
 
 bool tr_stencilled = false;
-extern qboolean tr_distortionPrePost; //tr_shadows.cpp
-extern qboolean tr_distortionNegate; //tr_shadows.cpp
+extern bool tr_distortionPrePost; //tr_shadows.cpp
+extern bool tr_distortionNegate; //tr_shadows.cpp
 
 // Whether we are currently rendering only glowing objects or not.
 bool g_bRenderGlowingObjects = false;

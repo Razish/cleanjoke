@@ -39,8 +39,8 @@ int			old_com_frameTime;
 float cl_mPitchOverride = 0.0f;
 float cl_mYawOverride = 0.0f;
 float cl_mSensitivityOverride = 0.0f;
-qboolean cl_bUseFighterPitch = qfalse;
-qboolean cl_crazyShipControls = qfalse;
+bool cl_bUseFighterPitch = false;
+bool cl_crazyShipControls = false;
 
 #define	OVERRIDE_MOUSE_SENSITIVITY 10.0f//20.0f = 180 degree turn in one mouse swipe across keyboard
 
@@ -62,10 +62,10 @@ kbutton_t	in_up, in_down;
 
 kbutton_t	in_buttons[MAX_KBUTTONS];
 
-qboolean	in_mlooking;
+bool	in_mlooking;
 
 void IN_MLookDown( void ) {
-	in_mlooking = qtrue;
+	in_mlooking = true;
 }
 
 void IN_CenterView (void) {
@@ -73,7 +73,7 @@ void IN_CenterView (void) {
 }
 
 void IN_MLookUp( void ) {
-	in_mlooking = qfalse;
+	in_mlooking = false;
 	if ( !cl_freelook->integer ) {
 		IN_CenterView ();
 	}
@@ -81,109 +81,109 @@ void IN_MLookUp( void ) {
 
 void IN_GenCMD1( void )
 {
-	cl.gcmdSendValue = qtrue;
+	cl.gcmdSendValue = true;
 	cl.gcmdValue = GENCMD_SABERSWITCH;
 }
 
 void IN_GenCMD2( void )
 {
-	cl.gcmdSendValue = qtrue;
+	cl.gcmdSendValue = true;
 	cl.gcmdValue = GENCMD_ENGAGE_DUEL;
 }
 
 void IN_GenCMD3( void )
 {
-	cl.gcmdSendValue = qtrue;
+	cl.gcmdSendValue = true;
 	cl.gcmdValue = GENCMD_FORCE_HEAL;
 }
 
 void IN_GenCMD4( void )
 {
-	cl.gcmdSendValue = qtrue;
+	cl.gcmdSendValue = true;
 	cl.gcmdValue = GENCMD_FORCE_SPEED;
 }
 
 void IN_GenCMD5( void )
 {
-	cl.gcmdSendValue = qtrue;
+	cl.gcmdSendValue = true;
 	cl.gcmdValue = GENCMD_FORCE_PULL;
 }
 
 void IN_GenCMD6( void )
 {
-	cl.gcmdSendValue = qtrue;
+	cl.gcmdSendValue = true;
 	cl.gcmdValue = GENCMD_FORCE_DISTRACT;
 }
 
 void IN_GenCMD7( void )
 {
-	cl.gcmdSendValue = qtrue;
+	cl.gcmdSendValue = true;
 	cl.gcmdValue = GENCMD_FORCE_RAGE;
 }
 
 void IN_GenCMD8( void )
 {
-	cl.gcmdSendValue = qtrue;
+	cl.gcmdSendValue = true;
 	cl.gcmdValue = GENCMD_FORCE_PROTECT;
 }
 
 void IN_GenCMD9( void )
 {
-	cl.gcmdSendValue = qtrue;
+	cl.gcmdSendValue = true;
 	cl.gcmdValue = GENCMD_FORCE_ABSORB;
 }
 
 void IN_GenCMD10( void )
 {
-	cl.gcmdSendValue = qtrue;
+	cl.gcmdSendValue = true;
 	cl.gcmdValue = GENCMD_FORCE_HEALOTHER;
 }
 
 void IN_GenCMD11( void )
 {
-	cl.gcmdSendValue = qtrue;
+	cl.gcmdSendValue = true;
 	cl.gcmdValue = GENCMD_FORCE_FORCEPOWEROTHER;
 }
 
 void IN_GenCMD12( void )
 {
-	cl.gcmdSendValue = qtrue;
+	cl.gcmdSendValue = true;
 	cl.gcmdValue = GENCMD_FORCE_SEEING;
 }
 
 void IN_GenCMD13( void )
 {
-	cl.gcmdSendValue = qtrue;
+	cl.gcmdSendValue = true;
 	cl.gcmdValue = GENCMD_USE_SEEKER;
 }
 
 void IN_GenCMD14( void )
 {
-	cl.gcmdSendValue = qtrue;
+	cl.gcmdSendValue = true;
 	cl.gcmdValue = GENCMD_USE_FIELD;
 }
 
 void IN_GenCMD15( void )
 {
-	cl.gcmdSendValue = qtrue;
+	cl.gcmdSendValue = true;
 	cl.gcmdValue = GENCMD_USE_BACTA;
 }
 
 void IN_GenCMD16( void )
 {
-	cl.gcmdSendValue = qtrue;
+	cl.gcmdSendValue = true;
 	cl.gcmdValue = GENCMD_USE_ELECTROBINOCULARS;
 }
 
 void IN_GenCMD17( void )
 {
-	cl.gcmdSendValue = qtrue;
+	cl.gcmdSendValue = true;
 	cl.gcmdValue = GENCMD_ZOOM;
 }
 
 void IN_GenCMD18( void )
 {
-	cl.gcmdSendValue = qtrue;
+	cl.gcmdSendValue = true;
 	cl.gcmdValue = GENCMD_USE_SENTRY;
 }
 
@@ -192,79 +192,79 @@ void IN_GenCMD19( void )
 	if ( d_saberStanceDebug->integer ) {
 		Com_Printf("SABERSTANCEDEBUG: Gencmd on client set successfully.\n");
 	}
-	cl.gcmdSendValue = qtrue;
+	cl.gcmdSendValue = true;
 	cl.gcmdValue = GENCMD_SABERATTACKCYCLE;
 }
 
 void IN_GenCMD20( void )
 {
-	cl.gcmdSendValue = qtrue;
+	cl.gcmdSendValue = true;
 	cl.gcmdValue = GENCMD_FORCE_THROW;
 }
 
 void IN_GenCMD21( void )
 {
-	cl.gcmdSendValue = qtrue;
+	cl.gcmdSendValue = true;
 	cl.gcmdValue = GENCMD_USE_JETPACK;
 }
 
 void IN_GenCMD22( void )
 {
-	cl.gcmdSendValue = qtrue;
+	cl.gcmdSendValue = true;
 	cl.gcmdValue = GENCMD_USE_BACTABIG;
 }
 
 void IN_GenCMD23( void )
 {
-	cl.gcmdSendValue = qtrue;
+	cl.gcmdSendValue = true;
 	cl.gcmdValue = GENCMD_USE_HEALTHDISP;
 }
 
 void IN_GenCMD24( void )
 {
-	cl.gcmdSendValue = qtrue;
+	cl.gcmdSendValue = true;
 	cl.gcmdValue = GENCMD_USE_AMMODISP;
 }
 
 void IN_GenCMD25( void )
 {
-	cl.gcmdSendValue = qtrue;
+	cl.gcmdSendValue = true;
 	cl.gcmdValue = GENCMD_USE_EWEB;
 }
 
 void IN_GenCMD26( void )
 {
-	cl.gcmdSendValue = qtrue;
+	cl.gcmdSendValue = true;
 	cl.gcmdValue = GENCMD_USE_CLOAK;
 }
 
 void IN_GenCMD27( void )
 {
-	cl.gcmdSendValue = qtrue;
+	cl.gcmdSendValue = true;
 	cl.gcmdValue = GENCMD_TAUNT;
 }
 
 void IN_GenCMD28( void )
 {
-	cl.gcmdSendValue = qtrue;
+	cl.gcmdSendValue = true;
 	cl.gcmdValue = GENCMD_BOW;
 }
 
 void IN_GenCMD29( void )
 {
-	cl.gcmdSendValue = qtrue;
+	cl.gcmdSendValue = true;
 	cl.gcmdValue = GENCMD_MEDITATE;
 }
 
 void IN_GenCMD30( void )
 {
-	cl.gcmdSendValue = qtrue;
+	cl.gcmdSendValue = true;
 	cl.gcmdValue = GENCMD_FLOURISH;
 }
 
 void IN_GenCMD31( void )
 {
-	cl.gcmdSendValue = qtrue;
+	cl.gcmdSendValue = true;
 	cl.gcmdValue = GENCMD_GLOAT;
 }
 
@@ -321,8 +321,8 @@ void IN_KeyDown( kbutton_t *b ) {
 	c = Cmd_Argv(2);
 	b->downtime = atoi(c);
 
-	b->active = qtrue;
-	b->wasPressed = qtrue;
+	b->active = true;
+	b->wasPressed = true;
 }
 
 void IN_KeyUp( kbutton_t *b ) {
@@ -336,7 +336,7 @@ void IN_KeyUp( kbutton_t *b ) {
 	} else {
 		// typed manually at the console, assume for unsticking, so clear all
 		b->down[0] = b->down[1] = 0;
-		b->active = qfalse;
+		b->active = false;
 		return;
 	}
 
@@ -351,7 +351,7 @@ void IN_KeyUp( kbutton_t *b ) {
 		return;		// some other key is still holding it down
 	}
 
-	b->active = qfalse;
+	b->active = false;
 
 	// save timestamp for partial frame summing
 	c = Cmd_Argv(2);
@@ -362,7 +362,7 @@ void IN_KeyUp( kbutton_t *b ) {
 		b->msec += frame_msec / 2;
 	}
 
-	b->active = qfalse;
+	b->active = false;
 }
 
 // Returns the fraction of the frame that the key was down
@@ -403,7 +403,7 @@ float CL_KeyState( kbutton_t *key ) {
 #define		AUTOMAP_KEY_DEFAULTVIEW		7
 static autoMapInput_t			g_clAutoMapInput;
 //intercept certain keys during automap mode
-static void CL_AutoMapKey(int autoMapKey, qboolean up)
+static void CL_AutoMapKey(int autoMapKey, bool up)
 {
 	autoMapInput_t *data = (autoMapInput_t *)cl.mSharedMemory;
 
@@ -471,7 +471,7 @@ static void CL_AutoMapKey(int autoMapKey, qboolean up)
 		break;
 	case AUTOMAP_KEY_DEFAULTVIEW:
 		memset(&g_clAutoMapInput, 0, sizeof(autoMapInput_t));
-		g_clAutoMapInput.goToDefaults = qtrue;
+		g_clAutoMapInput.goToDefaults = true;
 		break;
 	default:
 		break;
@@ -484,14 +484,14 @@ static void CL_AutoMapKey(int autoMapKey, qboolean up)
 		CGVM_AutomapInput();
 	}
 
-	g_clAutoMapInput.goToDefaults = qfalse;
+	g_clAutoMapInput.goToDefaults = false;
 }
 
 void IN_UpDown(void)
 {
 	if (g_clAutoMapMode)
 	{
-		CL_AutoMapKey(AUTOMAP_KEY_PITCHUP, qfalse);
+		CL_AutoMapKey(AUTOMAP_KEY_PITCHUP, false);
 	}
 	else
 	{
@@ -502,7 +502,7 @@ void IN_UpUp(void)
 {
 	if (g_clAutoMapMode)
 	{
-		CL_AutoMapKey(AUTOMAP_KEY_PITCHUP, qtrue);
+		CL_AutoMapKey(AUTOMAP_KEY_PITCHUP, true);
 	}
 	else
 	{
@@ -513,7 +513,7 @@ void IN_DownDown(void)
 {
 	if (g_clAutoMapMode)
 	{
-		CL_AutoMapKey(AUTOMAP_KEY_PITCHDOWN, qfalse);
+		CL_AutoMapKey(AUTOMAP_KEY_PITCHDOWN, false);
 	}
 	else
 	{
@@ -524,7 +524,7 @@ void IN_DownUp(void)
 {
 	if (g_clAutoMapMode)
 	{
-		CL_AutoMapKey(AUTOMAP_KEY_PITCHDOWN, qtrue);
+		CL_AutoMapKey(AUTOMAP_KEY_PITCHDOWN, true);
 	}
 	else
 	{
@@ -539,7 +539,7 @@ void IN_ForwardDown(void)
 {
 	if (g_clAutoMapMode)
 	{
-		CL_AutoMapKey(AUTOMAP_KEY_FORWARD, qfalse);
+		CL_AutoMapKey(AUTOMAP_KEY_FORWARD, false);
 	}
 	else
 	{
@@ -550,7 +550,7 @@ void IN_ForwardUp(void)
 {
 	if (g_clAutoMapMode)
 	{
-		CL_AutoMapKey(AUTOMAP_KEY_FORWARD, qtrue);
+		CL_AutoMapKey(AUTOMAP_KEY_FORWARD, true);
 	}
 	else
 	{
@@ -561,7 +561,7 @@ void IN_BackDown(void)
 {
 	if (g_clAutoMapMode)
 	{
-		CL_AutoMapKey(AUTOMAP_KEY_BACK, qfalse);
+		CL_AutoMapKey(AUTOMAP_KEY_BACK, false);
 	}
 	else
 	{
@@ -572,7 +572,7 @@ void IN_BackUp(void)
 {
 	if (g_clAutoMapMode)
 	{
-		CL_AutoMapKey(AUTOMAP_KEY_BACK, qtrue);
+		CL_AutoMapKey(AUTOMAP_KEY_BACK, true);
 	}
 	else
 	{
@@ -587,7 +587,7 @@ void IN_MoveleftDown(void)
 {
 	if (g_clAutoMapMode)
 	{
-		CL_AutoMapKey(AUTOMAP_KEY_YAWLEFT, qfalse);
+		CL_AutoMapKey(AUTOMAP_KEY_YAWLEFT, false);
 	}
 	else
 	{
@@ -598,7 +598,7 @@ void IN_MoveleftUp(void)
 {
 	if (g_clAutoMapMode)
 	{
-		CL_AutoMapKey(AUTOMAP_KEY_YAWLEFT, qtrue);
+		CL_AutoMapKey(AUTOMAP_KEY_YAWLEFT, true);
 	}
 	else
 	{
@@ -609,7 +609,7 @@ void IN_MoverightDown(void)
 {
 	if (g_clAutoMapMode)
 	{
-		CL_AutoMapKey(AUTOMAP_KEY_YAWRIGHT, qfalse);
+		CL_AutoMapKey(AUTOMAP_KEY_YAWRIGHT, false);
 	}
 	else
 	{
@@ -620,7 +620,7 @@ void IN_MoverightUp(void)
 {
 	if (g_clAutoMapMode)
 	{
-		CL_AutoMapKey(AUTOMAP_KEY_YAWRIGHT, qtrue);
+		CL_AutoMapKey(AUTOMAP_KEY_YAWRIGHT, true);
 	}
 	else
 	{
@@ -647,7 +647,7 @@ void IN_Button5Down(void) //use key
 {
 	if (g_clAutoMapMode)
 	{
-		CL_AutoMapKey(AUTOMAP_KEY_DEFAULTVIEW, qfalse);
+		CL_AutoMapKey(AUTOMAP_KEY_DEFAULTVIEW, false);
 	}
 	else
 	{
@@ -740,7 +740,7 @@ void IN_UseGivenForce(void)
 	}
 
 	if(genCmdNum != 0) {
-		cl.gcmdSendValue = qtrue;
+		cl.gcmdSendValue = true;
 		cl.gcmdValue = genCmdNum;
 	}
 }
@@ -804,7 +804,7 @@ void CL_KeyMove( usercmd_t *cmd ) {
 	// adjust for speed key / running
 	// the walking flag is to keep animations consistant
 	// even during acceleration and develeration
-	if ( in_speed.active ^ cl_run->integer ) {
+	if (((in_speed.active) ? 1 : 0) ^ cl_run->integer ) {
 		movespeed = 127;
 		cmd->buttons &= ~BUTTON_WALKING;
 	} else {
@@ -873,7 +873,7 @@ void CL_JoystickMove( usercmd_t *cmd ) {
 		return;
 	}
 
-	if ( !(in_speed.active ^ cl_run->integer) ) {
+	if ( !(((in_speed.active) ? 1 : 0) ^ cl_run->integer) ) {
 		cmd->buttons |= BUTTON_WALKING;
 	}
 
@@ -1076,11 +1076,11 @@ void CL_MouseMove( usercmd_t *cmd ) {
 		cmd->forwardmove = ClampChar( cmd->forwardmove - m_forward->value * my );
 }
 
-qboolean CL_NoUseableForce(void)
+bool CL_NoUseableForce(void)
 {
 	if (!cls.cgameStarted)
 	{ //ahh, no cgame loaded
-		return qfalse;
+		return false;
 	}
 
 	return CGVM_NoUseableForce();
@@ -1096,7 +1096,7 @@ void CL_CmdButtons( usercmd_t *cmd ) {
 		if ( in_buttons[i].active || in_buttons[i].wasPressed ) {
 			cmd->buttons |= 1 << i;
 		}
-		in_buttons[i].wasPressed = qfalse;
+		in_buttons[i].wasPressed = false;
 	}
 
 	if (cmd->buttons & BUTTON_FORCEPOWER)
@@ -1132,8 +1132,8 @@ void CL_FinishMove( usercmd_t *cmd ) {
 	if (cl.gcmdSendValue)
 	{
 		cmd->generic_cmd = cl.gcmdValue;
-		//cl.gcmdSendValue = qfalse;
-		cl.gcmdSentValue = qtrue;
+		//cl.gcmdSendValue = false;
+		cl.gcmdSentValue = true;
 	}
 	else
 	{
@@ -1279,23 +1279,23 @@ void CL_CreateNewCommands( void ) {
 	cl.cmds[cmdNum] = CL_CreateCmd();
 }
 
-// Returns qfalse if we are over the maxpackets limit and should choke back the bandwidth a bit by not sending a packet
+// Returns false if we are over the maxpackets limit and should choke back the bandwidth a bit by not sending a packet
 //	this frame.
 // All the commands will still get delivered in the next packet, but saving a header and getting more delta compression
 //	will reduce total bandwidth.
-qboolean CL_ReadyToSendPacket( void ) {
+bool CL_ReadyToSendPacket( void ) {
 	int		oldPacketNum;
 	int		delta;
 
 	// don't send anything if playing back a demo
 	if ( clc.demoplaying || cls.state == CA_CINEMATIC ) {
-		return qfalse;
+		return false;
 	}
 
 	// If we are downloading, we send no less than 50ms between packets
 	if ( *clc.downloadTempName &&
 		cls.realtime - clc.lastPacketSentTime < 50 ) {
-		return qfalse;
+		return false;
 	}
 
 	// if we don't have a valid gamestate yet, only send
@@ -1304,17 +1304,17 @@ qboolean CL_ReadyToSendPacket( void ) {
 		cls.state != CA_PRIMED &&
 		!*clc.downloadTempName &&
 		cls.realtime - clc.lastPacketSentTime < 1000 ) {
-		return qfalse;
+		return false;
 	}
 
 	// send every frame for loopbacks
 	if ( clc.netchan.remoteAddress.type == NA_LOOPBACK ) {
-		return qtrue;
+		return true;
 	}
 
 	// send every frame for LAN
 	if ( cl_lanForcePackets->integer && Sys_IsLANAddress( clc.netchan.remoteAddress ) ) {
-		return qtrue;
+		return true;
 	}
 
 	// check for exceeding cl_maxpackets
@@ -1328,10 +1328,10 @@ qboolean CL_ReadyToSendPacket( void ) {
 	delta = cls.realtime -  cl.outPackets[ oldPacketNum ].p_realtime;
 	if ( delta < 1000 / cl_maxpackets->integer ) {
 		// the accumulated commands will go out in the next packet
-		return qfalse;
+		return false;
 	}
 
-	return qtrue;
+	return true;
 }
 
 // Create and send the command packet to the server, including both the reliable commands and the usercmds
@@ -1433,8 +1433,8 @@ void CL_WritePacket( void ) {
 
 		if (cl.gcmdSentValue)
 		{ //hmm, just clear here, I guess.. hoping it will resolve issues with gencmd values sometimes not going through.
-			cl.gcmdSendValue = qfalse;
-			cl.gcmdSentValue = qfalse;
+			cl.gcmdSendValue = false;
+			cl.gcmdSentValue = false;
 			cl.gcmdValue = 0;
 		}
 	}

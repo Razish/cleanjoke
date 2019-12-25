@@ -24,7 +24,7 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 // use this to get a demo build without an explicit demo build, i.e. to get the demo ui files to build
 #include "ui/ui_local.h"
-#include "qcommon/qfiles.h"
+#include "qcommon/q_files.h"
 #include "ui/ui_force.h"
 #include "ui/menudef.h"
 
@@ -36,27 +36,27 @@ int uiMaxPoints = 20;
 int	uiForceUsed = 0;
 int uiForceAvailable=0;
 
-qboolean gTouchedForce = qfalse;
+bool gTouchedForce = false;
 
-qboolean uiForcePowersDisabled[NUM_FORCE_POWERS] = {
-	qfalse,//FP_HEAL,//instant
-	qfalse,//FP_LEVITATION,//hold/duration
-	qfalse,//FP_SPEED,//duration
-	qfalse,//FP_PUSH,//hold/duration
-	qfalse,//FP_PULL,//hold/duration
-	qfalse,//FP_TELEPATHY,//instant
-	qfalse,//FP_GRIP,//hold/duration
-	qfalse,//FP_LIGHTNING,//hold/duration
-	qfalse,//FP_RAGE,//duration
-	qfalse,//FP_PROTECT,
-	qfalse,//FP_ABSORB,
-	qfalse,//FP_TEAM_HEAL,
-	qfalse,//FP_TEAM_FORCE,
-	qfalse,//FP_DRAIN,
-	qfalse,//FP_SEE,
-	qfalse,//FP_SABER_OFFENSE,
-	qfalse,//FP_SABER_DEFENSE,
-	qfalse//FP_SABERTHROW,
+bool uiForcePowersDisabled[NUM_FORCE_POWERS] = {
+	false,//FP_HEAL,//instant
+	false,//FP_LEVITATION,//hold/duration
+	false,//FP_SPEED,//duration
+	false,//FP_PUSH,//hold/duration
+	false,//FP_PULL,//hold/duration
+	false,//FP_TELEPATHY,//instant
+	false,//FP_GRIP,//hold/duration
+	false,//FP_LIGHTNING,//hold/duration
+	false,//FP_RAGE,//duration
+	false,//FP_PROTECT,
+	false,//FP_ABSORB,
+	false,//FP_TEAM_HEAL,
+	false,//FP_TEAM_FORCE,
+	false,//FP_DRAIN,
+	false,//FP_SEE,
+	false,//FP_SABER_OFFENSE,
+	false,//FP_SABER_DEFENSE,
+	false//FP_SABERTHROW,
 };
 
 int uiForcePowersRank[NUM_FORCE_POWERS] = {
@@ -203,7 +203,7 @@ void UI_UpdateClientForcePowers(const char *teamArg)
 		}
 	}
 
-	gTouchedForce = qfalse;
+	gTouchedForce = false;
 }
 
 int UI_TranslateFCFIndex(int index)
@@ -225,7 +225,7 @@ void UI_SaveForceTemplate()
 	int strPlace = 0;
 	int forcePlace = 0;
 	int i = 0;
-	qboolean foundFeederItem = qfalse;
+	bool foundFeederItem = false;
 
 	if (!selectedName || !selectedName[0])
 	{
@@ -279,7 +279,7 @@ void UI_SaveForceTemplate()
 				(uiForceSide == FORCE_DARKSIDE && !uiInfo.forceConfigSide[i]))
 			{
 				Menu_SetFeederSelection(NULL, FEEDER_FORCECFG, UI_TranslateFCFIndex(i), NULL);
-				foundFeederItem = qtrue;
+				foundFeederItem = true;
 			}
 		}
 
@@ -315,7 +315,7 @@ void UpdateForceUsed( void )
 		if ( uiJediNonJedi == -1 )
 		{
 			int x = 0;
-			qboolean clear = qfalse, update = qfalse;
+			bool clear = false, update = false;
 			uiJediNonJedi = FORCE_NONJEDI;
 			while ( x < NUM_FORCE_POWERS )
 			{//if any force power is set, we must be a jedi
@@ -328,7 +328,7 @@ void UpdateForceUsed( void )
 					}
 					else if ( uiForcePowersRank[x] > 0 )
 					{
-						clear = qtrue;
+						clear = true;
 					}
 				}
 				else if ( uiForcePowersRank[x] > 0 )
@@ -343,7 +343,7 @@ void UpdateForceUsed( void )
 				if ( uiForcePowersRank[FP_SABER_OFFENSE] < 1 )
 				{
 					uiForcePowersRank[FP_SABER_OFFENSE]=1;
-					update = qtrue;
+					update = true;
 				}
 			}
 			else if ( clear )
@@ -354,7 +354,7 @@ void UpdateForceUsed( void )
 					uiForcePowersRank[x] = 0;
 					x++;
 				}
-				update = qtrue;
+				update = true;
 			}
 			if ( update )
 			{
@@ -389,11 +389,11 @@ void UpdateForceUsed( void )
 		}
 		if (menu)
 		{
-			Menu_ShowItemByName(menu, "setFP_SABER_DEFENSE", qtrue);
-			Menu_ShowItemByName(menu, "setfp_saberthrow", qtrue);
-			Menu_ShowItemByName(menu, "effectentry", qtrue);
-			Menu_ShowItemByName(menu, "effectfield", qtrue);
-			Menu_ShowItemByName(menu, "nosaber", qfalse);
+			Menu_ShowItemByName(menu, "setFP_SABER_DEFENSE", true);
+			Menu_ShowItemByName(menu, "setfp_saberthrow", true);
+			Menu_ShowItemByName(menu, "effectentry", true);
+			Menu_ShowItemByName(menu, "effectfield", true);
+			Menu_ShowItemByName(menu, "nosaber", false);
 		}
 	}
 	else
@@ -407,22 +407,22 @@ void UpdateForceUsed( void )
 			uiForcePowersRank[FP_SABERTHROW]=0;
 			if (menu)
 			{
-				Menu_ShowItemByName(menu, "setfp_saberdefend", qfalse);
-				Menu_ShowItemByName(menu, "setfp_saberthrow", qfalse);
-				Menu_ShowItemByName(menu, "effectentry", qfalse);
-				Menu_ShowItemByName(menu, "effectfield", qfalse);
-				Menu_ShowItemByName(menu, "nosaber", qtrue);
+				Menu_ShowItemByName(menu, "setfp_saberdefend", false);
+				Menu_ShowItemByName(menu, "setfp_saberthrow", false);
+				Menu_ShowItemByName(menu, "effectentry", false);
+				Menu_ShowItemByName(menu, "effectfield", false);
+				Menu_ShowItemByName(menu, "nosaber", true);
 			}
 		}
 		else
 		{
 			if (menu)
 			{
-				Menu_ShowItemByName(menu, "setfp_saberdefend", qtrue);
-				Menu_ShowItemByName(menu, "setfp_saberthrow", qtrue);
-				Menu_ShowItemByName(menu, "effectentry", qtrue);
-				Menu_ShowItemByName(menu, "effectfield", qtrue);
-				Menu_ShowItemByName(menu, "nosaber", qfalse);
+				Menu_ShowItemByName(menu, "setfp_saberdefend", true);
+				Menu_ShowItemByName(menu, "setfp_saberthrow", true);
+				Menu_ShowItemByName(menu, "effectentry", true);
+				Menu_ShowItemByName(menu, "effectfield", true);
+				Menu_ShowItemByName(menu, "nosaber", false);
 			}
 		}
 	}
@@ -481,7 +481,7 @@ void UI_ReadLegalForce(void)
 	int forcePowerRank = 0;
 	int currank = 0;
 	int forceTeam = 0;
-	qboolean updateForceLater = qfalse;
+	bool updateForceLater = false;
 
 	//First, stick them into a string.
 	Com_sprintf(fcfString, sizeof(fcfString), "%i-%i-", uiForceRank, uiForceSide);
@@ -518,7 +518,7 @@ void UI_ReadLegalForce(void)
 	//Second, legalize them.
 	if (!BG_LegalizedForcePowers(fcfString, sizeof (fcfString), uiMaxRank, ui_freeSaber.integer, forceTeam, atoi( Info_ValueForKey( info, "g_gametype" )), 0))
 	{ //if they were illegal, we should refresh them.
-		updateForceLater = qtrue;
+		updateForceLater = true;
 	}
 
 	//Lastly, put them back into the UI storage from the legalized string
@@ -571,7 +571,7 @@ void UI_ReadLegalForce(void)
 	}
 	uiForceUsed = 0;
 	uiForceAvailable = forceMasteryPoints[uiForceRank];
-	gTouchedForce = qtrue;
+	gTouchedForce = true;
 
 	for (c=0;fcfString[i]&&c<NUM_FORCE_POWERS;c++,i++)
 	{
@@ -628,7 +628,7 @@ void UI_ReadLegalForce(void)
 
 	if (updateForceLater)
 	{
-		gTouchedForce = qtrue;
+		gTouchedForce = true;
 		UI_UpdateClientForcePowers(NULL);
 	}
 }
@@ -764,7 +764,7 @@ validitycheck:
 extern int	uiSkinColor;
 extern int	uiHoldSkinColor;
 
-qboolean UI_SkinColor_HandleKey(int flags, float *special, int key, int num, int min, int max, int type)
+bool UI_SkinColor_HandleKey(int flags, float *special, int key, int num, int min, int max, int type)
 {
   if (key == A_MOUSE1 || key == A_MOUSE2 || key == A_ENTER || key == A_KP_ENTER)
   {
@@ -796,12 +796,12 @@ qboolean UI_SkinColor_HandleKey(int flags, float *special, int key, int num, int
 
 	UI_FeederSelection(FEEDER_Q3HEADS, uiInfo.q3SelectedHead, NULL);
 
-    return qtrue;
+    return true;
   }
-  return qfalse;
+  return false;
 }
 
-qboolean UI_ForceSide_HandleKey(int flags, float *special, int key, int num, int min, int max, int type)
+bool UI_ForceSide_HandleKey(int flags, float *special, int key, int num, int min, int max, int type)
 {
 	char info[MAX_INFO_VALUE];
 
@@ -813,9 +813,9 @@ qboolean UI_ForceSide_HandleKey(int flags, float *special, int key, int num, int
 		switch((int)(ui_myteam.value))
 		{
 		case TEAM_RED:
-			return qfalse;
+			return false;
 		case TEAM_BLUE:
-			return qfalse;
+			return false;
 		default:
 			break;
 		}
@@ -863,13 +863,13 @@ qboolean UI_ForceSide_HandleKey(int flags, float *special, int key, int num, int
 
 		UpdateForceUsed();
 
-		gTouchedForce = qtrue;
-		return qtrue;
+		gTouchedForce = true;
+		return true;
 	}
-	return qfalse;
+	return false;
 }
 
-qboolean UI_JediNonJedi_HandleKey(int flags, float *special, int key, int num, int min, int max, int type)
+bool UI_JediNonJedi_HandleKey(int flags, float *special, int key, int num, int min, int max, int type)
 {
 	char info[MAX_INFO_VALUE];
 
@@ -878,7 +878,7 @@ qboolean UI_JediNonJedi_HandleKey(int flags, float *special, int key, int num, i
 
 	if ( !UI_TrueJediEnabled() )
 	{//true jedi mode is not set
-		return qfalse;
+		return false;
 	}
 
 	if (key == A_MOUSE1 || key == A_MOUSE2 || key == A_ENTER || key == A_KP_ENTER)
@@ -940,13 +940,13 @@ qboolean UI_JediNonJedi_HandleKey(int flags, float *special, int key, int num, i
 
 		UpdateForceUsed();
 
-		gTouchedForce = qtrue;
-		return qtrue;
+		gTouchedForce = true;
+		return true;
 	}
-	return qfalse;
+	return false;
 }
 
-qboolean UI_ForceMaxRank_HandleKey(int flags, float *special, int key, int num, int min, int max, int type)
+bool UI_ForceMaxRank_HandleKey(int flags, float *special, int key, int num, int min, int max, int type)
 {
   if (key == A_MOUSE1 || key == A_MOUSE2 || key == A_ENTER || key == A_KP_ENTER)
   {
@@ -979,17 +979,17 @@ qboolean UI_ForceMaxRank_HandleKey(int flags, float *special, int key, int num, 
 	// The update force used will remove overallocated powers automatically.
 	UpdateForceUsed();
 
-	gTouchedForce = qtrue;
+	gTouchedForce = true;
 
-    return qtrue;
+    return true;
   }
-  return qfalse;
+  return false;
 }
 
 // This function will either raise or lower a power by one rank.
-qboolean UI_ForcePowerRank_HandleKey(int flags, float *special, int key, int num, int min, int max, int type)
+bool UI_ForcePowerRank_HandleKey(int flags, float *special, int key, int num, int min, int max, int type)
 {
-	qboolean raising;
+	bool raising;
 
 	if (key == A_MOUSE1 || key == A_MOUSE2 || key == A_ENTER || key == A_KP_ENTER || key == A_BACKSPACE)
 	{
@@ -1001,19 +1001,19 @@ qboolean UI_ForcePowerRank_HandleKey(int flags, float *special, int key, int num
 		//the power is disabled on the server
 		if (uiForcePowersDisabled[forcepower])
 		{
-			return qtrue;
+			return true;
 		}
 
 		// If we are not on the same side as a power, or if we are not of any rank at all.
 		if (uiForcePowerDarkLight[forcepower] && uiForceSide != uiForcePowerDarkLight[forcepower])
 		{
-			return qtrue;
+			return true;
 		}
 		else if (forcepower == FP_SABER_DEFENSE || forcepower == FP_SABERTHROW)
 		{	// Saberdefend and saberthrow can't be bought if there is no saberattack
 			if (uiForcePowersRank[FP_SABER_OFFENSE] < 1)
 			{
-				return qtrue;
+				return true;
 			}
 		}
 
@@ -1034,17 +1034,17 @@ qboolean UI_ForcePowerRank_HandleKey(int flags, float *special, int key, int num
 		{	// Lower a point.
 			if (uiForcePowersRank[forcepower]<=min)
 			{
-				return qtrue;
+				return true;
 			}
-			raising = qfalse;
+			raising = false;
 		}
 		else
 		{	// Raise a point.
 			if (uiForcePowersRank[forcepower]>=max)
 			{
-				return qtrue;
+				return true;
 			}
-			raising = qtrue;
+			raising = true;
 		}
 
 		if (raising)
@@ -1052,7 +1052,7 @@ qboolean UI_ForcePowerRank_HandleKey(int flags, float *special, int key, int num
 			rank = uiForcePowersRank[forcepower]+1;
 			if (bgForcePowerCost[forcepower][rank] > uiForceAvailable)
 			{	// We can't afford this power.  Abandon ship.
-				return qtrue;
+				return true;
 			}
 			else
 			{	// Sure we can afford it.
@@ -1071,11 +1071,11 @@ qboolean UI_ForcePowerRank_HandleKey(int flags, float *special, int key, int num
 
 		UpdateForceUsed();
 
-		gTouchedForce = qtrue;
+		gTouchedForce = true;
 
-		return qtrue;
+		return true;
 	}
-	return qfalse;
+	return false;
 }
 
 int gCustRank = 0;
@@ -1131,7 +1131,7 @@ void UI_ForceConfigHandle( int oldindex, int newindex )
 	{ //switching back to custom, shove the values back in from the custom storage
 		i = 0;
 		uiForceUsed = 0;
-		gTouchedForce = qtrue;
+		gTouchedForce = true;
 
 		while (i < NUM_FORCE_POWERS)
 		{
@@ -1278,7 +1278,7 @@ void UI_ForceConfigHandle( int oldindex, int newindex )
 	}
 	uiForceUsed = 0;
 	uiForceAvailable = forceMasteryPoints[uiForceRank];
-	gTouchedForce = qtrue;
+	gTouchedForce = true;
 
 	for (c=0;fcfBuffer[i]&&c<NUM_FORCE_POWERS;c++,i++)
 	{

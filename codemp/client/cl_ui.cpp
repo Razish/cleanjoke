@@ -30,7 +30,7 @@ void CL_ShutdownUI( void ) {
 	if ( !cls.uiStarted )
 		return;
 
-	cls.uiStarted = qfalse;
+	cls.uiStarted = false;
 
 	CL_UnbindUI();
 }
@@ -43,13 +43,13 @@ void CL_InitUI( void ) {
 	//rww - changed to <= CA_ACTIVE, because that is the state when we did a vid_restart
 	//ingame (was just < CA_ACTIVE before, resulting in ingame menus getting wiped and
 	//not reloaded on vid restart from ingame menu)
-	UIVM_Init( (qboolean)(cls.state >= CA_AUTHORIZING && cls.state <= CA_ACTIVE) );
+	UIVM_Init( (bool)(cls.state >= CA_AUTHORIZING && cls.state <= CA_ACTIVE) );
 }
 
 // See if the current console command is claimed by the ui
-qboolean UI_GameCommand( void ) {
+bool UI_GameCommand( void ) {
 	if ( !cls.uiStarted )
-		return qfalse;
+		return false;
 
 	return UIVM_ConsoleCommand( cls.realtime );
 }

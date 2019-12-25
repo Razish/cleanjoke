@@ -41,9 +41,10 @@ SFxHelper		theFxHelper;
 
 int				activeFx = 0;
 int				drawnFx;
-qboolean		fxInitialized = qfalse;
+bool		fxInitialized = false;
 
 // Frees all FX
+// ditches all active effects;
 bool FX_Free( bool templates )
 {
 	for ( int i = 0; i < MAX_EFFECTS; i++ )
@@ -63,6 +64,7 @@ bool FX_Free( bool templates )
 }
 
 // Frees all active FX but leaves the templates
+// ditches all active effects without touching the templates.
 void FX_Stop( void )
 {
 	for ( int i = 0; i < MAX_EFFECTS; i++ )
@@ -81,12 +83,13 @@ void FX_Stop( void )
 }
 
 // Preps system for use
+// called in CG_Init to purge the fx system.
 int	FX_Init( refdef_t* refdef )
 {
 //	FX_Free( true );
-	if ( fxInitialized == qfalse )
+	if ( fxInitialized == false )
 	{
-		fxInitialized = qtrue;
+		fxInitialized = true;
 
 		for ( int i = 0; i < MAX_EFFECTS; i++ )
 		{
@@ -100,6 +103,7 @@ int	FX_Init( refdef_t* refdef )
 	return true;
 }
 
+// called every cgame frame to add all fx into the scene.
 void FX_SetRefDef(refdef_t *refdef)
 {
 	theFxHelper.refdef = refdef;
@@ -588,7 +592,7 @@ CCylinder *FX_AddCylinder( vec3_t start, vec3_t normal,
 							int killTime, qhandle_t shader, int flags,
 							EMatImpactEffect matImpactFX /*MATIMPACTFX_NONE*/, int fxParm /*-1*/,
 							CGhoul2Info_v *ghoul2/*0*/, int entNum/*-1*/, int modelNum/*-1*/, int boltNum/*-1*/,
-							qboolean traceEnd)
+							bool traceEnd)
 {
 	if ( theFxHelper.mFrameTime < 1 )
 	{ // disallow adding new effects when the system is paused

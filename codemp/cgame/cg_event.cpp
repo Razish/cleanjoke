@@ -1364,12 +1364,12 @@ void CG_EntityEvent( centity_t *cent, vec3_t position ) {
 			}
 			else
 			{
-				trap->S_StartBackgroundTrack( "music/mp/duel.mp3", "music/mp/duel.mp3", qfalse );
+				trap->S_StartBackgroundTrack( "music/mp/duel.mp3", "music/mp/duel.mp3", false );
 			}
 		}
 		else
 		{ //ending the duel
-			CG_StartMusic(qtrue);
+			CG_StartMusic(true);
 		}
 		break;
 
@@ -1664,7 +1664,7 @@ void CG_EntityEvent( centity_t *cent, vec3_t position ) {
 		{
 			gitem_t	*item;
 			int		index;
-			qboolean	newindex = qfalse;
+			bool	newindex = false;
 
 			index = cg_entities[es->eventParm].currentState.modelindex;		// player predicted
 
@@ -1690,7 +1690,7 @@ void CG_EntityEvent( centity_t *cent, vec3_t position ) {
 					if (cg.forceSelect != index)
 					{
 						cg.forceSelect = index;
-						newindex = qtrue;
+						newindex = true;
 					}
 				}
 
@@ -1859,10 +1859,10 @@ void CG_EntityEvent( centity_t *cent, vec3_t position ) {
 			gunangle[1] = -matrix.matrix[1][0];
 			gunangle[2] = -matrix.matrix[2][0];
 
-			trap->FX_PlayEffectID(media.efx.null, gunpoint, gunangle, -1, -1, qfalse);
+			trap->FX_PlayEffectID(media.efx.null, gunpoint, gunangle, -1, -1, false);
 		}
 		else if (cent->currentState.weapon != WP_EMPLACED_GUN) {
-			CG_FireWeapon( cent, qfalse );
+			CG_FireWeapon( cent, false );
 		}
 		break;
 
@@ -1874,7 +1874,7 @@ void CG_EntityEvent( centity_t *cent, vec3_t position ) {
 			break;
 		}
 
-		CG_FireWeapon( cent, qtrue );
+		CG_FireWeapon( cent, true );
 
 		//if you just exploded your detpacks and you have no ammo left for them, autoswitch
 		if ( cg.snap->ps.clientNum == cent->currentState.number &&
@@ -1960,12 +1960,12 @@ void CG_EntityEvent( centity_t *cent, vec3_t position ) {
 					fxDir[1] = 1;
 				}
 				trap->S_StartSound(es->origin, es->number, CHAN_AUTO, hitSound );
-				trap->FX_PlayEffectID( hitPersonFxID, es->origin, fxDir, -1, -1, qfalse );
-				trap->FX_PlayEffectID( hitPersonFxID, es->origin, fxDir, -1, -1, qfalse );
-				trap->FX_PlayEffectID( hitPersonFxID, es->origin, fxDir, -1, -1, qfalse );
-				trap->FX_PlayEffectID( hitPersonFxID, es->origin, fxDir, -1, -1, qfalse );
-				trap->FX_PlayEffectID( hitPersonFxID, es->origin, fxDir, -1, -1, qfalse );
-				trap->FX_PlayEffectID( hitPersonFxID, es->origin, fxDir, -1, -1, qfalse );
+				trap->FX_PlayEffectID( hitPersonFxID, es->origin, fxDir, -1, -1, false );
+				trap->FX_PlayEffectID( hitPersonFxID, es->origin, fxDir, -1, -1, false );
+				trap->FX_PlayEffectID( hitPersonFxID, es->origin, fxDir, -1, -1, false );
+				trap->FX_PlayEffectID( hitPersonFxID, es->origin, fxDir, -1, -1, false );
+				trap->FX_PlayEffectID( hitPersonFxID, es->origin, fxDir, -1, -1, false );
+				trap->FX_PlayEffectID( hitPersonFxID, es->origin, fxDir, -1, -1, false );
 			}
 			else if (es->eventParm)
 			{ //hit a person
@@ -1978,17 +1978,17 @@ void CG_EntityEvent( centity_t *cent, vec3_t position ) {
 				trap->S_StartSound(es->origin, es->number, CHAN_AUTO, hitSound );
 				if ( es->eventParm == 3 )
 				{	// moderate or big hits.
-					trap->FX_PlayEffectID( hitPersonSmallFxID, es->origin, fxDir, -1, -1, qfalse );
+					trap->FX_PlayEffectID( hitPersonSmallFxID, es->origin, fxDir, -1, -1, false );
 				}
 				else if ( es->eventParm == 2 )
 				{	// this is for really big hits.
-					trap->FX_PlayEffectID( hitPersonMidFxID, es->origin, fxDir, -1, -1, qfalse );
+					trap->FX_PlayEffectID( hitPersonMidFxID, es->origin, fxDir, -1, -1, false );
 				}
 				else
 				{	// this should really just be done in the effect itself, no?
-					trap->FX_PlayEffectID( hitPersonFxID, es->origin, fxDir, -1, -1, qfalse );
-					trap->FX_PlayEffectID( hitPersonFxID, es->origin, fxDir, -1, -1, qfalse );
-					trap->FX_PlayEffectID( hitPersonFxID, es->origin, fxDir, -1, -1, qfalse );
+					trap->FX_PlayEffectID( hitPersonFxID, es->origin, fxDir, -1, -1, false );
+					trap->FX_PlayEffectID( hitPersonFxID, es->origin, fxDir, -1, -1, false );
+					trap->FX_PlayEffectID( hitPersonFxID, es->origin, fxDir, -1, -1, false );
 				}
 			}
 			else
@@ -2002,10 +2002,10 @@ void CG_EntityEvent( centity_t *cent, vec3_t position ) {
 				//old jk2mp method
 				/*
 				trap->S_StartSound(es->origin, es->number, CHAN_AUTO, trap->S_RegisterSound("sound/weapons/saber/saberhit.wav"));
-				trap->FX_PlayEffectID( trap->FX_RegisterEffect("saber/spark.efx"), es->origin, fxDir, -1, -1, qfalse );
+				trap->FX_PlayEffectID( trap->FX_RegisterEffect("saber/spark.efx"), es->origin, fxDir, -1, -1, false );
 				*/
 
-				trap->FX_PlayEffectID( hitOtherFxID, es->origin, fxDir, -1, -1, qfalse );
+				trap->FX_PlayEffectID( hitOtherFxID, es->origin, fxDir, -1, -1, false );
 			}
 
 			//rww - this means we have the number of the ent being hit and the ent that owns the saber doing
@@ -2023,11 +2023,11 @@ void CG_EntityEvent( centity_t *cent, vec3_t position ) {
 
 				if (es->eventParm)
 				{
-					saberOwner->serverSaberFleshImpact = qtrue;
+					saberOwner->serverSaberFleshImpact = true;
 				}
 				else
 				{
-					saberOwner->serverSaberFleshImpact = qfalse;
+					saberOwner->serverSaberFleshImpact = false;
 				}
 			}
 		}
@@ -2040,7 +2040,7 @@ void CG_EntityEvent( centity_t *cent, vec3_t position ) {
 			{ //saber block
 				int			blockFXID = media.efx.null;
 				qhandle_t	blockSound = trap->S_RegisterSound(va( "sound/weapons/saber/saberblock%d.wav", Q_irand(1, 9) ));
-				qboolean	noFlare = qfalse;
+				bool	noFlare = false;
 
 				if ( es->otherEntityNum2 >= 0
 					&& es->otherEntityNum2 < ENTITYNUM_NONE )
@@ -2084,7 +2084,7 @@ void CG_EntityEvent( centity_t *cent, vec3_t position ) {
 						fxDir[1] = 1;
 					}
 					trap->S_StartSound(es->origin, es->number, CHAN_AUTO, blockSound );
-					trap->FX_PlayEffectID( blockFXID, es->origin, fxDir, -1, -1, qfalse );
+					trap->FX_PlayEffectID( blockFXID, es->origin, fxDir, -1, -1, false );
 
 					if ( !noFlare )
 					{
@@ -2101,7 +2101,7 @@ void CG_EntityEvent( centity_t *cent, vec3_t position ) {
 				{
 					fxDir[1] = 1;
 				}
-				trap->FX_PlayEffectID(media.efx.null, es->origin, fxDir, -1, -1, qfalse);
+				trap->FX_PlayEffectID(media.efx.null, es->origin, fxDir, -1, -1, false);
 			}
 		}
 		break;
@@ -2151,7 +2151,7 @@ void CG_EntityEvent( centity_t *cent, vec3_t position ) {
 			{
 				break;
 			}
-			trap->FX_PlayEffectID(media.efx.null, pos, ang, -1, -1, qfalse);
+			trap->FX_PlayEffectID(media.efx.null, pos, ang, -1, -1, false);
 
 			trap->S_StartSound (NULL, es->number, CHAN_AUTO, trap->S_RegisterSound( "sound/weapons/saber/saberon.wav" ) );
 
@@ -2215,7 +2215,7 @@ void CG_EntityEvent( centity_t *cent, vec3_t position ) {
 		ByteToDir( es->eventParm, dir );
 		if (es->weapon)
 		{ //client
-			FX_DisruptorHitPlayer( cent->lerpOrigin, dir, qtrue );
+			FX_DisruptorHitPlayer( cent->lerpOrigin, dir, true );
 		}
 		else
 		{ //non-client
@@ -2440,7 +2440,7 @@ void CG_EntityEvent( centity_t *cent, vec3_t position ) {
 			{
 				break;
 			}
-			trap->FX_PlayEffectID(media.efx.null, pos, ang, -1, -1, qfalse);
+			trap->FX_PlayEffectID(media.efx.null, pos, ang, -1, -1, false);
 		}
 		break;
 
@@ -2467,7 +2467,7 @@ void CG_EntityEvent( centity_t *cent, vec3_t position ) {
 			{
 				break;
 			}
-			trap->FX_PlayEffectID(media.efx.null, pos, ang, -1, -1, qfalse);
+			trap->FX_PlayEffectID(media.efx.null, pos, ang, -1, -1, false);
 		}
 		break;
 
@@ -2574,11 +2574,11 @@ void CG_EntityEvent( centity_t *cent, vec3_t position ) {
 			for (dist = 0.0f; dist < shotDist; dist += 64.0f)
 			{ //one effect would be.. a whole lot better
 				VectorMA( es->origin2, dist, es->angles, spot );
-                trap->FX_PlayEffectID(media.efx.null, spot, es->angles2, -1, -1, qfalse);
+                trap->FX_PlayEffectID(media.efx.null, spot, es->angles2, -1, -1, false);
 			}
 
 			ByteToDir( es->eventParm, dir );
-			CG_MissileHitWall(WP_CONCUSSION, es->owner, position, dir, IMPACTSOUND_DEFAULT, qtrue, 0);
+			CG_MissileHitWall(WP_CONCUSSION, es->owner, position, dir, IMPACTSOUND_DEFAULT, true, 0);
 
 			FX_ConcAltShot(es->origin2, spot);
 
@@ -2597,15 +2597,15 @@ void CG_EntityEvent( centity_t *cent, vec3_t position ) {
 		ByteToDir( es->eventParm, dir );
 		if ( es->emplacedOwner )
 		{//hack: this is an index to a custom effect to use
-			trap->FX_PlayEffectID(cgs.gameEffects[es->emplacedOwner], position, dir, -1, -1, qfalse);
+			trap->FX_PlayEffectID(cgs.gameEffects[es->emplacedOwner], position, dir, -1, -1, false);
 		}
 		else if (cent->currentState.eFlags & EF_ALT_FIRING)
 		{
-			CG_MissileHitPlayer( es->weapon, position, dir, es->otherEntityNum, qtrue);
+			CG_MissileHitPlayer( es->weapon, position, dir, es->otherEntityNum, true);
 		}
 		else
 		{
-			CG_MissileHitPlayer( es->weapon, position, dir, es->otherEntityNum, qfalse);
+			CG_MissileHitPlayer( es->weapon, position, dir, es->otherEntityNum, false);
 		}
 
 		if (cg_ghoul2Marks.integer &&
@@ -2620,15 +2620,15 @@ void CG_EntityEvent( centity_t *cent, vec3_t position ) {
 		ByteToDir( es->eventParm, dir );
 		if ( es->emplacedOwner )
 		{//hack: this is an index to a custom effect to use
-			trap->FX_PlayEffectID(cgs.gameEffects[es->emplacedOwner], position, dir, -1, -1, qfalse);
+			trap->FX_PlayEffectID(cgs.gameEffects[es->emplacedOwner], position, dir, -1, -1, false);
 		}
 		else if (cent->currentState.eFlags & EF_ALT_FIRING)
 		{
-			CG_MissileHitWall(es->weapon, 0, position, dir, IMPACTSOUND_DEFAULT, qtrue, es->generic1);
+			CG_MissileHitWall(es->weapon, 0, position, dir, IMPACTSOUND_DEFAULT, true, es->generic1);
 		}
 		else
 		{
-			CG_MissileHitWall(es->weapon, 0, position, dir, IMPACTSOUND_DEFAULT, qfalse, 0);
+			CG_MissileHitWall(es->weapon, 0, position, dir, IMPACTSOUND_DEFAULT, false, 0);
 		}
 
 		if (cg_ghoul2Marks.integer &&
@@ -2643,15 +2643,15 @@ void CG_EntityEvent( centity_t *cent, vec3_t position ) {
 		ByteToDir( es->eventParm, dir );
 		if ( es->emplacedOwner )
 		{//hack: this is an index to a custom effect to use
-			trap->FX_PlayEffectID(cgs.gameEffects[es->emplacedOwner], position, dir, -1, -1, qfalse);
+			trap->FX_PlayEffectID(cgs.gameEffects[es->emplacedOwner], position, dir, -1, -1, false);
 		}
 		else if (cent->currentState.eFlags & EF_ALT_FIRING)
 		{
-			CG_MissileHitWall(es->weapon, 0, position, dir, IMPACTSOUND_METAL, qtrue, es->generic1);
+			CG_MissileHitWall(es->weapon, 0, position, dir, IMPACTSOUND_METAL, true, es->generic1);
 		}
 		else
 		{
-			CG_MissileHitWall(es->weapon, 0, position, dir, IMPACTSOUND_METAL, qfalse, 0);
+			CG_MissileHitWall(es->weapon, 0, position, dir, IMPACTSOUND_METAL, false, 0);
 		}
 		break;
 
@@ -2733,7 +2733,7 @@ void CG_EntityEvent( centity_t *cent, vec3_t position ) {
 				fxDir[1] = 1;
 			}
 
-			trap->FX_PlayEffectID(eID, es->origin, fxDir, -1, -1, qfalse);
+			trap->FX_PlayEffectID(eID, es->origin, fxDir, -1, -1, false);
 		}
 		break;
 
@@ -2742,12 +2742,12 @@ void CG_EntityEvent( centity_t *cent, vec3_t position ) {
 		DEBUGNAME("EV_PLAY_EFFECT_ID");
 		{
 			vec3_t fxDir;
-			qboolean portalEffect = qfalse;
+			bool portalEffect = false;
 			int efxIndex = 0;
 
 			if (event == EV_PLAY_PORTAL_EFFECT_ID)
 			{ //This effect should only be played inside sky portals.
-				portalEffect = qtrue;
+				portalEffect = true;
 			}
 
 			AngleVectors(es->angles, fxDir, 0, 0);
@@ -2774,11 +2774,11 @@ void CG_EntityEvent( centity_t *cent, vec3_t position ) {
 			{
 				if (portalEffect)
 				{
-					trap->FX_PlayEffectID(efxIndex, position, fxDir, -1, -1, qtrue );
+					trap->FX_PlayEffectID(efxIndex, position, fxDir, -1, -1, true );
 				}
 				else
 				{
-					trap->FX_PlayEffectID(efxIndex, position, fxDir, -1, -1, qfalse );
+					trap->FX_PlayEffectID(efxIndex, position, fxDir, -1, -1, false );
 				}
 			}
 		}

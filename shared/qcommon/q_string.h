@@ -12,8 +12,8 @@ int Q_isgraph( int c );
 int Q_islower( int c );
 int Q_isupper( int c );
 int Q_isalpha( int c );
-qboolean Q_isanumber( const char *s );
-qboolean Q_isintegral( float f );
+bool Q_isanumber( const char *s );
+bool Q_isintegral( float f );
 
 // portable case insensitive compare
 int Q_stricmp(const char *s1, const char *s2);

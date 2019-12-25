@@ -34,9 +34,9 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 // msg.c
 
 typedef struct msg_s {
-	qboolean	allowoverflow;	// if false, do a Com_Error
-	qboolean	overflowed;		// set to true if the buffer size failed (with allowoverflow set)
-	qboolean	oob;			// set to true if the buffer size failed (with allowoverflow set)
+	bool	allowoverflow;	// if false, do a Com_Error
+	bool	overflowed;		// set to true if the buffer size failed (with allowoverflow set)
+	bool	oob;			// set to true if the buffer size failed (with allowoverflow set)
 	byte	*data;
 	int		maxsize;
 	int		cursize;
@@ -85,7 +85,7 @@ void MSG_WriteDeltaUsercmdKey( msg_t *msg, int key, usercmd_t *from, usercmd_t *
 void MSG_ReadDeltaUsercmdKey( msg_t *msg, int key, usercmd_t *from, usercmd_t *to );
 
 void MSG_WriteDeltaEntity( msg_t *msg, struct entityState_s *from, struct entityState_s *to
-						   , qboolean force );
+						   , bool force );
 void MSG_ReadDeltaEntity( msg_t *msg, entityState_t *from, entityState_t *to,
 						 int number );
 
@@ -124,25 +124,25 @@ typedef enum {
 void		NET_Init( void );
 void		NET_Shutdown( void );
 void		NET_Restart_f( void );
-void		NET_Config( qboolean enableNetworking );
+void		NET_Config( bool enableNetworking );
 
 void		NET_SendPacket (netsrc_t sock, int length, const void *data, netadr_t to);
 void		NET_OutOfBandPrint( netsrc_t net_socket, netadr_t adr, const char *format, ...);
 void		NET_OutOfBandData( netsrc_t sock, netadr_t adr, byte *format, int len );
 
-qboolean	NET_CompareAdr (netadr_t a, netadr_t b);
-qboolean	NET_CompareBaseAdrMask( netadr_t a, netadr_t b, int netmask );
-qboolean	NET_CompareBaseAdr (netadr_t a, netadr_t b);
-qboolean	NET_IsLocalAddress (netadr_t adr);
+bool	NET_CompareAdr (netadr_t a, netadr_t b);
+bool	NET_CompareBaseAdrMask( netadr_t a, netadr_t b, int netmask );
+bool	NET_CompareBaseAdr (netadr_t a, netadr_t b);
+bool	NET_IsLocalAddress (netadr_t adr);
 const char	*NET_AdrToString (netadr_t a);
-qboolean	NET_StringToAdr ( const char *s, netadr_t *a);
-qboolean	NET_GetLoopPacket (netsrc_t sock, netadr_t *net_from, msg_t *net_message);
+bool	NET_StringToAdr ( const char *s, netadr_t *a);
+bool	NET_GetLoopPacket (netsrc_t sock, netadr_t *net_from, msg_t *net_message);
 void		NET_Sleep(int msec);
 
 void		Sys_SendPacket( int length, const void *data, netadr_t to );
 //Does NOT parse port numbers, only base addresses.
-qboolean	Sys_StringToAdr( const char *s, netadr_t *a );
-qboolean	Sys_IsLANAddress (netadr_t adr);
+bool	Sys_StringToAdr( const char *s, netadr_t *a );
+bool	Sys_IsLANAddress (netadr_t adr);
 void		Sys_ShowIP(void);
 
 #define	MAX_MSGLEN				49152		// max length of a message, which may
@@ -176,7 +176,7 @@ typedef struct netchan_s {
 
 	// outgoing fragment buffer
 	// we need to space out the sending of large fragmented messages
-	qboolean	unsentFragments;
+	bool	unsentFragments;
 	int			unsentFragmentStart;
 	int			unsentLength;
 	byte		unsentBuffer[MAX_MSGLEN];
@@ -188,7 +188,7 @@ void Netchan_Setup( netsrc_t sock, netchan_t *chan, netadr_t adr, int qport );
 void Netchan_Transmit( netchan_t *chan, int length, const byte *data );
 void Netchan_TransmitNextFragment( netchan_t *chan );
 
-qboolean Netchan_Process( netchan_t *chan, msg_t *msg );
+bool Netchan_Process( netchan_t *chan, msg_t *msg );
 
 // PROTOCOL
 
@@ -370,12 +370,12 @@ char *Cmd_DescriptionString( const char *cmd_name );
 #	define Q3CONFIG_CFG PRODUCT_NAME ".cfg"
 #endif
 
-qboolean FS_Initialized();
+bool FS_Initialized();
 
 void	FS_InitFilesystem (void);
-void	FS_Shutdown( qboolean closemfp );
+void	FS_Shutdown( bool closemfp );
 
-qboolean	FS_ConditionalRestart( int checksumFeed );
+bool	FS_ConditionalRestart( int checksumFeed );
 void	FS_Restart( int checksumFeed );
 // shutdown and restart the filesystem so changes to fs_gamedir can take effect
 
@@ -390,25 +390,25 @@ void	FS_FreeFileList( char **fileList );
 void FS_Remove( const char *osPath );
 void FS_HomeRemove( const char *homePath );
 
-void FS_Rmdir( const char *osPath, qboolean recursive );
-void FS_HomeRmdir( const char *homePath, qboolean recursive );
+void FS_Rmdir( const char *osPath, bool recursive );
+void FS_HomeRmdir( const char *homePath, bool recursive );
 
-qboolean FS_FileExists( const char *file );
+bool FS_FileExists( const char *file );
 
 char   *FS_BuildOSPath( const char *base, const char *game, const char *qpath );
-qboolean FS_CompareZipChecksum(const char *zipfile);
+bool FS_CompareZipChecksum(const char *zipfile);
 
 int		FS_GetFileList(  const char *path, const char *extension, char *listbuf, int bufsize );
 int		FS_GetModList(  char *listbuf, int bufsize );
 
-fileHandle_t	FS_FOpenFileWrite( const char *qpath, qboolean safe=qtrue );
+fileHandle_t	FS_FOpenFileWrite( const char *qpath, bool safe=true );
 // will properly create any needed paths and deal with seperater character issues
 
 int		FS_filelength( fileHandle_t f );
 fileHandle_t FS_SV_FOpenFileWrite( const char *filename );
 int		FS_SV_FOpenFileRead( const char *filename, fileHandle_t *fp );
-void	FS_SV_Rename( const char *from, const char *to, qboolean safe );
-long		FS_FOpenFileRead( const char *qpath, fileHandle_t *file, qboolean uniqueFILE );
+void	FS_SV_Rename( const char *from, const char *to, bool safe );
+long		FS_FOpenFileRead( const char *qpath, fileHandle_t *file, bool uniqueFILE );
 // if uniqueFILE is true, then a new FILE will be fopened even if the file
 // is found in an already open pak file.  If uniqueFILE is false, you must call
 // FS_FCloseFile instead of fclose, otherwise the pak FILE would be improperly closed
@@ -418,7 +418,7 @@ long		FS_FOpenFileRead( const char *qpath, fileHandle_t *file, qboolean uniqueFI
 int		FS_FileIsInPAK(const char *filename, int *pChecksum );
 // returns 1 if a file is in the PAK file, otherwise -1
 
-qboolean FS_FindPureDLL(const char *name);
+bool FS_FindPureDLL(const char *name);
 
 int		FS_Write( const void *buffer, int len, fileHandle_t f );
 
@@ -453,7 +453,7 @@ int		FS_FTell( fileHandle_t f );
 
 void	FS_Flush( fileHandle_t f );
 
-void	FS_FilenameCompletion( const char *dir, const char *ext, qboolean stripExt, completionCallback_t callback, qboolean allowNonPureFilesOnDisk );
+void	FS_FilenameCompletion( const char *dir, const char *ext, bool stripExt, completionCallback_t callback, bool allowNonPureFilesOnDisk );
 
 const char *FS_GetCurrentGameDir(bool emptybase=false);
 
@@ -470,7 +470,7 @@ int		FS_FOpenFileByMode( const char *qpath, fileHandle_t *f, fsMode_t mode );
 int		FS_Seek( fileHandle_t f, long offset, int origin );
 // seek on a file
 
-qboolean FS_FilenameCompare( const char *s1, const char *s2 );
+bool FS_FilenameCompare( const char *s1, const char *s2 );
 
 const char *FS_LoadedPakNames( void );
 const char *FS_LoadedPakChecksums( void );
@@ -496,11 +496,11 @@ void FS_PureServerSetLoadedPaks( const char *pakSums, const char *pakNames );
 // sole exception of .cfg files.
 
 bool FS_CheckDirTraversal(const char *checkdir);
-qboolean FS_idPak( char *pak, char *base );
-qboolean FS_ComparePaks( char *neededpaks, int len, qboolean dlstring );
+bool FS_idPak( char *pak, char *base );
+bool FS_ComparePaks( char *neededpaks, int len, bool dlstring );
 void FS_Rename( const char *from, const char *to );
 
-qboolean FS_WriteToTemporaryFile( const void *data, size_t dataLength, char **tempFileName );
+bool FS_WriteToTemporaryFile( const void *data, size_t dataLength, char **tempFileName );
 
 void FS_UpdateGamedir(void);
 
@@ -509,7 +509,6 @@ void FS_UpdateGamedir(void);
 
 #define CONSOLE_PROMPT_CHAR ']'
 #define	MAX_EDIT_LINE		256
-#define COMMAND_HISTORY		32
 
 typedef struct field_s {
 	int		cursor;
@@ -521,8 +520,8 @@ typedef struct field_s {
 void Field_Clear( field_t *edit );
 void Field_AutoComplete( field_t *edit );
 void Field_CompleteKeyname( void );
-void Field_CompleteFilename( const char *dir, const char *ext, qboolean stripExt, qboolean allowNonPureFilesOnDisk );
-void Field_CompleteCommand( char *cmd, qboolean doCommands, qboolean doCvars );
+void Field_CompleteFilename( const char *dir, const char *ext, bool stripExt, bool allowNonPureFilesOnDisk );
+void Field_CompleteCommand( char *cmd, bool doCommands, bool doCvars );
 
 // MISC
 
@@ -552,7 +551,7 @@ int      Com_HashKey(char *string, int maxlen);
 int			Com_Filter(char *filter, char *name, int casesensitive);
 int			Com_FilterPath(char *filter, char *name, int casesensitive);
 int			Com_RealTime(qtime_t *qtime);
-qboolean	Com_SafeMode( void );
+bool	Com_SafeMode( void );
 void		Com_RunAndTimeServerPacket(netadr_t *evFrom, msg_t *buf);
 
 void		Com_StartupVariable( const char *match );
@@ -567,7 +566,7 @@ extern	int		time_backend;		// renderer backend time
 
 extern	int		com_frameTime;
 
-extern	qboolean	com_errorEntered;
+extern	bool	com_errorEntered;
 
 extern	fileHandle_t	com_logfile;
 extern	fileHandle_t	com_journalFile;
@@ -627,10 +626,10 @@ void Z_LogHeap( void );
 // later on I'll re-implement __FILE__, __LINE__ etc, but for now...
 
 #ifdef DEBUG_ZONE_ALLOCS
-void *Z_Malloc  ( int iSize, memtag_t eTag, qboolean bZeroit = qfalse, int iAlign = 4);	// return memory NOT zero-filled by default
+void *Z_Malloc  ( int iSize, memtag_t eTag, bool bZeroit = false, int iAlign = 4);	// return memory NOT zero-filled by default
 void *S_Malloc	( int iSize );					// NOT 0 filled memory only for small allocations
 #else
-void *Z_Malloc  ( int iSize, memtag_t eTag, qboolean bZeroit = qfalse, int iAlign = 4);	// return memory NOT zero-filled by default
+void *Z_Malloc  ( int iSize, memtag_t eTag, bool bZeroit = false, int iAlign = 4);	// return memory NOT zero-filled by default
 void *S_Malloc	( int iSize );					// NOT 0 filled memory only for small allocations
 #endif
 void  Z_MorphMallocTag( void *pvBuffer, memtag_t eDesiredTag );
@@ -648,14 +647,14 @@ void Com_ShutdownHunkMemory(void);
 void Hunk_Clear( void );
 void Hunk_ClearToMark( void );
 void Hunk_SetMark( void );
-qboolean Hunk_CheckMark( void );
+bool Hunk_CheckMark( void );
 void Hunk_ClearTempMemory( void );
 void *Hunk_AllocateTempMemory( int size );
 void Hunk_FreeTempMemory( void *buf );
 int	Hunk_MemoryRemaining( void );
 void Hunk_Log( void);
 void Hunk_Trash( void );
-qboolean Com_TheHunkMarkHasBeenMade(void);
+bool Com_TheHunkMarkHasBeenMade(void);
 
 void Com_TouchMemory( void );
 
@@ -672,11 +671,11 @@ void CL_InitKeyCommands( void );
 // config files, but the rest of client startup will happen later
 
 void CL_Init( void );
-void CL_Disconnect( qboolean showMainMenu );
+void CL_Disconnect( bool showMainMenu );
 void CL_Shutdown( void );
 void CL_Frame( int msec );
-qboolean CL_GameCommand( void );
-void CL_KeyEvent (int key, qboolean down, unsigned time);
+bool CL_GameCommand( void );
+void CL_KeyEvent (int key, bool down, unsigned time);
 
 void CL_CharEvent( int key );
 // char events are for field typing, not game control
@@ -706,8 +705,8 @@ void CL_FlushMemory( void );
 void CL_StartHunkUsers( void );
 // start all the client stuff using the hunk
 
-qboolean CL_ConnectedToRemoteServer( void );
-// returns qtrue if connected to a server
+bool CL_ConnectedToRemoteServer( void );
+// returns true if connected to a server
 
 void Key_KeynameCompletion ( void(*callback)( const char *s ) );
 // for keyname autocompletion
@@ -727,11 +726,11 @@ void SV_Shutdown( char *finalmsg );
 void SV_Frame( int msec );
 void SV_PacketEvent( netadr_t from, msg_t *msg );
 int SV_FrameMsec( void );
-qboolean SV_GameCommand( void );
+bool SV_GameCommand( void );
 void SV_ShutdownGameProgs( void );
 
 // UI interface
-qboolean UI_GameCommand( void );
+bool UI_GameCommand( void );
 
 /* This is based on the Adaptive Huffman algorithm described in Sayood's Data
  * Compression book.  The ranks are not actually stored, but implicitly defined

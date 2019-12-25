@@ -90,7 +90,7 @@ void G_ReadSessionData( gclient_t *client )
 	client->sess.selectedFP     = (forcePowers_t)tempSelectedFP;
 	client->sess.sessionTeam	= (team_t)tempSessionTeam;
 	client->sess.spectatorState	= (spectatorState_t)tempSpectatorState;
-	client->sess.teamLeader		= (qboolean)tempTeamLeader;
+	client->sess.teamLeader		= (bool)tempTeamLeader;
 
 	// convert back to spaces from unused chars, as session data is written that way.
 	for ( i=0; client->sess.IP[i]; i++ )
@@ -105,7 +105,7 @@ void G_ReadSessionData( gclient_t *client )
 }
 
 // Called on a first-time connect
-void G_InitSessionData( gclient_t *client, char *userinfo, qboolean isBot ) {
+void G_InitSessionData( gclient_t *client, char *userinfo, bool isBot ) {
 	clientSession_t	*sess;
 	const char		*value;
 
@@ -172,7 +172,7 @@ void G_InitSessionData( gclient_t *client, char *userinfo, qboolean isBot ) {
 					int loners = 0;
 					int doubles = 0;
 
-					G_PowerDuelCount(&loners, &doubles, qtrue);
+					G_PowerDuelCount(&loners, &doubles, true);
 
 					if (!doubles || loners > (doubles/2))
 					{
@@ -198,7 +198,7 @@ void G_InitSessionData( gclient_t *client, char *userinfo, qboolean isBot ) {
 void G_InitWorldSession( void ) {
 	// if the gametype changed since the last session, don't use any client sessions
 	if ( level.gametype != session.integer ) {
-		level.newSession = qtrue;
+		level.newSession = true;
 		trap->Print( "Gametype changed, clearing session data.\n" );
 	}
 }

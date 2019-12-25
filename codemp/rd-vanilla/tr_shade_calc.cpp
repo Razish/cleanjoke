@@ -735,7 +735,7 @@ void RB_CalcFogTexCoords( float *st ) {
 	float		*v;
 	float		s, t;
 	float		eyeT;
-	qboolean	eyeOutside;
+	bool	eyeOutside;
 	fog_t		*fog;
 	vec3_t		localVec;
 	vec4_t		fogDistanceVector, fogDepthVector;
@@ -777,9 +777,9 @@ void RB_CalcFogTexCoords( float *st ) {
 	// this is needed for clipping distance even for constant fog
 
 	if ( eyeT < 0 ) {
-		eyeOutside = qtrue;
+		eyeOutside = true;
 	} else {
-		eyeOutside = qfalse;
+		eyeOutside = false;
 	}
 
 	fogDistanceVector[3] += 1.0/512;

@@ -1514,7 +1514,7 @@ static bool RB_TestZFlare( vec3_t point) {
 	// check to see if the point is completely off screen
 	for ( i = 0 ; i < 3 ; i++ ) {
 		if ( clip[i] >= clip[3] || clip[i] <= -clip[3] ) {
-			return qfalse;
+			return false;
 		}
 	}
 
@@ -1522,7 +1522,7 @@ static bool RB_TestZFlare( vec3_t point) {
 
 	if ( window[0] < 0 || window[0] >= backEnd.viewParms.viewportWidth
 		|| window[1] < 0 || window[1] >= backEnd.viewParms.viewportHeight ) {
-		return qfalse;	// shouldn't happen, since we check the clip[] above, except for FP rounding
+		return false;	// shouldn't happen, since we check the clip[] above, except for FP rounding
 	}
 
 //do test
@@ -1536,7 +1536,7 @@ static bool RB_TestZFlare( vec3_t point) {
 	}
 	// doing a readpixels is as good as doing a glFinish(), so
 	// don't bother with another sync
-	glState.finishCalled = qfalse;
+	glState.finishCalled = false;
 	qglReadPixels( backEnd.viewParms.viewportX + window[0],backEnd.viewParms.viewportY + window[1], 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &depth );
 
 	screenZ = backEnd.viewParms.projectionMatrix[14] /

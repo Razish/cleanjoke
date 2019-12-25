@@ -23,7 +23,7 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 #pragma once
 
 // BlockStream.h
-#include "qcommon/qcommon.h"
+#include "qcommon/q_common.h"
 #include <stdio.h>
 
 #include <list>
@@ -78,7 +78,7 @@ public:
 
 	inline void *operator new( size_t size )
 	{	// Allocate the memory.
-		return Z_Malloc( size, TAG_ICARUS4, qtrue );
+		return Z_Malloc( size, TAG_ICARUS4, true );
 	}
 	// Overloaded delete operator.
 	inline void operator delete( void *pRawData )

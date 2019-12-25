@@ -41,7 +41,7 @@ CROFFSystem::CROFF::CROFF( const char *file, int id )
 	mID				= id;
 	mMoveRotateList = NULL;
 	mNoteTrackIndexes = 0;
-	mUsedByClient = mUsedByServer = qfalse;
+	mUsedByClient = mUsedByServer = false;
 }
 
 // Frees any resources when the CROFF object dies
@@ -61,7 +61,7 @@ CROFFSystem::CROFF::~CROFF()
 
 // Cleans up the roff system, not sure how useful this really is
 // returns success or failure
-qboolean CROFFSystem::Restart()
+bool CROFFSystem::Restart()
 {
 	TROFFList::iterator itr = mROFFList.begin();
 
@@ -77,45 +77,45 @@ qboolean CROFFSystem::Restart()
 	// clear CROFFSystem unique ID counter
 	mID = 0;
 
-	return qtrue;
+	return true;
 }
 
 // Makes sure that the requested file is actually a ROFF
 //	data	pass in the file data
 // returns test success or failure
-qboolean CROFFSystem::IsROFF( unsigned char *data )
+bool CROFFSystem::IsROFF( unsigned char *data )
 {
 	TROFFHeader		*hdr = (TROFFHeader *)data;
 	TROFF2Header	*hdr2 = (TROFF2Header *)data;
 
 	if ( !strcmp( hdr->mHeader, ROFF_STRING ))
 	{ // bad header
-		return qfalse;
+		return false;
 	}
 
 	if (LittleLong(hdr->mVersion) != ROFF_VERSION && LittleLong(hdr->mVersion) != ROFF_NEW_VERSION)
 	{	// bad version
-		return qfalse;
+		return false;
 	}
 
 	if (LittleLong(hdr->mVersion) == ROFF_VERSION && LittleFloat(hdr->mCount) <= 0.0)
 	{	// bad count
-		return qfalse;
+		return false;
 	}
 
 	if (LittleLong(hdr->mVersion) == ROFF_NEW_VERSION && LittleLong(hdr2->mCount) <= 0)
 	{	// bad count
-		return qfalse;
+		return false;
 	}
 
-	return qtrue;
+	return true;
 }
 
 // Handles stuffing the roff data in the CROFF object
 //	data	file data
 //	obj		the object to stuff the data into
 // returns initialization success or failure
-qboolean CROFFSystem::InitROFF( unsigned char *data, CROFF *obj )
+bool CROFFSystem::InitROFF( unsigned char *data, CROFF *obj )
 {
 	int	i;
 
@@ -159,17 +159,17 @@ qboolean CROFFSystem::InitROFF( unsigned char *data, CROFF *obj )
 	}
 	else
 	{
-		return qfalse;
+		return false;
 	}
 
-	return qtrue;
+	return true;
 }
 
 // Handles stuffing the roff data in the CROFF object for version 2
 //	data	file data
 //	obj		the object to stuff the data into
 // returns initialization success or failure
-qboolean CROFFSystem::InitROFF2( unsigned char *data, CROFF *obj )
+bool CROFFSystem::InitROFF2( unsigned char *data, CROFF *obj )
 {
 	int	i;
 
@@ -231,10 +231,10 @@ qboolean CROFFSystem::InitROFF2( unsigned char *data, CROFF *obj )
 	}
 	else
 	{
-		return qfalse;
+		return false;
 	}
 
-	return qtrue;
+	return true;
 }
 
 // attempt to fix bad angles (large) that come in from the exporter
@@ -272,7 +272,7 @@ void CROFFSystem::FixBadAngles(CROFF *obj)
 // Disallows repeated caches of existing roffs.
 //	file	filepath of the roff to cache
 // returns ID of the roff, whether its an existing one or new one.
-int CROFFSystem::Cache( const char *file, qboolean isClient )
+int CROFFSystem::Cache( const char *file, bool isClient )
 {
 	// See if this item is already cached
 	int				len;
@@ -330,11 +330,11 @@ int CROFFSystem::Cache( const char *file, qboolean isClient )
 	cROFF = (*mROFFList.find( id )).second;
 	if (isClient)
 	{
-		cROFF->mUsedByClient = qtrue;
+		cROFF->mUsedByClient = true;
 	}
 	else
 	{
-		cROFF->mUsedByServer = qtrue;
+		cROFF->mUsedByServer = true;
 	}
 
 	// If we haven't requested a new ID, we'll just be returning the ID of the existing roff
@@ -363,8 +363,8 @@ int	CROFFSystem::GetID( const char *file )
 
 // Removes the roff from the list, deleting it to free up any used resources
 //	id	pass in the id of the roff to delete, use GetID if you only know the roff filepath
-// returns qtrue if item was in the list, qfalse otherwise
-qboolean CROFFSystem::Unload( int id )
+// returns true if item was in the list, false otherwise
+bool CROFFSystem::Unload( int id )
 {
 	TROFFList::iterator itr;
 
@@ -380,7 +380,7 @@ qboolean CROFFSystem::Unload( int id )
 		Com_Printf( S_COLOR_GREEN "roff unloaded\n" );
 #endif
 
-		return qtrue;
+		return true;
 	}
 	else
 	{ // not found
@@ -388,13 +388,13 @@ qboolean CROFFSystem::Unload( int id )
 #ifdef _DEBUG
 		Com_Printf( S_COLOR_RED "unload failed: roff <%i> does not exist\n", id );
 #endif
-		return qfalse;
+		return false;
 	}
 }
 
 // Cleans out all Roffs, freeing up any used resources
 // returns success of operation
-qboolean CROFFSystem::Clean(qboolean isClient)
+bool CROFFSystem::Clean(bool isClient)
 {
 	TROFFList::iterator itr;
 
@@ -406,7 +406,7 @@ qboolean CROFFSystem::Clean(qboolean isClient)
 
 		itr = mROFFList.begin();
 	}
-	return qtrue;
+	return true;
 }
 
 // Dumps the file path to the current set of cached roffs, for debug purposes
@@ -428,7 +428,7 @@ void CROFFSystem::List()
 // Overloaded version of List, dumps the specified roff data to the console
 //	id	id of roff to display
 // returns success or failure of operation
-qboolean CROFFSystem::List( int id )
+bool CROFFSystem::List( int id )
 {
 	TROFFList::iterator itr;
 
@@ -452,19 +452,19 @@ qboolean CROFFSystem::List( int id )
 						dat[i].mRotateOffset[0], dat[i].mRotateOffset[1], dat[i].mRotateOffset[2] );
 		}
 
-		return qtrue;
+		return true;
 	}
 
 	Com_Printf( S_COLOR_YELLOW"ROFF not found: id <%d>\n", id );
 
-	return qfalse;
+	return false;
 }
 
 // Start roff playback on an entity
 //	entID	the id of the entity that will be roffed
 //	id		the id of the roff to play
 // returns success or failure of add operation
-qboolean CROFFSystem::Play( int entID, int id, qboolean doTranslation, qboolean isClient )
+bool CROFFSystem::Play( int entID, int id, bool doTranslation, bool isClient )
 {
 	sharedEntity_t *ent = NULL;
 
@@ -474,9 +474,9 @@ qboolean CROFFSystem::Play( int entID, int id, qboolean doTranslation, qboolean 
 
 		if ( ent == NULL )
 		{ // shame on you..
-			return qfalse;
+			return false;
 		}
-		ent->r.mIsRoffing = qtrue;
+		ent->r.mIsRoffing = true;
 
 		/*rjr	if(ent->GetPhysics() == PHYSICS_TYPE_NONE)
 		{
@@ -491,8 +491,8 @@ qboolean CROFFSystem::Play( int entID, int id, qboolean doTranslation, qboolean 
 	roffing_ent->mROFFID		= id;
 	roffing_ent->mNextROFFTime	= svs.time;
 	roffing_ent->mROFFFrame		= 0;
-	roffing_ent->mKill			= qfalse;
-	roffing_ent->mSignal		= qtrue; // TODO: hook up the real signal code
+	roffing_ent->mKill			= false;
+	roffing_ent->mSignal		= true; // TODO: hook up the real signal code
 	roffing_ent->mTranslated	= doTranslation;
 	roffing_ent->mIsClient		= isClient;
 
@@ -501,7 +501,7 @@ qboolean CROFFSystem::Play( int entID, int id, qboolean doTranslation, qboolean 
 
 	mROFFEntList.push_back( roffing_ent );
 
-	return qtrue;
+	return true;
 }
 
 // List all of the ents in the roff system
@@ -544,7 +544,7 @@ void CROFFSystem::ListEnts()
 // Prematurely purge an entity from the roff system
 //	entID	the id of the entity to purge
 // returns success or failure of purge operation
-qboolean CROFFSystem::PurgeEnt( int entID, qboolean isClient )
+bool CROFFSystem::PurgeEnt( int entID, bool isClient )
 {
 	TROFFEntList::iterator itr = mROFFEntList.begin();
 
@@ -558,37 +558,37 @@ qboolean CROFFSystem::PurgeEnt( int entID, qboolean isClient )
 			delete (*itr);
 
 			mROFFEntList.erase( itr );
-			return qtrue;
+			return true;
 		}
 	}
 
 	Com_Printf( S_COLOR_RED"Purge failed:  Entity <%i> not found\n", entID );
 
-	return qfalse;
+	return false;
 }
 
 // Prematurely purge an entity from the roff system
 //	name	the name fo the entity to purge
 // returns success or failure of purge operation
-qboolean CROFFSystem::PurgeEnt( char *name )
+bool CROFFSystem::PurgeEnt( char *name )
 {
 /* rjr	CEntity *ent = entitySystem->GetEntityFromName( NULL, name );
 
-	if ( ent && ent->GetInUse() == qtrue )
+	if ( ent && ent->GetInUse() == true )
 	{
 		return PurgeEnt( ent->GetID() );
 	}
 	else
 	{
 		Com_Printf( S_COLOR_RED"Entity <%s> not found or not in use\n", name );
-		return qfalse;
+		return false;
 	}*/
 
-	return qfalse;
+	return false;
 }
 
 // Update all of the entities in the system
-void CROFFSystem::UpdateEntities(qboolean isClient)
+void CROFFSystem::UpdateEntities(bool isClient)
 {
 	TROFFEntList::iterator itr = mROFFEntList.begin();
 	TROFFList::iterator itrRoff;
@@ -608,7 +608,7 @@ void CROFFSystem::UpdateEntities(qboolean isClient)
 		{ // roff that baby!
 			if ( !ApplyROFF( ((SROFFEntity *)(*itr)), ((CROFF *)((*itrRoff).second ))))
 			{ // done roffing, mark for death
-				((SROFFEntity *)(*itr))->mKill = qtrue;
+				((SROFFEntity *)(*itr))->mKill = true;
 			}
 		}
 		else
@@ -617,7 +617,7 @@ void CROFFSystem::UpdateEntities(qboolean isClient)
 //			Com_Printf( S_COLOR_RED" -ROFF not found for entity <%s>\n",
 //					entitySystem->GetEntityFromID(((SROFFEntity *)(*itr))->mEntID)->GetName() );
 
-			((SROFFEntity *)(*itr))->mKill = qtrue;
+			((SROFFEntity *)(*itr))->mKill = true;
 
 			ClearLerp( (*itr) );
 		}
@@ -635,7 +635,7 @@ void CROFFSystem::UpdateEntities(qboolean isClient)
 			continue;
 		}
 
-		if ( ((SROFFEntity *)(*itr))->mKill == qtrue )
+		if ( ((SROFFEntity *)(*itr))->mKill == true )
 		{
 			//make sure ICARUS knows ROFF is stopped
 //			CICARUSGameInterface::TaskIDComplete(
@@ -656,7 +656,7 @@ void CROFFSystem::UpdateEntities(qboolean isClient)
 //	roff_ent	the roff_entity struct
 //	roff		raw roff data
 // returns true on success, false if roff playback complete or failure
-qboolean CROFFSystem::ApplyROFF( SROFFEntity *roff_ent, CROFFSystem::CROFF *roff )
+bool CROFFSystem::ApplyROFF( SROFFEntity *roff_ent, CROFFSystem::CROFF *roff )
 {
 	vec3_t			f, r, u, result;
 	sharedEntity_t	*ent = NULL;
@@ -665,7 +665,7 @@ qboolean CROFFSystem::ApplyROFF( SROFFEntity *roff_ent, CROFFSystem::CROFF *roff
 
 	if ( svs.time < roff_ent->mNextROFFTime )
 	{ // Not time to roff yet
-		return qtrue;
+		return true;
 	}
 
 	if (roff_ent->mIsClient)
@@ -687,7 +687,7 @@ qboolean CROFFSystem::ApplyROFF( SROFFEntity *roff_ent, CROFFSystem::CROFF *roff
 
 		if ( ent == 0 )
 		{	// bad stuff
-			return qfalse;
+			return false;
 		}
 
 		originTrajectory = &ent->s.pos;
@@ -702,9 +702,9 @@ qboolean CROFFSystem::ApplyROFF( SROFFEntity *roff_ent, CROFFSystem::CROFF *roff
 		SetLerp( angleTrajectory, TR_STATIONARY, angle, NULL, svs.time, roff->mLerp );
 		if (!roff_ent->mIsClient)
 		{
-			ent->r.mIsRoffing = qfalse;
+			ent->r.mIsRoffing = false;
 		}
-		return qfalse;
+		return false;
 	}
 
 	if (roff_ent->mTranslated)
@@ -744,7 +744,7 @@ qboolean CROFFSystem::ApplyROFF( SROFFEntity *roff_ent, CROFFSystem::CROFF *roff
 	if ( !roff_ent->mIsClient )
 		ent->next_roff_time = roff_ent->mNextROFFTime;
 
-	return qtrue;
+	return true;
 }
 
 // send the note to the client. It will parse through the note for leading or trailing white space (thus making each
@@ -790,7 +790,7 @@ void CROFFSystem::ProcessNote(SROFFEntity *roff_ent, char *note)
 // Helper function to clear a given entities lerp fields
 //	roff_ent	The ID of the entity to clear
 // returns success or failure of the operation
-qboolean CROFFSystem::ClearLerp( SROFFEntity *roff_ent )
+bool CROFFSystem::ClearLerp( SROFFEntity *roff_ent )
 {
 	sharedEntity_t	*ent = NULL;
 	trajectory_t	*originTrajectory = NULL, *angleTrajectory = NULL;
@@ -815,7 +815,7 @@ qboolean CROFFSystem::ClearLerp( SROFFEntity *roff_ent )
 
 		if ( ent == 0 )
 		{	// bad stuff
-			return qfalse;
+			return false;
 		}
 
 		originTrajectory = &ent->s.pos;
@@ -827,7 +827,7 @@ qboolean CROFFSystem::ClearLerp( SROFFEntity *roff_ent )
 	SetLerp( originTrajectory, TR_STATIONARY, origin, NULL, svs.time, ROFF_SAMPLE_RATE );
 	SetLerp( angleTrajectory, TR_STATIONARY, angle, NULL, svs.time, ROFF_SAMPLE_RATE );
 
-	return qtrue;
+	return true;
 }
 
 // Helper function to set up a positional or angular interpolation

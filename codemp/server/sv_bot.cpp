@@ -144,7 +144,7 @@ void SV_BotCalculatePaths( int /*rmg*/ )
 					VectorSubtract(gWPArray[i]->origin, gWPArray[c]->origin, a);
 
 					nLDist = VectorLength(a);
-					forceJumpable = qfalse;//CanForceJumpTo(i, c, nLDist);
+					forceJumpable = false;//CanForceJumpTo(i, c, nLDist);
 
 					if ((nLDist < maxNeighborDist || forceJumpable) &&
 						((int)gWPArray[i]->origin[2] == (int)gWPArray[c]->origin[2] || forceJumpable) &&
@@ -283,10 +283,10 @@ void QDECL BotImport_Print(int type, char *fmt, ...)
 void BotImport_Trace(bsp_trace_t *bsptrace, vec3_t start, vec3_t mins, vec3_t maxs, vec3_t end, int passent, int contentmask) {
 	trace_t trace;
 
-	SV_Trace(&trace, start, mins, maxs, end, passent, contentmask, qfalse, 0, 10);
+	SV_Trace(&trace, start, mins, maxs, end, passent, contentmask, false, 0, 10);
 	//copy the trace information
-	bsptrace->allsolid = (qboolean)trace.allsolid;
-	bsptrace->startsolid = (qboolean)trace.startsolid;
+	bsptrace->allsolid = (bool)trace.allsolid;
+	bsptrace->startsolid = (bool)trace.startsolid;
 	bsptrace->fraction = trace.fraction;
 	VectorCopy(trace.endpos, bsptrace->endpos);
 	bsptrace->plane.dist = trace.plane.dist;
@@ -303,10 +303,10 @@ void BotImport_Trace(bsp_trace_t *bsptrace, vec3_t start, vec3_t mins, vec3_t ma
 void BotImport_EntityTrace(bsp_trace_t *bsptrace, vec3_t start, vec3_t mins, vec3_t maxs, vec3_t end, int entnum, int contentmask) {
 	trace_t trace;
 
-	SV_ClipToEntity(&trace, start, mins, maxs, end, entnum, contentmask, qfalse);
+	SV_ClipToEntity(&trace, start, mins, maxs, end, entnum, contentmask, false);
 	//copy the trace information
-	bsptrace->allsolid = (qboolean)trace.allsolid;
-	bsptrace->startsolid = (qboolean)trace.startsolid;
+	bsptrace->allsolid = (bool)trace.allsolid;
+	bsptrace->startsolid = (bool)trace.startsolid;
 	bsptrace->fraction = trace.fraction;
 	VectorCopy(trace.endpos, bsptrace->endpos);
 	bsptrace->plane.dist = trace.plane.dist;
@@ -358,7 +358,7 @@ void BotImport_BSPModelMinsMaxsOrigin(int modelnum, vec3_t angles, vec3_t outmin
 void *Bot_GetMemoryGame(int size) {
 	void *ptr;
 
-	ptr = Z_Malloc( size, TAG_BOTGAME, qtrue );
+	ptr = Z_Malloc( size, TAG_BOTGAME, true );
 
 	return ptr;
 }
@@ -370,7 +370,7 @@ void Bot_FreeMemoryGame(void *ptr) {
 void *BotImport_GetMemory(int size) {
 	void *ptr;
 
-	ptr = Z_Malloc( size, TAG_BOTLIB, qtrue );
+	ptr = Z_Malloc( size, TAG_BOTLIB, true );
 	return ptr;
 }
 
@@ -399,7 +399,7 @@ int BotImport_DebugPolygonCreate(int color, int numPoints, vec3_t *points) {
 	if (i >= bot_maxdebugpolys_latch)
 		return 0;
 	poly = &debugpolygons[i];
-	poly->inuse = qtrue;
+	poly->inuse = true;
 	poly->color = color;
 	poly->numPoints = numPoints;
 	Com_Memcpy(poly->points, points, numPoints * sizeof(vec3_t));
@@ -412,7 +412,7 @@ void BotImport_DebugPolygonShow(int id, int color, int numPoints, vec3_t *points
 
 	if (!debugpolygons) return;
 	poly = &debugpolygons[id];
-	poly->inuse = qtrue;
+	poly->inuse = true;
 	poly->color = color;
 	poly->numPoints = numPoints;
 	Com_Memcpy(poly->points, points, numPoints * sizeof(vec3_t));
@@ -421,7 +421,7 @@ void BotImport_DebugPolygonShow(int id, int color, int numPoints, vec3_t *points
 void BotImport_DebugPolygonDelete(int id)
 {
 	if (!debugpolygons) return;
-	debugpolygons[id].inuse = qfalse;
+	debugpolygons[id].inuse = false;
 }
 
 int BotImport_DebugLineCreate(void) {
@@ -461,7 +461,7 @@ void BotImport_DebugLineShow(int line, vec3_t start, vec3_t end, int color) {
 }
 
 void BotClientCommand( int client, const char *command ) {
-	SV_ExecuteClientCommand( &svs.clients[client], command, qtrue );
+	SV_ExecuteClientCommand( &svs.clients[client], command, true );
 }
 
 void SV_BotFrame( int time ) {
@@ -515,7 +515,7 @@ void SV_BotInitBotLib(void) {
 
 	if (debugpolygons) Z_Free(debugpolygons);
 	bot_maxdebugpolys_latch = bot_maxdebugpolys->integer;
-	debugpolygons = (struct bot_debugpoly_s *)Z_Malloc(sizeof(bot_debugpoly_t) * bot_maxdebugpolys_latch, TAG_BOTLIB, qtrue);
+	debugpolygons = (struct bot_debugpoly_s *)Z_Malloc(sizeof(bot_debugpoly_t) * bot_maxdebugpolys_latch, TAG_BOTLIB, true);
 
 	botlib_import.Print = BotImport_Print;
 	botlib_import.Trace = BotImport_Trace;
@@ -564,18 +564,18 @@ int SV_BotGetConsoleMessage( int client, char *buf, int size )
 	cl->lastPacketTime = svs.time;
 
 	if ( cl->reliableAcknowledge == cl->reliableSequence ) {
-		return qfalse;
+		return false;
 	}
 
 	cl->reliableAcknowledge++;
 	index = cl->reliableAcknowledge & ( MAX_RELIABLE_COMMANDS - 1 );
 
 	if ( !cl->reliableCommands[index][0] ) {
-		return qfalse;
+		return false;
 	}
 
 	Q_strncpyz( buf, cl->reliableCommands[index], size );
-	return qtrue;
+	return true;
 }
 
 int SV_BotGetSnapshotEntity( int client, int sequence ) {

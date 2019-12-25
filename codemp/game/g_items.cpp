@@ -127,7 +127,7 @@ void ShieldRemove(gentity_t *self)
 	// Play kill sound...
 	G_AddEvent(self, EV_GENERAL_SOUND, shieldDeactivateSound);
 	self->s.loopSound = 0;
-	self->s.loopIsSoundset = qfalse;
+	self->s.loopIsSoundset = false;
 
 	return;
 }
@@ -183,7 +183,7 @@ void ShieldGoSolid(gentity_t *self)
 		return;
 	}
 
-	trap->Trace (&tr, self->r.currentOrigin, self->r.mins, self->r.maxs, self->r.currentOrigin, self->s.number, CONTENTS_BODY, qfalse, 0, 0 );
+	trap->Trace (&tr, self->r.currentOrigin, self->r.mins, self->r.maxs, self->r.currentOrigin, self->s.number, CONTENTS_BODY, false, 0, 0 );
 	if(tr.startsolid)
 	{	// gah, we can't activate yet
 		self->nextthink = level.time + 200;
@@ -197,13 +197,13 @@ void ShieldGoSolid(gentity_t *self)
 		self->r.contents = CONTENTS_SOLID;
 		self->nextthink = level.time + 1000;
 		self->think = ShieldThink;
-		self->takedamage = qtrue;
+		self->takedamage = true;
 		trap->LinkEntity((sharedEntity_t *)self);
 
 		// Play raising sound...
 		G_AddEvent(self, EV_GENERAL_SOUND, shieldActivateSound);
 		self->s.loopSound = shieldLoopSound;
-		self->s.loopIsSoundset = qfalse;
+		self->s.loopIsSoundset = false;
 	}
 
 	return;
@@ -218,13 +218,13 @@ void ShieldGoNotSolid(gentity_t *self)
 	// nextthink needs to have a large enough interval to avoid excess accumulation of Activate messages
 	self->nextthink = level.time + 200;
 	self->think = ShieldGoSolid;
-	self->takedamage = qfalse;
+	self->takedamage = false;
 	trap->LinkEntity((sharedEntity_t *)self);
 
 	// Play kill sound...
 	G_AddEvent(self, EV_GENERAL_SOUND, shieldDeactivateSound);
 	self->s.loopSound = 0;
-	self->s.loopIsSoundset = qfalse;
+	self->s.loopIsSoundset = false;
 }
 
 // Somebody (a player) has touched the shield.  See if it is a "friend".
@@ -256,14 +256,14 @@ void CreateShield(gentity_t *ent)
 	trace_t		tr;
 	vec3_t		mins, maxs, end, posTraceEnd, negTraceEnd, start;
 	int			height, posWidth, negWidth, halfWidth = 0;
-	qboolean	xaxis;
+	bool	xaxis;
 	int			paramData = 0;
 //	static int	shieldID;
 
 	// trace upward to find height of shield
 	VectorCopy(ent->r.currentOrigin, end);
 	end[2] += MAX_SHIELD_HEIGHT;
-	trap->Trace (&tr, ent->r.currentOrigin, NULL, NULL, end, ent->s.number, MASK_SHOT, qfalse, 0, 0 );
+	trap->Trace (&tr, ent->r.currentOrigin, NULL, NULL, end, ent->s.number, MASK_SHOT, false, 0, 0 );
 	height = (int)(MAX_SHIELD_HEIGHT * tr.fraction);
 
 	// use angles to find the proper axis along which to align the shield
@@ -276,23 +276,23 @@ void CreateShield(gentity_t *ent)
 	{
 		posTraceEnd[1]+=MAX_SHIELD_HALFWIDTH;
 		negTraceEnd[1]-=MAX_SHIELD_HALFWIDTH;
-		xaxis = qfalse;
+		xaxis = false;
 	}
 	else  // shield runs along x-axis
 	{
 		posTraceEnd[0]+=MAX_SHIELD_HALFWIDTH;
 		negTraceEnd[0]-=MAX_SHIELD_HALFWIDTH;
-		xaxis = qtrue;
+		xaxis = true;
 	}
 
 	// trace horizontally to find extend of shield
 	// positive trace
 	VectorCopy(ent->r.currentOrigin, start);
 	start[2] += (height>>1);
-	trap->Trace (&tr, start, 0, 0, posTraceEnd, ent->s.number, MASK_SHOT, qfalse, 0, 0 );
+	trap->Trace (&tr, start, 0, 0, posTraceEnd, ent->s.number, MASK_SHOT, false, 0, 0 );
 	posWidth = MAX_SHIELD_HALFWIDTH * tr.fraction;
 	// negative trace
-	trap->Trace (&tr, start, 0, 0, negTraceEnd, ent->s.number, MASK_SHOT, qfalse, 0, 0 );
+	trap->Trace (&tr, start, 0, 0, negTraceEnd, ent->s.number, MASK_SHOT, false, 0, 0 );
 	negWidth = MAX_SHIELD_HALFWIDTH * tr.fraction;
 
 	// kef -- monkey with dimensions and place origin in center
@@ -338,7 +338,7 @@ void CreateShield(gentity_t *ent)
 	ent->touch = ShieldTouch;
 
 	// see if we're valid
-	trap->Trace (&tr, ent->r.currentOrigin, ent->r.mins, ent->r.maxs, ent->r.currentOrigin, ent->s.number, CONTENTS_BODY, qfalse, 0, 0 );
+	trap->Trace (&tr, ent->r.currentOrigin, ent->r.mins, ent->r.maxs, ent->r.currentOrigin, ent->s.number, CONTENTS_BODY, false, 0, 0 );
 
 	if (tr.startsolid)
 	{	// Something in the way!
@@ -348,7 +348,7 @@ void CreateShield(gentity_t *ent)
 		// nextthink needs to have a large enough interval to avoid excess accumulation of Activate messages
 		ent->nextthink = level.time + 200;
 		ent->think = ShieldGoSolid;
-		ent->takedamage = qfalse;
+		ent->takedamage = false;
 		trap->LinkEntity((sharedEntity_t *)ent);
 	}
 	else
@@ -358,13 +358,13 @@ void CreateShield(gentity_t *ent)
 		ent->nextthink = level.time;
 		ent->think = ShieldThink;
 
-		ent->takedamage = qtrue;
+		ent->takedamage = true;
 		trap->LinkEntity((sharedEntity_t *)ent);
 
 		// Play raising sound...
 		G_AddEvent(ent, EV_GENERAL_SOUND, shieldActivateSound);
 		ent->s.loopSound = shieldLoopSound;
-		ent->s.loopIsSoundset = qfalse;
+		ent->s.loopIsSoundset = false;
 	}
 
 	ShieldGoSolid(ent);
@@ -372,13 +372,13 @@ void CreateShield(gentity_t *ent)
 	return;
 }
 
-qboolean PlaceShield(gentity_t *playerent)
+bool PlaceShield(gentity_t *playerent)
 {
 	static const gitem_t *shieldItem = NULL;
 	gentity_t	*shield = NULL;
 	trace_t		tr;
 	vec3_t		fwd, pos, dest, mins = {-4,-4, 0}, maxs = {4,4,4};
-	static qboolean registered = qfalse;
+	static bool registered = false;
 
 	if ( !registered )
 	{
@@ -388,20 +388,20 @@ qboolean PlaceShield(gentity_t *playerent)
 		shieldDeactivateSound = G_SoundIndex("sound/movers/doors/forcefield_off.wav");
 		shieldDamageSound = G_SoundIndex("sound/effects/bumpfield.wav");
 		shieldItem = BG_FindItemForHoldable(HI_SHIELD);
-		registered = qtrue;
+		registered = true;
 	}
 
 	// can we place this in front of us?
 	AngleVectors (playerent->client->ps.viewangles, fwd, NULL, NULL);
 	fwd[2] = 0;
 	VectorMA(playerent->client->ps.origin, SHIELD_PLACEDIST, fwd, dest);
-	trap->Trace (&tr, playerent->client->ps.origin, mins, maxs, dest, playerent->s.number, MASK_SHOT, qfalse, 0, 0 );
+	trap->Trace (&tr, playerent->client->ps.origin, mins, maxs, dest, playerent->s.number, MASK_SHOT, false, 0, 0 );
 	if (tr.fraction > 0.9)
 	{//room in front
 		VectorCopy(tr.endpos, pos);
 		// drop to floor
 		VectorSet( dest, pos[0], pos[1], pos[2] - 4096 );
-		trap->Trace( &tr, pos, mins, maxs, dest, playerent->s.number, MASK_SOLID, qfalse, 0, 0 );
+		trap->Trace( &tr, pos, mins, maxs, dest, playerent->s.number, MASK_SOLID, false, 0, 0 );
 		if ( !tr.startsolid && !tr.allsolid )
 		{
 			// got enough room so place the portable shield
@@ -444,7 +444,7 @@ qboolean PlaceShield(gentity_t *playerent)
 			trap->LinkEntity ((sharedEntity_t *)shield);
 
 			shield->s.owner = playerent->s.number;
-			shield->s.shouldtarget = qtrue;
+			shield->s.shouldtarget = true;
 			if (level.gametype >= GT_TEAM)
 			{
 				shield->s.teamowner = playerent->client->sess.sessionTeam;
@@ -457,11 +457,11 @@ qboolean PlaceShield(gentity_t *playerent)
 			// Play placing sound...
 			G_AddEvent(shield, EV_GENERAL_SOUND, shieldAttachSound);
 
-			return qtrue;
+			return true;
 		}
 	}
 	// no room
-	return qfalse;
+	return false;
 }
 
 void ItemUse_Binoculars(gentity_t *ent)
@@ -486,7 +486,7 @@ void ItemUse_Binoculars(gentity_t *ent)
 	if (ent->client->ps.zoomMode == 0) // not zoomed or currently zoomed with the disruptor
 	{
 		ent->client->ps.zoomMode = 2;
-		ent->client->ps.zoomLocked = qfalse;
+		ent->client->ps.zoomLocked = false;
 		ent->client->ps.zoomFov = 40.0f;
 	}
 	else if (ent->client->ps.zoomMode == 2)
@@ -527,16 +527,16 @@ void pas_fire( gentity_t *ent )
 	myOrg[1] += fwd[1]*16;
 	myOrg[2] += fwd[2]*16;
 
-	WP_FireTurretMissile(&g_entities[ent->genericValue3], myOrg, fwd, qfalse, 10, 2300, MOD_SENTRY, ent );
+	WP_FireTurretMissile(&g_entities[ent->genericValue3], myOrg, fwd, false, 10, 2300, MOD_SENTRY, ent );
 
 	G_RunObject(ent);
 }
 
 #define TURRET_RADIUS 800
 
-static qboolean pas_find_enemies( gentity_t *self )
+static bool pas_find_enemies( gentity_t *self )
 {
-	qboolean	found = qfalse;
+	bool	found = false;
 	int			count, i;
 	float		bestDist = TURRET_RADIUS*TURRET_RADIUS;
 	float		enemyDist;
@@ -556,7 +556,7 @@ static qboolean pas_find_enemies( gentity_t *self )
 
 	VectorCopy(self->s.pos.trBase, org2);
 
-	count = G_RadiusList( org2, TURRET_RADIUS, self, qtrue, entity_list );
+	count = G_RadiusList( org2, TURRET_RADIUS, self, true, entity_list );
 
 	for ( i = 0; i < count; i++ )
 	{
@@ -592,7 +592,7 @@ static qboolean pas_find_enemies( gentity_t *self )
 			VectorCopy( target->r.currentOrigin, org );
 		}
 
-		trap->Trace( &tr, org2, NULL, NULL, org, self->s.number, MASK_SHOT, qfalse, 0, 0 );
+		trap->Trace( &tr, org2, NULL, NULL, org, self->s.number, MASK_SHOT, false, 0, 0 );
 
 		if ( !tr.allsolid && !tr.startsolid && ( tr.fraction == 1.0 || tr.entityNum == target->s.number ))
 		{
@@ -612,7 +612,7 @@ static qboolean pas_find_enemies( gentity_t *self )
 				}
 
 				bestDist = enemyDist;
-				found = qtrue;
+				found = true;
 			}
 		}
 	}
@@ -623,11 +623,11 @@ static qboolean pas_find_enemies( gentity_t *self )
 void pas_adjust_enemy( gentity_t *ent )
 {
 	trace_t	tr;
-	qboolean keep = qtrue;
+	bool keep = true;
 
 	if ( ent->enemy->health <= 0 )
 	{
-		keep = qfalse;
+		keep = false;
 	}
 	else
 	{
@@ -645,14 +645,14 @@ void pas_adjust_enemy( gentity_t *ent )
 			VectorCopy( ent->enemy->r.currentOrigin, org );
 		}
 
-		trap->Trace( &tr, org2, NULL, NULL, org, ent->s.number, MASK_SHOT, qfalse, 0, 0 );
+		trap->Trace( &tr, org2, NULL, NULL, org, ent->s.number, MASK_SHOT, false, 0, 0 );
 
 		if ( tr.allsolid || tr.startsolid || tr.fraction < 0.9f || tr.entityNum == ent->s.number )
 		{
 			if (tr.entityNum != ent->enemy->s.number)
 			{
 				// trace failed
-				keep = qfalse;
+				keep = false;
 			}
 		}
 	}
@@ -696,7 +696,7 @@ static void turret_die(gentity_t *self, gentity_t *inflictor, gentity_t *attacke
 
 	// clear my data
 	self->die  = 0;//NULL;
-	self->takedamage = qfalse;
+	self->takedamage = false;
 	self->health = 0;
 
 	// hack the effect angle so that explode death can orient the effect properly
@@ -705,7 +705,7 @@ static void turret_die(gentity_t *self, gentity_t *inflictor, gentity_t *attacke
 	G_PlayEffect(EFFECT_EXPLOSION_PAS, self->s.pos.trBase, self->s.angles);
 	G_RadiusDamage(self->s.pos.trBase, &g_entities[self->genericValue3], 30, 256, self, self, MOD_UNKNOWN);
 
-	g_entities[self->genericValue3].client->ps.fd.sentryDeployed = qfalse;
+	g_entities[self->genericValue3].client->ps.fd.sentryDeployed = false;
 
 	//ExplodeDeath( self );
 	G_FreeEntity( self );
@@ -718,7 +718,7 @@ void sentryExpire(gentity_t *self)
 
 void pas_think( gentity_t *ent )
 {
-	qboolean	moved;
+	bool	moved;
 	float		diffYaw, diffPitch;
 	vec3_t		enemyDir, org;
 	vec3_t		frontAngles, backAngles;
@@ -726,7 +726,7 @@ void pas_think( gentity_t *ent )
 	int			iEntityList[MAX_GENTITIES];
 	int			numListedEntities;
 	int			i = 0;
-	qboolean	clTrapped = qfalse;
+	bool	clTrapped = false;
 	vec3_t		testMins, testMaxs;
 
 	testMins[0] = ent->r.currentOrigin[0] + ent->r.mins[0]+4;
@@ -752,7 +752,7 @@ void pas_think( gentity_t *ent )
 			{
 				if (iEntityList[i] == ent->s.number)
 				{
-					clTrapped = qtrue;
+					clTrapped = true;
 					break;
 				}
 				i++;
@@ -841,7 +841,7 @@ void pas_think( gentity_t *ent )
 		ent->s.bolt2 = ENTITYNUM_NONE;
 	}
 
-	moved = qfalse;
+	moved = false;
 	diffYaw = 0.0f; diffPitch = 0.0f;
 
 	ent->speed = AngleNormalize360( ent->speed );
@@ -874,7 +874,7 @@ void pas_think( gentity_t *ent )
 
 	if ( fabs(diffYaw) > 0.25f )
 	{
-		moved = qtrue;
+		moved = true;
 
 		if ( fabs(diffYaw) > 10.0f )
 		{
@@ -890,7 +890,7 @@ void pas_think( gentity_t *ent )
 
 	if ( fabs(diffPitch) > 0.25f )
 	{
-		moved = qtrue;
+		moved = true;
 
 		if ( fabs(diffPitch) > 4.0f )
 		{
@@ -915,7 +915,7 @@ void pas_think( gentity_t *ent )
 	else
 	{
 		ent->s.loopSound = 0;
-		ent->s.loopIsSoundset = qfalse;
+		ent->s.loopIsSoundset = false;
 	}
 
 	if ( ent->enemy && ent->attackDebounceTime < level.time )
@@ -953,7 +953,7 @@ void turret_free(gentity_t *self)
 		return;
 	}
 
-	g_entities[self->genericValue3].client->ps.fd.sentryDeployed = qfalse;
+	g_entities[self->genericValue3].client->ps.fd.sentryDeployed = false;
 
 	G_FreeEntity( self );
 }
@@ -986,10 +986,10 @@ void SP_PAS( gentity_t *base )
 		base->health = 50;
 	}
 
-	base->takedamage = qtrue;
+	base->takedamage = true;
 	base->die  = turret_die;
 
-	base->physicsObject = qtrue;
+	base->physicsObject = true;
 
 	G_Sound( base, CHAN_BODY, G_SoundIndex( "sound/chars/turret/startup.wav" ));
 }
@@ -1056,12 +1056,12 @@ void ItemUse_Sentry( gentity_t *ent )
 
 	sentry->alliedTeam = ent->client->sess.sessionTeam;
 
-	ent->client->ps.fd.sentryDeployed = qtrue;
+	ent->client->ps.fd.sentryDeployed = true;
 
 	trap->LinkEntity((sharedEntity_t *)sentry);
 
 	sentry->s.owner = ent->s.number;
-	sentry->s.shouldtarget = qtrue;
+	sentry->s.shouldtarget = true;
 	if (level.gametype >= GT_TEAM)
 	{
 		sentry->s.teamowner = ent->client->sess.sessionTeam;
@@ -1128,7 +1128,7 @@ void Jetpack_Off(gentity_t *ent)
 		return;
 	}
 
-	ent->client->jetPackOn = qfalse;
+	ent->client->jetPackOn = false;
 }
 
 void Jetpack_On(gentity_t *ent)
@@ -1152,7 +1152,7 @@ void Jetpack_On(gentity_t *ent)
 
 	G_Sound(ent, CHAN_AUTO, G_SoundIndex("sound/boba/JETON"));
 
-	ent->client->jetPackOn = qtrue;
+	ent->client->jetPackOn = true;
 }
 
 void ItemUse_Jetpack( gentity_t *ent )
@@ -1242,7 +1242,7 @@ void SpecialItemThink(gentity_t *ent)
 		return;
 	}
 
-	G_RunExPhys(ent, gravity, mass, bounce, qfalse, NULL, 0);
+	G_RunExPhys(ent, gravity, mass, bounce, false, NULL, 0);
 	VectorCopy(ent->r.currentOrigin, ent->s.origin);
 	ent->nextthink = level.time + 50;
 }
@@ -1586,7 +1586,7 @@ void EWebFire(gentity_t *owner, gentity_t *eweb)
 	VectorMA(p, -16.0f, d, bPoint);
 
 	//create the missile
-	missile = CreateMissile( bPoint, d, 1200.0f, 10000, owner, qfalse );
+	missile = CreateMissile( bPoint, d, 1200.0f, 10000, owner, false );
 
 	missile->classname = "generic_proj";
 	missile->s.weapon = WP_TURRET;
@@ -1623,7 +1623,7 @@ void EWebPositionUser(gentity_t *owner, gentity_t *eweb)
 
 	p[2] += 4.0f;
 
-	trap->Trace(&tr, owner->client->ps.origin, owner->r.mins, owner->r.maxs, p, owner->s.number, MASK_PLAYERSOLID, qfalse, 0, 0);
+	trap->Trace(&tr, owner->client->ps.origin, owner->r.mins, owner->r.maxs, p, owner->s.number, MASK_PLAYERSOLID, false, 0, 0);
 
 	if (!tr.startsolid && !tr.allsolid && tr.fraction == 1.0f)
 	{ //all clear, we can move there
@@ -1631,7 +1631,7 @@ void EWebPositionUser(gentity_t *owner, gentity_t *eweb)
 
 		VectorCopy(p, pDown);
 		pDown[2] -= 7.0f;
-		trap->Trace(&tr, p, owner->r.mins, owner->r.maxs, pDown, owner->s.number, MASK_PLAYERSOLID, qfalse, 0, 0);
+		trap->Trace(&tr, p, owner->r.mins, owner->r.maxs, pDown, owner->s.number, MASK_PLAYERSOLID, false, 0, 0);
 
 		if (!tr.startsolid && !tr.allsolid)
 		{
@@ -1715,14 +1715,14 @@ void EWebUpdateBoneAngles(gentity_t *owner, gentity_t *eweb)
 //keep it updated
 void EWebThink(gentity_t *self)
 {
-	qboolean killMe = qfalse;
+	bool killMe = false;
 	const float gravity = 3.0f;
 	const float mass = 0.09f;
 	const float bounce = 1.1f;
 
 	if (self->r.ownerNum == ENTITYNUM_NONE)
 	{
-		killMe = qtrue;
+		killMe = true;
 	}
 	else
 	{
@@ -1731,7 +1731,7 @@ void EWebThink(gentity_t *self)
 		if (!owner->inuse || !owner->client || owner->client->pers.connected != CON_CONNECTED ||
 			owner->client->ewebIndex != self->s.number || owner->health < 1)
 		{
-			killMe = qtrue;
+			killMe = true;
 		}
 		else if (owner->client->ps.emplacedIndex != self->s.number)
 		{ //just go back to the inventory then
@@ -1788,7 +1788,7 @@ void EWebThink(gentity_t *self)
 	}
 
 	//run some physics on it real quick so it falls and stuff properly
-	G_RunExPhys(self, gravity, mass, bounce, qfalse, NULL, 0);
+	G_RunExPhys(self, gravity, mass, bounce, false, NULL, 0);
 
 	self->nextthink = level.time;
 }
@@ -1817,7 +1817,7 @@ gentity_t *EWeb_Create(gentity_t *spawner)
 
 	VectorMA(s, 48.0f, fwd, pos);
 
-	trap->Trace(&tr, s, mins, maxs, pos, spawner->s.number, MASK_PLAYERSOLID, qfalse, 0, 0);
+	trap->Trace(&tr, s, mins, maxs, pos, spawner->s.number, MASK_PLAYERSOLID, false, 0, 0);
 
 	if (tr.allsolid || tr.startsolid || tr.fraction != 1.0f)
 	{ //can't spawn here, we are in solid
@@ -1830,14 +1830,14 @@ gentity_t *EWeb_Create(gentity_t *spawner)
 	ent->clipmask = MASK_PLAYERSOLID;
 	ent->r.contents = MASK_PLAYERSOLID;
 
-	ent->physicsObject = qtrue;
+	ent->physicsObject = true;
 
 	//for the sake of being able to differentiate client-side between this and an emplaced gun
 	ent->s.weapon = WP_NONE;
 
 	VectorCopy(pos, downPos);
 	downPos[2] -= 18.0f;
-	trap->Trace(&tr, pos, mins, maxs, downPos, spawner->s.number, MASK_PLAYERSOLID, qfalse, 0, 0);
+	trap->Trace(&tr, pos, mins, maxs, downPos, spawner->s.number, MASK_PLAYERSOLID, false, 0, 0);
 
 	if (tr.startsolid || tr.allsolid || tr.fraction == 1.0f || tr.entityNum < ENTITYNUM_WORLD)
 	{ //didn't hit ground.
@@ -1856,7 +1856,7 @@ gentity_t *EWeb_Create(gentity_t *spawner)
 	ent->s.owner = spawner->s.number;
 	ent->s.teamowner = spawner->client->sess.sessionTeam;
 
-	ent->takedamage = qtrue;
+	ent->takedamage = true;
 
 	if (spawner->client->ewebHealth <= 0)
 	{ //refresh the owner's e-web health if its last e-web did not exist or was killed
@@ -2024,7 +2024,7 @@ int Pickup_Powerup( gentity_t *ent, gentity_t *other ) {
 		}
 
 		// if not line of sight, no sound
-		trap->Trace( &tr, client->ps.origin, NULL, NULL, ent->s.pos.trBase, ENTITYNUM_NONE, CONTENTS_SOLID, qfalse, 0, 0 );
+		trap->Trace( &tr, client->ps.origin, NULL, NULL, ent->s.pos.trBase, ENTITYNUM_NONE, CONTENTS_SOLID, false, 0, 0 );
 		if ( tr.fraction != 1.0 ) {
 			continue;
 		}
@@ -2236,7 +2236,7 @@ void RespawnItem( gentity_t *ent ) {
 
 void Touch_Item (gentity_t *ent, gentity_t *other, trace_t *trace) {
 	int			respawn;
-	qboolean	predict;
+	bool	predict;
 
 	if (ent->genericValue10 > level.time &&
 		other &&
@@ -2300,8 +2300,8 @@ void Touch_Item (gentity_t *ent, gentity_t *other, trace_t *trace) {
 	switch( ent->item->giType ) {
 	case IT_WEAPON:
 		respawn = Pickup_Weapon(ent, other);
-//		predict = qfalse;
-		predict = qtrue;
+//		predict = false;
+		predict = true;
 		break;
 	case IT_AMMO:
 		respawn = Pickup_Ammo(ent, other);
@@ -2327,23 +2327,23 @@ void Touch_Item (gentity_t *ent, gentity_t *other, trace_t *trace) {
 				other->client->ps.stats[STAT_WEAPONS] |= (1 << weapForAmmo);
 			}
 		}
-//		predict = qfalse;
-		predict = qtrue;
+//		predict = false;
+		predict = true;
 		break;
 	case IT_ARMOR:
 		respawn = Pickup_Armor(ent, other);
-//		predict = qfalse;
-		predict = qtrue;
+//		predict = false;
+		predict = true;
 		break;
 	case IT_HEALTH:
 		respawn = Pickup_Health(ent, other);
-//		predict = qfalse;
-		predict = qtrue;
+//		predict = false;
+		predict = true;
 		break;
 	case IT_POWERUP:
 		respawn = Pickup_Powerup(ent, other);
-		predict = qfalse;
-//		predict = qtrue;
+		predict = false;
+//		predict = true;
 		break;
 	case IT_TEAM:
 		respawn = Pickup_Team(ent, other);
@@ -2401,7 +2401,7 @@ void Touch_Item (gentity_t *ent, gentity_t *other, trace_t *trace) {
 		ent->r.svFlags |= SVF_NOCLIENT;
 		ent->s.eFlags |= EF_NODRAW;
 		ent->r.contents = 0;
-		ent->unlinkAfterEvent = qtrue;
+		ent->unlinkAfterEvent = true;
 		return;
 	}
 
@@ -2420,7 +2420,7 @@ void Touch_Item (gentity_t *ent, gentity_t *other, trace_t *trace) {
 
 	// dropped items will not respawn
 	if ( ent->flags & FL_DROPPED_ITEM ) {
-		ent->freeAfterEvent = qtrue;
+		ent->freeAfterEvent = true;
 	}
 
 	// picked up items still stay around, they just don't
@@ -2530,7 +2530,7 @@ gentity_t *LaunchItem( gitem_t *item, vec3_t origin, vec3_t velocity ) {
 		dropped->s.angles[ROLL] = -90;
 	}
 
-	dropped->physicsObject = qtrue;
+	dropped->physicsObject = true;
 
 	trap->LinkEntity ((sharedEntity_t *)dropped);
 
@@ -2696,7 +2696,7 @@ void FinishSpawningItem( gentity_t *ent ) {
 		ent->r.maxs[2] -= 0.1f;
 
 		VectorSet( dest, ent->s.origin[0], ent->s.origin[1], ent->s.origin[2] - 4096 );
-		trap->Trace( &tr, ent->s.origin, ent->r.mins, ent->r.maxs, dest, ent->s.number, MASK_SOLID, qfalse, 0, 0 );
+		trap->Trace( &tr, ent->s.origin, ent->r.mins, ent->r.maxs, dest, ent->s.number, MASK_SOLID, false, 0, 0 );
 		if ( tr.startsolid ) {
 			trap->Print ("FinishSpawningItem: %s startsolid at %s\n", ent->classname, vtos(ent->s.origin));
 			G_FreeEntity( ent );
@@ -2736,7 +2736,7 @@ void FinishSpawningItem( gentity_t *ent ) {
 	trap->LinkEntity ((sharedEntity_t *)ent);
 }
 
-qboolean	itemRegistered[MAX_ITEMS];
+bool	itemRegistered[MAX_ITEMS];
 
 void G_CheckTeamItems( void ) {
 
@@ -2773,7 +2773,7 @@ void RegisterItem( gitem_t *item ) {
 	if ( !item ) {
 		trap->Error( ERR_DROP, "RegisterItem: NULL" );
 	}
-	itemRegistered[ item - bg_itemlist ] = qtrue;
+	itemRegistered[ item - bg_itemlist ] = true;
 }
 
 // Write the needed items to a config string so the client will know which ones to precache
@@ -2926,7 +2926,7 @@ void G_RunItem( gentity_t *ent ) {
 	} else {
 		mask = MASK_PLAYERSOLID & ~CONTENTS_BODY;//MASK_SOLID;
 	}
-	trap->Trace( &tr, ent->r.currentOrigin, ent->r.mins, ent->r.maxs, origin, ent->r.ownerNum, mask, qfalse, 0, 0 );
+	trap->Trace( &tr, ent->r.currentOrigin, ent->r.mins, ent->r.maxs, origin, ent->r.ownerNum, mask, false, 0, 0 );
 
 	VectorCopy( tr.endpos, ent->r.currentOrigin );
 

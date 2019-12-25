@@ -22,16 +22,26 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
 
+// ======================================================================
+// INCLUDE
+// ======================================================================
+
 #include "qcommon/sstring.h"	// #include <string>
-#include <vector>
 #include <map>
+#include <vector>
+
+// ======================================================================
+// DEFINE
+// ======================================================================
 
 #define	AMBIENT_SET_FILENAME	"sound/sound.txt"
 
-const	int	MAX_WAVES_PER_GROUP	= 8;
-const	int	MAX_SET_NAME_LENGTH	= 64;
+constexpr int MAX_WAVES_PER_GROUP = 8;
+constexpr int MAX_SET_NAME_LENGTH = 64;
 
-// Enums
+// ======================================================================
+// ENUM
+// ======================================================================
 
 enum set_e
 {
@@ -57,7 +67,9 @@ enum setKeyword_e
 	NUM_AS_KEYWORDS,
 };
 
-// Structures
+// ======================================================================
+// STRUCT
+// ======================================================================
 
 //NOTENOTE: Was going to make this a class, but don't want to muck around
 typedef struct ambientSet_s
@@ -75,9 +87,11 @@ typedef struct ambientSet_s
 	int				fadeTime;						//When the fade was started on this set
 } ambientSet_t;
 
-typedef void (*parseFunc_t)( ambientSet_t & );
+typedef void (*parseFunc_t)(ambientSet_t &);
 
-// Classes
+// ======================================================================
+// CLASS
+// ======================================================================
 
 //NOTENOTE: But this one should be a class because of all the mapping and internal data handling
 class CSetGroup
@@ -106,14 +120,14 @@ protected:
 	std::map	< sstring_t, ambientSet_t * >	*m_setMap;
 };
 
-// Prototypes
+// ======================================================================
+// FUNCTION
+// ======================================================================
 
-void AS_Init( void );
-void AS_Free( void );
-void AS_ParseSets( void );
-void AS_AddPrecacheEntry( const char *name );
-
-void S_UpdateAmbientSet ( const char *name, vec3_t origin );
 int S_AddLocalSet( const char *name, vec3_t listener_origin, vec3_t origin, int entID, int time );
-
 sfxHandle_t	AS_GetBModelSound( const char *name, int stage );
+void AS_AddPrecacheEntry( const char *name );
+void AS_Free( void );
+void AS_Init( void );
+void AS_ParseSets( void );
+void S_UpdateAmbientSet ( const char *name, vec3_t origin );

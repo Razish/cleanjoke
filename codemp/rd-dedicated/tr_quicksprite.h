@@ -12,7 +12,7 @@ private:
 			textureBundle_t	*mTexBundle;
 			unsigned long	mGLStateBits;
 			int				mFogIndex;
-			qboolean		mUseFog;
+			bool		mUseFog;
 			vec4_t			mVerts[SHADER_MAX_VERTEXES];
 			unsigned int	mIndexes[SHADER_MAX_VERTEXES];			// Ideally this would be static, cause it never changes
 			vec2_t			mTextureCoords[SHADER_MAX_VERTEXES];	// Ideally this would be static, cause it never changes

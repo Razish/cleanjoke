@@ -22,13 +22,21 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
 
+// ======================================================================
+// INCLUDE
+// ======================================================================
+
 #include "client/FxPrimitives.h"
 
-bool	FX_Free( bool templates );	// ditches all active effects;
-int		FX_Init( refdef_t* refdef );	// called in CG_Init to purge the fx system.
+// ======================================================================
+// FUNCTION
+// ======================================================================
+
+bool	FX_Free( bool templates );
+int		FX_Init( refdef_t* refdef );
+void	FX_Add( bool portal );
 void	FX_SetRefDef(refdef_t *refdef);
-void	FX_Add( bool portal );		// called every cgame frame to add all fx into the scene.
-void	FX_Stop( void );	// ditches all active effects without touching the templates.
+void	FX_Stop( void );
 
 CParticle *FX_AddParticle( vec3_t org, vec3_t vel, vec3_t accel,
 							float size1, float size2, float sizeParm,
@@ -76,7 +84,7 @@ CCylinder *FX_AddCylinder( vec3_t start, vec3_t normal,
 							int killTime, qhandle_t shader, int flags,
 							EMatImpactEffect matImpactFX = MATIMPACTFX_NONE, int fxParm = -1,
 							CGhoul2Info_v *ghoul2 = NULL, int entNum=-1, int modelNum=-1, int boltNum=-1,
-							qboolean traceEnd = qfalse);
+							bool traceEnd = false);
 
 CEmitter *FX_AddEmitter( vec3_t org, vec3_t vel, vec3_t accel,
 							float size1, float size2, float sizeParm,

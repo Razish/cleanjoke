@@ -82,7 +82,7 @@ static const consoleCommand_t commands[] = {
 static const size_t numCommands = ARRAY_LEN( commands );
 
 // The string has been tokenized and can be retrieved with Cmd_Argc() / Cmd_Argv()
-qboolean UI_ConsoleCommand( int realTime ) {
+bool UI_ConsoleCommand( int realTime ) {
 	consoleCommand_t *command = NULL;
 
 	uiInfo.uiDC.frameTime = realTime - uiInfo.uiDC.realTime;
@@ -91,10 +91,10 @@ qboolean UI_ConsoleCommand( int realTime ) {
 	command = (consoleCommand_t *)Q_LinearSearch( UI_Argv( 0 ), commands, numCommands, sizeof( commands[0] ), cmdcmp );
 
 	if ( !command )
-		return qfalse;
+		return false;
 
 	command->func();
-	return qtrue;
+	return true;
 }
 
 void UI_DrawHandlePic( float x, float y, float w, float h, qhandle_t hShader ) {

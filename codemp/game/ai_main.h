@@ -212,7 +212,7 @@ struct bot_state_t {
 	float            isCamping;
 	wpobject_t      *wpCamping;
 	wpobject_t      *wpCampingTo;
-	qboolean         campStanding;
+	bool         campStanding;
 	int              randomNavTime;
 	int              randomNav;
 	int              saberSpecialist;
@@ -257,7 +257,7 @@ struct bot_state_t {
 	int              saberBTime;
 	int              saberSTime;
 	int              saberThrowTime;
-	qboolean         saberPower;
+	bool         saberPower;
 	int              saberPowerTime;
 	int              botChallengingTime;
 	char             forceinfo[MAX_FORCE_INFO_SIZE];
@@ -266,7 +266,7 @@ struct bot_state_t {
 #endif
 	int              doForcePush;
 	int              noUseTime;
-	qboolean         doingFallback;
+	bool         doingFallback;
 	int              iHaveNoIdeaWhereIAmGoing;
 	vec3_t           lastSignificantAreaChange;
 	int              lastSignificantChangeTime;

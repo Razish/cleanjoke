@@ -24,7 +24,7 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 #pragma once
 
 #include "qcommon/q_shared.h"
-#include "qcommon/qcommon.h"
+#include "qcommon/q_common.h"
 #include "game/g_public.h"
 #include "game/bg_public.h"
 #include "rd-common/tr_public.h"
@@ -54,7 +54,7 @@ typedef enum {
 
 typedef struct server_s {
 	serverState_t	state;
-	qboolean		restarting;			// if true, send configstring changes during SS_LOADING
+	bool		restarting;			// if true, send configstring changes during SS_LOADING
 	int				serverId;			// changes each server start
 	int				restartedServerId;	// serverId before a map_restart
 	int				checksumFeed;		//
@@ -85,7 +85,7 @@ typedef struct server_s {
 	char			*mSharedMemory;
 
 	time_t			realMapTimeStarted;	// time the current map was started
-	qboolean		demosPruned; // whether or not existing demos were cleaned up already
+	bool		demosPruned; // whether or not existing demos were cleaned up already
 } server_t;
 
 typedef struct clientSnapshot_s {
@@ -117,11 +117,11 @@ typedef enum {
 // struct to hold demo data for a single demo
 typedef struct {
 	char		demoName[MAX_OSPATH];
-	qboolean	demorecording;
-	qboolean	demowaiting;	// don't record until a non-delta message is sent
+	bool	demorecording;
+	bool	demowaiting;	// don't record until a non-delta message is sent
 	int			minDeltaFrame;	// the first non-delta frame stored in the demo.  cannot delta against frames older than this
 	fileHandle_t	demofile;
-	qboolean	isBot;
+	bool	isBot;
 	int			botReliableAcknowledge; // for bots, need to maintain a separate reliableAcknowledge to record server messages into the demo file
 } demoInfo_t;
 
@@ -129,7 +129,7 @@ typedef struct client_s {
 	clientState_t	state;
 	char			userinfo[MAX_INFO_STRING];		// name, etc
 
-	qboolean		sentGamedir; //see if he has been sent an svc_setgame
+	bool		sentGamedir; //see if he has been sent an svc_setgame
 
 	char			reliableCommands[MAX_RELIABLE_COMMANDS][MAX_STRING_CHARS];
 	int				reliableSequence;		// last added reliable message, not necesarily sent or acknowledged yet
@@ -157,7 +157,7 @@ typedef struct client_s {
 	int				downloadXmitBlock;	// last block we xmited
 	unsigned char	*downloadBlocks[MAX_DOWNLOAD_WINDOW];	// the buffers for the download blocks
 	int				downloadBlockSize[MAX_DOWNLOAD_WINDOW];
-	qboolean		downloadEOF;		// We have sent the EOF block
+	bool		downloadEOF;		// We have sent the EOF block
 	int				downloadSendTime;	// time we last got an ack from the client
 
 	int				deltaMessage;		// frame last client usercmd message
@@ -165,7 +165,7 @@ typedef struct client_s {
 	int				lastPacketTime;		// svs.time when packet was last received
 	int				lastConnectTime;	// svs.time when connection started
 	int				nextSnapshotTime;	// send another snapshot when svs.time >= nextSnapshotTime
-	qboolean		rateDelayed;		// true if nextSnapshotTime was set based on rate instead of snapshotMsec
+	bool		rateDelayed;		// true if nextSnapshotTime was set based on rate instead of snapshotMsec
 	int				timeoutCount;		// must timeout a few frames in a row so debugging doesn't break
 	clientSnapshot_t	frames[PACKET_BACKUP];	// updates can be delta'd from here
 	int				ping;
@@ -173,21 +173,21 @@ typedef struct client_s {
 	int				snapshotMsec;		// requests a snapshot every snapshotMsec unless rate choked
 	int				wishSnaps;			// requested snapshot/sec rate
 	int				pureAuthentic;
-	qboolean		gotCP; // TTimo - additional flag to distinguish between a bad pure checksum, and no cp command at all
+	bool		gotCP; // TTimo - additional flag to distinguish between a bad pure checksum, and no cp command at all
 	netchan_t		netchan;
 
 	int				lastUserInfoChange; //if > svs.time && count > x, deny change -rww
 	int				lastUserInfoCount; //allow a certain number of changes within a certain time period -rww
 
 	int				oldServerTime;
-	qboolean		csUpdated[MAX_CONFIGSTRINGS];
+	bool		csUpdated[MAX_CONFIGSTRINGS];
 
 	demoInfo_t		demo;
 } client_t;
 
 // this structure will be cleared only when the game dll changes
 typedef struct serverStatic_s {
-	qboolean	initialized;				// sv_init has completed
+	bool	initialized;				// sv_init has completed
 
 	int			time;						// will be strictly increasing across level changes
 	time_t		startTime;					// time since epoch the executable was started
@@ -203,7 +203,7 @@ typedef struct serverStatic_s {
 
 	netadr_t	authorizeAddress;			// for rcon return messages
 
-	qboolean	gameStarted;				// gvm is loaded
+	bool	gameStarted;				// gvm is loaded
 } serverStatic_t;
 
 #define SERVER_MAXBANS	1024
@@ -213,7 +213,7 @@ typedef struct serverBan_s {
 	// For a CIDR-Notation type suffix
 	int subnet;
 
-	qboolean isexception;
+	bool isexception;
 } serverBan_t;
 
 extern	serverStatic_t	svs;				// persistant server info across maps
@@ -244,8 +244,8 @@ struct leakyBucket_s {
 
 extern leakyBucket_t outboundLeakyBucket;
 
-qboolean SVC_RateLimit( leakyBucket_t *bucket, int burst, int period );
-qboolean SVC_RateLimitAddress( netadr_t from, int burst, int period );
+bool SVC_RateLimit( leakyBucket_t *bucket, int burst, int period );
+bool SVC_RateLimitAddress( netadr_t from, int burst, int period );
 void SV_FinalMessage (char *message);
 void QDECL SV_SendServerCommand( client_t *cl, const char *fmt, ...);
 
@@ -264,13 +264,13 @@ void SV_SetUserinfo( int index, const char *val );
 void SV_GetUserinfo( int index, char *buffer, int bufferSize );
 
 void SV_ChangeMaxClients( void );
-void SV_SpawnServer( char *server, qboolean killBots, ForceReload_e eForceReload );
+void SV_SpawnServer( char *server, bool killBots, ForceReload_e eForceReload );
 
 // sv_challenge.cpp
 void SV_ChallengeInit();
 void SV_ChallengeShutdown();
 int SV_CreateChallenge(netadr_t from);
-qboolean SV_VerifyChallenge(int receivedChallenge, netadr_t from);
+bool SV_VerifyChallenge(int receivedChallenge, netadr_t from);
 
 // sv_client.c
 void SV_GetChallenge( netadr_t from );
@@ -284,7 +284,7 @@ void SV_UserinfoChanged( client_t *cl );
 void SV_ClientEnterWorld( client_t *client, usercmd_t *cmd );
 void SV_DropClient( client_t *drop, const char *reason );
 
-void SV_ExecuteClientCommand( client_t *cl, const char *s, qboolean clientOK );
+void SV_ExecuteClientCommand( client_t *cl, const char *s, bool clientOK );
 void SV_ClientThink (client_t *cl, usercmd_t *cmd);
 
 void SV_WriteDownloadToClient( client_t *cl , msg_t *msg );
@@ -312,7 +312,7 @@ playerState_t *SV_GameClientNum( int num );
 svEntity_t	*SV_SvEntityForGentity( sharedEntity_t *gEnt );
 sharedEntity_t *SV_GEntityForSvEntity( svEntity_t *svEnt );
 void		SV_InitGameProgs ( void );
-qboolean	SV_inPVS (const vec3_t p1, const vec3_t p2);
+bool	SV_inPVS (const vec3_t p1, const vec3_t p2);
 
 // sv_bot.c
 void		SV_BotFrame( int time );
@@ -377,7 +377,7 @@ void SV_ClipToEntity( trace_t *trace, const vec3_t start, const vec3_t mins, con
 // sv_net_chan.c
 void SV_Netchan_Transmit( client_t *client, msg_t *msg);	//int length, const byte *data );
 void SV_Netchan_TransmitNextFragment( netchan_t *chan );
-qboolean SV_Netchan_Process( client_t *client, msg_t *msg );
+bool SV_Netchan_Process( client_t *client, msg_t *msg );
 char	*SV_ExpandNewlines( char *in );
 void SV_CreateClientGameStateMessage( client_t *client, msg_t *msg );
 const char *SV_GetStringEdString(char *refSection, char *refName);

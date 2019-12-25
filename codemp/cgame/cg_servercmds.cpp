@@ -403,7 +403,7 @@ static void CG_ConfigStringModified( void ) {
 
 	// do something with it if necessary
 	if ( num == CS_MUSIC ) {
-		CG_StartMusic( qtrue );
+		CG_StartMusic( true );
 	} else if ( num == CS_SERVERINFO ) {
 		CG_ParseServerinfo();
 	} else if ( num == CS_WARMUP ) {
@@ -470,24 +470,24 @@ static void CG_ConfigStringModified( void ) {
 		cgs.levelStartTime = atoi( str );
 	} else if ( num == CS_VOTE_TIME ) {
 		cgs.voteTime = atoi( str );
-		cgs.voteModified = qtrue;
+		cgs.voteModified = true;
 	} else if ( num == CS_VOTE_YES ) {
 		cgs.voteYes = atoi( str );
-		cgs.voteModified = qtrue;
+		cgs.voteModified = true;
 	} else if ( num == CS_VOTE_NO ) {
 		cgs.voteNo = atoi( str );
-		cgs.voteModified = qtrue;
+		cgs.voteModified = true;
 	} else if ( num == CS_VOTE_STRING ) {
 		Q_strncpyz( cgs.voteString, str, sizeof( cgs.voteString ) );
 	} else if ( num >= CS_TEAMVOTE_TIME && num <= CS_TEAMVOTE_TIME + 1) {
 		cgs.teamVoteTime[num-CS_TEAMVOTE_TIME] = atoi( str );
-		cgs.teamVoteModified[num-CS_TEAMVOTE_TIME] = qtrue;
+		cgs.teamVoteModified[num-CS_TEAMVOTE_TIME] = true;
 	} else if ( num >= CS_TEAMVOTE_YES && num <= CS_TEAMVOTE_YES + 1) {
 		cgs.teamVoteYes[num-CS_TEAMVOTE_YES] = atoi( str );
-		cgs.teamVoteModified[num-CS_TEAMVOTE_YES] = qtrue;
+		cgs.teamVoteModified[num-CS_TEAMVOTE_YES] = true;
 	} else if ( num >= CS_TEAMVOTE_NO && num <= CS_TEAMVOTE_NO + 1) {
 		cgs.teamVoteNo[num-CS_TEAMVOTE_NO] = atoi( str );
-		cgs.teamVoteModified[num-CS_TEAMVOTE_NO] = qtrue;
+		cgs.teamVoteModified[num-CS_TEAMVOTE_NO] = true;
 	} else if ( num >= CS_TEAMVOTE_STRING && num <= CS_TEAMVOTE_STRING + 1) {
 		Q_strncpyz( cgs.teamVoteString[num-CS_TEAMVOTE_STRING], str, sizeof( cgs.teamVoteString ) );
 	} else if ( num == CS_INTERMISSION ) {
@@ -531,7 +531,7 @@ static void CG_ConfigStringModified( void ) {
 	}
 	else if ( num >= CS_PLAYERS && num < CS_PLAYERS+MAX_CLIENTS )
 	{
-		CG_NewClientInfo( num - CS_PLAYERS, qtrue);
+		CG_NewClientInfo( num - CS_PLAYERS, true);
 		CG_BuildSpectatorString();
 	} else if ( num == CS_FLAGSTATUS ) {
 		if( cgs.gametype == GT_CTF || cgs.gametype == GT_CTY ) {
@@ -606,8 +606,8 @@ void CG_KillCEntityG2(int entNum)
 		cent->frame_hold = NULL;
 	}
 
-	cent->isRagging = qfalse; //just in case.
-	cent->ikStatus = qfalse;
+	cent->isRagging = false; //just in case.
+	cent->ikStatus = false;
 
 	cent->localAnimIndex = 0;
 }
@@ -677,13 +677,13 @@ static void CG_MapRestart( void ) {
 
 	cg.timelimitWarnings = 0;
 
-	cg.intermissionStarted = qfalse;
+	cg.intermissionStarted = false;
 
 	cgs.voteTime = 0;
 
-	cg.mapRestart = qtrue;
+	cg.mapRestart = true;
 
-	CG_StartMusic(qtrue);
+	CG_StartMusic(true);
 
 	trap->S_ClearLoopingSounds();
 
@@ -716,7 +716,7 @@ void CG_CheckSVStringEdRef(char *buf, const char *str)
 	int i = 0;
 	int b = 0;
 	int strLen = 0;
-	qboolean gotStrip = qfalse;
+	bool gotStrip = false;
 
 	if (!str || !str[0])
 	{
@@ -738,7 +738,7 @@ void CG_CheckSVStringEdRef(char *buf, const char *str)
 
 	while (i < strLen && str[i])
 	{
-		gotStrip = qfalse;
+		gotStrip = false;
 
 		if (str[i] == '@' && (i+1) < strLen)
 		{
@@ -809,7 +809,7 @@ static void CG_BodyQueueCopy(centity_t *cent, int clientNum, int knownWeapon)
 		return;
 	}
 
-	cent->isRagging = qfalse; //reset in case it's still set from another body that was in this cent slot.
+	cent->isRagging = false; //reset in case it's still set from another body that was in this cent slot.
 	cent->ownerRagging = source->isRagging; //if the owner was in ragdoll state, then we want to go into it too right away.
 
 	cent->bodyFadeTime = 0;
@@ -821,7 +821,7 @@ static void CG_BodyQueueCopy(centity_t *cent, int clientNum, int knownWeapon)
 
 	if (source->isRagging)
 	{ //just reset it now.
-		source->isRagging = qfalse;
+		source->isRagging = false;
 		trap->G2API_SetRagDoll(source->ghoul2, NULL); //calling with null parms resets to no ragdoll.
 	}
 
@@ -839,13 +839,13 @@ static void CG_BodyQueueCopy(centity_t *cent, int clientNum, int knownWeapon)
 	{
 		int aNum;
 		int eFrame;
-		qboolean fallBack = qfalse;
+		bool fallBack = false;
 
 		//anim = &bgAllAnims[cent->localAnimIndex].anims[ cent->currentState.torsoAnim ];
 		if (!BG_InDeathAnim(source->currentState.torsoAnim))
 		{ //then just snap the corpse into a default
 			anim = &bgAllAnims[source->localAnimIndex].anims[ BOTH_DEAD1 ];
-			fallBack = qtrue;
+			fallBack = true;
 		}
 		else
 		{
@@ -979,10 +979,10 @@ static void CG_RestoreClientGhoul_f( void ) {
 	int			indexNum = 0;
 	int			argNum = trap->Cmd_Argc();
 	centity_t	*clent;
-	qboolean	IRCG = qfalse;
+	bool	IRCG = false;
 
 	if ( !strcmp( CG_Argv( 0 ), "ircg" ) )
-		IRCG = qtrue;
+		IRCG = true;
 
 	if ( argNum < 1 ) {
 		assert( 0 );
@@ -1034,7 +1034,7 @@ static void CG_RestoreClientGhoul_f( void ) {
 
 	//make sure ragdoll state is reset
 	if ( clent->isRagging ) {
-		clent->isRagging = qfalse;
+		clent->isRagging = false;
 		trap->G2API_SetRagDoll( clent->ghoul2, NULL ); //calling with null parms resets to no ragdoll.
 	}
 
@@ -1156,7 +1156,7 @@ static void CG_RemapShader_f( void ) {
 static void CG_ClientLevelShot_f( void ) {
 	// clientLevelShot is sent before taking a special screenshot for
 	// the menu system during development
-	cg.levelShot = qtrue;
+	cg.levelShot = true;
 }
 
 typedef struct serverCommand_s {

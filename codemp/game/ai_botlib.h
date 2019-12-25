@@ -206,13 +206,13 @@ struct aas_routingupdate_t {
 	vec3_t              start;            // start point the area was entered
 	uint16_t            tmptraveltime;    // temporary travel time
 	uint16_t            *areatraveltimes; // travel times within the area
-	qboolean            inlist;           // true if the update is in the list
+	bool            inlist;           // true if the update is in the list
 	aas_routingupdate_t *next;
 	aas_routingupdate_t *prev;
 };
 
 struct aas_trace_t {
-	qboolean startsolid; // if true, the initial point was in a solid area
+	bool startsolid; // if true, the initial point was in a solid area
 	float    fraction;   // time completed, 1.0 = didn't hit anything
 	vec3_t   endpos;     // final position
 	int      ent;        // entity blocking the trace
@@ -293,8 +293,8 @@ struct bsp_surface_t {
 };
 
 struct bsp_trace_t {
-	qboolean      allsolid;   // if true, plane is not valid
-	qboolean      startsolid; // if true, the initial point was in a solid area
+	bool      allsolid;   // if true, plane is not valid
+	bool      startsolid; // if true, the initial point was in a solid area
 	float         fraction;   // time completed, 1.0 = didn't hit anything
 	vec3_t        endpos;     // final position
 	cplane_t      plane;      // surface normal at impact
@@ -438,11 +438,11 @@ struct bot_weaponstate_t {
 
 aas_link_t        *AAS_AASLinkEntity( vec3_t absmins, vec3_t absmaxs, int entnum );
 aas_link_t        *AAS_AllocAASLink( void );
-qboolean           AAS_AreaEntityCollision( int areanum, vec3_t start, vec3_t end, int presencetype, int passent, aas_trace_t *trace );
+bool           AAS_AreaEntityCollision( int areanum, vec3_t start, vec3_t end, int presencetype, int passent, aas_trace_t *trace );
 int                AAS_BestReachableLinkArea( aas_link_t *areas );
 int                AAS_BoxOnPlaneSide2( vec3_t absmins, vec3_t absmaxs, aas_plane_t *p );
 void               AAS_DeAllocAASLink( aas_link_t *link );
-qboolean           AAS_EntityCollision( int entnum, vec3_t start, vec3_t boxmins, vec3_t boxmaxs, vec3_t end, int contentmask, bsp_trace_t *trace );
+bool           AAS_EntityCollision( int entnum, vec3_t start, vec3_t boxmins, vec3_t boxmaxs, vec3_t end, int contentmask, bsp_trace_t *trace );
 void               AAS_EntityInfo( int entnum, aas_entityinfo_t *info );
 aas_link_t        *AAS_LinkEntityClientBBox( vec3_t absmins, vec3_t absmaxs, int entnum, int presencetype );
 aas_trace_t        AAS_TraceClientBBox( vec3_t start, vec3_t end, int presencetype, int passent );

@@ -183,7 +183,7 @@ static float R_BytesPerTex (int format)
 	}
 }
 
-float R_SumOfUsedImages( qboolean bUseFormat )
+float R_SumOfUsedImages( bool bUseFormat )
 {
 	int	total = 0;
 	image_t *pImage;
@@ -287,7 +287,7 @@ void R_ImageList_f( void ) {
 }
 
 // Scale up the pixel values in a texture to increase the lighting range
-void R_LightScaleTexture (unsigned *in, int inwidth, int inheight, qboolean only_gamma )
+void R_LightScaleTexture (unsigned *in, int inwidth, int inheight, bool only_gamma )
 {
 	if ( only_gamma )
 	{
@@ -510,10 +510,10 @@ static void R_Images_DeleteImageContents( image_t *pImage )
 
 static void Upload32( unsigned *data,
 						 GLenum format,
-						 qboolean mipmap,
-						 qboolean picmip,
-						 qboolean isLightmap,
-						 qboolean allowTC,
+						 bool mipmap,
+						 bool picmip,
+						 bool isLightmap,
+						 bool allowTC,
 						 int *pformat,
 						 word *pUploadWidth, word *pUploadHeight, bool bRectangle = false )
 {
@@ -653,7 +653,7 @@ static void Upload32( unsigned *data,
 			goto done;
 		}
 
-		R_LightScaleTexture (data, width, height, (qboolean)!mipmap );
+		R_LightScaleTexture (data, width, height, (bool)!mipmap );
 
 		qglTexImage2D( uiTarget, 0, *pformat, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data );
 
@@ -801,16 +801,16 @@ void RE_RegisterImages_Info_f( void )
 
 // currently, this just goes through all the images and dumps any not referenced on this level...
 
-qboolean RE_RegisterImages_LevelLoadEnd(void)
+bool RE_RegisterImages_LevelLoadEnd(void)
 {
 	ri.Printf( PRINT_DEVELOPER, S_COLOR_RED "RE_RegisterImages_LevelLoadEnd():\n");
 
 //	int iNumImages = AllocatedImages.size();	// more for curiosity, really.
 
-	qboolean imageDeleted = qtrue;
+	bool imageDeleted = true;
 	for (AllocatedImages_t::iterator itImage = AllocatedImages.begin(); itImage != AllocatedImages.end(); /* blank */)
 	{
-		qboolean bEraseOccured = qfalse;
+		bool bEraseOccured = false;
 
 		image_t *pImage = (*itImage).second;
 
@@ -828,8 +828,8 @@ qboolean RE_RegisterImages_LevelLoadEnd(void)
 				R_Images_DeleteImageContents(pImage);
 
 				AllocatedImages.erase(itImage++);
-				bEraseOccured = qtrue;
-				imageDeleted = qtrue;
+				bEraseOccured = true;
+				imageDeleted = true;
 			}
 		}
 
@@ -859,7 +859,7 @@ qboolean RE_RegisterImages_LevelLoadEnd(void)
 
 // This is called by both R_FindImageFile and anything that creates default images...
 
-static image_t *R_FindImageFile_NoLoad(const char *name, qboolean mipmap, qboolean allowPicmip, qboolean allowTC, int glWrapClampMode )
+static image_t *R_FindImageFile_NoLoad(const char *name, bool mipmap, bool allowPicmip, bool allowTC, int glWrapClampMode )
 {
 	if (!name) {
 		return NULL;
@@ -898,10 +898,10 @@ static image_t *R_FindImageFile_NoLoad(const char *name, qboolean mipmap, qboole
 
 // This is the only way any image_t are created
 image_t *R_CreateImage( const char *name, const byte *pic, int width, int height,
-					   GLenum format, qboolean mipmap, qboolean allowPicmip, qboolean allowTC, int glWrapClampMode, bool bRectangle )
+					   GLenum format, bool mipmap, bool allowPicmip, bool allowTC, int glWrapClampMode, bool bRectangle )
 {
 	image_t		*image;
-	qboolean	isLightmap = qfalse;
+	bool	isLightmap = false;
 
 	if (strlen(name) >= MAX_QPATH ) {
 		Com_Error (ERR_DROP, "R_CreateImage: \"%s\" is too long\n", name);
@@ -915,7 +915,7 @@ image_t *R_CreateImage( const char *name, const byte *pic, int width, int height
 	{
 		const char *psLightMapNameSearchPos = strrchr(name,'/');
 		if (  psLightMapNameSearchPos && !strncmp( psLightMapNameSearchPos+1, "lightmap", 8 ) ) {
-			isLightmap = qtrue;
+			isLightmap = true;
 		}
 	}
 
@@ -929,8 +929,8 @@ image_t *R_CreateImage( const char *name, const byte *pic, int width, int height
 		return image;
 	}
 
-	image = (image_t*) Z_Malloc( sizeof( image_t ), TAG_IMAGE_T, qtrue );
-//	memset(image,0,sizeof(*image));	// qtrue above does this
+	image = (image_t*) Z_Malloc( sizeof( image_t ), TAG_IMAGE_T, true );
+//	memset(image,0,sizeof(*image));	// true above does this
 
 	image->texnum = 1024 + giTextureBindNum++;	// ++ is of course staggeringly important...
 
@@ -966,7 +966,7 @@ image_t *R_CreateImage( const char *name, const byte *pic, int width, int height
 	}
 
 	Upload32( (unsigned *)pic,	format,
-								(qboolean)image->mipmap,
+								(bool)image->mipmap,
 								allowPicmip,
 								isLightmap,
 								allowTC,
@@ -995,7 +995,7 @@ image_t *R_CreateImage( const char *name, const byte *pic, int width, int height
 
 // Finds or loads the given image.
 // Returns NULL if it fails, not a default image.
-image_t	*R_FindImageFile( const char *name, qboolean mipmap, qboolean allowPicmip, qboolean allowTC, int glWrapClampMode ) {
+image_t	*R_FindImageFile( const char *name, bool mipmap, bool allowPicmip, bool allowTC, int glWrapClampMode ) {
 	image_t	*image;
 	int		width, height;
 	byte	*pic;
@@ -1046,7 +1046,7 @@ static void R_CreateDlightImage( void )
 	R_LoadImage("gfx/2d/dlight", &pic, &width, &height);
 	if (pic)
 	{
-		tr.dlightImage = R_CreateImage("*dlight", pic, width, height, GL_RGBA, qfalse, qfalse, qfalse, GL_CLAMP );
+		tr.dlightImage = R_CreateImage("*dlight", pic, width, height, GL_RGBA, false, false, false, GL_CLAMP );
 		Z_Free(pic);
 	}
 	else
@@ -1074,7 +1074,7 @@ static void R_CreateDlightImage( void )
 				data[y][x][3] = 255;
 			}
 		}
-		tr.dlightImage = R_CreateImage("*dlight", (byte *)data, DLIGHT_SIZE, DLIGHT_SIZE, GL_RGBA, qfalse, qfalse, qfalse, GL_CLAMP );
+		tr.dlightImage = R_CreateImage("*dlight", (byte *)data, DLIGHT_SIZE, DLIGHT_SIZE, GL_RGBA, false, false, false, GL_CLAMP );
 	}
 }
 
@@ -1145,7 +1145,7 @@ static void R_CreateFogImage( void ) {
 	// standard openGL clamping doesn't really do what we want -- it includes
 	// the border color at the edges.  OpenGL 1.2 has clamp-to-edge, which does
 	// what we want.
-	tr.fogImage = R_CreateImage("*fog", (byte *)data, FOG_S, FOG_T, GL_RGBA, qfalse, qfalse, qfalse, GL_CLAMP );
+	tr.fogImage = R_CreateImage("*fog", (byte *)data, FOG_S, FOG_T, GL_RGBA, false, false, false, GL_CLAMP );
 	Hunk_FreeTempMemory( data );
 
 	borderColor[0] = 1.0;
@@ -1184,7 +1184,7 @@ static void R_CreateDefaultImage( void ) {
 		data[x][DEFAULT_SIZE-1][2] =
 		data[x][DEFAULT_SIZE-1][3] = 255;
 	}
-	tr.defaultImage = R_CreateImage("*default", (byte *)data, DEFAULT_SIZE, DEFAULT_SIZE, GL_RGBA, qtrue, qfalse, qfalse, GL_REPEAT );
+	tr.defaultImage = R_CreateImage("*default", (byte *)data, DEFAULT_SIZE, DEFAULT_SIZE, GL_RGBA, true, false, false, GL_REPEAT );
 }
 
 void R_CreateBuiltinImages( void ) {
@@ -1195,9 +1195,9 @@ void R_CreateBuiltinImages( void ) {
 
 	// we use a solid white image instead of disabling texturing
 	memset( data, 255, sizeof( data ) );
-	tr.whiteImage = R_CreateImage("*white", (byte *)data, 8, 8, GL_RGBA, qfalse, qfalse, qfalse, GL_REPEAT);
+	tr.whiteImage = R_CreateImage("*white", (byte *)data, 8, 8, GL_RGBA, false, false, false, GL_REPEAT);
 
-	tr.screenImage = R_CreateImage("*screen", (byte *)data, 8, 8, GL_RGBA, qfalse, qfalse, qfalse, GL_REPEAT );
+	tr.screenImage = R_CreateImage("*screen", (byte *)data, 8, 8, GL_RGBA, false, false, false, GL_REPEAT );
 
 	// Create the scene glow image. - AReis
 	tr.screenGlow = 1024 + giTextureBindNum++;
@@ -1264,11 +1264,11 @@ void R_CreateBuiltinImages( void ) {
 		}
 	}
 
-	tr.identityLightImage = R_CreateImage("*identityLight", (byte *)data, 8, 8, GL_RGBA, qfalse, qfalse, qfalse, GL_REPEAT);
+	tr.identityLightImage = R_CreateImage("*identityLight", (byte *)data, 8, 8, GL_RGBA, false, false, false, GL_REPEAT);
 
 	for(x=0;x<NUM_SCRATCH_IMAGES;x++) {
 		// scratchimage is usually used for cinematic drawing
-		tr.scratchImage[x] = R_CreateImage(va("*scratch%d",x), (byte *)data, DEFAULT_SIZE, DEFAULT_SIZE, GL_RGBA, qfalse, qtrue, qfalse, GL_CLAMP);
+		tr.scratchImage[x] = R_CreateImage(va("*scratch%d",x), (byte *)data, DEFAULT_SIZE, DEFAULT_SIZE, GL_RGBA, false, true, false, GL_CLAMP);
 	}
 
 	R_CreateDlightImage();

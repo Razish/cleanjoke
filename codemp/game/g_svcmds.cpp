@@ -50,7 +50,7 @@ typedef struct ipFilter_s {
 static ipFilter_t	ipFilters[MAX_IPFILTERS];
 static int			numIPFilters;
 
-static qboolean StringToFilter( char *s, ipFilter_t *f ) {
+static bool StringToFilter( char *s, ipFilter_t *f ) {
 	char num[128];
 	int i, j;
 	byteAlias_t b, m;
@@ -69,7 +69,7 @@ static qboolean StringToFilter( char *s, ipFilter_t *f ) {
 				continue;
 			}
 			trap->Print( "Bad filter address: %s\n", s );
-			return qfalse;
+			return false;
 		}
 
 		j = 0;
@@ -89,7 +89,7 @@ static qboolean StringToFilter( char *s, ipFilter_t *f ) {
 	f->mask = m.ui;
 	f->compare = b.ui;
 
-	return qtrue;
+	return true;
 }
 
 static void UpdateIPBans( void ) {
@@ -123,7 +123,7 @@ static void UpdateIPBans( void ) {
 	trap->Cvar_Set( "g_banIPs", iplist_final );
 }
 
-qboolean G_FilterPacket( char *from ) {
+bool G_FilterPacket( char *from ) {
 	int i;
 	uint32_t in;
 	byteAlias_t m;
@@ -402,7 +402,7 @@ void Svcmd_Say_f( void ) {
 typedef struct svcmd_s {
 	const char	*name;
 	void		(*func)(void);
-	qboolean	dedicated;
+	bool	dedicated;
 } svcmd_t;
 
 int svcmdcmp( const void *a, const void *b ) {
@@ -410,21 +410,21 @@ int svcmdcmp( const void *a, const void *b ) {
 }
 
 const svcmd_t svcmds[] = {
-	{ "addbot",                   Svcmd_AddBot_f,                   qfalse },
-	{ "addip",                    Svcmd_AddIP_f,                    qfalse },
-	{ "botlist",                  Svcmd_BotList_f,                  qfalse },
-	{ "entitylist",               Svcmd_EntityList_f,               qfalse },
-	{ "forceteam",                Svcmd_ForceTeam_f,                qfalse },
-	{ "game_memory",              Svcmd_GameMem_f,                  qfalse },
-	{ "listip",                   Svcmd_ListIP_f,                   qfalse },
-	{ "removeip",                 Svcmd_RemoveIP_f,                 qfalse },
-	{ "say",                      Svcmd_Say_f,                      qtrue },
-	{ "toggleallowvote",          Svcmd_ToggleAllowVote_f,          qfalse },
-	{ "toggleuserinfovalidation", Svcmd_ToggleUserinfoValidation_f, qfalse },
+	{ "addbot",                   Svcmd_AddBot_f,                   false },
+	{ "addip",                    Svcmd_AddIP_f,                    false },
+	{ "botlist",                  Svcmd_BotList_f,                  false },
+	{ "entitylist",               Svcmd_EntityList_f,               false },
+	{ "forceteam",                Svcmd_ForceTeam_f,                false },
+	{ "game_memory",              Svcmd_GameMem_f,                  false },
+	{ "listip",                   Svcmd_ListIP_f,                   false },
+	{ "removeip",                 Svcmd_RemoveIP_f,                 false },
+	{ "say",                      Svcmd_Say_f,                      true },
+	{ "toggleallowvote",          Svcmd_ToggleAllowVote_f,          false },
+	{ "toggleuserinfovalidation", Svcmd_ToggleUserinfoValidation_f, false },
 };
 static const size_t numsvcmds = ARRAY_LEN( svcmds );
 
-qboolean	ConsoleCommand( void ) {
+bool	ConsoleCommand( void ) {
 	char	cmd[MAX_TOKEN_CHARS] = {0};
 	svcmd_t	*command = NULL;
 
@@ -432,12 +432,12 @@ qboolean	ConsoleCommand( void ) {
 
 	command = (svcmd_t *)Q_LinearSearch( cmd, svcmds, numsvcmds, sizeof( svcmds[0] ), svcmdcmp );
 	if ( !command )
-		return qfalse;
+		return false;
 
 	if ( command->dedicated && !dedicated.integer )
-		return qfalse;
+		return false;
 
 	command->func();
-	return qtrue;
+	return true;
 }
 

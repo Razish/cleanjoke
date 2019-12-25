@@ -26,7 +26,7 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 #include <sys/stat.h>
 #define __STDC_FORMAT_MACROS
 #include <inttypes.h>
-#include "qcommon/qcommon.h"
+#include "qcommon/q_common.h"
 #include "qcommon/com_cvar.h"
 #include "qcommon/com_cvars.h"
 #include "sys/sys_local.h"
@@ -296,7 +296,7 @@ First try to load library name from system library path,
 from executable path, then fs_basepath.
 =================
 */
-void *Sys_LoadDll( const char *name, qboolean useSystemLib )
+void *Sys_LoadDll( const char *name, bool useSystemLib )
 {
 	void *dllhandle = NULL;
 
@@ -594,7 +594,7 @@ Sys_SigHandler
 */
 void Sys_SigHandler( int signal )
 {
-	static qboolean signalcaught = qfalse;
+	static bool signalcaught = false;
 
 	if( signalcaught )
 	{
@@ -603,11 +603,11 @@ void Sys_SigHandler( int signal )
 	}
 	else
 	{
-		signalcaught = qtrue;
+		signalcaught = true;
 		//VM_Forced_Unload_Start();
 #ifndef DEDICATED
 		CL_Shutdown();
-		//CL_Shutdown(va("Received signal %d", signal), qtrue, qtrue);
+		//CL_Shutdown(va("Received signal %d", signal), true, true);
 #endif
 		SV_Shutdown(va("Received signal %d", signal) );
 		//VM_Forced_Unload_Done();

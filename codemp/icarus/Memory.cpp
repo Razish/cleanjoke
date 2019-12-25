@@ -28,7 +28,7 @@ void *ICARUS_Malloc(int iSize)
 {
 	//return gi.Malloc(iSize, TAG_ICARUS);
 	//return malloc(iSize);
-	return Z_Malloc(iSize, TAG_ICARUS5, qfalse);
+	return Z_Malloc(iSize, TAG_ICARUS5, false);
 }
 
 void ICARUS_Free(void *pMem)

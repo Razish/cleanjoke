@@ -26,7 +26,7 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 #include "game/bg_saga.h"
 
 //bypass most of the normal checks in SetTeam
-void SetTeamQuick( gentity_t *ent, team_t team, qboolean doBegin ) {
+void SetTeamQuick( gentity_t *ent, team_t team, bool doBegin ) {
 	char userinfo[MAX_INFO_STRING];
 
 	trap->GetUserinfo( ent->s.number, userinfo, sizeof( userinfo ) );
@@ -66,6 +66,6 @@ void SetTeamQuick( gentity_t *ent, team_t team, qboolean doBegin ) {
 
 	if (doBegin)
 	{
-		ClientBegin( ent->s.number, qfalse );
+		ClientBegin( ent->s.number, false );
 	}
 }

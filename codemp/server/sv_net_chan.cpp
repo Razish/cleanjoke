@@ -31,7 +31,7 @@ static void SV_Netchan_Encode( client_t *client, msg_t *msg ) {
 	long /*reliableAcknowledge,*/ i, index;
 	byte key, *string;
         int	srdc, sbit;
-		qboolean soob;
+		bool soob;
 
 	if ( msg->cursize < SV_ENCODE_START ) {
 		return;
@@ -43,7 +43,7 @@ static void SV_Netchan_Encode( client_t *client, msg_t *msg ) {
 
         msg->bit = 0;
         msg->readcount = 0;
-        msg->oob = qfalse;
+        msg->oob = false;
 
 	/*reliableAcknowledge =*/ MSG_ReadLong(msg);
 
@@ -80,14 +80,14 @@ static void SV_Netchan_Encode( client_t *client, msg_t *msg ) {
 static void SV_Netchan_Decode( client_t *client, msg_t *msg ) {
 	int serverId, messageAcknowledge, reliableAcknowledge;
 	int i, index, srdc, sbit;
-	qboolean soob;
+	bool soob;
 	byte key, *string;
 
         srdc = msg->readcount;
         sbit = msg->bit;
         soob = msg->oob;
 
-        msg->oob = qfalse;
+        msg->oob = false;
 
         serverId = MSG_ReadLong(msg);
 	messageAcknowledge = MSG_ReadLong(msg);
@@ -134,12 +134,12 @@ void SV_Netchan_Transmit( client_t *client, msg_t *msg) {	//int length, const by
 	Netchan_Transmit( &client->netchan, msg->cursize, msg->data );
 }
 
-qboolean SV_Netchan_Process( client_t *client, msg_t *msg ) {
+bool SV_Netchan_Process( client_t *client, msg_t *msg ) {
 	int ret;
 //	int i;
 	ret = Netchan_Process( &client->netchan, msg );
 	if (!ret)
-		return qfalse;
+		return false;
 	SV_Netchan_Decode( client, msg );
 //	Huff_Decompress( msg, SV_DECODE_START );
 //	for(i=SV_DECODE_START+msg->readcount;i<msg->cursize;i++) {
@@ -147,6 +147,6 @@ qboolean SV_Netchan_Process( client_t *client, msg_t *msg ) {
 //			Com_Error(ERR_DROP,"bad\n");
 //		}
 //	}
-	return qtrue;
+	return true;
 }
 

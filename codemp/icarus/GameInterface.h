@@ -39,7 +39,7 @@ extern	struct interface_export_s	interface_export;
 
 void Interface_Init( struct interface_export_s *pe );
 int ICARUS_RunScript( sharedEntity_t *ent, const char *name );
-bool ICARUS_RegisterScript( const char *name, qboolean bCalledDuringInterrogate = qfalse);
+bool ICARUS_RegisterScript( const char *name, bool bCalledDuringInterrogate = false);
 extern class ICARUS_Instance	*iICARUS;
 extern bufferlist_t		ICARUS_BufferList;
 extern entlist_t		ICARUS_EntList;

@@ -38,7 +38,7 @@ static void CG_ForceModelChange( void ) {
 		if ( !VALIDSTRING( clientInfo ) )
 			continue;
 
-		CG_NewClientInfo( i, qtrue );
+		CG_NewClientInfo( i, true );
 	}
 }
 

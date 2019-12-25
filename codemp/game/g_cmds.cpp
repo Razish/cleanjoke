@@ -123,16 +123,16 @@ char	*ConcatArgs( int start ) {
 	return line;
 }
 
-qboolean StringIsInteger( const char *s ) {
+bool StringIsInteger( const char *s ) {
 	int			i=0, len=0;
-	qboolean	foundDigit=qfalse;
+	bool	foundDigit=false;
 
 	for ( i=0, len=strlen( s ); i<len; i++ )
 	{
 		if ( !isdigit( s[i] ) )
-			return qfalse;
+			return false;
 
-		foundDigit = qtrue;
+		foundDigit = true;
 	}
 
 	return foundDigit;
@@ -140,7 +140,7 @@ qboolean StringIsInteger( const char *s ) {
 
 // Returns a player number for either a number or name string
 // Returns -1 if invalid
-int ClientNumberFromString( gentity_t *to, const char *s, qboolean allowconnecting ) {
+int ClientNumberFromString( gentity_t *to, const char *s, bool allowconnecting ) {
 	gclient_t	*cl;
 	int			idnum;
 	char		cleanInput[MAX_NETNAME];
@@ -180,12 +180,12 @@ void G_Give( gentity_t *ent, const char *name, const char *args, int argc )
 {
 	gitem_t		*it;
 	int			i;
-	qboolean	give_all = qfalse;
+	bool	give_all = false;
 	gentity_t	*it_ent;
 	trace_t		trace;
 
 	if ( !Q_stricmp( name, "all" ) )
-		give_all = qtrue;
+		give_all = true;
 
 	if ( give_all )
 	{
@@ -317,7 +317,7 @@ void Cmd_GiveOther_f( gentity_t *ent )
 	}
 
 	trap->Argv( 1, otherindex, sizeof( otherindex ) );
-	i = ClientNumberFromString( ent, otherindex, qfalse );
+	i = ClientNumberFromString( ent, otherindex, false );
 	if ( i == -1 ) {
 		return;
 	}
@@ -424,7 +424,7 @@ void Cmd_KillOther_f( gentity_t *ent )
 	}
 
 	trap->Argv( 1, otherindex, sizeof( otherindex ) );
-	i = ClientNumberFromString( ent, otherindex, qfalse );
+	i = ClientNumberFromString( ent, otherindex, false );
 	if ( i == -1 ) {
 		return;
 	}
@@ -466,33 +466,33 @@ void BroadcastTeamChange( gclient_t *client, int oldTeam )
 	G_LogPrintf( "ChangeTeam: %i [%s] (%s) \"%s^7\" %s -> %s\n", (int)(client - level.clients), client->sess.IP, client->pers.guid, client->pers.netname, TeamName( oldTeam ), TeamName( client->sess.sessionTeam ) );
 }
 
-qboolean G_PowerDuelCheckFail(gentity_t *ent)
+bool G_PowerDuelCheckFail(gentity_t *ent)
 {
 	int			loners = 0;
 	int			doubles = 0;
 
 	if (!ent->client || ent->client->sess.duelTeam == DUELTEAM_FREE)
 	{
-		return qtrue;
+		return true;
 	}
 
-	G_PowerDuelCount(&loners, &doubles, qfalse);
+	G_PowerDuelCount(&loners, &doubles, false);
 
 	if (ent->client->sess.duelTeam == DUELTEAM_LONE && loners >= 1)
 	{
-		return qtrue;
+		return true;
 	}
 
 	if (ent->client->sess.duelTeam == DUELTEAM_DOUBLE && doubles >= 2)
 	{
-		return qtrue;
+		return true;
 	}
 
-	return qfalse;
+	return false;
 }
 
-qboolean g_dontPenalizeTeam = qfalse;
-qboolean g_preventTeamBegin = qfalse;
+bool g_dontPenalizeTeam = false;
+bool g_preventTeamBegin = false;
 void SetTeam( gentity_t *ent, char *s ) {
 	int					team, oldTeam;
 	gclient_t			*client;
@@ -663,9 +663,9 @@ void SetTeam( gentity_t *ent, char *s ) {
 		// Kill him (makes sure he loses flags, etc)
 		ent->flags &= ~FL_GODMODE;
 		ent->client->ps.stats[STAT_HEALTH] = ent->health = 0;
-		g_dontPenalizeTeam = qtrue;
+		g_dontPenalizeTeam = true;
 		player_die (ent, ent, ent, 100000, MOD_SUICIDE);
-		g_dontPenalizeTeam = qfalse;
+		g_dontPenalizeTeam = false;
 
 	}
 	// they go to the end of the line for tournaments
@@ -682,7 +682,7 @@ void SetTeam( gentity_t *ent, char *s ) {
 	client->sess.spectatorState = specState;
 	client->sess.spectatorClient = specClient;
 
-	client->sess.teamLeader = qfalse;
+	client->sess.teamLeader = false;
 	if ( team == TEAM_RED || team == TEAM_BLUE ) {
 		teamLeader = TeamLeader( team );
 		// if there is no team leader or the team leader is a bot and this client is not a bot
@@ -711,7 +711,7 @@ void SetTeam( gentity_t *ent, char *s ) {
 
 	if (!g_preventTeamBegin)
 	{
-		ClientBegin( clientNum, qfalse );
+		ClientBegin( clientNum, false );
 	}
 }
 
@@ -731,14 +731,14 @@ void StopFollowing( gentity_t *ent ) {
 	ent->client->ps.forceHandExtend = HANDEXTEND_NONE;
 	ent->client->ps.forceHandExtendTime = 0;
 	ent->client->ps.zoomMode = 0;
-	ent->client->ps.zoomLocked = qfalse;
+	ent->client->ps.zoomLocked = false;
 	ent->client->ps.zoomLockTime = 0;
 	ent->client->ps.saberMove = LS_NONE;
 	ent->client->ps.legsAnim = 0;
 	ent->client->ps.legsTimer = 0;
 	ent->client->ps.torsoAnim = 0;
 	ent->client->ps.torsoTimer = 0;
-	ent->client->ps.isJediMaster = qfalse; // major exploit if you are spectating somebody and they are JM and you reconnect
+	ent->client->ps.isJediMaster = false; // major exploit if you are spectating somebody and they are JM and you reconnect
 	ent->client->ps.cloakFuel = 100; // so that fuel goes away after stop following them
 	ent->client->ps.jetpackFuel = 100; // so that fuel goes away after stop following them
 	ent->health = ent->client->ps.stats[STAT_HEALTH] = 100; // so that you don't keep dead angles if you were spectating a dead person
@@ -935,7 +935,7 @@ argCheck:
 	}
 }
 
-qboolean G_SetSaber(gentity_t *ent, int saberNum, char *saberName)
+bool G_SetSaber(gentity_t *ent, int saberNum, char *saberName)
 {
 	char truncSaberName[MAX_QPATH] = {0};
 
@@ -969,7 +969,7 @@ qboolean G_SetSaber(gentity_t *ent, int saberNum, char *saberName)
 		ent->client->ps.fd.saberAnimLevelBase = ent->client->saberCycleQueue = ent->client->ps.fd.saberAnimLevel;
 	}
 
-	return qtrue;
+	return true;
 }
 
 void Cmd_Follow_f( gentity_t *ent ) {
@@ -989,7 +989,7 @@ void Cmd_Follow_f( gentity_t *ent ) {
 	}
 
 	trap->Argv( 1, arg, sizeof( arg ) );
-	i = ClientNumberFromString( ent, arg, qfalse );
+	i = ClientNumberFromString( ent, arg, false );
 	if ( i == -1 ) {
 		return;
 	}
@@ -1030,7 +1030,7 @@ void Cmd_Follow_f( gentity_t *ent ) {
 void Cmd_FollowCycle_f( gentity_t *ent, int dir ) {
 	int		clientnum;
 	int		original;
-	qboolean	looped = qfalse;
+	bool	looped = false;
 
 	if ( ent->client->sess.spectatorState == SPECTATOR_NOT && ent->client->switchTeamTime > level.time ) {
 		trap->SendServerCommand( ent-g_entities, va("print \"%s\n\"", G_GetStringEdString("MP_SVGAME", "NOSWITCH")) );
@@ -1071,7 +1071,7 @@ void Cmd_FollowCycle_f( gentity_t *ent, int dir ) {
 			else
 			{
 				clientnum = 0;
-				looped = qtrue;
+				looped = true;
 			}
 		}
 		if ( clientnum < 0 ) {
@@ -1083,7 +1083,7 @@ void Cmd_FollowCycle_f( gentity_t *ent, int dir ) {
 			else
 			{
 				clientnum = level.maxclients - 1;
-				looped = qtrue;
+				looped = true;
 			}
 		}
 
@@ -1278,7 +1278,7 @@ static void Cmd_Tell_f( gentity_t *ent ) {
 	}
 
 	trap->Argv( 1, arg, sizeof( arg ) );
-	targetNum = ClientNumberFromString( ent, arg, qfalse );
+	targetNum = ClientNumberFromString( ent, arg, false );
 	if ( targetNum == -1 ) {
 		return;
 	}
@@ -1377,42 +1377,42 @@ static const char *gameNames[GT_MAX_GAME_TYPE] = {
 	"Capture the Ysalamiri"
 };
 
-qboolean G_VoteCapturelimit( gentity_t *ent, int numArgs, const char *arg1, const char *arg2 ) {
+bool G_VoteCapturelimit( gentity_t *ent, int numArgs, const char *arg1, const char *arg2 ) {
 	int n = Com_Clampi( 0, 0x7FFFFFFF, atoi( arg2 ) );
 	Com_sprintf( level.voteString, sizeof( level.voteString ), "%s %i", arg1, n );
 	Com_sprintf( level.voteDisplayString, sizeof( level.voteDisplayString ), "%s", level.voteString );
 	Q_strncpyz( level.voteStringClean, level.voteString, sizeof( level.voteStringClean ) );
-	return qtrue;
+	return true;
 }
 
-qboolean G_VoteClientkick( gentity_t *ent, int numArgs, const char *arg1, const char *arg2 ) {
+bool G_VoteClientkick( gentity_t *ent, int numArgs, const char *arg1, const char *arg2 ) {
 	int n = atoi ( arg2 );
 
 	if ( n < 0 || n >= level.maxclients ) {
 		trap->SendServerCommand( ent-g_entities, va( "print \"invalid client number %d.\n\"", n ) );
-		return qfalse;
+		return false;
 	}
 
 	if ( g_entities[n].client->pers.connected == CON_DISCONNECTED ) {
 		trap->SendServerCommand( ent-g_entities, va( "print \"there is no client with the client number %d.\n\"", n ) );
-		return qfalse;
+		return false;
 	}
 
 	Com_sprintf( level.voteString, sizeof( level.voteString ), "%s %s", arg1, arg2 );
 	Com_sprintf( level.voteDisplayString, sizeof( level.voteDisplayString ), "%s %s", arg1, g_entities[n].client->pers.netname );
 	Q_strncpyz( level.voteStringClean, level.voteString, sizeof( level.voteStringClean ) );
-	return qtrue;
+	return true;
 }
 
-qboolean G_VoteFraglimit( gentity_t *ent, int numArgs, const char *arg1, const char *arg2 ) {
+bool G_VoteFraglimit( gentity_t *ent, int numArgs, const char *arg1, const char *arg2 ) {
 	int n = Com_Clampi( 0, 0x7FFFFFFF, atoi( arg2 ) );
 	Com_sprintf( level.voteString, sizeof( level.voteString ), "%s %i", arg1, n );
 	Com_sprintf( level.voteDisplayString, sizeof( level.voteDisplayString ), "%s", level.voteString );
 	Q_strncpyz( level.voteStringClean, level.voteString, sizeof( level.voteStringClean ) );
-	return qtrue;
+	return true;
 }
 
-qboolean G_VoteGametype( gentity_t *ent, int numArgs, const char *arg1, const char *arg2 ) {
+bool G_VoteGametype( gentity_t *ent, int numArgs, const char *arg1, const char *arg2 ) {
 	int gt = atoi( arg2 );
 
 	// ffa, ctf, tdm, etc
@@ -1430,30 +1430,30 @@ qboolean G_VoteGametype( gentity_t *ent, int numArgs, const char *arg1, const ch
 		gt = GT_FFA;
 	}
 
-	level.votingGametype = qtrue;
+	level.votingGametype = true;
 	level.votingGametypeTo = gt;
 
 	Com_sprintf( level.voteString, sizeof( level.voteString ), "%s %d", arg1, gt );
 	Com_sprintf( level.voteDisplayString, sizeof( level.voteDisplayString ), "%s %s", arg1, gameNames[gt] );
 	Q_strncpyz( level.voteStringClean, level.voteString, sizeof( level.voteStringClean ) );
-	return qtrue;
+	return true;
 }
 
-qboolean G_VoteKick( gentity_t *ent, int numArgs, const char *arg1, const char *arg2 ) {
-	int clientid = ClientNumberFromString( ent, arg2, qtrue );
+bool G_VoteKick( gentity_t *ent, int numArgs, const char *arg1, const char *arg2 ) {
+	int clientid = ClientNumberFromString( ent, arg2, true );
 	gentity_t *target = NULL;
 
 	if ( clientid == -1 )
-		return qfalse;
+		return false;
 
 	target = &g_entities[clientid];
 	if ( !target || !target->inuse || !target->client )
-		return qfalse;
+		return false;
 
 	Com_sprintf( level.voteString, sizeof( level.voteString ), "clientkick %d", clientid );
 	Com_sprintf( level.voteDisplayString, sizeof( level.voteDisplayString ), "kick %s", target->client->pers.netname );
 	Q_strncpyz( level.voteStringClean, level.voteString, sizeof( level.voteStringClean ) );
-	return qtrue;
+	return true;
 }
 
 void Cmd_MapList_f( gentity_t *ent ) {
@@ -1479,7 +1479,7 @@ void Cmd_MapList_f( gentity_t *ent ) {
 	trap->SendServerCommand( ent-g_entities, va( "print \"%s\n\"", buf ) );
 }
 
-qboolean G_VoteMap( gentity_t *ent, int numArgs, const char *arg1, const char *arg2 ) {
+bool G_VoteMap( gentity_t *ent, int numArgs, const char *arg1, const char *arg2 ) {
 	char bspName[MAX_QPATH] = {0}, *mapName = NULL, *mapName2 = NULL;
 	fileHandle_t fp = NULL_FILE;
 	const char *arenaInfo;
@@ -1487,12 +1487,12 @@ qboolean G_VoteMap( gentity_t *ent, int numArgs, const char *arg1, const char *a
 	// didn't specify a map, show available maps
 	if ( numArgs < 3 ) {
 		Cmd_MapList_f( ent );
-		return qfalse;
+		return false;
 	}
 
 	if ( strchr( arg2, '\\' ) ) {
 		trap->SendServerCommand( ent-g_entities, "print \"Can't have mapnames with a \\\n\"" );
-		return qfalse;
+		return false;
 	}
 
 	Com_sprintf( bspName, sizeof(bspName), "maps/%s.bsp", arg2 );
@@ -1500,13 +1500,13 @@ qboolean G_VoteMap( gentity_t *ent, int numArgs, const char *arg1, const char *a
 		trap->SendServerCommand( ent-g_entities, va( "print \"Can't find map %s on server\n\"", bspName ) );
 		if( fp != NULL_FILE )
 			trap->FS_Close( fp );
-		return qfalse;
+		return false;
 	}
 	trap->FS_Close( fp );
 
 	if ( !G_DoesMapSupportGametype( arg2, level.gametype ) ) {
 		trap->SendServerCommand( ent-g_entities, va( "print \"%s\n\"", G_GetStringEdString( "MP_SVGAME", "NOVOTE_MAPNOTSUPPORTEDBYGAME" ) ) );
-		return qfalse;
+		return false;
 	}
 
 	// preserve the map rotation
@@ -1529,31 +1529,31 @@ qboolean G_VoteMap( gentity_t *ent, int numArgs, const char *arg1, const char *a
 
 	Com_sprintf( level.voteDisplayString, sizeof( level.voteDisplayString ), "map %s (%s)", mapName, mapName2 );
 	Q_strncpyz( level.voteStringClean, level.voteString, sizeof( level.voteStringClean ) );
-	return qtrue;
+	return true;
 }
 
-qboolean G_VoteMapRestart( gentity_t *ent, int numArgs, const char *arg1, const char *arg2 ) {
+bool G_VoteMapRestart( gentity_t *ent, int numArgs, const char *arg1, const char *arg2 ) {
 	int n = Com_Clampi( 0, 60, atoi( arg2 ) );
 	if ( numArgs < 3 )
 		n = 5;
 	Com_sprintf( level.voteString, sizeof( level.voteString ), "%s %i", arg1, n );
 	Q_strncpyz( level.voteDisplayString, level.voteString, sizeof( level.voteDisplayString ) );
 	Q_strncpyz( level.voteStringClean, level.voteString, sizeof( level.voteStringClean ) );
-	return qtrue;
+	return true;
 }
 
-qboolean G_VoteNextmap( gentity_t *ent, int numArgs, const char *arg1, const char *arg2 ) {
+bool G_VoteNextmap( gentity_t *ent, int numArgs, const char *arg1, const char *arg2 ) {
 	if ( !nextmap.string[0] ) {
 		trap->SendServerCommand( ent-g_entities, "print \"nextmap not set.\n\"" );
-		return qfalse;
+		return false;
 	}
 	Com_sprintf( level.voteString, sizeof( level.voteString ), "vstr nextmap");
 	Q_strncpyz( level.voteDisplayString, level.voteString, sizeof( level.voteDisplayString ) );
 	Q_strncpyz( level.voteStringClean, level.voteString, sizeof( level.voteStringClean ) );
-	return qtrue;
+	return true;
 }
 
-qboolean G_VoteTimelimit( gentity_t *ent, int numArgs, const char *arg1, const char *arg2 ) {
+bool G_VoteTimelimit( gentity_t *ent, int numArgs, const char *arg1, const char *arg2 ) {
 	float tl = Com_Clamp( 0.0f, 35790.0f, atof( arg2 ) );
 	if ( Q_isintegral( tl ) )
 		Com_sprintf( level.voteString, sizeof( level.voteString ), "%s %i", arg1, (int)tl );
@@ -1561,39 +1561,39 @@ qboolean G_VoteTimelimit( gentity_t *ent, int numArgs, const char *arg1, const c
 		Com_sprintf( level.voteString, sizeof( level.voteString ), "%s %.3f", arg1, tl );
 	Q_strncpyz( level.voteDisplayString, level.voteString, sizeof( level.voteDisplayString ) );
 	Q_strncpyz( level.voteStringClean, level.voteString, sizeof( level.voteStringClean ) );
-	return qtrue;
+	return true;
 }
 
-qboolean G_VoteWarmup( gentity_t *ent, int numArgs, const char *arg1, const char *arg2 ) {
+bool G_VoteWarmup( gentity_t *ent, int numArgs, const char *arg1, const char *arg2 ) {
 	int n = Com_Clampi( 0, 1, atoi( arg2 ) );
 	Com_sprintf( level.voteString, sizeof( level.voteString ), "%s %i", arg1, n );
 	Q_strncpyz( level.voteDisplayString, level.voteString, sizeof( level.voteDisplayString ) );
 	Q_strncpyz( level.voteStringClean, level.voteString, sizeof( level.voteStringClean ) );
-	return qtrue;
+	return true;
 }
 
 typedef struct voteString_s {
 	const char	*string;
 	const char	*aliases;	// space delimited list of aliases, will always show the real vote string
-	qboolean	(*func)(gentity_t *ent, int numArgs, const char *arg1, const char *arg2);
+	bool	(*func)(gentity_t *ent, int numArgs, const char *arg1, const char *arg2);
 	int			numArgs;	// number of REQUIRED arguments, not total/optional arguments
 	uint32_t	validGT;	// bit-flag of valid gametypes
-	qboolean	voteDelay;	// if true, will delay executing the vote string after it's accepted by g_voteDelay
+	bool	voteDelay;	// if true, will delay executing the vote string after it's accepted by g_voteDelay
 	const char	*shortHelp;	// NULL if no arguments needed
 } voteString_t;
 
 static voteString_t validVoteStrings[] = {
 	//	vote string				aliases										# args	valid gametypes							exec delay		short help
-	{	"capturelimit",			"caps",				G_VoteCapturelimit,		1,		GTB_CTF|GTB_CTY,						qtrue,			"<num>" },
-	{	"clientkick",			NULL,				G_VoteClientkick,		1,		GTB_ALL,								qfalse,			"<clientnum>" },
-	{	"fraglimit",			"frags",			G_VoteFraglimit,		1,		GTB_ALL & ~(GTB_CTF|GTB_CTY),			qtrue,			"<num>" },
-	{	"g_doWarmup",			"dowarmup warmup",	G_VoteWarmup,			1,		GTB_ALL,								qtrue,			"<0-1>" },
-	{	"g_gametype",			"gametype gt mode",	G_VoteGametype,			1,		GTB_ALL,								qtrue,			"<num or name>" },
-	{	"kick",					NULL,				G_VoteKick,				1,		GTB_ALL,								qfalse,			"<client name>" },
-	{	"map",					NULL,				G_VoteMap,				0,		GTB_ALL,								qtrue,			"<name>" },
-	{	"map_restart",			"restart",			G_VoteMapRestart,		0,		GTB_ALL,								qtrue,			"<optional delay>" },
-	{	"nextmap",				NULL,				G_VoteNextmap,			0,		GTB_ALL,								qtrue,			NULL },
-	{	"timelimit",			"time",				G_VoteTimelimit,		1,		GTB_ALL,								qtrue,			"<num>" },
+	{	"capturelimit",			"caps",				G_VoteCapturelimit,		1,		GTB_CTF|GTB_CTY,						true,			"<num>" },
+	{	"clientkick",			NULL,				G_VoteClientkick,		1,		GTB_ALL,								false,			"<clientnum>" },
+	{	"fraglimit",			"frags",			G_VoteFraglimit,		1,		GTB_ALL & ~(GTB_CTF|GTB_CTY),			true,			"<num>" },
+	{	"g_doWarmup",			"dowarmup warmup",	G_VoteWarmup,			1,		GTB_ALL,								true,			"<0-1>" },
+	{	"g_gametype",			"gametype gt mode",	G_VoteGametype,			1,		GTB_ALL,								true,			"<num or name>" },
+	{	"kick",					NULL,				G_VoteKick,				1,		GTB_ALL,								false,			"<client name>" },
+	{	"map",					NULL,				G_VoteMap,				0,		GTB_ALL,								true,			"<name>" },
+	{	"map_restart",			"restart",			G_VoteMapRestart,		0,		GTB_ALL,								true,			"<optional delay>" },
+	{	"nextmap",				NULL,				G_VoteNextmap,			0,		GTB_ALL,								true,			NULL },
+	{	"timelimit",			"time",				G_VoteTimelimit,		1,		GTB_ALL,								true,			"<num>" },
 };
 static const int validVoteStringsSize = ARRAY_LEN( validVoteStrings );
 
@@ -1725,7 +1725,7 @@ validVote:
 		return;
 	}
 
-	level.votingGametype = qfalse;
+	level.votingGametype = false;
 
 	level.voteExecuteDelay = vote->voteDelay ? g_voteDelay.integer : 0;
 
@@ -1808,27 +1808,27 @@ void Cmd_Vote_f( gentity_t *ent ) {
 	// for players entering or leaving
 }
 
-qboolean G_TeamVoteLeader( gentity_t *ent, int cs_offset, team_t team, int numArgs, const char *arg1, const char *arg2 ) {
-	int clientid = numArgs == 2 ? ent->s.number : ClientNumberFromString( ent, arg2, qfalse );
+bool G_TeamVoteLeader( gentity_t *ent, int cs_offset, team_t team, int numArgs, const char *arg1, const char *arg2 ) {
+	int clientid = numArgs == 2 ? ent->s.number : ClientNumberFromString( ent, arg2, false );
 	gentity_t *target = NULL;
 
 	if ( clientid == -1 )
-		return qfalse;
+		return false;
 
 	target = &g_entities[clientid];
 	if ( !target || !target->inuse || !target->client )
-		return qfalse;
+		return false;
 
 	if ( target->client->sess.sessionTeam != team )
 	{
 		trap->SendServerCommand( ent-g_entities, va( "print \"User %s is not on your team\n\"", arg2 ) );
-		return qfalse;
+		return false;
 	}
 
 	Com_sprintf( level.teamVoteString[cs_offset], sizeof( level.teamVoteString[cs_offset] ), "leader %d", clientid );
 	Q_strncpyz( level.teamVoteDisplayString[cs_offset], level.teamVoteString[cs_offset], sizeof( level.teamVoteDisplayString[cs_offset] ) );
 	Q_strncpyz( level.teamVoteStringClean[cs_offset], level.teamVoteString[cs_offset], sizeof( level.teamVoteStringClean[cs_offset] ) );
-	return qtrue;
+	return true;
 }
 
 void Cmd_CallTeamVote_f( gentity_t *ent ) {
@@ -2058,7 +2058,7 @@ int G_ItemUsable(playerState_t *ps, int forcedUse)
 		trtest[1] = fwdorg[1] + fwd[1]*16;
 		trtest[2] = fwdorg[2] + fwd[2]*16;
 
-		trap->Trace(&tr, ps->origin, mins, maxs, trtest, ps->clientNum, MASK_PLAYERSOLID, qfalse, 0, 0);
+		trap->Trace(&tr, ps->origin, mins, maxs, trtest, ps->clientNum, MASK_PLAYERSOLID, false, 0, 0);
 
 		if ((tr.fraction != 1 && tr.entityNum != ps->clientNum) || tr.startsolid || tr.allsolid)
 		{
@@ -2079,12 +2079,12 @@ int G_ItemUsable(playerState_t *ps, int forcedUse)
 		AngleVectors (ps->viewangles, fwd, NULL, NULL);
 		fwd[2] = 0;
 		VectorMA(ps->origin, 64, fwd, dest);
-		trap->Trace(&tr, ps->origin, mins, maxs, dest, ps->clientNum, MASK_SHOT, qfalse, 0, 0 );
+		trap->Trace(&tr, ps->origin, mins, maxs, dest, ps->clientNum, MASK_SHOT, false, 0, 0 );
 		if (tr.fraction > 0.9 && !tr.startsolid && !tr.allsolid)
 		{
 			VectorCopy(tr.endpos, pos);
 			VectorSet( dest, pos[0], pos[1], pos[2] - 4096 );
-			trap->Trace( &tr, pos, mins, maxs, dest, ps->clientNum, MASK_SOLID, qfalse, 0, 0 );
+			trap->Trace( &tr, pos, mins, maxs, dest, ps->clientNum, MASK_SOLID, false, 0, 0 );
 			if ( !tr.startsolid && !tr.allsolid )
 			{
 				return 1;
@@ -2184,21 +2184,21 @@ void Cmd_ToggleSaber_f(gentity_t *ent)
 	}
 }
 
-qboolean G_SaberCanTurnOffSomeBlades( saberInfo_t *saber ) {
+bool G_SaberCanTurnOffSomeBlades( saberInfo_t *saber ) {
 	if ( saber->bladeStyle2Start > 0 && saber->numBlades > saber->bladeStyle2Start ) {
 		// check if all blades are always on
 		if ( cjk_saberTweaks.integer & ST_NO_DEACTIVATE ) {
-			return qfalse;
+			return false;
 		}
 	}
 	else {
 		// check if all blades are always on
 		if ( cjk_saberTweaks.integer & ST_NO_DEACTIVATE ) {
-			return qfalse;
+			return false;
 		}
 	}
 	//you can turn some off
-	return qtrue;
+	return true;
 }
 void Cmd_SaberAttackCycle_f(gentity_t *ent)
 {
@@ -2380,7 +2380,7 @@ void Cmd_SaberAttackCycle_f(gentity_t *ent)
 	}
 }
 
-qboolean G_OtherPlayersDueling(void)
+bool G_OtherPlayersDueling(void)
 {
 	int i = 0;
 	gentity_t *ent;
@@ -2391,12 +2391,12 @@ qboolean G_OtherPlayersDueling(void)
 
 		if (ent && ent->inuse && ent->client && ent->client->ps.duelInProgress)
 		{
-			return qtrue;
+			return true;
 		}
 		i++;
 	}
 
-	return qfalse;
+	return false;
 }
 
 void Cmd_EngageDuel_f(gentity_t *ent)
@@ -2468,7 +2468,7 @@ void Cmd_EngageDuel_f(gentity_t *ent)
 	fwdOrg[1] = ent->client->ps.origin[1] + forward[1]*256;
 	fwdOrg[2] = (ent->client->ps.origin[2]+ent->client->ps.viewheight) + forward[2]*256;
 
-	trap->Trace(&tr, ent->client->ps.origin, NULL, NULL, fwdOrg, ent->s.number, MASK_PLAYERSOLID, qfalse, 0, 0);
+	trap->Trace(&tr, ent->client->ps.origin, NULL, NULL, fwdOrg, ent->s.number, MASK_PLAYERSOLID, false, 0, 0);
 
 	if (tr.fraction != 1 && tr.entityNum < MAX_CLIENTS)
 	{
@@ -2491,8 +2491,8 @@ void Cmd_EngageDuel_f(gentity_t *ent)
 		{
 			trap->SendServerCommand( /*challenged-g_entities*/-1, va("print \"%s %s %s!\n\"", challenged->client->pers.netname, G_GetStringEdString("MP_SVGAME", "PLDUELACCEPT"), ent->client->pers.netname) );
 
-			ent->client->ps.duelInProgress = qtrue;
-			challenged->client->ps.duelInProgress = qtrue;
+			ent->client->ps.duelInProgress = true;
+			challenged->client->ps.duelInProgress = true;
 
 			ent->client->ps.duelTime = level.time + 2000;
 			challenged->client->ps.duelTime = level.time + 2000;
@@ -2623,24 +2623,24 @@ void StandardSetBodyAnim(gentity_t *self, int anim, int flags)
 	G_SetAnim(self, NULL, SETANIM_BOTH, anim, flags, 0);
 }
 
-qboolean TryGrapple(gentity_t *ent)
+bool TryGrapple(gentity_t *ent)
 {
 	if (ent->client->ps.weaponTime > 0)
 	{ //weapon busy
-		return qfalse;
+		return false;
 	}
 	if (ent->client->ps.forceHandExtend != HANDEXTEND_NONE)
 	{ //force power or knockdown or something
-		return qfalse;
+		return false;
 	}
 	if (ent->client->grappleState)
 	{ //already grappling? but weapontime should be > 0 then..
-		return qfalse;
+		return false;
 	}
 
 	if (ent->client->ps.weapon != WP_SABER && ent->client->ps.weapon != WP_MELEE)
 	{
-		return qfalse;
+		return false;
 	}
 
 	if (ent->client->ps.weapon == WP_SABER && !ent->client->ps.saberHolstered)
@@ -2648,7 +2648,7 @@ qboolean TryGrapple(gentity_t *ent)
 		Cmd_ToggleSaber_f(ent);
 		if (!ent->client->ps.saberHolstered)
 		{ //must have saber holstered
-			return qfalse;
+			return false;
 		}
 	}
 
@@ -2663,10 +2663,10 @@ qboolean TryGrapple(gentity_t *ent)
 		}
 		ent->client->ps.weaponTime = ent->client->ps.torsoTimer;
 		ent->client->dangerTime = level.time;
-		return qtrue;
+		return true;
 	}
 
-	return qfalse;
+	return false;
 }
 
 void Cmd_TargetUse_f( gentity_t *ent )

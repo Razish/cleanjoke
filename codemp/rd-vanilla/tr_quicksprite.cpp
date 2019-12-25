@@ -36,7 +36,7 @@ CQuickSpriteSystem::CQuickSpriteSystem() :
 	mTexBundle(NULL),
 	mGLStateBits(0),
 	mFogIndex(-1),
-	mUseFog(qfalse),
+	mUseFog(false),
 	mNextVert(0)
 {
 	int i;
@@ -160,12 +160,12 @@ void CQuickSpriteSystem::StartGroup(textureBundle_t *bundle, uint32_t glbits, in
 	mGLStateBits = glbits;
 	if (fogIndex != -1)
 	{
-		mUseFog = qtrue;
+		mUseFog = true;
 		mFogIndex = fogIndex;
 	}
 	else
 	{
-		mUseFog = qfalse;
+		mUseFog = false;
 	}
 
 	qglDisable(GL_CULL_FACE);
@@ -216,11 +216,11 @@ void CQuickSpriteSystem::Add(float *pointdata, color4ub_t color, vec2_t fog)
 		*curfogtexcoord++ = fog[0];
 		*curfogtexcoord++ = fog[1];
 
-		mUseFog=qtrue;
+		mUseFog=true;
 	}
 	else
 	{
-		mUseFog=qfalse;
+		mUseFog=false;
 	}
 
 	mNextVert+=4;

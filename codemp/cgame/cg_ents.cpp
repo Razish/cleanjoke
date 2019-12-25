@@ -102,7 +102,7 @@ void CG_S_AddLoopingSound(int entityNum, const vec3_t origin, const vec3_t veloc
 	centity_t *cent = &cg_entities[entityNum];
 	cgLoopSound_t *cSound = NULL;
 	int i = 0;
-	qboolean alreadyPlaying = qfalse;
+	bool alreadyPlaying = false;
 
 	//first see if we're already looping this sound handle.
 	while (i < cent->numLoopingSounds)
@@ -111,7 +111,7 @@ void CG_S_AddLoopingSound(int entityNum, const vec3_t origin, const vec3_t veloc
 
 		if (cSound->sfx == sfx)
 		{
-			alreadyPlaying = qtrue;
+			alreadyPlaying = true;
 			break;
 		}
 
@@ -497,17 +497,17 @@ void ScaleModelAxis(refEntity_t	*ent)
 		if (ent->modelScale[0] && ent->modelScale[0] != 1.0f)
 		{
 			VectorScale( ent->axis[0], ent->modelScale[0] , ent->axis[0] );
-			ent->nonNormalizedAxes = qtrue;
+			ent->nonNormalizedAxes = true;
 		}
 		if (ent->modelScale[1] && ent->modelScale[1] != 1.0f)
 		{
 			VectorScale( ent->axis[1], ent->modelScale[1] , ent->axis[1] );
-			ent->nonNormalizedAxes = qtrue;
+			ent->nonNormalizedAxes = true;
 		}
 		if (ent->modelScale[2] && ent->modelScale[2] != 1.0f)
 		{
 			VectorScale( ent->axis[2], ent->modelScale[2] , ent->axis[2] );
-			ent->nonNormalizedAxes = qtrue;
+			ent->nonNormalizedAxes = true;
 		}
 }
 
@@ -572,16 +572,16 @@ void CG_Disintegration(centity_t *cent, refEntity_t *ent)
 
 		VectorMA( fxOrg, -18, cg.refdef.viewaxis[0], fxOrg );
 		fxOrg[2] += Q_flrand(-1.0f, 1.0f) * 20;
-		trap->FX_PlayEffectID( media.efx.null, fxOrg, fxDir, -1, -1, qfalse );
+		trap->FX_PlayEffectID( media.efx.null, fxOrg, fxDir, -1, -1, false );
 
 		if ( Q_flrand(0.0f, 1.0f) > 0.5f )
 		{
-			trap->FX_PlayEffectID( media.efx.null, fxOrg, fxDir, -1, -1, qfalse );
+			trap->FX_PlayEffectID( media.efx.null, fxOrg, fxDir, -1, -1, false );
 		}
 	}
 }
 
-static qboolean CG_RenderTimeEntBolt(centity_t *cent)
+static bool CG_RenderTimeEntBolt(centity_t *cent)
 {
 	int clientNum = cent->currentState.boltToPlayer-1;
 	centity_t *cl;
@@ -592,7 +592,7 @@ static qboolean CG_RenderTimeEntBolt(centity_t *cent)
 	if (clientNum >= MAX_CLIENTS || clientNum < 0)
 	{
 		assert(0);
-		return qfalse;
+		return false;
 	}
 
 	cl = &cg_entities[clientNum];
@@ -600,13 +600,13 @@ static qboolean CG_RenderTimeEntBolt(centity_t *cent)
 	if (!cl->ghoul2)
 	{
 		assert(0);
-		return qfalse;
+		return false;
 	}
 
 	if (clientNum == cg.predictedPlayerState.clientNum &&
 		!cg.renderingThirdPerson)
 	{ //If in first person and you have it then render the thing spinning around on your hud.
-		return qfalse;
+		return false;
 	}
 
 	getBolt = trap->G2API_AddBolt(cl->ghoul2, 0, "lhand");
@@ -621,7 +621,7 @@ static qboolean CG_RenderTimeEntBolt(centity_t *cent)
 	VectorCopy(boltOrg, cent->lerpOrigin);
 	VectorCopy(boltAng, cent->lerpAngles);
 
-	return qtrue;
+	return true;
 }
 
 void CG_AddRadarEnt(centity_t *cent)
@@ -657,7 +657,7 @@ static void CG_General( centity_t *cent ) {
 	int					beamID;
 	vec3_t				beamOrg;
 	mdxaBone_t			matrix;
-	qboolean			doNotSetModel = qfalse;
+	bool			doNotSetModel = false;
 
 	if (cent->currentState.modelGhoul2 == 127)
 	{ //not ready to be drawn or initialized..
@@ -693,7 +693,7 @@ static void CG_General( centity_t *cent ) {
             return;
 		}
 		if (!CG_RenderTimeEntBolt(cent))
-		{ //If this function returns qfalse we shouldn't render this ent at all.
+		{ //If this function returns false we shouldn't render this ent at all.
 			if (cent->currentState.boltToPlayer > 0 &&
 				cent->currentState.boltToPlayer <= MAX_CLIENTS)
 			{
@@ -758,7 +758,7 @@ static void CG_General( centity_t *cent ) {
 	}
 	else if (cent->isRagging)
 	{
-		cent->isRagging = qfalse;
+		cent->isRagging = false;
 
 		if (cent->ghoul2 && trap->G2_HaveWeGhoul2Models(cent->ghoul2))
 		{ //May not be valid, in the case of a ragged entity being removed and a non-g2 ent filling its slot.
@@ -807,7 +807,7 @@ static void CG_General( centity_t *cent ) {
 		int k = 0;
 		vec3_t posDif;
 
-		doNotSetModel = qtrue;
+		doNotSetModel = true;
 
 		if (cent->currentState.modelindex >= 0)
 		{
@@ -1007,7 +1007,7 @@ static void CG_General( centity_t *cent ) {
 				BG_GiveMeVectorFromMatrix(&matrix, ORIGIN, boltOrg);
 				BG_GiveMeVectorFromMatrix(&matrix, NEGATIVE_Y, boltAng);
 
-				trap->FX_PlayEffectID(media.efx.null, boltOrg, boltAng, -1, -1, qfalse);
+				trap->FX_PlayEffectID(media.efx.null, boltOrg, boltAng, -1, -1, false);
 			}
 
 			cent->bolt4 = newBolt;
@@ -1031,7 +1031,7 @@ static void CG_General( centity_t *cent ) {
 				BG_GiveMeVectorFromMatrix(&matrix, ORIGIN, boltOrg);
 				BG_GiveMeVectorFromMatrix(&matrix, NEGATIVE_Y, boltAng);
 
-				trap->FX_PlayEffectID(media.efx.null, boltOrg, boltAng, -1, -1, qfalse);
+				trap->FX_PlayEffectID(media.efx.null, boltOrg, boltAng, -1, -1, false);
 			}
 
 			if (cent->currentState.modelGhoul2 == G2_MODELPART_RARM || cent->currentState.modelGhoul2 == G2_MODELPART_RHAND || cent->currentState.modelGhoul2 == G2_MODELPART_WAIST)
@@ -1092,7 +1092,7 @@ static void CG_General( centity_t *cent ) {
 				{
 					boltAng[1] = 1;
 				}
-				trap->FX_PlayEffectID(media.efx.null, boltOrg, boltAng, -1, -1, qfalse);
+				trap->FX_PlayEffectID(media.efx.null, boltOrg, boltAng, -1, -1, false);
 
 				cent->trailTime = cg.time + 400;
 			}
@@ -1283,7 +1283,7 @@ static void CG_General( centity_t *cent ) {
 	{
 		if (cent->bodyFadeTime > cg.time)
 		{
-			qboolean lightSide = (cent->teamPowerType != 0) ? qtrue : qfalse;
+			bool lightSide = (cent->teamPowerType != 0) ? true : false;
 			vec3_t hitLoc, tempAng;
 			float tempLength;
 			int curTimeDif = ((cg.time + 60000) - cent->bodyFadeTime);
@@ -1576,7 +1576,7 @@ static void CG_General( centity_t *cent ) {
 		{
 			VectorMA( ent.origin, 6.6f, ent.axis[0], beamOrg );// forward
 			beamID = media.efx.null;
-			trap->FX_PlayEffectID( beamID, beamOrg, cent->currentState.pos.trDelta, -1, -1, qfalse );
+			trap->FX_PlayEffectID( beamID, beamOrg, cent->currentState.pos.trDelta, -1, -1, false );
 		}
 		else
 		{
@@ -1591,13 +1591,13 @@ static void CG_General( centity_t *cent ) {
 
 				while (i > 0)
 				{
-					trap->FX_PlayEffectID( beamID, beamOrg, cent->currentState.pos.trDelta, -1, -1, qfalse );
-					trap->FX_PlayEffectID( beamID, beamOrg, cent->currentState.pos.trDelta, -1, -1, qfalse );
+					trap->FX_PlayEffectID( beamID, beamOrg, cent->currentState.pos.trDelta, -1, -1, false );
+					trap->FX_PlayEffectID( beamID, beamOrg, cent->currentState.pos.trDelta, -1, -1, false );
 					i--;
 				}
 			}
 
-			trap->FX_PlayEffectID( beamID, beamOrg, cent->currentState.pos.trDelta, -1, -1, qfalse );
+			trap->FX_PlayEffectID( beamID, beamOrg, cent->currentState.pos.trDelta, -1, -1, false );
 		}
 	}
 }
@@ -1624,7 +1624,7 @@ static void CG_Speaker( centity_t *cent ) {
 	cent->miscTime = cg.time + cent->currentState.frame * 100 + cent->currentState.clientNum * 100 * Q_flrand(-1.0f, 1.0f);
 }
 
-qboolean CG_GreyItem(int type, int tag, int plSide)
+bool CG_GreyItem(int type, int tag, int plSide)
 {
 	if (type == IT_POWERUP &&
 		(tag == PW_FORCE_ENLIGHTENED_LIGHT || tag == PW_FORCE_ENLIGHTENED_DARK))
@@ -1633,19 +1633,19 @@ qboolean CG_GreyItem(int type, int tag, int plSide)
 		{
 			if (tag == PW_FORCE_ENLIGHTENED_DARK)
 			{
-				return qtrue;
+				return true;
 			}
 		}
 		else if (plSide == FORCE_DARKSIDE)
 		{
 			if (tag == PW_FORCE_ENLIGHTENED_LIGHT)
 			{
-				return qtrue;
+				return true;
 			}
 		}
 	}
 
-	return qfalse;
+	return false;
 }
 
 static void CG_Item( centity_t *cent ) {
@@ -1678,7 +1678,7 @@ static void CG_Item( centity_t *cent ) {
 		!cg_simpleItems.integer)
 	{
 		vec3_t uNorm;
-		qboolean doGrey;
+		bool doGrey;
 
 		VectorClear(uNorm);
 
@@ -1707,7 +1707,7 @@ static void CG_Item( centity_t *cent ) {
 
 		if (!doGrey)
 		{
-			trap->FX_PlayEffectID(media.efx.null, ent.origin, uNorm, -1, -1, qfalse);
+			trap->FX_PlayEffectID(media.efx.null, ent.origin, uNorm, -1, -1, false);
 		}
 	}
 
@@ -1902,7 +1902,7 @@ static void CG_Item( centity_t *cent ) {
 	VectorCopy( cent->lerpOrigin, ent.origin);
 	VectorCopy( cent->lerpOrigin, ent.oldorigin);
 
-	ent.nonNormalizedAxes = qfalse;
+	ent.nonNormalizedAxes = false;
 
 	// if just respawned, slowly scale up
 
@@ -1950,7 +1950,7 @@ static void CG_Item( centity_t *cent ) {
 		VectorScale( ent.axis[0], 1.5, ent.axis[0] );
 		VectorScale( ent.axis[1], 1.5, ent.axis[1] );
 		VectorScale( ent.axis[2], 1.5, ent.axis[2] );
-		ent.nonNormalizedAxes = qtrue;
+		ent.nonNormalizedAxes = true;
 		//trap->S_AddLoopingSound( cent->currentState.number, cent->lerpOrigin, vec3_origin, media.sounds.null );
 	}
 
@@ -2235,7 +2235,7 @@ static void CG_Missile( centity_t *cent ) {
 		if ( VectorNormalize2( cent->currentState.pos.trDelta, forward ) == 0.0f ) {
 			forward[2] = 1.0f;
 		}
-		trap->FX_PlayEffectID( cgs.gameEffects[s1->otherEntityNum2], cent->lerpOrigin, forward, -1, -1, qfalse );
+		trap->FX_PlayEffectID( cgs.gameEffects[s1->otherEntityNum2], cent->lerpOrigin, forward, -1, -1, false );
 		if ( s1->loopSound ) {
 			vec3_t	velocity;
 			BG_EvaluateTrajectoryDelta( &cent->currentState.pos, cg.time, velocity );
@@ -2435,7 +2435,7 @@ static void CG_Missile( centity_t *cent ) {
 		vec3_t	beamOrg;
 
 		VectorMA( ent.origin, 8, ent.axis[0], beamOrg );// forward
-		trap->FX_PlayEffectID( media.efx.null, beamOrg, ent.axis[0], -1, -1, qfalse );
+		trap->FX_PlayEffectID( media.efx.null, beamOrg, ent.axis[0], -1, -1, false );
 	}
 }
 
@@ -2685,7 +2685,7 @@ static void CG_InterpolateEntityPosition( centity_t *cent ) {
 }
 
 void CG_CalcEntityLerpPositions( centity_t *cent ) {
-	qboolean goAway = qfalse;
+	bool goAway = false;
 
 	// if this player does not want to see extrapolated players
 	if ( !cg_smoothClients.integer ) {
@@ -2709,7 +2709,7 @@ void CG_CalcEntityLerpPositions( centity_t *cent ) {
 		&& cent->currentState.number < MAX_CLIENTS )
 	{
 		CG_InterpolateEntityPosition( cent );
-		goAway = qtrue;
+		goAway = true;
 	}
 	else
 	{
@@ -2792,11 +2792,11 @@ static void CG_FX( centity_t *cent )
 	{
 		if (s1->isPortalEnt)
 		{
-			trap->FX_PlayEffectID(efxIndex, cent->lerpOrigin, fxDir, -1, -1, qtrue );
+			trap->FX_PlayEffectID(efxIndex, cent->lerpOrigin, fxDir, -1, -1, true );
 		}
 		else
 		{
-			trap->FX_PlayEffectID(efxIndex, cent->lerpOrigin, fxDir, -1, -1, qfalse );
+			trap->FX_PlayEffectID(efxIndex, cent->lerpOrigin, fxDir, -1, -1, false );
 		}
 	}
 
@@ -2895,7 +2895,7 @@ void CG_ManualEntityRender(centity_t *cent)
 	CG_AddCEntity(cent);
 }
 
-void CG_AddPacketEntities( qboolean isPortal ) {
+void CG_AddPacketEntities( bool isPortal ) {
 	int					num;
 	centity_t			*cent;
 	playerState_t		*ps;
@@ -2949,7 +2949,7 @@ void CG_AddPacketEntities( qboolean isPortal ) {
 	ps = &cg.predictedPlayerState;
 
 	CG_CheckPlayerG2Weapons(ps, &cg_entities[cg.predictedPlayerState.clientNum]);
-	BG_PlayerStateToEntityState( ps, &cg_entities[cg.predictedPlayerState.clientNum].currentState, qfalse );
+	BG_PlayerStateToEntityState( ps, &cg_entities[cg.predictedPlayerState.clientNum].currentState, false );
 
 	CG_AddCEntity( &cg_entities[cg.predictedPlayerState.clientNum] );
 
@@ -3152,7 +3152,7 @@ defaultoffsetposition:
 			useOrigin[1] += up[1]*parsedOffset[2];
 			useOrigin[2] += up[2]*parsedOffset[2];
 
-			trap->FX_PlayEffectID(objectID, useOrigin, useAngles, -1, -1, qfalse);
+			trap->FX_PlayEffectID(objectID, useOrigin, useAngles, -1, -1, false);
 		}
 	}
 	else if (strcmp(type, "sound") == 0)

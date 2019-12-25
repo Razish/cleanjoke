@@ -623,8 +623,8 @@ static int Thai_InitFields(int &iGlyphTPs, const char *&psLang)
 // looks messy, but the actual execution route is quite short, so it's fast...
 // Note that I have to have this 3-param form instead of advancing a passed-in "const char **psText" because of VM-crap
 //	where you can only change ptr-contents, not ptrs themselves. Bleurgh.
-// Ditto the qtrue:qfalse crap instead of just returning stuff straight through.
-unsigned int AnyLanguage_ReadCharFromString( const char *psText, int *piAdvanceCount, qboolean *pbIsTrailingPunctuation /* = NULL */)
+// Ditto the true:false crap instead of just returning stuff straight through.
+unsigned int AnyLanguage_ReadCharFromString( const char *psText, int *piAdvanceCount, bool *pbIsTrailingPunctuation /* = NULL */)
 {
 	const byte *psString = (const byte *) psText;	// avoid sign-promote bug
 	unsigned int uiLetter;
@@ -643,7 +643,7 @@ unsigned int AnyLanguage_ReadCharFromString( const char *psText, int *piAdvanceC
 
 				if ( pbIsTrailingPunctuation)
 				{
-					*pbIsTrailingPunctuation = qfalse;
+					*pbIsTrailingPunctuation = false;
 				}
 
 				return uiLetter;
@@ -662,7 +662,7 @@ unsigned int AnyLanguage_ReadCharFromString( const char *psText, int *piAdvanceC
 
 				if ( pbIsTrailingPunctuation)
 				{
-					*pbIsTrailingPunctuation = Taiwanese_IsTrailingPunctuation( uiLetter ) ? qtrue : qfalse;
+					*pbIsTrailingPunctuation = Taiwanese_IsTrailingPunctuation( uiLetter ) ? true : false;
 				}
 
 				return uiLetter;
@@ -681,7 +681,7 @@ unsigned int AnyLanguage_ReadCharFromString( const char *psText, int *piAdvanceC
 
 				if ( pbIsTrailingPunctuation)
 				{
-					*pbIsTrailingPunctuation = Japanese_IsTrailingPunctuation( uiLetter ) ? qtrue : qfalse;
+					*pbIsTrailingPunctuation = Japanese_IsTrailingPunctuation( uiLetter ) ? true : false;
 				}
 
 				return uiLetter;
@@ -700,7 +700,7 @@ unsigned int AnyLanguage_ReadCharFromString( const char *psText, int *piAdvanceC
 
 				if ( pbIsTrailingPunctuation)
 				{
-					*pbIsTrailingPunctuation = Chinese_IsTrailingPunctuation( uiLetter ) ? qtrue : qfalse;
+					*pbIsTrailingPunctuation = Chinese_IsTrailingPunctuation( uiLetter ) ? true : false;
 				}
 
 				return uiLetter;
@@ -718,7 +718,7 @@ unsigned int AnyLanguage_ReadCharFromString( const char *psText, int *piAdvanceC
 
 				if ( pbIsTrailingPunctuation )
 				{
-					*pbIsTrailingPunctuation = Thai_IsTrailingPunctuation( uiLetter ) ? qtrue : qfalse;
+					*pbIsTrailingPunctuation = Thai_IsTrailingPunctuation( uiLetter ) ? true : false;
 				}
 
 				return uiLetter;
@@ -743,7 +743,7 @@ unsigned int AnyLanguage_ReadCharFromString( const char *psText, int *piAdvanceC
 									uiLetter == '.' ||
 									uiLetter == ';' ||
 									uiLetter == ':'
-									) ? qtrue : qfalse;
+									) ? true : false;
 	}
 
 	return uiLetter;
@@ -752,7 +752,7 @@ unsigned int AnyLanguage_ReadCharFromString( const char *psText, int *piAdvanceC
 // needed for subtitle printing since original code no longer worked once camera bar height was changed to 480/10
 //	rather than refdef height / 10. I now need to bodge the coords to come out right.
 
-qboolean Language_IsAsian(void)
+bool Language_IsAsian(void)
 {
 	switch ( GetLanguageEnum() )
 	{
@@ -761,15 +761,15 @@ qboolean Language_IsAsian(void)
 		case eJapanese:
 		case eChinese:
 		case eThai:	// this is asian, but the query is normally used for scaling
-			return qtrue;
+			return true;
 		default:
 			break;
 	}
 
-	return qfalse;
+	return false;
 }
 
-qboolean Language_UsesSpaces(void)
+bool Language_UsesSpaces(void)
 {
 	// ( korean uses spaces )
 	switch ( GetLanguageEnum() )
@@ -778,12 +778,12 @@ qboolean Language_UsesSpaces(void)
 		case eJapanese:
 		case eChinese:
 		case eThai:
-			return qfalse;
+			return false;
 		default:
 			break;
 	}
 
-	return qtrue;
+	return true;
 }
 
 // name is (eg) "ergo" or "lcd", no extension.
@@ -868,10 +868,10 @@ CFontInfo::CFontInfo(const char *_fontName)
 
 	if ( com_buildScript->integer == 2 ) {
 		Com_Printf( "com_buildScript(2): Registering foreign fonts...\n" );
-		static qboolean bDone = qfalse;	// Do this once only (for speed)...
+		static bool bDone = false;	// Do this once only (for speed)...
 		if (!bDone)
 		{
-			bDone = qtrue;
+			bDone = true;
 
 			char sTemp[MAX_QPATH];
 			int iGlyphTPs = 0;
@@ -885,11 +885,11 @@ CFontInfo::CFontInfo(const char *_fontName)
 				char sTemp[MAX_QPATH];
 
 				sprintf(sTemp,"fonts/%s.tga", g_SBCSOverrideLanguages[i].m_psName );
-				ri.FS_FOpenFileRead( sTemp, &f, qfalse );
+				ri.FS_FOpenFileRead( sTemp, &f, false );
 				if (f) ri.FS_FCloseFile( f );
 
 				sprintf(sTemp,"fonts/%s.fontdat", g_SBCSOverrideLanguages[i].m_psName );
-				ri.FS_FOpenFileRead( sTemp, &f, qfalse );
+				ri.FS_FOpenFileRead( sTemp, &f, false );
 				if (f) ri.FS_FCloseFile( f );
 			}
 
@@ -907,12 +907,12 @@ CFontInfo::CFontInfo(const char *_fontName)
 					{
 						// additional files needed for Thai language...
 
-						ri.FS_FOpenFileRead( sFILENAME_THAI_WIDTHS , &f, qfalse );
+						ri.FS_FOpenFileRead( sFILENAME_THAI_WIDTHS , &f, false );
 						if (f) {
 							ri.FS_FCloseFile( f );
 						}
 
-						ri.FS_FOpenFileRead( sFILENAME_THAI_CODES, &f, qfalse );
+						ri.FS_FOpenFileRead( sFILENAME_THAI_CODES, &f, false );
 						if (f) {
 							ri.FS_FCloseFile( f );
 						}
@@ -925,7 +925,7 @@ CFontInfo::CFontInfo(const char *_fontName)
 					Com_sprintf(sTemp,sizeof(sTemp), "fonts/%s_%d_1024_%d.tga", psLang, 1024/m_iAsianGlyphsAcross, i);
 
 					// RE_RegisterShaderNoMip( sTemp );	// don't actually need to load it, so...
-					ri.FS_FOpenFileRead( sTemp, &f, qfalse );
+					ri.FS_FOpenFileRead( sTemp, &f, false );
 					if (f) {
 						ri.FS_FCloseFile( f );
 					}
@@ -1411,7 +1411,7 @@ int RE_Font_HeightPixels(const int iFontHandle, const float fScale)
 
 void RE_Font_DrawString(int ox, int oy, const char *psText, const float *rgba, const int iFontHandle, int iMaxPixelWidth, const float fScale)
 {
-	static qboolean gbInShadow = qfalse;	// MUST default to this
+	static bool gbInShadow = false;	// MUST default to this
 	float				fox, foy, fx, fy;
 	int					colour, offset;
 	const glyphInfo_t	*pLetter;
@@ -1492,9 +1492,9 @@ void RE_Font_DrawString(int ox, int oy, const char *psText, const float *rgba, c
 
 		const vec4_t v4DKGREY2 = {0.15f, 0.15f, 0.15f, rgba?rgba[3]:1.0f};
 
-		gbInShadow = qtrue;
+		gbInShadow = true;
 		RE_Font_DrawString(ox + offset, oy + offset, psText, v4DKGREY2, iFontHandle & SET_MASK, iMaxPixelWidth, fScale);
-		gbInShadow = qfalse;
+		gbInShadow = false;
 	}
 
 	RE_SetColor( rgba );
@@ -1507,7 +1507,7 @@ void RE_Font_DrawString(int ox, int oy, const char *psText, const float *rgba, c
 	fx = fox;
 	foy += curfont->mbRoundCalcs ? Round((curfont->GetHeight() - (curfont->GetDescender() >> 1)) * fScale) : (curfont->GetHeight() - (curfont->GetDescender() >> 1)) * fScale;
 
-	qboolean bNextTextWouldOverflow = qfalse;
+	bool bNextTextWouldOverflow = false;
 	while (*psText && !bNextTextWouldOverflow)
 	{
 		int iAdvanceCount;
@@ -1529,7 +1529,7 @@ void RE_Font_DrawString(int ox, int oy, const char *psText, const float *rgba, c
 		case 32:						// Space
 			pLetter = curfont->GetLetter(' ');
 			fx += curfont->mbRoundCalcs ? Round(pLetter->horizAdvance * fScale) : pLetter->horizAdvance * fScale;
-			bNextTextWouldOverflow = ( iMaxPixelWidth != -1 && ((fx-fox) > (float)iMaxPixelWidth) ) ? qtrue : qfalse; // yeuch
+			bNextTextWouldOverflow = ( iMaxPixelWidth != -1 && ((fx-fox) > (float)iMaxPixelWidth) ) ? true : false; // yeuch
 			break;
 		case '_':	// has a special word-break usage if in Thai (and followed by a thai char), and should not be displayed, else treat as normal
 			if (GetLanguageEnum()== eThai && ((unsigned char *)psText)[0] >= TIS_GLYPHS_START)
@@ -1572,7 +1572,7 @@ void RE_Font_DrawString(int ox, int oy, const char *psText, const float *rgba, c
 			}
 
 			float fAdvancePixels = curfont->mbRoundCalcs ? Round(pLetter->horizAdvance * fThisScale) : pLetter->horizAdvance * fThisScale;
-			bNextTextWouldOverflow = ( iMaxPixelWidth != -1 && (((fx+fAdvancePixels)-fox) > (float)iMaxPixelWidth) ) ? qtrue : qfalse; // yeuch
+			bNextTextWouldOverflow = ( iMaxPixelWidth != -1 && (((fx+fAdvancePixels)-fox) > (float)iMaxPixelWidth) ) ? true : false; // yeuch
 			if (!bNextTextWouldOverflow)
 			{
 				// this 'mbRoundCalcs' stuff is crap, but the only way to make the font code work. Sigh...

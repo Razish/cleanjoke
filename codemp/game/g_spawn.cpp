@@ -24,7 +24,7 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 #include "game/g_local.h"
 #include "game/g_ICARUScb.h"
 
-qboolean	G_SpawnString( const char *key, const char *defaultString, char **out ) {
+bool	G_SpawnString( const char *key, const char *defaultString, char **out ) {
 	int		i;
 
 	if ( !level.spawning ) {
@@ -35,57 +35,57 @@ qboolean	G_SpawnString( const char *key, const char *defaultString, char **out )
 	for ( i = 0 ; i < level.numSpawnVars ; i++ ) {
 		if ( !Q_stricmp( key, level.spawnVars[i][0] ) ) {
 			*out = level.spawnVars[i][1];
-			return qtrue;
+			return true;
 		}
 	}
 
 	*out = (char *)defaultString;
-	return qfalse;
+	return false;
 }
 
-qboolean	G_SpawnFloat( const char *key, const char *defaultString, float *out ) {
+bool	G_SpawnFloat( const char *key, const char *defaultString, float *out ) {
 	char		*s;
-	qboolean	present;
+	bool	present;
 
 	present = G_SpawnString( key, defaultString, &s );
 	*out = atof( s );
 	return present;
 }
 
-qboolean	G_SpawnInt( const char *key, const char *defaultString, int *out ) {
+bool	G_SpawnInt( const char *key, const char *defaultString, int *out ) {
 	char		*s;
-	qboolean	present;
+	bool	present;
 
 	present = G_SpawnString( key, defaultString, &s );
 	*out = atoi( s );
 	return present;
 }
 
-qboolean	G_SpawnVector( const char *key, const char *defaultString, float *out ) {
+bool	G_SpawnVector( const char *key, const char *defaultString, float *out ) {
 	char		*s;
-	qboolean	present;
+	bool	present;
 
 	present = G_SpawnString( key, defaultString, &s );
 	if ( sscanf( s, "%f %f %f", &out[0], &out[1], &out[2] ) != 3 ) {
 		trap->Print( "G_SpawnVector: Failed sscanf on %s (default: %s)\n", key, defaultString );
 		VectorClear( out );
-		return qfalse;
+		return false;
 	}
 	return present;
 }
 
-qboolean	G_SpawnBoolean( const char *key, const char *defaultString, qboolean *out ) {
+bool	G_SpawnBoolean( const char *key, const char *defaultString, bool *out ) {
 	char		*s;
-	qboolean	present;
+	bool	present;
 
 	present = G_SpawnString( key, defaultString, &s );
 
-	if ( !Q_stricmp( s, "qtrue" ) || !Q_stricmp( s, "true" ) || !Q_stricmp( s, "yes" ) || !Q_stricmp( s, "1" ) )
-		*out = qtrue;
-	else if ( !Q_stricmp( s, "qfalse" ) || !Q_stricmp( s, "false" ) || !Q_stricmp( s, "no" ) || !Q_stricmp( s, "0" ) )
-		*out = qfalse;
+	if ( !Q_stricmp( s, "true" ) || !Q_stricmp( s, "true" ) || !Q_stricmp( s, "yes" ) || !Q_stricmp( s, "1" ) )
+		*out = true;
+	else if ( !Q_stricmp( s, "false" ) || !Q_stricmp( s, "false" ) || !Q_stricmp( s, "no" ) || !Q_stricmp( s, "0" ) )
+		*out = false;
 	else
-		*out = qfalse;
+		*out = false;
 
 	return present;
 }
@@ -379,18 +379,18 @@ const spawn_t	spawns[] = {
 	{ "waypoint_small",                    SP_waypoint_small },
 };
 
-// Finds the spawn function for the entity and calls it, returning qfalse if not found
+// Finds the spawn function for the entity and calls it, returning false if not found
 static int spawncmp( const void *a, const void *b ) {
 	return Q_stricmp( (const char *)a, ((spawn_t*)b)->name );
 }
 
-qboolean G_CallSpawn( gentity_t *ent ) {
+bool G_CallSpawn( gentity_t *ent ) {
 	spawn_t	*s;
 	gitem_t	*item;
 
 	if ( !ent->classname ) {
 		trap->Print( "G_CallSpawn: NULL classname\n" );
-		return qfalse;
+		return false;
 	}
 
 	// check item spawn functions
@@ -398,7 +398,7 @@ qboolean G_CallSpawn( gentity_t *ent ) {
 	for ( item=bg_itemlist+1 ; item->classname ; item++ ) {
 		if ( !strcmp(item->classname, ent->classname) ) {
 			G_SpawnItem( ent, item );
-			return qtrue;
+			return true;
 		}
 	}
 
@@ -410,11 +410,11 @@ qboolean G_CallSpawn( gentity_t *ent ) {
 			G_SoundIndex( ent->healingsound );
 
 		s->spawn( ent );
-		return qtrue;
+		return true;
 	}
 
 	trap->Print( "%s doesn't have a spawn function\n", ent->classname );
-	return qfalse;
+	return false;
 }
 
 // Builds a copy of the string, translating \n to real linefeeds so message texts can be multi-line
@@ -545,13 +545,13 @@ void G_ParseField( const char *key, const char *value, gentity_t *ent )
 static void Adjust_AreaPortal( gentity_t *ent ) {
 	if ( ent->s.eType == ET_MOVER ) {
 		trap->LinkEntity( (sharedEntity_t *)ent );
-		trap->AdjustAreaPortalState( (sharedEntity_t *)ent, qtrue );
+		trap->AdjustAreaPortalState( (sharedEntity_t *)ent, true );
 	}
 }
 
 // Spawn an entity and fill in all of the level fields from level.spawnVars[], then call the class specfic spawn
 //	function
-void G_SpawnGEntityFromSpawnVars( qboolean inSubBSP ) {
+void G_SpawnGEntityFromSpawnVars( bool inSubBSP ) {
 	int			i;
 	gentity_t	*ent;
 	char		*s, *value, *gametypeName;
@@ -782,7 +782,7 @@ static void HandleEntityAdjustment(void)
 
 // Parses a brace bounded set of key / value pairs out of the level's entity strings into level.spawnVars[]
 // This does not actually spawn an entity.
-qboolean G_ParseSpawnVars( qboolean inSubBSP ) {
+bool G_ParseSpawnVars( bool inSubBSP ) {
 	char		keyname[MAX_TOKEN_CHARS];
 	char		com_token[MAX_TOKEN_CHARS];
 
@@ -792,7 +792,7 @@ qboolean G_ParseSpawnVars( qboolean inSubBSP ) {
 	// parse the opening brace
 	if ( !trap->GetEntityToken( com_token, sizeof( com_token ) ) ) {
 		// end of spawn string
-		return qfalse;
+		return false;
 	}
 	if ( com_token[0] != '{' ) {
 		trap->Error( ERR_DROP, "G_ParseSpawnVars: found %s when expecting {",com_token );
@@ -830,7 +830,7 @@ qboolean G_ParseSpawnVars( qboolean inSubBSP ) {
 		HandleEntityAdjustment();
 	}
 
-	return qtrue;
+	return true;
 }
 
 static	char *defaultStyles[32][3] =
@@ -1047,7 +1047,7 @@ void SP_worldspawn( void )
 	//when the first client connnects.
 	if (!BGPAFtextLoaded)
 	{
-		BG_ParseAnimationFile("models/players/_humanoid/animation.cfg", bgHumanoidAnimations, qtrue);
+		BG_ParseAnimationFile("models/players/_humanoid/animation.cfg", bgHumanoidAnimations, true);
 	}
 
 	if (!precachedKyle)
@@ -1149,9 +1149,9 @@ void SP_worldspawn( void )
 }
 
 //rww - Planning on having something here?
-qboolean SP_bsp_worldspawn ( void )
+bool SP_bsp_worldspawn ( void )
 {
-	return qtrue;
+	return true;
 }
 
 void G_PrecacheSoundsets( void )
@@ -1183,7 +1183,7 @@ void G_LinkLocations( void ) {
 	if ( level.locations.linked )
 		return;
 
-	level.locations.linked = qtrue;
+	level.locations.linked = true;
 
 	trap->SetConfigstring( CS_LOCATIONS, "unknown" );
 
@@ -1196,15 +1196,15 @@ void G_LinkLocations( void ) {
 }
 
 // Parses textual entity definitions out of an entstring and spawns gentities.
-void G_SpawnEntitiesFromString( qboolean inSubBSP ) {
+void G_SpawnEntitiesFromString( bool inSubBSP ) {
 	// allow calls to G_Spawn*()
-	level.spawning = qtrue;
+	level.spawning = true;
 	level.numSpawnVars = 0;
 
 	// the worldspawn is not an actual entity, but it still
 	// has a "spawn" function to perform any global setup
 	// needed by a level (setting configstrings or cvars, etc)
-	if ( !G_ParseSpawnVars(qfalse) ) {
+	if ( !G_ParseSpawnVars(false) ) {
 		trap->Error( ERR_DROP, "SpawnEntities: no entities" );
 	}
 
@@ -1246,7 +1246,7 @@ void G_SpawnEntitiesFromString( qboolean inSubBSP ) {
 
 	if (!inSubBSP)
 	{
-		level.spawning = qfalse;			// any future calls to G_Spawn*() will be errors
+		level.spawning = false;			// any future calls to G_Spawn*() will be errors
 	}
 
 	G_LinkLocations();

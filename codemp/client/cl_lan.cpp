@@ -125,7 +125,7 @@ int LAN_AddServer(int source, const char *name, const char *address) {
 		if (i >= *count) {
 			servers[*count].adr = adr;
 			Q_strncpyz(servers[*count].hostName, name, sizeof(servers[*count].hostName));
-			servers[*count].visible = qtrue;
+			servers[*count].visible = true;
 			(*count)++;
 			return 1;
 		}
@@ -152,7 +152,7 @@ int LAN_AddFavAddr( const char *address ) {
 		cls.favoriteServers[cls.numfavoriteservers].adr = adr;
 		Q_strncpyz( cls.favoriteServers[cls.numfavoriteservers].hostName, address,
 			sizeof(cls.favoriteServers[cls.numfavoriteservers].hostName) );
-		cls.favoriteServers[cls.numfavoriteservers].visible = qtrue;
+		cls.favoriteServers[cls.numfavoriteservers].visible = true;
 		cls.numfavoriteservers++;
 		return 1;
 	}
@@ -416,7 +416,7 @@ void LAN_GetPingInfo( int n, char *buf, int buflen ) {
 	CL_GetPingInfo( n, buf, buflen );
 }
 
-void LAN_MarkServerVisible(int source, int n, qboolean visible ) {
+void LAN_MarkServerVisible(int source, int n, bool visible ) {
 	if (n == -1) {
 		int count = MAX_OTHER_SERVERS;
 		serverInfo_t *server = NULL;
@@ -480,10 +480,10 @@ int LAN_ServerIsVisible(int source, int n ) {
 			}
 			break;
 	}
-	return qfalse;
+	return false;
 }
 
-qboolean LAN_UpdateVisiblePings(int source ) {
+bool LAN_UpdateVisiblePings(int source ) {
 	return CL_UpdateVisiblePings_f(source);
 }
 

@@ -67,10 +67,10 @@ void auto_turret_die ( gentity_t *self, gentity_t *inflictor, gentity_t *attacke
 
 	// clear my data
 	self->die = NULL;
-	self->takedamage = qfalse;
+	self->takedamage = false;
 	self->s.health = self->health = 0;
 	self->s.loopSound = 0;
-	self->s.shouldtarget = qfalse;
+	self->s.shouldtarget = false;
 	//self->s.owner = MAX_CLIENTS; //not owned by any client
 
 	VectorCopy( self->r.currentOrigin, pos );
@@ -165,7 +165,7 @@ static void turret_fire ( gentity_t *ent, vec3_t start, vec3_t dir )
 	bolt->methodOfDeath = MOD_TARGET_LASER;
 	bolt->splashMethodOfDeath = MOD_TARGET_LASER;
 	bolt->clipmask = MASK_SHOT | CONTENTS_LIGHTSABER;
-	//bolt->trigger_formation = qfalse;		// don't draw tail on first frame
+	//bolt->trigger_formation = false;		// don't draw tail on first frame
 
 	VectorSet( bolt->r.maxs, 1.5, 1.5, 1.5 );
 	VectorScale( bolt->r.maxs, -1, bolt->r.mins );
@@ -379,9 +379,9 @@ static void turret_sleep( gentity_t *self )
 	self->enemy = NULL;
 }
 
-static qboolean turret_find_enemies( gentity_t *self )
+static bool turret_find_enemies( gentity_t *self )
 {
-	qboolean	found = qfalse;
+	bool	found = false;
 	int			i, count;
 	float		bestDist = self->radius * self->radius;
 	float		enemyDist;
@@ -391,7 +391,7 @@ static qboolean turret_find_enemies( gentity_t *self )
 	gentity_t *top = &g_entities[self->r.ownerNum];
 	if ( !top )
 	{
-		return qfalse;
+		return false;
 	}
 
 	if ( self->aimDebounceTime > level.time ) // time since we've been shut off
@@ -406,7 +406,7 @@ static qboolean turret_find_enemies( gentity_t *self )
 
 	VectorCopy( top->r.currentOrigin, org2 );
 
-	count = G_RadiusList( org2, self->radius, self, qtrue, entity_list );
+	count = G_RadiusList( org2, self->radius, self, true, entity_list );
 
 	for ( i = 0; i < count; i++ )
 	{
@@ -453,7 +453,7 @@ static qboolean turret_find_enemies( gentity_t *self )
 		VectorCopy( target->r.currentOrigin, org );
 		org[2] += target->r.maxs[2]*0.5f;
 
-		trap->Trace( &tr, org2, NULL, NULL, org, self->s.number, MASK_SHOT, qfalse, 0, 0 );
+		trap->Trace( &tr, org2, NULL, NULL, org, self->s.number, MASK_SHOT, false, 0, 0 );
 
 		if ( !tr.allsolid && !tr.startsolid && ( tr.fraction == 1.0 || tr.entityNum == target->s.number ))
 		{
@@ -473,7 +473,7 @@ static qboolean turret_find_enemies( gentity_t *self )
 				}
 
 				bestDist = enemyDist;
-				found = qtrue;
+				found = true;
 			}
 		}
 	}
@@ -491,7 +491,7 @@ static qboolean turret_find_enemies( gentity_t *self )
 
 void turret_base_think( gentity_t *self )
 {
-	qboolean	turnOff = qtrue;
+	bool	turnOff = true;
 	float		enemyDist;
 	vec3_t		enemyDir, org, org2;
 
@@ -517,7 +517,7 @@ void turret_base_think( gentity_t *self )
 	{
 		if ( turret_find_enemies( self ))
 		{
-			turnOff = qfalse;
+			turnOff = false;
 		}
 	}
 	else if ( self->enemy->client && self->enemy->client->sess.sessionTeam == TEAM_SPECTATOR )
@@ -561,11 +561,11 @@ void turret_base_think( gentity_t *self )
 					{
 						org2[2] -= 10;
 					}
-					trap->Trace( &tr, org2, NULL, NULL, org, self->s.number, MASK_SHOT, qfalse, 0, 0 );
+					trap->Trace( &tr, org2, NULL, NULL, org, self->s.number, MASK_SHOT, false, 0, 0 );
 
 					if ( !tr.allsolid && !tr.startsolid && tr.entityNum == self->enemy->s.number )
 					{
-						turnOff = qfalse;	// Can see our enemy
+						turnOff = false;	// Can see our enemy
 					}
 				}
 			}
@@ -607,7 +607,7 @@ void turret_base_use( gentity_t *self, gentity_t *other, gentity_t *activator )
 	*/
 }
 
-qboolean turret_base_spawn_top( gentity_t *base )
+bool turret_base_spawn_top( gentity_t *base )
 {
 	vec3_t		org;
 	int			t;
@@ -615,7 +615,7 @@ qboolean turret_base_spawn_top( gentity_t *base )
 	gentity_t *top = G_Spawn();
 	if ( !top )
 	{
-		return qfalse;
+		return false;
 	}
 
 	top->s.modelindex = G_ModelIndex( "models/map_objects/hoth/turret_top_new.md3" );
@@ -666,7 +666,7 @@ qboolean turret_base_spawn_top( gentity_t *base )
 		G_ScaleNetHealth(base);
 	}
 
-	base->takedamage = qtrue;
+	base->takedamage = true;
 	base->pain = TurretBasePain;
 	base->die = bottom_die;
 
@@ -683,8 +683,8 @@ qboolean turret_base_spawn_top( gentity_t *base )
 	base->alliedTeam = top->alliedTeam;
 	base->s.teamowner = top->s.teamowner;
 
-	base->s.shouldtarget = qtrue;
-	top->s.shouldtarget = qtrue;
+	base->s.shouldtarget = true;
+	top->s.shouldtarget = true;
 
 	//link them to each other
 	base->target_ent = top;
@@ -746,7 +746,7 @@ qboolean turret_base_spawn_top( gentity_t *base )
 	top->r.contents = CONTENTS_BODY;
 
 	//base->max_health = base->health;
-	top->takedamage = qtrue;
+	top->takedamage = true;
 	top->pain = TurretPain;
 	top->die  = auto_turret_die;
 
@@ -760,7 +760,7 @@ qboolean turret_base_spawn_top( gentity_t *base )
 	top->s.weapon = WP_EMPLACED_GUN;
 
 	trap->LinkEntity( (sharedEntity_t *)top );
-	return qtrue;
+	return true;
 }
 
 /*QUAKED misc_turret (1 0 0) (-48 -48 0) (48 48 144) START_OFF

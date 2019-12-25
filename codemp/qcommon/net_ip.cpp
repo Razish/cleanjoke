@@ -22,7 +22,7 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 ===========================================================================
 */
 
-#include "qcommon/qcommon.h"
+#include "qcommon/q_common.h"
 #include "qcommon/com_cvar.h"
 #include "qcommon/com_cvars.h"
 
@@ -44,7 +44,7 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 	#define socketError WSAGetLastError( )
 
 	static WSADATA	winsockdata;
-	static qboolean	winsockInitialized = qfalse;
+	static bool	winsockInitialized = false;
 #else
 
 #if MAC_OS_X_VERSION_MIN_REQUIRED == 1020
@@ -82,8 +82,8 @@ typedef int SOCKET;
 
 #endif
 
-static qboolean usingSocks = qfalse;
-static qboolean networkingEnabled = qfalse;
+static bool usingSocks = false;
+static bool networkingEnabled = false;
 
 static struct sockaddr_in	socksRelayAddr;
 
@@ -171,7 +171,7 @@ static void SockadrToNetadr( struct sockaddr_in *s, netadr_t *a ) {
 	a->port = s->sin_port;
 }
 
-static qboolean Sys_StringToSockaddr( const char *s, struct sockaddr_in *sadr )
+static bool Sys_StringToSockaddr( const char *s, struct sockaddr_in *sadr )
 {
 	struct hostent	*h;
 
@@ -187,22 +187,22 @@ static qboolean Sys_StringToSockaddr( const char *s, struct sockaddr_in *sadr )
 	else
 	{
 		if( ( h = gethostbyname( s ) ) == 0 )
-			return qfalse;
+			return false;
 		sadr->sin_addr.s_addr = *(uint32_t *)h->h_addr_list[0];
 	}
 
-	return qtrue;
+	return true;
 }
 
-qboolean Sys_StringToAdr( const char *s, netadr_t *a ) {
+bool Sys_StringToAdr( const char *s, netadr_t *a ) {
 	struct sockaddr_in sadr;
 
 	if ( !Sys_StringToSockaddr( s, &sadr ) ) {
-		return qfalse;
+		return false;
 	}
 
 	SockadrToNetadr( &sadr, a );
-	return qtrue;
+	return true;
 }
 
 // Receive one packet
@@ -210,13 +210,13 @@ qboolean Sys_StringToAdr( const char *s, netadr_t *a ) {
 int	recvfromCount;
 #endif
 
-qboolean NET_GetPacket( netadr_t *net_from, msg_t *net_message, fd_set *fdr ) {
+bool NET_GetPacket( netadr_t *net_from, msg_t *net_message, fd_set *fdr ) {
 	int ret, err;
 	socklen_t fromlen;
 	struct sockaddr_in from;
 
 	if ( ip_socket == INVALID_SOCKET || !FD_ISSET(ip_socket, fdr) ) {
-		return qfalse;
+		return false;
 	}
 
 	fromlen = sizeof( from );
@@ -229,17 +229,17 @@ qboolean NET_GetPacket( netadr_t *net_from, msg_t *net_message, fd_set *fdr ) {
 		err = socketError;
 
 		if( err == EAGAIN || err == ECONNRESET )
-			return qfalse;
+			return false;
 
 		Com_Printf( "NET_GetPacket: %s\n", NET_ErrorString() );
-		return qfalse;
+		return false;
 	}
 
 	memset( from.sin_zero, 0, 8 );
 
 	if ( usingSocks && memcmp( &from, &socksRelayAddr, fromlen ) == 0 ) {
 		if ( ret < 10 || net_message->data[0] != 0 || net_message->data[1] != 0 || net_message->data[2] != 0 || net_message->data[3] != 1 ) {
-			return qfalse;
+			return false;
 		}
 		net_from->type = NA_IP;
 		net_from->ip[0] = net_message->data[4];
@@ -256,11 +256,11 @@ qboolean NET_GetPacket( netadr_t *net_from, msg_t *net_message, fd_set *fdr ) {
 
 	if( ret >= net_message->maxsize ) {
 		Com_Printf( "Oversize packet from %s\n", NET_AdrToString (*net_from) );
-		return qfalse;
+		return false;
 	}
 
 	net_message->cursize = ret;
-	return qtrue;
+	return true;
 }
 
 static char socksBuf[4096];
@@ -311,29 +311,29 @@ void Sys_SendPacket( int length, const void *data, netadr_t to ) {
 }
 
 // LAN clients will have their rate var ignored
-qboolean Sys_IsLANAddress( netadr_t adr ) {
+bool Sys_IsLANAddress( netadr_t adr ) {
 	if ( net_forcenonlocal && net_forcenonlocal->integer )
-		return qfalse;
+		return false;
 
 	if( adr.type == NA_LOOPBACK )
-		return qtrue;
+		return true;
 
 	if( adr.type != NA_IP )
-		return qfalse;
+		return false;
 
 	// RFC1918:
 	// 10.0.0.0        -   10.255.255.255  (10/8 prefix)
 	// 172.16.0.0      -   172.31.255.255  (172.16/12 prefix)
 	// 192.168.0.0     -   192.168.255.255 (192.168/16 prefix)
 	if ( adr.ip[0] == 10 )
-		return qtrue;
+		return true;
 	if ( adr.ip[0] == 172 && (adr.ip[1]&0xf0) == 16 )
-		return qtrue;
+		return true;
 	if ( adr.ip[0] == 192 && adr.ip[1] == 168 )
-		return qtrue;
+		return true;
 
 	if ( adr.ip[0] == 127 )
-		return qtrue;
+		return true;
 
 	// choose which comparison to use based on the class of the address being tested
 	// any local adresses of a different class than the address being tested will fail based on the first byte
@@ -341,9 +341,9 @@ qboolean Sys_IsLANAddress( netadr_t adr ) {
 	// Class C
 	for ( int i=0; i<numIP; i++ ) {
 		if( memcmp( adr.ip, localIP[i], 3 ) == 0 )
-			return qtrue;
+			return true;
 	}
-	return qfalse;
+	return false;
 }
 
 void Sys_ShowIP(void) {
@@ -418,10 +418,10 @@ void NET_OpenSocks( int port ) {
 	struct sockaddr_in	address;
 	struct hostent		*h;
 	int					len;
-	qboolean			rfc1929;
+	bool			rfc1929;
 	unsigned char		buf[64];
 
-	usingSocks = qfalse;
+	usingSocks = false;
 
 	Com_Printf( "Opening connection to SOCKS server.\n" );
 
@@ -451,10 +451,10 @@ void NET_OpenSocks( int port ) {
 
 	// send socks authentication handshake
 	if ( *net_socksUsername->string || *net_socksPassword->string ) {
-		rfc1929 = qtrue;
+		rfc1929 = true;
 	}
 	else {
-		rfc1929 = qfalse;
+		rfc1929 = false;
 	}
 
 	buf[0] = 5;		// SOCKS version
@@ -575,7 +575,7 @@ void NET_OpenSocks( int port ) {
 	memcpy( &socksRelayAddr.sin_port, &buf[8], 2 );
 	memset( &socksRelayAddr.sin_zero, 0, 8 );
 
-	usingSocks = qtrue;
+	usingSocks = true;
 }
 
 #ifdef MACOS_X
@@ -762,7 +762,7 @@ void NET_OpenIP( void )
 	}
 }
 
-static qboolean NET_GetCvars( void ) {
+static bool NET_GetCvars( void ) {
 	int	modified =
 		net_enabled->modified +
 		net_forcenonlocal->modified +
@@ -782,21 +782,21 @@ static qboolean NET_GetCvars( void ) {
 		net_socksServer->modified =
 		net_socksPort->modified =
 		net_socksUsername->modified =
-		net_socksPassword->modified = qfalse;
+		net_socksPassword->modified = false;
 
-	return modified ? qtrue : qfalse;
+	return modified ? true : false;
 }
 
-void NET_Config( qboolean enableNetworking ) {
-	qboolean	modified;
-	qboolean	stop;
-	qboolean	start;
+void NET_Config( bool enableNetworking ) {
+	bool	modified;
+	bool	stop;
+	bool	start;
 
 	// get any latched changes to cvars
 	modified = NET_GetCvars();
 
 	if ( !net_enabled->integer )
-		enableNetworking = qfalse;
+		enableNetworking = false;
 
 	// if enable state is the same and no cvars were modified, we have nothing to do
 	if ( enableNetworking == networkingEnabled && !modified )
@@ -804,22 +804,22 @@ void NET_Config( qboolean enableNetworking ) {
 
 	if ( enableNetworking == networkingEnabled ) {
 		if ( enableNetworking ) {
-			stop = qtrue;
-			start = qtrue;
+			stop = true;
+			start = true;
 		}
 		else {
-			stop = qfalse;
-			start = qfalse;
+			stop = false;
+			start = false;
 		}
 	}
 	else {
 		if ( enableNetworking ) {
-			stop = qfalse;
-			start = qtrue;
+			stop = false;
+			start = true;
 		}
 		else {
-			stop = qtrue;
-			start = qfalse;
+			stop = true;
+			start = false;
 		}
 		networkingEnabled = enableNetworking;
 	}
@@ -850,11 +850,11 @@ void NET_Init( void ) {
 		return;
 	}
 
-	winsockInitialized = qtrue;
+	winsockInitialized = true;
 	Com_Printf( "Winsock Initialized\n" );
 #endif
 
-	NET_Config( qtrue );
+	NET_Config( true );
 
 	Cmd_AddCommand ("net_restart", NET_Restart_f, "Restart the networking sub-system" );
 }
@@ -864,10 +864,10 @@ void NET_Shutdown( void ) {
 		return;
 	}
 
-	NET_Config( qfalse );
+	NET_Config( false );
 #ifdef _WIN32
 	WSACleanup();
-	winsockInitialized = qfalse;
+	winsockInitialized = false;
 #endif
 }
 
@@ -939,5 +939,5 @@ void NET_Sleep( int msec ) {
 }
 
 void NET_Restart_f( void ) {
-	NET_Config( qtrue );
+	NET_Config( true );
 }

@@ -23,14 +23,15 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
 
+// ======================================================================
+// INCLUDE
+// ======================================================================
+
 #include "qcommon/q_shared.h"
 
-// this is only used for visualization tools in cm_ debug functions
-
-typedef struct winding_s {
-	int		numpoints;
-	vec3_t	p[4];		// variable sized
-} winding_t;
+// ======================================================================
+// DEFINE
+// ======================================================================
 
 #define	MAX_POINTS_ON_WINDING	64
 
@@ -48,15 +49,26 @@ typedef struct winding_s {
 #define	ON_EPSILON	0.1f
 #endif
 
-winding_t	*AllocWinding (int points);
-winding_t	*CopyWinding (winding_t *w);
-winding_t	*BaseWindingForPlane (vec3_t normal, float dist);
-void	FreeWinding (winding_t *w);
-void	WindingBounds (winding_t *w, vec3_t mins, vec3_t maxs);
+// ======================================================================
+// STRUCT
+// ======================================================================
 
-void	AddWindingToConvexHull( winding_t *w, winding_t **hull, vec3_t normal );
+// this is only used for visualization tools in cm_ debug functions
+typedef struct winding_s {
+	int		numpoints;
+	vec3_t	p[4];		// variable sized
+} winding_t;
 
-void	ChopWindingInPlace (winding_t **w, vec3_t normal, float dist, float epsilon);
+// ======================================================================
+// EXTERN VARIABLE
+// ======================================================================
+
 // frees the original if clipped
-
 void pw(winding_t *w);
+void AddWindingToConvexHull( winding_t *w, winding_t **hull, vec3_t normal );
+void ChopWindingInPlace (winding_t **w, vec3_t normal, float dist, float epsilon);
+void FreeWinding (winding_t *w);
+void WindingBounds (winding_t *w, vec3_t mins, vec3_t maxs);
+winding_t *AllocWinding (int points);
+winding_t *BaseWindingForPlane (vec3_t normal, float dist);
+winding_t *CopyWinding (winding_t *w);

@@ -125,7 +125,7 @@ void multi_trigger_run( gentity_t *ent )
 }
 
 //determine if the class given is listed in the string using the | formatting
-qboolean G_NameInTriggerClassList(char *list, char *str)
+bool G_NameInTriggerClassList(char *list, char *str)
 {
 	char cmp[MAX_STRING_CHARS];
 	int i = 0;
@@ -144,21 +144,21 @@ qboolean G_NameInTriggerClassList(char *list, char *str)
 
 		if (!Q_stricmp(str, cmp))
 		{ //found it
-			return qtrue;
+			return true;
 		}
 		if (list[i] != '|')
 		{ //reached the end and never found it
-			return qfalse;
+			return false;
 		}
 		i++;
 	}
 
-	return qfalse;
+	return false;
 }
 
 void multi_trigger( gentity_t *ent, gentity_t *activator )
 {
-	qboolean haltTrigger = qfalse;
+	bool haltTrigger = false;
 
 	if ( ent->think == multi_trigger_run )
 	{//already triggered, just waiting to run
@@ -574,7 +574,7 @@ void Do_Strike(gentity_t *ent)
 	strikeFrom[2] = ent->r.absmax[2]-4.0f;
 
 	//now trace for damaging stuff, and do the effect
-	trap->Trace(&localTrace, strikeFrom, NULL, NULL, strikePoint, ent->s.number, MASK_PLAYERSOLID, qfalse, 0, 0);
+	trap->Trace(&localTrace, strikeFrom, NULL, NULL, strikePoint, ent->s.number, MASK_PLAYERSOLID, false, 0, 0);
 	VectorCopy(localTrace.endpos, strikePoint);
 
 	if (localTrace.startsolid || localTrace.allsolid)

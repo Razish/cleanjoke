@@ -61,7 +61,7 @@ void R_ImageLoader_Init();
 typedef void (*ImageLoaderFn)( const char *filename, byte **pic, int *width, int *height );
 
 // Adds a new image loader to handle a new image type. The extension should not begin with a period (a full stop).
-qboolean R_ImageLoader_Add( const char *extension, ImageLoaderFn imageLoader );
+bool R_ImageLoader_Add( const char *extension, ImageLoaderFn imageLoader );
 
 // Load an image from file.
 void R_LoadImage( const char *shortname, byte **pic, int *width, int *height );

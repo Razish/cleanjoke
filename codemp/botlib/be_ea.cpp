@@ -270,7 +270,7 @@ void EA_GetInput(int client, float thinktime, bot_input_t *input)
 void EA_ResetInput(int client)
 {
 	bot_input_t *bi;
-	int jumped = qfalse;
+	bool jumped = false;
 
 	bi = &botinputs[client];
 	bi->actionflags &= ~ACTION_JUMPEDLASTFRAME;

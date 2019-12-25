@@ -320,16 +320,16 @@ int WeaponAttackAnim[WP_NUM_WEAPONS] =
 	BOTH_ATTACK1//WP_TURRET,
 };
 
-qboolean BG_FileExists( const char *fileName ) {
+bool BG_FileExists( const char *fileName ) {
 	if ( fileName && fileName[0] ) {
 		fileHandle_t f = NULL_FILE;
 		trap->FS_Open( fileName, &f, FS_READ );
 		if ( f > 0 ) {
 			trap->FS_Close( f );
-			return qtrue;
+			return true;
 		}
 	}
-	return qfalse;
+	return false;
 }
 
 // given a boltmatrix, return in vec a normalised vector for the axis requested in flags
@@ -380,11 +380,11 @@ void BG_GiveMeVectorFromMatrix(mdxaBone_t *boltMatrix, int flags, vec3_t vec)
 //	and spit it into powerOut, returning true if it was legal to begin with and false if not.
 // fpDisabled is actually only expected (needed) from the server, because the ui disables force power selection anyway
 //	when force powers are disabled on the server.
-qboolean BG_LegalizedForcePowers( char *powerOut, size_t powerOutSize, int maxRank, qboolean freeSaber, int teamForce, int gametype, int fpDisabled )
+bool BG_LegalizedForcePowers( char *powerOut, size_t powerOutSize, int maxRank, bool freeSaber, int teamForce, int gametype, int fpDisabled )
 {
 	char powerBuf[128];
 	char readBuf[128];
-	qboolean maintainsValidity = qtrue;
+	bool maintainsValidity = true;
 	int powerLen = strlen(powerOut);
 	int i = 0;
 	int c = 0;
@@ -399,7 +399,7 @@ qboolean BG_LegalizedForcePowers( char *powerOut, size_t powerOutSize, int maxRa
 	{ //This should not happen. If it does, this is obviously a bogus string.
 		//They can have this string. Because I said so.
 		Q_strncpyz( powerBuf, DEFAULT_FORCEPOWERS, sizeof( powerBuf ) );
-		maintainsValidity = qfalse;
+		maintainsValidity = false;
 	}
 	else
 		Q_strncpyz( powerBuf, powerOut, sizeof( powerBuf ) ); //copy it as the original
@@ -427,7 +427,7 @@ qboolean BG_LegalizedForcePowers( char *powerOut, size_t powerOutSize, int maxRa
 		final_Side != FORCE_DARKSIDE)
 	{ //Not a valid side. You will be dark. Because I said so. (this is something that should never actually happen unless you purposely feed in an invalid config)
 		final_Side = FORCE_DARKSIDE;
-		maintainsValidity = qfalse;
+		maintainsValidity = false;
 	}
 
 	if (teamForce)
@@ -435,7 +435,7 @@ qboolean BG_LegalizedForcePowers( char *powerOut, size_t powerOutSize, int maxRa
 		if (final_Side != teamForce)
 		{
 			final_Side = teamForce;
-			//maintainsValidity = qfalse;
+			//maintainsValidity = false;
 			//Not doing this, for now. Let them join the team with their filtered powers.
 		}
 	}
@@ -517,7 +517,7 @@ qboolean BG_LegalizedForcePowers( char *powerOut, size_t powerOutSize, int maxRa
 			minPow = 1;
 		}
 
-		maintainsValidity = qfalse;
+		maintainsValidity = false;
 
 		while (usedPoints > allowedPoints)
 		{
@@ -1659,37 +1659,37 @@ float vectoyaw( const vec3_t vec ) {
 	return yaw;
 }
 
-qboolean BG_HasYsalamiri(int gametype, playerState_t *ps)
+bool BG_HasYsalamiri(int gametype, playerState_t *ps)
 {
 	if (gametype == GT_CTY &&
 		(ps->powerups[PW_REDFLAG] || ps->powerups[PW_BLUEFLAG]))
 	{
-		return qtrue;
+		return true;
 	}
 
 	if (ps->powerups[PW_YSALAMIRI])
 	{
-		return qtrue;
+		return true;
 	}
 
-	return qfalse;
+	return false;
 }
 
-qboolean BG_CanUseFPNow(int gametype, playerState_t *ps, int time, forcePowers_t power)
+bool BG_CanUseFPNow(int gametype, playerState_t *ps, int time, forcePowers_t power)
 {
 	if (BG_HasYsalamiri(gametype, ps))
 	{
-		return qfalse;
+		return false;
 	}
 
 	if ( ps->forceRestricted || ps->trueNonJedi )
 	{
-		return qfalse;
+		return false;
 	}
 
 	if (ps->weapon == WP_EMPLACED_GUN)
 	{ //can't use any of your powers while on an emplaced weapon
-		return qfalse;
+		return false;
 	}
 
 	if (ps->duelInProgress)
@@ -1699,7 +1699,7 @@ qboolean BG_CanUseFPNow(int gametype, playerState_t *ps, int time, forcePowers_t
 		{
 			if (!ps->saberLockFrame || power != FP_PUSH)
 			{
-				return qfalse;
+				return false;
 			}
 		}
 	}
@@ -1708,13 +1708,13 @@ qboolean BG_CanUseFPNow(int gametype, playerState_t *ps, int time, forcePowers_t
 	{
 		if (power != FP_PUSH)
 		{
-			return qfalse;
+			return false;
 		}
 	}
 
 	if (ps->fallingToDeath)
 	{
-		return qfalse;
+		return false;
 	}
 
 	if ((ps->brokenLimbs & (1 << BROKENLIMB_RARM)) ||
@@ -1727,13 +1727,13 @@ qboolean BG_CanUseFPNow(int gametype, playerState_t *ps, int time, forcePowers_t
 		case FP_GRIP:
 		case FP_LIGHTNING:
 		case FP_DRAIN:
-			return qfalse;
+			return false;
 		default:
 			break;
 		}
 	}
 
-	return qtrue;
+	return true;
 }
 
 gitem_t	*BG_FindItemForPowerup( powerup_t pw ) {
@@ -1802,7 +1802,7 @@ gitem_t	*BG_FindItem( const char *classname ) {
 }
 
 // Items can be picked up without actually touching their physical bounds to make grabbing them easier
-qboolean	BG_PlayerTouchesItem( playerState_t *ps, entityState_t *item, int atTime ) {
+bool	BG_PlayerTouchesItem( playerState_t *ps, entityState_t *item, int atTime ) {
 	vec3_t		origin;
 
 	BG_EvaluateTrajectory( &item->pos, atTime, origin );
@@ -1814,10 +1814,10 @@ qboolean	BG_PlayerTouchesItem( playerState_t *ps, entityState_t *item, int atTim
 		|| ps->origin[1] - origin[1] < -36
 		|| ps->origin[2] - origin[2] > 36
 		|| ps->origin[2] - origin[2] < -36 ) {
-		return qfalse;
+		return false;
 	}
 
-	return qtrue;
+	return true;
 }
 
 int BG_ProperForceIndex( int power ) {
@@ -1895,14 +1895,14 @@ int BG_GetItemIndexByTag(int tag, int type)
 }
 
 //yeah..
-qboolean BG_IsItemSelectable(playerState_t *ps, int item)
+bool BG_IsItemSelectable(playerState_t *ps, int item)
 {
 	if (item == HI_HEALTHDISP || item == HI_AMMODISP ||
 		item == HI_JETPACK)
 	{
-		return qfalse;
+		return false;
 	}
-	return qtrue;
+	return true;
 }
 
 void BG_CycleInven(playerState_t *ps, int direction)
@@ -1970,7 +1970,7 @@ void BG_CycleInven(playerState_t *ps, int direction)
 
 // Returns false if the item should not be picked up.
 // This needs to be the same for client side prediction and server use.
-qboolean BG_CanItemBeGrabbed( int gametype, const entityState_t *ent, const playerState_t *ps ) {
+bool BG_CanItemBeGrabbed( int gametype, const entityState_t *ent, const playerState_t *ps ) {
 	gitem_t	*item;
 
 	if ( ent->modelindex < 1 || ent->modelindex >= bg_numItems ) {
@@ -1990,7 +1990,7 @@ qboolean BG_CanItemBeGrabbed( int gametype, const entityState_t *ent, const play
 				&& (item->giType != IT_HOLDABLE || item->giTag != HI_SEEKER)//not a seeker
 				&& (item->giType != IT_POWERUP || item->giTag == PW_YSALAMIRI) )//not a force pick-up
 			{
-				return qfalse;
+				return false;
 			}
 		}
 		else if ( ps->trueNonJedi )
@@ -1999,89 +1999,89 @@ qboolean BG_CanItemBeGrabbed( int gametype, const entityState_t *ent, const play
 				|| (item->giType == IT_HOLDABLE && item->giTag == HI_SEEKER)//if holdable, cannot pick up seeker
 				|| (item->giType == IT_WEAPON && item->giTag == WP_SABER ) )//or if it's a saber
 			{
-				return qfalse;
+				return false;
 			}
 		}
 		if ( ps->isJediMaster && item && (item->giType == IT_WEAPON || item->giType == IT_AMMO))
 		{//jedi master cannot pick up weapons
-			return qfalse;
+			return false;
 		}
 		if ( ps->duelInProgress )
 		{ //no picking stuff up while in a duel, no matter what the type is
-			return qfalse;
+			return false;
 		}
 	}
 	else
 	{//safety return since below code assumes a non-null ps
-		return qfalse;
+		return false;
 	}
 
 	switch( item->giType ) {
 	case IT_WEAPON:
 		if (ent->generic1 == ps->clientNum && ent->powerups)
 		{
-			return qfalse;
+			return false;
 		}
 		if (!(ent->eFlags & EF_DROPPEDWEAPON) && (ps->stats[STAT_WEAPONS] & (1 << item->giTag)) &&
 			item->giTag != WP_THERMAL && item->giTag != WP_TRIP_MINE && item->giTag != WP_DET_PACK)
 		{ //weaponstay stuff.. if this isn't dropped, and you already have it, you don't get it.
-			return qfalse;
+			return false;
 		}
 		if (item->giTag == WP_THERMAL || item->giTag == WP_TRIP_MINE || item->giTag == WP_DET_PACK)
 		{ //check to see if full on ammo for this, if so, then..
 			int ammoIndex = weaponData[item->giTag].ammoIndex;
 			if (ps->ammo[ammoIndex] >= ammoData[ammoIndex].max)
 			{ //don't need it
-				return qfalse;
+				return false;
 			}
 		}
-		return qtrue;	// weapons are always picked up
+		return true;	// weapons are always picked up
 
 	case IT_AMMO:
 		if (item->giTag == -1)
 		{ //special case for "all ammo" packs
-			return qtrue;
+			return true;
 		}
 		if ( ps->ammo[item->giTag] >= ammoData[item->giTag].max) {
-			return qfalse;		// can't hold any more
+			return false;		// can't hold any more
 		}
-		return qtrue;
+		return true;
 
 	case IT_ARMOR:
 		if ( ps->stats[STAT_ARMOR] >= ps->stats[STAT_MAX_HEALTH]/* * item->giTag*/ ) {
-			return qfalse;
+			return false;
 		}
-		return qtrue;
+		return true;
 
 	case IT_HEALTH:
 		// small and mega healths will go over the max, otherwise
 		// don't pick up if already at max
 		if ((ps->fd.forcePowersActive & (1 << FP_RAGE)))
 		{
-			return qfalse;
+			return false;
 		}
 
 		if ( item->quantity == 5 || item->quantity == 100 ) {
 			if ( ps->stats[STAT_HEALTH] >= ps->stats[STAT_MAX_HEALTH] * 2 ) {
-				return qfalse;
+				return false;
 			}
-			return qtrue;
+			return true;
 		}
 
 		if ( ps->stats[STAT_HEALTH] >= ps->stats[STAT_MAX_HEALTH] ) {
-			return qfalse;
+			return false;
 		}
-		return qtrue;
+		return true;
 
 	case IT_POWERUP:
 		if (ps && (ps->powerups[PW_YSALAMIRI]))
 		{
 			if (item->giTag != PW_YSALAMIRI)
 			{
-				return qfalse;
+				return false;
 			}
 		}
-		return qtrue;	// powerups are always picked up
+		return true;	// powerups are always picked up
 
 	case IT_TEAM: // team items, such as flags
 		if( gametype == GT_CTF || gametype == GT_CTY ) {
@@ -2092,23 +2092,23 @@ qboolean BG_CanItemBeGrabbed( int gametype, const entityState_t *ent, const play
 				if (item->giTag == PW_BLUEFLAG ||
 					(item->giTag == PW_REDFLAG && ent->modelindex2) ||
 					(item->giTag == PW_REDFLAG && ps->powerups[PW_BLUEFLAG]) )
-					return qtrue;
+					return true;
 			} else if (ps->persistant[PERS_TEAM] == TEAM_BLUE) {
 				if (item->giTag == PW_REDFLAG ||
 					(item->giTag == PW_BLUEFLAG && ent->modelindex2) ||
 					(item->giTag == PW_BLUEFLAG && ps->powerups[PW_REDFLAG]) )
-					return qtrue;
+					return true;
 			}
 		}
 
-		return qfalse;
+		return false;
 
 	case IT_HOLDABLE:
 		if ( ps->stats[STAT_HOLDABLE_ITEMS] & (1 << item->giTag))
 		{
-			return qfalse;
+			return false;
 		}
-		return qtrue;
+		return true;
 
         case IT_BAD:
             Com_Error( ERR_DROP, "BG_CanItemBeGrabbed: IT_BAD" );
@@ -2119,7 +2119,7 @@ qboolean BG_CanItemBeGrabbed( int gametype, const entityState_t *ent, const play
          break;
 	}
 
-	return qfalse;
+	return false;
 }
 
 void BG_EvaluateTrajectory( const trajectory_t *tr, int atTime, vec3_t result ) {
@@ -2472,7 +2472,7 @@ int BG_EmplacedView(vec3_t baseAngles, vec3_t angles, float *newYaw, float const
 	return 0;
 }
 
-qboolean BG_ValidateSkinForTeam( const char *modelName, char *skinName, int team, float *colors )
+bool BG_ValidateSkinForTeam( const char *modelName, char *skinName, int team, float *colors )
 {
 	if (strlen (modelName) > 5 && Q_stricmpn (modelName, "jedi_", 5) == 0)
 	{ //argh, it's a custom player skin!
@@ -2488,7 +2488,7 @@ qboolean BG_ValidateSkinForTeam( const char *modelName, char *skinName, int team
 			colors[1] = 0.0f;
 			colors[2] = 1.0f;
 		}
-		return qtrue;
+		return true;
 	}
 
 	if (team == TEAM_RED)
@@ -2500,7 +2500,7 @@ qboolean BG_ValidateSkinForTeam( const char *modelName, char *skinName, int team
 				|| strchr(skinName, '|') )//a multi-skin playerModel
 			{
 				Q_strncpyz(skinName, "red", MAX_QPATH);
-				return qfalse;
+				return false;
 			}
 			else
 			{//need to set it to red
@@ -2517,7 +2517,7 @@ qboolean BG_ValidateSkinForTeam( const char *modelName, char *skinName, int team
 						if ( len+4 >= MAX_QPATH )
 						{//too big to append "_red"
 							Q_strncpyz(skinName, "red", MAX_QPATH);
-							return qfalse;
+							return false;
 						}
 						else
 						{
@@ -2530,7 +2530,7 @@ qboolean BG_ValidateSkinForTeam( const char *modelName, char *skinName, int team
 				{
 					Q_strncpyz(skinName, "red", MAX_QPATH);
 				}
-				return qfalse;
+				return false;
 			}
 		}
 
@@ -2544,7 +2544,7 @@ qboolean BG_ValidateSkinForTeam( const char *modelName, char *skinName, int team
 				|| strchr(skinName, '|') )//a multi-skin playerModel
 			{
 				Q_strncpyz(skinName, "blue", MAX_QPATH);
-				return qfalse;
+				return false;
 			}
 			else
 			{//need to set it to blue
@@ -2561,7 +2561,7 @@ qboolean BG_ValidateSkinForTeam( const char *modelName, char *skinName, int team
 						if ( len+5 >= MAX_QPATH )
 						{//too big to append "_blue"
 							Q_strncpyz(skinName, "blue", MAX_QPATH);
-							return qfalse;
+							return false;
 						}
 						else
 						{
@@ -2574,15 +2574,15 @@ qboolean BG_ValidateSkinForTeam( const char *modelName, char *skinName, int team
 				{
 					Q_strncpyz(skinName, "blue", MAX_QPATH);
 				}
-				return qfalse;
+				return false;
 			}
 		}
 	}
-	return qtrue;
+	return true;
 }
 
 // This is done after each set of usercmd_t on the server, and after local prediction on the client
-void BG_PlayerStateToEntityState( playerState_t *ps, entityState_t *s, qboolean snap ) {
+void BG_PlayerStateToEntityState( playerState_t *ps, entityState_t *s, bool snap ) {
 	int		i;
 
 	if ( ps->pm_type == PM_INTERMISSION || ps->pm_type == PM_SPECTATOR ) {
@@ -2722,7 +2722,7 @@ void BG_PlayerStateToEntityState( playerState_t *ps, entityState_t *s, qboolean 
 }
 
 // This is done after each set of usercmd_t on the server, and after local prediction on the client
-void BG_PlayerStateToEntityStateExtraPolate( playerState_t *ps, entityState_t *s, int time, qboolean snap ) {
+void BG_PlayerStateToEntityStateExtraPolate( playerState_t *ps, entityState_t *s, int time, bool snap ) {
 	int		i;
 
 	if ( ps->pm_type == PM_INTERMISSION || ps->pm_type == PM_SPECTATOR ) {
@@ -2974,7 +2974,7 @@ char *BG_StringAlloc ( const char *source )
 	return dest;
 }
 
-qboolean BG_OutOfMemory ( void )
+bool BG_OutOfMemory ( void )
 {
 	return bg_poolSize >= MAX_POOL_SIZE;
 }

@@ -1,5 +1,6 @@
 /*
 ===========================================================================
+Copyright (C) 1999 - 2005, Id Software, Inc.
 Copyright (C) 2000 - 2013, Raven Software, Inc.
 Copyright (C) 2001 - 2013, Activision, Inc.
 Copyright (C) 2013 - 2015, OpenJK contributors
@@ -22,31 +23,35 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
 
-// tr_QuickSprite.h: interface for the CQuickSprite class.
+#include <cstdint>
 
-class CQuickSpriteSystem
-{
-private:
-			textureBundle_t	*mTexBundle;
-			uint32_t	mGLStateBits;
-			int				mFogIndex;
-			bool		mUseFog;
-			vec4_t			mVerts[SHADER_MAX_VERTEXES];
-			vec2_t			mTextureCoords[SHADER_MAX_VERTEXES];	// Ideally this would be static, cause it never changes
-			vec2_t			mFogTextureCoords[SHADER_MAX_VERTEXES];
-			uint32_t	mColors[SHADER_MAX_VERTEXES];
-			int				mNextVert;
+using byte = unsigned char;
+using word = unsigned short;
+using ulong = unsigned long;
 
-			void Flush(void);
+using qhandle_t = int32_t;
+using thandle_t = int32_t;
+using fxHandle_t = int32_t;
+using sfxHandle_t = int32_t;
+using fileHandle_t = int32_t;
+using clipHandle_t = int32_t;
 
-public:
-			CQuickSpriteSystem();
-			~CQuickSpriteSystem();
+using vec_t = float;
+using ivec_t = int32_t;
 
-			void StartGroup(textureBundle_t *bundle, uint32_t glbits, int fogIndex = -1);
-			void EndGroup(void);
+using vec2_t = vec_t[2];
+using vec3_t = vec_t[3];
+using vec4_t = vec_t[4];
+using vec5_t = vec_t[5];
 
-			void Add(float *pointdata, color4ub_t color, vec2_t fog=NULL);
-};
+using ivec2_t = ivec_t[2];
+using ivec3_t = ivec_t[3];
+using ivec4_t = ivec_t[4];
+using ivec5_t = ivec_t[5];
 
-extern CQuickSpriteSystem SQuickSprite;
+using vec3pair_t = vec3_t[2];
+using matrix3_t = vec3_t[3];
+
+using cvarHandle_t = int;
+
+using color4ub_t = byte[4];

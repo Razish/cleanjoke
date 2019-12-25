@@ -270,13 +270,13 @@ void Use_Target_Speaker (gentity_t *ent, gentity_t *other, gentity_t *activator)
 		if (ent->s.loopSound)
 		{
 			ent->s.loopSound = 0;	// turn it off
-			ent->s.loopIsSoundset = qfalse;
+			ent->s.loopIsSoundset = false;
 			ent->s.trickedentindex = 1;
 		}
 		else
 		{
 			ent->s.loopSound = ent->noise_index;	// start it
-			ent->s.loopIsSoundset = qfalse;
+			ent->s.loopIsSoundset = false;
 			ent->s.trickedentindex = 0;
 		}
 	}else {	// normal sound
@@ -329,7 +329,7 @@ void SP_target_speaker( gentity_t *ent ) {
 	// check for prestarted looping sound
 	if ( ent->spawnflags & 1 ) {
 		ent->s.loopSound = ent->noise_index;
-		ent->s.loopIsSoundset = qfalse;
+		ent->s.loopIsSoundset = false;
 	}
 
 	ent->use = Use_Target_Speaker;
@@ -364,7 +364,7 @@ void target_laser_think (gentity_t *self) {
 	// fire forward and see what we hit
 	VectorMA (self->s.origin, 2048, self->movedir, end);
 
-	trap->Trace( &tr, self->s.origin, NULL, NULL, end, self->s.number, CONTENTS_SOLID|CONTENTS_BODY|CONTENTS_CORPSE, qfalse, 0, 0);
+	trap->Trace( &tr, self->s.origin, NULL, NULL, end, self->s.number, CONTENTS_SOLID|CONTENTS_BODY|CONTENTS_CORPSE, false, 0, 0);
 
 	if ( tr.entityNum ) {
 		// hurt it if we can
@@ -473,7 +473,7 @@ if RANDOM is checked, only one of the targets will be fired, not all of them
 wait - set to -1 to use it only once
 */
 void target_relay_use (gentity_t *self, gentity_t *other, gentity_t *activator) {
-	qboolean ranscript = qfalse;
+	bool ranscript = false;
 	if ( ( self->spawnflags & 1 ) && activator->client
 		&& activator->client->sess.sessionTeam != TEAM_RED ) {
 		return;
@@ -558,7 +558,7 @@ void SP_target_location( gentity_t *self ) {
 		return;
 	}
 	else {
-		static qboolean didwarn = qfalse;
+		static bool didwarn = false;
 		if ( !self->message ) {
 			trap->Print( "target_location with no message at %s\n", vtos( self->s.origin ) );
 			G_FreeEntity( self );
@@ -568,7 +568,7 @@ void SP_target_location( gentity_t *self ) {
 		if ( level.locations.num >= MAX_LOCATIONS ) {
 			if ( !didwarn ) {
 				trap->Print( "Maximum target_locations hit (%d)! Remaining locations will be removed.\n", MAX_LOCATIONS );
-				didwarn = qtrue;
+				didwarn = true;
 			}
 			G_FreeEntity( self );
 			return;
@@ -884,7 +884,7 @@ void SP_target_scriptrunner( gentity_t *self )
 	self->use = target_scriptrunner_use;
 }
 
-void G_SetActiveState(char *targetstring, qboolean actState)
+void G_SetActiveState(char *targetstring, bool actState)
 {
 	gentity_t	*target = NULL;
 	while( NULL != (target = G_Find(target, FOFS(targetname), targetstring)) )
@@ -893,8 +893,8 @@ void G_SetActiveState(char *targetstring, qboolean actState)
 	}
 }
 
-#define ACT_ACTIVE		qtrue
-#define ACT_INACTIVE	qfalse
+#define ACT_ACTIVE		true
+#define ACT_INACTIVE	false
 
 void target_activate_use(gentity_t *self, gentity_t *other, gentity_t *activator)
 {

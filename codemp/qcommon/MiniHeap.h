@@ -22,7 +22,15 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
 
+// ======================================================================
+// INCLUDE
+// ======================================================================
+
 #include "qcommon/q_shared.h"
+
+// ======================================================================
+// CLASS
+// ======================================================================
 
 class IHeapAllocator
 {
@@ -80,6 +88,10 @@ public:
 	}
 
 };
+
+// ======================================================================
+// EXTERN VARIABLE
+// ======================================================================
 
 // this is in the parent executable, so access ri->GetG2VertSpaceServer() from the rd backends!
 extern IHeapAllocator *G2VertSpaceServer;

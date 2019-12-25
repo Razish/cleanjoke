@@ -422,7 +422,7 @@ void RB_CaptureScreenImage(void)
 	static byte *tmp = NULL;
 	if (!tmp)
 	{
-		tmp = (byte *)Z_Malloc((sizeof(byte)*4)*(glConfig.vidWidth*glConfig.vidHeight), TAG_ICARUS, qtrue);
+		tmp = (byte *)Z_Malloc((sizeof(byte)*4)*(glConfig.vidWidth*glConfig.vidHeight), TAG_ICARUS, true);
 	}
 	qglReadPixels(0, 0, glConfig.vidWidth, glConfig.vidHeight, GL_RGBA, GL_UNSIGNED_BYTE, tmp);
 	qglTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 512, 512, 0, GL_RGBA, GL_UNSIGNED_BYTE, tmp);
@@ -473,8 +473,8 @@ void RB_CaptureScreenImage(void)
 //yeah.. not really shadow-related.. but it's stencil-related. -rww
 float tr_distortionAlpha = 1.0f; //opaque
 float tr_distortionStretch = 0.0f; //no stretch override
-qboolean tr_distortionPrePost = qfalse; //capture before postrender phase?
-qboolean tr_distortionNegate = qfalse; //negative blend mode
+bool tr_distortionPrePost = false; //capture before postrender phase?
+bool tr_distortionNegate = false; //negative blend mode
 void RB_DistortionFill(void)
 {
 	float alpha = tr_distortionAlpha;

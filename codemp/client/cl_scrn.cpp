@@ -31,7 +31,7 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 #include "ui/ui_public.h"
 
 extern console_t con;
-qboolean	scr_initialized;		// ready to draw
+bool	scr_initialized;		// ready to draw
 
 // Coordinates are 640*480 virtual values
 void SCR_DrawNamedPic( float x, float y, float width, float height, const char *picname ) {
@@ -132,7 +132,7 @@ void SCR_DrawSmallChar( int x, int y, int ch ) {
 
 // Draws a multi-colored string with a drop shadow, optionally forcing to a fixed color.
 // Coordinates are at 640 by 480 virtual resolution
-void SCR_DrawStringExt( int x, int y, float size, const char *string, float *setColor, qboolean forceColor, qboolean noColorEscape ) {
+void SCR_DrawStringExt( int x, int y, float size, const char *string, float *setColor, bool forceColor, bool noColorEscape ) {
 	vec4_t		color;
 	const char	*s;
 	int			xx;
@@ -177,17 +177,17 @@ void SCR_DrawStringExt( int x, int y, float size, const char *string, float *set
 }
 
 // draws a string with embedded color control characters with fade
-void SCR_DrawBigString( int x, int y, const char *s, float alpha, qboolean noColorEscape ) {
+void SCR_DrawBigString( int x, int y, const char *s, float alpha, bool noColorEscape ) {
 	float	color[4];
 
 	color[0] = color[1] = color[2] = 1.0;
 	color[3] = alpha;
-	SCR_DrawStringExt( x, y, BIGCHAR_WIDTH, s, color, qfalse, noColorEscape );
+	SCR_DrawStringExt( x, y, BIGCHAR_WIDTH, s, color, false, noColorEscape );
 }
 
 // Draws a multi-colored string with a drop shadow, optionally forcing to a fixed color.
 // Coordinates are at 640 by 480 virtual resolution
-void SCR_DrawSmallStringExt( int x, int y, const char *string, float *setColor, qboolean forceColor, qboolean noColorEscape ) {
+void SCR_DrawSmallStringExt( int x, int y, const char *string, float *setColor, bool forceColor, bool noColorEscape ) {
 	vec4_t		color;
 	const char	*s;
 	int			xx;
@@ -253,7 +253,7 @@ void SCR_DrawDemoRecording( void ) {
 	pos = FS_FTell( clc.demofile );
 	Com_sprintf( string, sizeof(string), "RECORDING %s: %ik", clc.demoName, pos / 1024 );
 
-	SCR_DrawStringExt( 320 - strlen( string ) * 4, 20, 8, string, g_color_table[7], qtrue, qfalse );
+	SCR_DrawStringExt( 320 - strlen( string ) * 4, 20, 8, string, g_color_table[7], true, false );
 }
 
 // DEBUG GRAPH
@@ -301,14 +301,14 @@ void SCR_DrawDebugGraph (void)
 }
 
 void SCR_Init( void ) {
-	scr_initialized = qtrue;
+	scr_initialized = true;
 }
 
 // This will be called twice if rendering in stereo mode
 void SCR_DrawScreenField( stereoFrame_t stereoFrame ) {
 	re->BeginFrame( stereoFrame );
 
-	qboolean uiFullscreen = (qboolean)(cls.uiStarted && UIVM_IsFullscreen());
+	bool uiFullscreen = (bool)(cls.uiStarted && UIVM_IsFullscreen());
 
 	if ( !cls.uiStarted ) {
 		Com_DPrintf("draw screen without UI loaded\n");
@@ -338,7 +338,7 @@ void SCR_DrawScreenField( stereoFrame_t stereoFrame ) {
 			// connecting clients will only show the connection dialog
 			// refresh to update the time
 			UIVM_Refresh( cls.realtime );
-			UIVM_DrawConnectScreen( qfalse );
+			UIVM_DrawConnectScreen( false );
 			break;
 		case CA_LOADING:
 		case CA_PRIMED:
@@ -349,7 +349,7 @@ void SCR_DrawScreenField( stereoFrame_t stereoFrame ) {
 			// flash away too briefly on local or lan games
 			// refresh to update the time
 			UIVM_Refresh( cls.realtime );
-			UIVM_DrawConnectScreen( qtrue );
+			UIVM_DrawConnectScreen( true );
 			break;
 		case CA_ACTIVE:
 			CL_CGameRendering( stereoFrame );

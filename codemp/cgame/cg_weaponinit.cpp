@@ -44,7 +44,7 @@ void CG_RegisterWeapon( int weaponNum) {
 	}
 
 	memset( weaponInfo, 0, sizeof( *weaponInfo ) );
-	weaponInfo->registered = qtrue;
+	weaponInfo->registered = true;
 
 	for ( item = bg_itemlist + 1 ; item->classname ; item++ ) {
 		if ( item->giType == IT_WEAPON && item->giTag == weaponNum ) {

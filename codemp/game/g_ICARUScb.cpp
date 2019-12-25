@@ -344,21 +344,21 @@ int Q3_PlaySound( int taskID, int entID, const char *name, const char *channel )
 	gentity_t		*ent = &g_entities[entID];
 	char			finalName[MAX_QPATH];
 	soundChannel_t	voice_chan = CHAN_VOICE; // set a default so the compiler doesn't bitch
-	qboolean		type_voice = qfalse;
+	bool		type_voice = false;
 	int				soundHandle;
-	qboolean		bBroadcast;
+	bool		bBroadcast;
 
 	Q_strncpyz( finalName, name, MAX_QPATH );
 	Q_strupr(finalName);
-	//G_AddSexToMunroString( finalName, qtrue );
+	//G_AddSexToMunroString( finalName, true );
 
 	COM_StripExtension( (const char *)finalName, finalName, sizeof( finalName ) );
 
 	soundHandle = G_SoundIndex( (char *) finalName );
-	bBroadcast = qfalse;
+	bBroadcast = false;
 
 	if ( ( Q_stricmp( channel, "CHAN_ANNOUNCER" ) == 0 ) || (ent->classname && Q_stricmp("target_scriptrunner", ent->classname ) == 0) ) {
-		bBroadcast = qtrue;
+		bBroadcast = true;
 	}
 
 	// moved here from further down so I can easily check channel-type without code dup...
@@ -366,18 +366,18 @@ int Q3_PlaySound( int taskID, int entID, const char *name, const char *channel )
 	if ( Q_stricmp( channel, "CHAN_VOICE" ) == 0 )
 	{
 		voice_chan = CHAN_VOICE;
-		type_voice = qtrue;
+		type_voice = true;
 	}
 	else if ( Q_stricmp( channel, "CHAN_VOICE_ATTEN" ) == 0 )
 	{
 		voice_chan = CHAN_AUTO;//CHAN_VOICE_ATTEN;
-		type_voice = qtrue;
+		type_voice = true;
 	}
 	else if ( Q_stricmp( channel, "CHAN_VOICE_GLOBAL" ) == 0 ) // this should broadcast to everyone, put only casue animation on G_SoundOnEnt...
 	{
 		voice_chan = CHAN_AUTO;//CHAN_VOICE_GLOBAL;
-		type_voice = qtrue;
-		bBroadcast = qtrue;
+		type_voice = true;
+		bBroadcast = true;
 	}
 
 	// if we're in-camera, check for skipping cinematic and ifso, no subtitle print (since screen is not being
@@ -423,7 +423,7 @@ int Q3_PlaySound( int taskID, int entID, const char *name, const char *channel )
 	{
 		if ( timescale.value > 1.0f ) {
 			//Skip the damn sound!
-			return qtrue;
+			return true;
 		}
 		else {
 			//This the voice channel
@@ -432,7 +432,7 @@ int Q3_PlaySound( int taskID, int entID, const char *name, const char *channel )
 		//Remember we're waiting for this
 		trap->ICARUS_TaskIDSet( (sharedEntity_t *)ent, TID_CHAN_VOICE, taskID );
 
-		return qfalse;
+		return false;
 	}
 
 	if ( bBroadcast )
@@ -448,7 +448,7 @@ int Q3_PlaySound( int taskID, int entID, const char *name, const char *channel )
 		G_Sound( ent, CHAN_AUTO, soundHandle );
 	}
 
-	return qtrue;
+	return true;
 }
 
 void Q3_Play( int taskID, int entID, const char *type, const char *name )
@@ -481,7 +481,7 @@ void Q3_Play( int taskID, int entID, const char *type, const char *name )
 
 			trap->LinkEntity( (sharedEntity_t *)ent );
 
-			trap->ROFF_Play(ent->s.number, ent->roffid, qtrue);
+			trap->ROFF_Play(ent->s.number, ent->roffid, true);
 		}
 	}
 }
@@ -516,7 +516,7 @@ void moverCallback( gentity_t *ent )
 
 	// play sound
 	ent->s.loopSound = 0;//stop looping sound
-	ent->s.loopIsSoundset = qfalse;
+	ent->s.loopIsSoundset = false;
 	G_PlayDoorSound( ent, BMS_END );//play end sound
 
 	if ( ent->moverState == MOVER_1TO2 )
@@ -538,7 +538,7 @@ void moverCallback( gentity_t *ent )
 
 //	if ( !Q_stricmp( "misc_model_breakable", ent->classname ) && ent->physicsBounce )
 //	{//a gravity-affected model
-//		misc_model_breakable_gravity_init( ent, qfalse );
+//		misc_model_breakable_gravity_init( ent, false );
 //	}
 }
 
@@ -1019,7 +1019,7 @@ int Q3_GetFloat( int entID, int type, const char *name, float *value )
 		if (ent->parms == NULL)
 		{
 			G_DebugPrint( WL_ERROR, "GET_PARM: %s %s did not have any parms set!\n", ent->classname, ent->targetname );
-			return 0;	// would prefer qfalse, but I'm fitting in with what's here <sigh>
+			return 0;	// would prefer false, but I'm fitting in with what's here <sigh>
 		}
 		*value = atof( ent->parms->parm[toGet - SET_PARM1] );
 		break;
@@ -1511,7 +1511,7 @@ void MoveOwner( gentity_t *self )
 }
 
 // Copies passed origin to ent running script once there is nothing there blocking the spot
-static qboolean Q3_SetTeleportDest( int entID, vec3_t org )
+static bool Q3_SetTeleportDest( int entID, vec3_t org )
 {
 	gentity_t	*teleEnt = &g_entities[entID];
 
@@ -1527,7 +1527,7 @@ static qboolean Q3_SetTeleportDest( int entID, vec3_t org )
 			teleporter->think = MoveOwner;
 			teleporter->nextthink = level.time + FRAMETIME;
 
-			return qfalse;
+			return false;
 		}
 		else
 		{
@@ -1535,7 +1535,7 @@ static qboolean Q3_SetTeleportDest( int entID, vec3_t org )
 		}
 	}
 
-	return qtrue;
+	return true;
 }
 
 // Sets the origin of an entity directly
@@ -1766,7 +1766,7 @@ static void SetUpperAnim ( int entID, int animID)
 }
 
 // Sets the upper animation of an entity
-static qboolean Q3_SetAnimUpper( int entID, const char *anim_name )
+static bool Q3_SetAnimUpper( int entID, const char *anim_name )
 {
 	int			animID = 0;
 
@@ -1775,22 +1775,22 @@ static qboolean Q3_SetAnimUpper( int entID, const char *anim_name )
 	if( animID == -1 )
 	{
 		G_DebugPrint( WL_WARNING, "Q3_SetAnimUpper: unknown animation sequence '%s'\n", anim_name );
-		return qfalse;
+		return false;
 	}
 
 	/*
 	if ( !PM_HasAnimation( SV_GentityNum(entID), animID ) )
 	{
-		return qfalse;
+		return false;
 	}
 	*/
 
 	SetUpperAnim( entID, animID );
-	return qtrue;
+	return true;
 }
 
 // Sets the lower animation of an entity
-static qboolean Q3_SetAnimLower( int entID, const char *anim_name )
+static bool Q3_SetAnimLower( int entID, const char *anim_name )
 {
 	int			animID = 0;
 
@@ -1801,21 +1801,21 @@ static qboolean Q3_SetAnimLower( int entID, const char *anim_name )
 	if( animID == -1 )
 	{
 		G_DebugPrint( WL_WARNING, "Q3_SetAnimLower: unknown animation sequence '%s'\n", anim_name );
-		return qfalse;
+		return false;
 	}
 
 	/*
 	if ( !PM_HasAnimation( SV_GentityNum(entID), animID ) )
 	{
-		return qfalse;
+		return false;
 	}
 	*/
 
 	SetLowerAnim( entID, animID );
-	return qtrue;
+	return true;
 }
 
-static void Q3_SetAnimHoldTime( int entID, int int_data, qboolean lower )
+static void Q3_SetAnimHoldTime( int entID, int int_data, bool lower )
 {
 	G_DebugPrint( WL_WARNING, "Q3_SetAnimHoldTime is not currently supported in MP\n");
 	/*
@@ -1924,7 +1924,7 @@ static void Q3_SetTimeScale( int entID, const char *data )
 	trap->Cvar_Set("timescale", data);
 }
 
-static void Q3_SetInvisible( int entID, qboolean invisible )
+static void Q3_SetInvisible( int entID, bool invisible )
 {
 	gentity_t	*self  = &g_entities[entID];
 
@@ -1953,7 +1953,7 @@ static void Q3_SetInvisible( int entID, qboolean invisible )
 	}
 }
 
-static void Q3_SetVampire( int entID, qboolean vampire )
+static void Q3_SetVampire( int entID, bool vampire )
 {
 	G_DebugPrint( WL_WARNING, "Q3_SetVampire: NOT SUPPORTED IN MP\n");
 	return;
@@ -1967,7 +1967,7 @@ void Q3_SetLoopSound(int entID, const char *name)
 	if ( Q_stricmp( "NULL", name ) == 0 || Q_stricmp( "NONE", name )==0)
 	{
 		self->s.loopSound = 0;
-		self->s.loopIsSoundset = qfalse;
+		self->s.loopIsSoundset = false;
 		return;
 	}
 
@@ -1976,7 +1976,7 @@ void Q3_SetLoopSound(int entID, const char *name)
 	if (index)
 	{
 		self->s.loopSound = index;
-		self->s.loopIsSoundset = qfalse;
+		self->s.loopIsSoundset = false;
 	}
 	else
 	{
@@ -1984,7 +1984,7 @@ void Q3_SetLoopSound(int entID, const char *name)
 	}
 }
 
-void Q3_SetICARUSFreeze( int entID, const char *name, qboolean freeze )
+void Q3_SetICARUSFreeze( int entID, const char *name, bool freeze )
 {
 	gentity_t	*self  = G_Find( NULL, FOFS(targetname), name );
 	if ( !self )
@@ -2339,14 +2339,14 @@ static void Q3_SetEvent( int entID, const char *event_name )
 	return;
 }
 
-static void Q3_SetIgnoreEnemies( int entID, qboolean data)
+static void Q3_SetIgnoreEnemies( int entID, bool data)
 {
 
 	G_DebugPrint( WL_WARNING, "Q3_SetIgnoreEnemies: NOT SUPPORTED IN MP");
 	return;
 }
 
-static void Q3_SetNoTarget( int entID, qboolean data)
+static void Q3_SetNoTarget( int entID, bool data)
 {
 	gentity_t	*ent  = &g_entities[entID];
 
@@ -2362,7 +2362,7 @@ static void Q3_SetNoTarget( int entID, qboolean data)
 		ent->flags &= ~FL_NOTARGET;
 }
 
-static void Q3_SetDontShoot( int entID, qboolean add)
+static void Q3_SetDontShoot( int entID, bool add)
 {
 	gentity_t	*ent  = &g_entities[entID];
 
@@ -2382,7 +2382,7 @@ static void Q3_SetDontShoot( int entID, qboolean add)
 	}
 }
 
-static void Q3_SetInactive(int entID, qboolean add)
+static void Q3_SetInactive(int entID, bool add)
 {
 	gentity_t	*ent  = &g_entities[entID];
 
@@ -2402,7 +2402,7 @@ static void Q3_SetInactive(int entID, qboolean add)
 	}
 }
 
-static void Q3_SetFuncUsableVisible(int entID, qboolean visible )
+static void Q3_SetFuncUsableVisible(int entID, bool visible )
 {
 	gentity_t	*ent  = &g_entities[entID];
 
@@ -2427,7 +2427,7 @@ static void Q3_SetFuncUsableVisible(int entID, qboolean visible )
 	}
 }
 
-static void Q3_SetLockedEnemy ( int entID, qboolean locked)
+static void Q3_SetLockedEnemy ( int entID, bool locked)
 {
 	G_DebugPrint( WL_WARNING, "Q3_SetLockedEnemy: NOT SUPPORTED IN MP\n");
 	return;
@@ -2441,31 +2441,31 @@ static void Q3_SetCinematicSkipScript( char *scriptname )
 	return;
 }
 
-static void Q3_SetNoMindTrick( int entID, qboolean add)
+static void Q3_SetNoMindTrick( int entID, bool add)
 {
 	G_DebugPrint( WL_WARNING, "Q3_SetNoMindTrick: NOT SUPPORTED IN MP\n");
 	return;
 }
 
-static void Q3_SetUseSubtitles( int entID, qboolean add)
+static void Q3_SetUseSubtitles( int entID, bool add)
 {
 	G_DebugPrint( WL_WARNING, "Q3_SetUseSubtitles: NOT SUPPORTED IN MP\n");
 	return;
 }
 
-static void Q3_SetDismemberable( int entID, qboolean dismemberable)
+static void Q3_SetDismemberable( int entID, bool dismemberable)
 {
 	G_DebugPrint( WL_WARNING, "Q3_SetDismemberable: NOT SUPPORTED IN MP\n");
 	return;
 }
 
-static void Q3_SetMoreLight( int entID, qboolean add )
+static void Q3_SetMoreLight( int entID, bool add )
 {
 	G_DebugPrint( WL_WARNING, "Q3_SetMoreLight: NOT SUPPORTED IN MP\n");
 	return;
 }
 
-static void Q3_SetUndying( int entID, qboolean undying)
+static void Q3_SetUndying( int entID, bool undying)
 {
 	gentity_t	*ent  = &g_entities[entID];
 
@@ -2485,7 +2485,7 @@ static void Q3_SetUndying( int entID, qboolean undying)
 	}
 }
 
-static void Q3_SetInvincible( int entID, qboolean invincible)
+static void Q3_SetInvincible( int entID, bool invincible)
 {
 	gentity_t	*ent  = &g_entities[entID];
 
@@ -2518,7 +2518,7 @@ static void Q3_SetInvincible( int entID, qboolean invincible)
 	}
 }
 
-static void Q3_SetForceInvincible( int entID, qboolean forceInv )
+static void Q3_SetForceInvincible( int entID, bool forceInv )
 {
 	G_DebugPrint( WL_WARNING, "Q3_SetForceInvicible: NOT SUPPORTED IN MP\n");
 	return;
@@ -2550,14 +2550,14 @@ void SolidifyOwner( gentity_t *self )
 	}
 }
 
-static qboolean Q3_SetSolid( int entID, qboolean solid)
+static bool Q3_SetSolid( int entID, bool solid)
 {
 	gentity_t	*ent  = &g_entities[entID];
 
 	if ( !ent || !ent->inuse )
 	{
 		G_DebugPrint( WL_WARNING, "Q3_SetSolid: invalid entID %d\n", entID);
-		return qtrue;
+		return true;
 	}
 
 	if ( solid )
@@ -2574,7 +2574,7 @@ static qboolean Q3_SetSolid( int entID, qboolean solid)
 			solidifier->nextthink = level.time + FRAMETIME;
 
 			ent->r.contents = oldContents;
-			return qfalse;
+			return false;
 		}
 		ent->clipmask |= CONTENTS_BODY;
 	}
@@ -2589,7 +2589,7 @@ static qboolean Q3_SetSolid( int entID, qboolean solid)
 			ent->r.contents = CONTENTS_CORPSE;
 		}
 	}
-	return qtrue;
+	return true;
 }
 
 static void Q3_SetForwardMove( int entID, int fmoveVal)
@@ -2694,29 +2694,29 @@ static void Q3_Face( int entID,int expression, float holdtime)
 	G_DebugPrint( WL_WARNING, "Q3_Face: NOT SUPPORTED IN MP\n");
 }
 
-static qboolean Q3_SetLocation( int entID, const char *location )
+static bool Q3_SetLocation( int entID, const char *location )
 {
 	G_DebugPrint( WL_WARNING, "Q3_SetLocation: NOT SUPPORTED IN MP\n");
-	return qtrue;
+	return true;
 }
 
-qboolean	player_locked = qfalse;
-static void Q3_SetPlayerLocked( int entID, qboolean locked )
+bool	player_locked = false;
+static void Q3_SetPlayerLocked( int entID, bool locked )
 {
 	G_DebugPrint( WL_WARNING, "Q3_SetPlayerLocked: NOT SUPPORTED IN MP\n");
 }
 
-static void Q3_SetLockPlayerWeapons( int entID, qboolean locked )
+static void Q3_SetLockPlayerWeapons( int entID, bool locked )
 {
 	G_DebugPrint( WL_WARNING, "Q3_SetLockPlayerWeapons: NOT SUPPORTED IN MP\n");
 }
 
-static void Q3_SetNoImpactDamage( int entID, qboolean noImp )
+static void Q3_SetNoImpactDamage( int entID, bool noImp )
 {
 	G_DebugPrint( WL_WARNING, "Q3_SetNoImpactDamage: NOT SUPPORTED IN MP\n");
 }
 
-static qboolean Q3_SetBehaviorSet( int entID, int toSet, const char *scriptname)
+static bool Q3_SetBehaviorSet( int entID, int toSet, const char *scriptname)
 {
 	gentity_t	*ent  = &g_entities[entID];
 	bSet_t		bSet = BSET_INVALID;
@@ -2724,7 +2724,7 @@ static qboolean Q3_SetBehaviorSet( int entID, int toSet, const char *scriptname)
 	if ( !ent )
 	{
 		G_DebugPrint( WL_WARNING, "Q3_SetBehaviorSet: invalid entID %d\n", entID);
-		return qfalse;
+		return false;
 	}
 
 	switch(toSet)
@@ -2778,7 +2778,7 @@ static qboolean Q3_SetBehaviorSet( int entID, int toSet, const char *scriptname)
 
 	if(bSet < BSET_SPAWN || bSet >= NUM_BSETS)
 	{
-		return qfalse;
+		return false;
 	}
 
 	if(!Q_stricmp("NULL", scriptname))
@@ -2806,7 +2806,7 @@ static qboolean Q3_SetBehaviorSet( int entID, int toSet, const char *scriptname)
 		//ent->behaviorSet[bSet] = scriptname;
 		//strncpy( (char *) &ent->behaviorSet[bSet], scriptname, MAX_BSET_LENGTH );
 	}
-	return qtrue;
+	return true;
 }
 
 static void Q3_SetDelayScriptTime(int entID, int delayTime)
@@ -2814,7 +2814,7 @@ static void Q3_SetDelayScriptTime(int entID, int delayTime)
 	G_DebugPrint( WL_WARNING, "Q3_SetDelayScriptTime: NOT SUPPORTED IN MP\n");
 }
 
-static void Q3_SetPlayerUsable( int entID, qboolean usable )
+static void Q3_SetPlayerUsable( int entID, bool usable )
 {
 	gentity_t	*ent  = &g_entities[entID];
 
@@ -2861,18 +2861,18 @@ static void Q3_SetAnimFrame( int entID, int animFrame )
 	G_DebugPrint( WL_WARNING, "Q3_SetAnimFrame: NOT SUPPORTED IN MP\n");
 }
 
-static void Q3_SetLoopAnim( int entID, qboolean loopAnim )
+static void Q3_SetLoopAnim( int entID, bool loopAnim )
 {
 	G_DebugPrint( WL_WARNING, "Q3_SetLoopAnim: NOT SUPPORTED IN MP\n");
 }
 
-static void Q3_SetShields( int entID, qboolean shields )
+static void Q3_SetShields( int entID, bool shields )
 {
 	G_DebugPrint( WL_WARNING, "Q3_SetShields: NOT SUPPORTED IN MP\n");
 	return;
 }
 
-static void Q3_SetSaberActive( int entID, qboolean active )
+static void Q3_SetSaberActive( int entID, bool active )
 {
 	gentity_t *ent = &g_entities[entID];
 
@@ -2897,7 +2897,7 @@ static void Q3_SetSaberActive( int entID, qboolean active )
 	}
 }
 
-static void Q3_SetNoKnockback( int entID, qboolean noKnockback )
+static void Q3_SetNoKnockback( int entID, bool noKnockback )
 {
 	gentity_t	*ent  = &g_entities[entID];
 
@@ -2969,8 +2969,8 @@ static void Q3_LCARSText ( const char *id)
 	return;
 }
 
-//returns qtrue if it got to the end, otherwise qfalse.
-qboolean Q3_Set( int taskID, int entID, const char *type_name, const char *data )
+//returns true if it got to the end, otherwise false.
+bool Q3_Set( int taskID, int entID, const char *type_name, const char *data )
 {
 	gentity_t	*ent = &g_entities[entID];
 	float		float_data;
@@ -3001,7 +3001,7 @@ qboolean Q3_Set( int taskID, int entID, const char *type_name, const char *data 
 		if ( !Q3_SetTeleportDest( entID, vector_data ) )
 		{
 			trap->ICARUS_TaskIDSet( (sharedEntity_t *)ent, TID_MOVE_NAV, taskID );
-			return qfalse;
+			return false;
 		}
 		break;
 
@@ -3043,7 +3043,7 @@ qboolean Q3_Set( int taskID, int entID, const char *type_name, const char *data 
 		{
 			Q3_TaskIDClear( &ent->taskID[TID_ANIM_BOTH] );//We only want to wait for the top
 			trap->ICARUS_TaskIDSet( (sharedEntity_t *)ent, TID_ANIM_UPPER, taskID );
-			return qfalse;	//Don't call it back
+			return false;	//Don't call it back
 		}
 		break;
 
@@ -3052,7 +3052,7 @@ qboolean Q3_Set( int taskID, int entID, const char *type_name, const char *data 
 		{
 			Q3_TaskIDClear( &ent->taskID[TID_ANIM_BOTH] );//We only want to wait for the bottom
 			trap->ICARUS_TaskIDSet( (sharedEntity_t *)ent, TID_ANIM_LOWER, taskID );
-			return qfalse;	//Don't call it back
+			return false;	//Don't call it back
 		}
 		break;
 
@@ -3083,35 +3083,35 @@ qboolean Q3_Set( int taskID, int entID, const char *type_name, const char *data 
 			}
 			if ( both )
 			{
-				return qfalse;	//Don't call it back
+				return false;	//Don't call it back
 			}
 		}
 		break;
 
 	case SET_ANIM_HOLDTIME_LOWER:
 		int_data = atoi((char *) data);
-		Q3_SetAnimHoldTime( entID, int_data, qtrue );
+		Q3_SetAnimHoldTime( entID, int_data, true );
 		Q3_TaskIDClear( &ent->taskID[TID_ANIM_BOTH] );//We only want to wait for the bottom
 		trap->ICARUS_TaskIDSet( (sharedEntity_t *)ent, TID_ANIM_LOWER, taskID );
-		return qfalse;	//Don't call it back
+		return false;	//Don't call it back
 		break;
 
 	case SET_ANIM_HOLDTIME_UPPER:
 		int_data = atoi((char *) data);
-		Q3_SetAnimHoldTime( entID, int_data, qfalse );
+		Q3_SetAnimHoldTime( entID, int_data, false );
 		Q3_TaskIDClear( &ent->taskID[TID_ANIM_BOTH] );//We only want to wait for the top
 		trap->ICARUS_TaskIDSet( (sharedEntity_t *)ent, TID_ANIM_UPPER, taskID );
-		return qfalse;	//Don't call it back
+		return false;	//Don't call it back
 		break;
 
 	case SET_ANIM_HOLDTIME_BOTH:
 		int_data = atoi((char *) data);
-		Q3_SetAnimHoldTime( entID, int_data, qfalse );
-		Q3_SetAnimHoldTime( entID, int_data, qtrue );
+		Q3_SetAnimHoldTime( entID, int_data, false );
+		Q3_SetAnimHoldTime( entID, int_data, true );
 		trap->ICARUS_TaskIDSet( (sharedEntity_t *)ent, TID_ANIM_BOTH, taskID );
 		trap->ICARUS_TaskIDSet( (sharedEntity_t *)ent, TID_ANIM_UPPER, taskID );
 		trap->ICARUS_TaskIDSet( (sharedEntity_t *)ent, TID_ANIM_LOWER, taskID );
-		return qfalse;	//Don't call it back
+		return false;	//Don't call it back
 		break;
 
 	case SET_HEALTH:
@@ -3138,7 +3138,7 @@ qboolean Q3_Set( int taskID, int entID, const char *type_name, const char *data 
 
 	case SET_ICARUS_FREEZE:
 	case SET_ICARUS_UNFREEZE:
-		Q3_SetICARUSFreeze( entID, (char *) data, (qboolean)(toSet==SET_ICARUS_FREEZE) );
+		Q3_SetICARUSFreeze( entID, (char *) data, (bool)(toSet==SET_ICARUS_FREEZE) );
 		break;
 
 	case SET_ITEM:
@@ -3148,7 +3148,7 @@ qboolean Q3_Set( int taskID, int entID, const char *type_name, const char *data 
 	case SET_WIDTH:
 		int_data = atoi((char *) data);
 		Q3_SetWidth( entID, int_data );
-		return qfalse;
+		return false;
 		break;
 
 	case SET_FRICTION:
@@ -3177,30 +3177,30 @@ qboolean Q3_Set( int taskID, int entID, const char *type_name, const char *data 
 
 	case SET_IGNOREENEMIES:
 		if(!Q_stricmp("true", ((char *)data)))
-			Q3_SetIgnoreEnemies( entID, qtrue);
+			Q3_SetIgnoreEnemies( entID, true);
 		else if(!Q_stricmp("false", ((char *)data)))
-			Q3_SetIgnoreEnemies( entID, qfalse);
+			Q3_SetIgnoreEnemies( entID, false);
 		break;
 
 	case SET_DONTSHOOT:
 		if(!Q_stricmp("true", ((char *)data)))
-			Q3_SetDontShoot( entID, qtrue);
+			Q3_SetDontShoot( entID, true);
 		else if(!Q_stricmp("false", ((char *)data)))
-			Q3_SetDontShoot( entID, qfalse);
+			Q3_SetDontShoot( entID, false);
 		break;
 
 	case SET_LOCKED_ENEMY:
 		if(!Q_stricmp("true", ((char *)data)))
-			Q3_SetLockedEnemy( entID, qtrue);
+			Q3_SetLockedEnemy( entID, true);
 		else if(!Q_stricmp("false", ((char *)data)))
-			Q3_SetLockedEnemy( entID, qfalse);
+			Q3_SetLockedEnemy( entID, false);
 		break;
 
 	case SET_NOTARGET:
 		if(!Q_stricmp("true", ((char *)data)))
-			Q3_SetNoTarget( entID, qtrue);
+			Q3_SetNoTarget( entID, true);
 		else if(!Q_stricmp("false", ((char *)data)))
-			Q3_SetNoTarget( entID, qfalse);
+			Q3_SetNoTarget( entID, false);
 		break;
 
 	case SET_LEAN:
@@ -3227,7 +3227,7 @@ qboolean Q3_Set( int taskID, int entID, const char *type_name, const char *data 
 		if ( !Q3_SetLocation( entID, (char *) data ) )
 		{
 			trap->ICARUS_TaskIDSet( (sharedEntity_t *)ent, TID_LOCATION, taskID );
-			return qfalse;
+			return false;
 		}
 		break;
 
@@ -3279,9 +3279,9 @@ qboolean Q3_Set( int taskID, int entID, const char *type_name, const char *data 
 
 	case SET_NO_MINDTRICK:
 		if(!Q_stricmp("true", ((char *)data)))
-			Q3_SetNoMindTrick( entID, qtrue);
+			Q3_SetNoMindTrick( entID, true);
 		else
-			Q3_SetNoMindTrick( entID, qfalse);
+			Q3_SetNoMindTrick( entID, false);
 		break;
 
 	case SET_CINEMATIC_SKIPSCRIPT :
@@ -3295,102 +3295,102 @@ qboolean Q3_Set( int taskID, int entID, const char *type_name, const char *data 
 
 	case SET_USE_SUBTITLES:
 		if(!Q_stricmp("true", ((char *)data)))
-			Q3_SetUseSubtitles( entID, qtrue);
+			Q3_SetUseSubtitles( entID, true);
 		else
-			Q3_SetUseSubtitles( entID, qfalse);
+			Q3_SetUseSubtitles( entID, false);
 		break;
 
 	case SET_DISMEMBERABLE:
 		if(!Q_stricmp("true", ((char *)data)))
-			Q3_SetDismemberable( entID, qtrue);
+			Q3_SetDismemberable( entID, true);
 		else
-			Q3_SetDismemberable( entID, qfalse);
+			Q3_SetDismemberable( entID, false);
 		break;
 
 	case SET_MORELIGHT:
 		if(!Q_stricmp("true", ((char *)data)))
-			Q3_SetMoreLight( entID, qtrue);
+			Q3_SetMoreLight( entID, true);
 		else
-			Q3_SetMoreLight( entID, qfalse);
+			Q3_SetMoreLight( entID, false);
 		break;
 
 	case SET_TREASONED:
 		G_DebugPrint( WL_VERBOSE, "SET_TREASONED is disabled, do not use\n" );
 		/*
-		G_TeamRetaliation( NULL, SV_GentityNum(0), qfalse );
+		G_TeamRetaliation( NULL, SV_GentityNum(0), false );
 		ffireLevel = FFIRE_LEVEL_RETALIATION;
 		*/
 		break;
 
 	case SET_UNDYING:
 		if(!Q_stricmp("true", ((char *)data)))
-			Q3_SetUndying( entID, qtrue);
+			Q3_SetUndying( entID, true);
 		else
-			Q3_SetUndying( entID, qfalse);
+			Q3_SetUndying( entID, false);
 		break;
 
 	case SET_INVINCIBLE:
 		if(!Q_stricmp("true", ((char *)data)))
-			Q3_SetInvincible( entID, qtrue);
+			Q3_SetInvincible( entID, true);
 		else
-			Q3_SetInvincible( entID, qfalse);
+			Q3_SetInvincible( entID, false);
 		break;
 
 	case SET_SOLID:
 		if(!Q_stricmp("true", ((char *)data)))
 		{
-			if ( !Q3_SetSolid( entID, qtrue) )
+			if ( !Q3_SetSolid( entID, true) )
 			{
 				trap->ICARUS_TaskIDSet( (sharedEntity_t *)ent, TID_RESIZE, taskID );
-				return qfalse;
+				return false;
 			}
 		}
 		else
 		{
-			Q3_SetSolid( entID, qfalse);
+			Q3_SetSolid( entID, false);
 		}
 		break;
 
 	case SET_INVISIBLE:
 		if( !Q_stricmp("true", ((char *)data)) )
-			Q3_SetInvisible( entID, qtrue );
+			Q3_SetInvisible( entID, true );
 		else
-			Q3_SetInvisible( entID, qfalse );
+			Q3_SetInvisible( entID, false );
 		break;
 
 	case SET_VAMPIRE:
 		if( !Q_stricmp("true", ((char *)data)) )
-			Q3_SetVampire( entID, qtrue );
+			Q3_SetVampire( entID, true );
 		else
-			Q3_SetVampire( entID, qfalse );
+			Q3_SetVampire( entID, false );
 		break;
 
 	case SET_FORCE_INVINCIBLE:
 		if( !Q_stricmp("true", ((char *)data)) )
-			Q3_SetForceInvincible( entID, qtrue );
+			Q3_SetForceInvincible( entID, true );
 		else
-			Q3_SetForceInvincible( entID, qfalse );
+			Q3_SetForceInvincible( entID, false );
 		break;
 
 	case SET_PLAYER_LOCKED:
 		if( !Q_stricmp("true", ((char *)data)) )
-			Q3_SetPlayerLocked( entID, qtrue );
+			Q3_SetPlayerLocked( entID, true );
 		else
-			Q3_SetPlayerLocked( entID, qfalse );
+			Q3_SetPlayerLocked( entID, false );
 		break;
 
 	case SET_LOCK_PLAYER_WEAPONS:
 		if( !Q_stricmp("true", ((char *)data)) )
-			Q3_SetLockPlayerWeapons( entID, qtrue );
+			Q3_SetLockPlayerWeapons( entID, true );
 		else
-			Q3_SetLockPlayerWeapons( entID, qfalse );
+			Q3_SetLockPlayerWeapons( entID, false );
 		break;
 
 	case SET_NO_IMPACT_DAMAGE:
 		if( !Q_stricmp("true", ((char *)data)) )
-			Q3_SetNoImpactDamage( entID, qtrue );
+			Q3_SetNoImpactDamage( entID, true );
 		else
-			Q3_SetNoImpactDamage( entID, qfalse );
+			Q3_SetNoImpactDamage( entID, false );
 		break;
 
 	case SET_FORWARDMOVE:
@@ -3466,11 +3466,11 @@ qboolean Q3_Set( int taskID, int entID, const char *type_name, const char *data 
 	case SET_PLAYER_USABLE:
 		if(!Q_stricmp("true", ((char *)data)))
 		{
-			Q3_SetPlayerUsable(entID, qtrue);
+			Q3_SetPlayerUsable(entID, true);
 		}
 		else
 		{
-			Q3_SetPlayerUsable(entID, qfalse);
+			Q3_SetPlayerUsable(entID, false);
 		}
 		break;
 
@@ -3484,23 +3484,23 @@ qboolean Q3_Set( int taskID, int entID, const char *type_name, const char *data 
 		Q3_SetEndFrame(entID, int_data);
 
 		trap->ICARUS_TaskIDSet( (sharedEntity_t *)ent, TID_ANIM_BOTH, taskID );
-		return qfalse;
+		return false;
 		break;
 
 	case SET_ANIMFRAME:
 		int_data = atoi((char *) data);
 		Q3_SetAnimFrame(entID, int_data);
-		return qfalse;
+		return false;
 		break;
 
 	case SET_LOOP_ANIM:
 		if(!Q_stricmp("true", ((char *)data)))
 		{
-			Q3_SetLoopAnim(entID, qtrue);
+			Q3_SetLoopAnim(entID, true);
 		}
 		else
 		{
-			Q3_SetLoopAnim(entID, qfalse);
+			Q3_SetLoopAnim(entID, false);
 		}
 		break;
 
@@ -3512,22 +3512,22 @@ qboolean Q3_Set( int taskID, int entID, const char *type_name, const char *data 
 	case SET_SHIELDS:
 		if(!Q_stricmp("true", ((char *)data)))
 		{
-			Q3_SetShields(entID, qtrue);
+			Q3_SetShields(entID, true);
 		}
 		else
 		{
-			Q3_SetShields(entID, qfalse);
+			Q3_SetShields(entID, false);
 		}
 		break;
 
 	case SET_SABERACTIVE:
 		if(!Q_stricmp("true", ((char *)data)))
 		{
-			Q3_SetSaberActive( entID, qtrue );
+			Q3_SetSaberActive( entID, true );
 		}
 		else
 		{
-			Q3_SetSaberActive( entID, qfalse );
+			Q3_SetSaberActive( entID, false );
 		}
 		break;
 
@@ -3550,11 +3550,11 @@ qboolean Q3_Set( int taskID, int entID, const char *type_name, const char *data 
 	case SET_INACTIVE:
 		if(!Q_stricmp("true", ((char *)data)))
 		{
-			Q3_SetInactive( entID, qtrue);
+			Q3_SetInactive( entID, true);
 		}
 		else if(!Q_stricmp("false", ((char *)data)))
 		{
-			Q3_SetInactive( entID, qfalse);
+			Q3_SetInactive( entID, false);
 		}
 		else if(!Q_stricmp("unlocked", ((char *)data)))
 		{
@@ -3577,22 +3577,22 @@ qboolean Q3_Set( int taskID, int entID, const char *type_name, const char *data 
 	case SET_FUNC_USABLE_VISIBLE:
 		if(!Q_stricmp("true", ((char *)data)))
 		{
-			Q3_SetFuncUsableVisible( entID, qtrue);
+			Q3_SetFuncUsableVisible( entID, true);
 		}
 		else if(!Q_stricmp("false", ((char *)data)))
 		{
-			Q3_SetFuncUsableVisible( entID, qfalse);
+			Q3_SetFuncUsableVisible( entID, false);
 		}
 		break;
 
 	case SET_NO_KNOCKBACK:
 		if(!Q_stricmp("true", ((char *)data)))
 		{
-			Q3_SetNoKnockback(entID, qtrue);
+			Q3_SetNoKnockback(entID, true);
 		}
 		else
 		{
-			Q3_SetNoKnockback(entID, qfalse);
+			Q3_SetNoKnockback(entID, false);
 		}
 		break;
 
@@ -3669,22 +3669,22 @@ qboolean Q3_Set( int taskID, int entID, const char *type_name, const char *data 
 	case SET_DISABLE_SHADER_ANIM:
 		if(!Q_stricmp("true", ((char *)data)))
 		{
-			Q3_SetDisableShaderAnims( entID, qtrue);
+			Q3_SetDisableShaderAnims( entID, true);
 		}
 		else
 		{
-			Q3_SetDisableShaderAnims( entID, qfalse);
+			Q3_SetDisableShaderAnims( entID, false);
 		}
 		break;
 
 	case SET_SHADER_ANIM:
 		if(!Q_stricmp("true", ((char *)data)))
 		{
-			Q3_SetShaderAnim( entID, qtrue);
+			Q3_SetShaderAnim( entID, true);
 		}
 		else
 		{
-			Q3_SetShaderAnim( entID, qfalse);
+			Q3_SetShaderAnim( entID, false);
 		}
 		break;
 
@@ -3721,5 +3721,5 @@ qboolean Q3_Set( int taskID, int entID, const char *type_name, const char *data 
 		break;
 	}
 
-	return qtrue;
+	return true;
 }

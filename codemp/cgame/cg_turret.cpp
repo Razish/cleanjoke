@@ -192,7 +192,7 @@ void TurretClientRun(centity_t *ent)
 		BG_GiveMeVectorFromMatrix(&boltMatrix, ORIGIN, muzzleOrg);
 		BG_GiveMeVectorFromMatrix(&boltMatrix, NEGATIVE_X, muzzleDir);
 
-		trap->FX_PlayEffectID(media.efx.null, muzzleOrg, muzzleDir, -1, -1, qfalse);
+		trap->FX_PlayEffectID(media.efx.null, muzzleOrg, muzzleDir, -1, -1, false);
 
 		ent->bolt4 = ent->currentState.fireflag;
 	}

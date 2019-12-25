@@ -90,8 +90,9 @@ if(BuildMPEngine OR BuildMPDed)
 		"${MPDir}/qcommon/cm_public.h"
 		"${MPDir}/qcommon/disablewarnings.h"
 		"${MPDir}/qcommon/q_shared.h"
-		"${MPDir}/qcommon/qcommon.h"
-		"${MPDir}/qcommon/qfiles.h"
+		"${MPDir}/qcommon/q_common.h"
+		"${MPDir}/qcommon/q_files.h"
+		"${MPDir}/qcommon/q_type.h"
 		"${MPDir}/qcommon/tags.h"
 
 		${SharedCommonFiles}
@@ -204,8 +205,9 @@ if(BuildMPEngine OR BuildMPDed)
 		"${MPDir}/qcommon/persistence.cpp"
 		"${MPDir}/qcommon/q_shared.cpp"
 		"${MPDir}/qcommon/q_shared.h"
-		"${MPDir}/qcommon/qcommon.h"
-		"${MPDir}/qcommon/qfiles.h"
+		"${MPDir}/qcommon/q_common.h"
+		"${MPDir}/qcommon/q_files.h"
+		"${MPDir}/qcommon/q_type.h"
 		"${MPDir}/qcommon/RoffSystem.cpp"
 		"${MPDir}/qcommon/RoffSystem.h"
 		"${MPDir}/qcommon/sstring.h"

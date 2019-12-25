@@ -22,9 +22,28 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
 
-// Filename:-	snd_music.h
+// ======================================================================
+// INCLUDE
+// ======================================================================
 
-#include "qcommon/qcommon.h"
+#include "qcommon/q_common.h"
+
+// ======================================================================
+// DEFINE
+// ======================================================================
+
+#define iMAX_ACTION_TRANSITIONS		4	// these can be increased easily enough, I just need to know about them
+#define iMAX_EXPLORE_TRANSITIONS	4	//
+
+#define eBGRNDTRACK_DATABEGIN	eBGRNDTRACK_EXPLORE	// label for FOR() loops (not in enum, else debugger shows in instead of the explore one unless I declare them backwards, which is gay)
+#define eBGRNDTRACK_DATAEND		eBGRNDTRACK_NONDYNAMIC // tracks from this point on are for logic or copies, do NOT free them.
+
+#define eBGRNDTRACK_FIRSTTRANSITION	eBGRNDTRACK_ACTIONTRANS0	// used for "are we in transition mode" check
+#define eBGRNDTRACK_LASTTRANSITION	eBGRNDTRACK_EXPLORETRANS3
+
+// ======================================================================
+// ENUM
+// ======================================================================
 
 // if you change this enum, you MUST update the #defines below
 typedef enum
@@ -50,23 +69,15 @@ typedef enum
 
 } MusicState_e;
 
-#define iMAX_ACTION_TRANSITIONS		4	// these can be increased easily enough, I just need to know about them
-#define iMAX_EXPLORE_TRANSITIONS	4	//
+// ======================================================================
+// FUNCTION
+// ======================================================================
 
-#define eBGRNDTRACK_DATABEGIN	eBGRNDTRACK_EXPLORE	// label for FOR() loops (not in enum, else debugger shows in instead of the explore one unless I declare them backwards, which is gay)
-#define eBGRNDTRACK_DATAEND		eBGRNDTRACK_NONDYNAMIC // tracks from this point on are for logic or copies, do NOT free them.
-
-#define eBGRNDTRACK_FIRSTTRANSITION	eBGRNDTRACK_ACTIONTRANS0	// used for "are we in transition mode" check
-#define eBGRNDTRACK_LASTTRANSITION	eBGRNDTRACK_EXPLORETRANS3	//
-
-void		Music_SetLevelName			( const char *psLevelName );
-qboolean	Music_DynamicDataAvailable	( const char *psDynamicMusicLabel );
+const char *Music_BaseStateToString		( MusicState_e eMusicState, bool bDebugPrintQuery = false);
 const char *Music_GetFileNameForState	( MusicState_e eMusicState );
-qboolean	Music_StateIsTransition		( MusicState_e eMusicState );
-qboolean	Music_StateCanBeInterrupted	( MusicState_e eMusicState, MusicState_e eProposedMusicState );
 float		Music_GetRandomEntryTime	( MusicState_e eMusicState );
-
-qboolean	Music_AllowedToTransition	( float fPlayingTimeElapsed, MusicState_e eMusicState, MusicState_e	*peTransition = NULL, float *pfNewTrackEntryTime = NULL);
-
-const char *Music_BaseStateToString		( MusicState_e eMusicState, qboolean bDebugPrintQuery = qfalse);
-
+bool	Music_AllowedToTransition	( float fPlayingTimeElapsed, MusicState_e eMusicState, MusicState_e	*peTransition = NULL, float *pfNewTrackEntryTime = NULL);
+bool	Music_DynamicDataAvailable	( const char *psDynamicMusicLabel );
+bool	Music_StateCanBeInterrupted	( MusicState_e eMusicState, MusicState_e eProposedMusicState );
+bool	Music_StateIsTransition		( MusicState_e eMusicState );
+void		Music_SetLevelName			( const char *psLevelName );

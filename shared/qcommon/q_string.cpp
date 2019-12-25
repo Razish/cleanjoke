@@ -58,25 +58,25 @@ int Q_isalpha( int c )
 	return ( 0 );
 }
 
-qboolean Q_isanumber( const char *s )
+bool Q_isanumber( const char *s )
 {
 	char *p;
 	double ret;
 
 	if( *s == '\0' )
-		return qfalse;
+		return false;
 
 	ret = strtod( s, &p );
 
 	if ( ret == HUGE_VAL || errno == ERANGE )
-		return qfalse;
+		return false;
 
-	return (qboolean)(*p == '\0');
+	return (bool)(*p == '\0');
 }
 
-qboolean Q_isintegral( float f )
+bool Q_isintegral( float f )
 {
-	return (qboolean)( (int)f == f );
+	return (bool)( (int)f == f );
 }
 
 char* Q_strrchr( const char* string, int c )
@@ -284,16 +284,16 @@ char *Q_CleanStr( char *string ) {
 // This function modifies INPUT (is mutable)
 // (Also strips ^8 and ^9)
 void Q_StripColor( char *text ) {
-	qboolean doPass = qtrue;
+	bool doPass = true;
 	char *read;
 	char *write;
 
 	while ( doPass ) {
-		doPass = qfalse;
+		doPass = false;
 		read = write = text;
 		while ( *read ) {
 			if ( Q_IsColorStringExt( read ) ) {
-				doPass = qtrue;
+				doPass = true;
 				read += 2;
 			}
 			else {
@@ -323,15 +323,15 @@ void Q_strstrip( char *string, const char *strip, const char *repl )
 	char		*out=string, *p=string, c;
 	const char	*s=strip;
 	int			replaceLen = repl?strlen( repl ):0, offset=0;
-	qboolean	recordChar = qtrue;
+	bool	recordChar = true;
 
 	while ( (c = *p++) != '\0' ) {
-		recordChar = qtrue;
+		recordChar = true;
 		for ( s=strip; *s; s++ ) {
 			offset = s-strip;
 			if ( c == *s ) {
 				if ( !repl || offset >= replaceLen ) {
-					recordChar = qfalse;
+					recordChar = false;
 				}
 				else {
 					c = repl[offset];

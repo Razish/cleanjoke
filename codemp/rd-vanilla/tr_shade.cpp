@@ -35,7 +35,7 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 */
 
 shaderCommands_t	tess;
-static qboolean	setArraysOnce;
+static bool	setArraysOnce;
 
 color4ub_t	styleColors[MAX_LIGHT_STYLES];
 
@@ -58,7 +58,7 @@ static int		c_begins;
 static void R_DrawStripElements( int numIndexes, const glIndex_t *indexes, void ( APIENTRY *element )(GLint) ) {
 	int i;
 	glIndex_t last[3];
-	qboolean even;
+	bool even;
 
 	c_begins++;
 
@@ -78,7 +78,7 @@ static void R_DrawStripElements( int numIndexes, const glIndex_t *indexes, void 
 	last[1] = indexes[1];
 	last[2] = indexes[2];
 
-	even = qfalse;
+	even = false;
 
 	for ( i = 3; i < numIndexes; i += 3 )
 	{
@@ -91,7 +91,7 @@ static void R_DrawStripElements( int numIndexes, const glIndex_t *indexes, void 
 				element( indexes[i+2] );
 				c_vertexes++;
 				assert( (int)indexes[i+2] < tess.numVertexes );
-				even = qtrue;
+				even = true;
 			}
 			// otherwise we're done with this strip so finish it and start
 			// a new one
@@ -108,7 +108,7 @@ static void R_DrawStripElements( int numIndexes, const glIndex_t *indexes, void 
 
 				c_vertexes += 3;
 
-				even = qfalse;
+				even = false;
 			}
 		}
 		else
@@ -119,7 +119,7 @@ static void R_DrawStripElements( int numIndexes, const glIndex_t *indexes, void 
 				element( indexes[i+2] );
 				c_vertexes++;
 
-				even = qfalse;
+				even = false;
 			}
 			// otherwise we're done with this strip so finish it and start
 			// a new one
@@ -135,7 +135,7 @@ static void R_DrawStripElements( int numIndexes, const glIndex_t *indexes, void 
 				element( indexes[i+2] );
 				c_vertexes += 3;
 
-				even = qfalse;
+				even = false;
 			}
 		}
 
@@ -1049,7 +1049,7 @@ static void ComputeColors( shaderStage_t *pStage, int forceRGBGen )
 {
 	int			i;
 	color4ub_t	*colors = tess.svars.colors;
-	qboolean killGen = qfalse;
+	bool killGen = false;
 	alphaGen_t forceAlphaGen = pStage->alphaGen;//set this up so we can override below
 
 	if ( tess.shader != tr.projectionShadowShader && tess.shader != tr.shadowShader &&
@@ -1059,7 +1059,7 @@ static void ComputeColors( shaderStage_t *pStage, int forceRGBGen )
 		RB_CalcDisintegrateVertDeform();
 
 		// We've done some custom alpha and color stuff, so we can skip the rest.  Let it do fog though
-		killGen = qtrue;
+		killGen = true;
 	}
 
 	// rgbGen
@@ -1095,7 +1095,7 @@ static void ComputeColors( shaderStage_t *pStage, int forceRGBGen )
 			color[0] = color[1] = color[2] = color[3] = Q_ftol( backEnd.currentEntity->e.shaderRGBA[0] * (1-dot) );
 		}
 
-		killGen = qtrue;
+		killGen = true;
 	}
 
 	if (killGen)
@@ -1709,13 +1709,13 @@ void RB_StageIteratorGeneric( void )
 
 	if ( tess.numPasses > 1 || input->shader->multitextureEnv )
 	{
-		setArraysOnce = qfalse;
+		setArraysOnce = false;
 		qglDisableClientState (GL_COLOR_ARRAY);
 		qglDisableClientState (GL_TEXTURE_COORD_ARRAY);
 	}
 	else
 	{
-		setArraysOnce = qtrue;
+		setArraysOnce = true;
 
 		qglEnableClientState( GL_COLOR_ARRAY);
 		qglColorPointer( 4, GL_UNSIGNED_BYTE, 0, tess.svars.colors );

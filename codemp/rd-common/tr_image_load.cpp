@@ -48,18 +48,18 @@ const ImageLoaderMap *FindImageLoader ( const char *extension )
 
 // Adds a new image loader to load the specified image file extension.
 // The 'extension' string should not begin with a period (full stop).
-qboolean R_ImageLoader_Add ( const char *extension, ImageLoaderFn imageLoader )
+bool R_ImageLoader_Add ( const char *extension, ImageLoaderFn imageLoader )
 {
 	if ( numImageLoaders >= MAX_IMAGE_LOADERS )
 	{
 		ri.Printf (PRINT_DEVELOPER, "R_AddImageLoader: Cannot add any more image loaders (maximum %d).\n", MAX_IMAGE_LOADERS);
-		return qfalse;
+		return false;
 	}
 
 	if ( FindImageLoader (extension) != NULL )
 	{
 		ri.Printf (PRINT_DEVELOPER, "R_AddImageLoader: Image loader already exists for extension \"%s\".\n", extension);
-		return qfalse;
+		return false;
 	}
 
 	ImageLoaderMap *newImageLoader = &imageLoaders[numImageLoaders];
@@ -68,7 +68,7 @@ qboolean R_ImageLoader_Add ( const char *extension, ImageLoaderFn imageLoader )
 
 	numImageLoaders++;
 
-	return qtrue;
+	return true;
 }
 
 // Initializes the image loader, and adds the built-in image loaders

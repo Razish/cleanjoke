@@ -71,19 +71,19 @@ static void CG_ScoresDown_f( void ) {
 		// leave the current scores up if they were already
 		// displayed, but if this is the first hit, clear them out
 		if ( !cg.showScores ) {
-			cg.showScores = qtrue;
+			cg.showScores = true;
 			cg.numScores = 0;
 		}
 	} else {
 		// show the cached contents even if they just pressed if it
 		// is within two seconds
-		cg.showScores = qtrue;
+		cg.showScores = true;
 	}
 }
 
 static void CG_ScoresUp_f( void ) {
 	if ( cg.showScores ) {
-		cg.showScores = qfalse;
+		cg.showScores = false;
 		cg.scoreFadeTime = cg.time;
 	}
 }
@@ -225,16 +225,16 @@ static const consoleCommand_t commands[] = {
 static const size_t numCommands = ARRAY_LEN( commands );
 
 // The string has been tokenized and can be retrieved with Cmd_Argc() / Cmd_Argv()
-qboolean CG_ConsoleCommand( void ) {
+bool CG_ConsoleCommand( void ) {
 	consoleCommand_t	*command = NULL;
 
 	command = (consoleCommand_t *)Q_LinearSearch( CG_Argv( 0 ), commands, numCommands, sizeof( commands[0] ), cmdcmp );
 
 	if ( !command || !command->func )
-		return qfalse;
+		return false;
 
 	command->func();
-	return qtrue;
+	return true;
 }
 
 static const char *gcmds[] = {

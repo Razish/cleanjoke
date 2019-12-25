@@ -65,9 +65,9 @@ struct lerpFrame_t {
 	int			frameTime;			// time when ->frame will be exactly on
 	float		backlerp;
 	float		yawAngle;
-	qboolean	yawing;
+	bool	yawing;
 	float		pitchAngle;
-	qboolean	pitching;
+	bool	pitching;
 	int			animationNumber;
 	animation_t	*animation;
 	int			animationTime;		// time when the first frame of the animation will be exact
@@ -99,9 +99,9 @@ struct playerInfo_t {
 	int				torsoAnimationTimer;
 	int				pendingTorsoAnim;
 	int				legsAnimationTimer;
-	qboolean		chat;
-	qboolean		newModel;
-	qboolean		barrelSpinning;
+	bool		chat;
+	bool		newModel;
+	bool		barrelSpinning;
 	float			barrelAngle;
 	int				barrelTime;
 	int				realWeapon;
@@ -138,7 +138,7 @@ struct mapInfo_t {
 	int cinematic;
 	int timeToBeat[MAX_GAMETYPES];
 	qhandle_t levelShot;
-	qboolean active;
+	bool active;
 };
 
 struct tierInfo_t {
@@ -169,7 +169,7 @@ struct serverStatus_t {
 	int		sortKey;
 	int		sortDir;
 	int		lastCount;
-	qboolean refreshActive;
+	bool refreshActive;
 	int		currentServer;
 	int		displayServers[MAX_DISPLAY_SERVERS];
 	int		numDisplayServers;
@@ -192,7 +192,7 @@ struct pendingServer_t {
 	char		name[MAX_ADDRESSLENGTH];
 	int			startTime;
 	int			serverNum;
-	qboolean	valid;
+	bool	valid;
 };
 
 struct pendingServerStatus_t {
@@ -255,7 +255,7 @@ struct uiInfo_t {
 	int						playerRefresh;
 	int						playerIndex;
 	int						playerNumber;
-	qboolean				teamLeader;
+	bool				teamLeader;
 	char					playerNames[MAX_CLIENTS][MAX_NETNAME];
 	char					teamNames[MAX_CLIENTS][MAX_TEAMNAME];
 	int						teamClientNums[MAX_CLIENTS];
@@ -298,10 +298,10 @@ struct uiInfo_t {
 	int						forceConfigCount;
 	int						forceConfigSelected;
 	char					forceConfigNames[MAX_FORCE_CONFIGS][128];
-	qboolean				forceConfigSide[MAX_FORCE_CONFIGS]; //true if it's a light side config, false if dark side
+	bool				forceConfigSide[MAX_FORCE_CONFIGS]; //true if it's a light side config, false if dark side
 	int						forceConfigDarkIndexBegin; //mark the index number dark configs start at
 	int						forceConfigLightIndexBegin; //mark the index number light configs start at
-	qboolean				inGameLoad;
+	bool				inGameLoad;
 	int						playerSpeciesMax;
 	int						playerSpeciesCount;
 	playerSpeciesInfo_t		*playerSpecies;
@@ -315,10 +315,10 @@ struct uiInfo_t {
 
 
 
-qboolean    UI_ConsoleCommand         ( int realTime );
+bool    UI_ConsoleCommand         ( int realTime );
 char       *UI_Cvar_VariableString    ( const char *var_name );
 void        UI_DrawHandlePic          ( float x, float y, float w, float h, qhandle_t hShader );
-qboolean    UI_FeederSelection        ( float feederID, int index, itemDef_t *item );
+bool    UI_FeederSelection        ( float feederID, int index, itemDef_t *item );
 void        UI_FillRect               ( float x, float y, float width, float height, const float *color );
 char       *UI_GetBotNameByNumber     ( int num );
 int         UI_GetNumBots             ( void );
@@ -327,14 +327,14 @@ void        UI_Load                   ( void );
 void        UI_LoadArenas             ( void );
 void        UI_LoadBots               ( void );
 void        UI_LoadForceConfig_List   ( void );
-void        UI_LoadMenus              ( const char *menuFile, qboolean reset );
+void        UI_LoadMenus              ( const char *menuFile, bool reset );
 void        UI_RegisterCvars          ( void );
 void        UI_Report                 ( void );
-qboolean    UI_SaberModelForSaber     ( const char *saberName, char *saberModel );
-qboolean    UI_SaberProperNameForSaber( const char *saberName, char *saberProperName );
-qboolean    UI_SaberTypeForSaber      ( const char *saberName, char *saberType );
+bool    UI_SaberModelForSaber     ( const char *saberName, char *saberModel );
+bool    UI_SaberProperNameForSaber( const char *saberName, char *saberProperName );
+bool    UI_SaberTypeForSaber      ( const char *saberName, char *saberType );
 const char *UI_TeamName               ( int team );
-qboolean    UI_TrueJediEnabled        ( void );
+bool    UI_TrueJediEnabled        ( void );
 void        UI_UpdateCvars            ( void );
 void        UpdateForceUsed           ( void );
 
@@ -352,4 +352,4 @@ void UI_CacheSaberGlowGraphics(void);
 void UI_SaberDrawBlades( itemDef_t *item, vec3_t origin, vec3_t angles );
 void UI_SaberLoadParms( void );
 
-extern qboolean ui_saber_parms_parsed;
+extern bool ui_saber_parms_parsed;

@@ -25,7 +25,7 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 #define __STDC_FORMAT_MACROS
 #include <inttypes.h>
 
-#include "qcommon/qcommon.h"
+#include "qcommon/q_common.h"
 #include "qcommon/com_cvars.h"
 
 vm_t *currentVM = NULL;
@@ -75,7 +75,7 @@ vm_t *VM_Create( vmSlots_t vmSlot ) {
 		return vmTable[vmSlot];
 
 	// find a free vm
-	vmTable[vmSlot] = (vm_t *)Z_Malloc( sizeof(*vm), TAG_VM, qtrue );
+	vmTable[vmSlot] = (vm_t *)Z_Malloc( sizeof(*vm), TAG_VM, true );
 	vm = vmTable[vmSlot];
 
 	// initialise it
@@ -133,7 +133,7 @@ void VM_Shifted_Alloc( void **ptr, int size ) {
 		return;
 	}
 
-	mem = Z_Malloc( size + 1, TAG_VM_ALLOCATED, qfalse );
+	mem = Z_Malloc( size + 1, TAG_VM_ALLOCATED, false );
 	if ( !mem ) {
 		assert( 0 );
 		*ptr = NULL;

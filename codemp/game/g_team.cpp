@@ -40,27 +40,27 @@ teamgame_t teamgame;
 static const char ctfFlagStatusRemap[] = { '0', '1', '*', '*', '2' };
 
 void Team_SetFlagStatus( int team, flagStatus_t status ) {
-	qboolean modified = qfalse;
+	bool modified = false;
 
 	switch( team ) {
 	case TEAM_RED:	// CTF
 		if( teamgame.redStatus != status ) {
 			teamgame.redStatus = status;
-			modified = qtrue;
+			modified = true;
 		}
 		break;
 
 	case TEAM_BLUE:	// CTF
 		if( teamgame.blueStatus != status ) {
 			teamgame.blueStatus = status;
-			modified = qtrue;
+			modified = true;
 		}
 		break;
 
 	case TEAM_FREE:	// One Flag CTF
 		if( teamgame.flagStatus != status ) {
 			teamgame.flagStatus = status;
-			modified = qtrue;
+			modified = true;
 		}
 		break;
 	}
@@ -231,9 +231,9 @@ void AddTeamScore(vec3_t origin, int team, int score) {
 	level.teamScores[ team ] += score;
 }
 
-qboolean OnSameTeam( gentity_t *ent1, gentity_t *ent2 ) {
+bool OnSameTeam( gentity_t *ent1, gentity_t *ent2 ) {
 	if ( !ent1->client || !ent2->client ) {
-		return qfalse;
+		return false;
 	}
 
 	if ( level.gametype == GT_POWERDUEL ) {
@@ -241,14 +241,14 @@ qboolean OnSameTeam( gentity_t *ent1, gentity_t *ent2 ) {
 	}
 
 	if ( level.gametype < GT_TEAM ) {
-		return qfalse;
+		return false;
 	}
 
 	if ( ent1->client->sess.sessionTeam == ent2->client->sess.sessionTeam ) {
-		return qtrue;
+		return true;
 	}
 
-	return qfalse;
+	return false;
 }
 
 void Team_CheckDroppedItem( gentity_t *dropped ) {
@@ -881,14 +881,14 @@ locationData_t *Team_GetLocation(gentity_t *ent)
 }
 
 // Report a location for the player. Uses placed nearby target_location entities
-qboolean Team_GetLocationMsg(gentity_t *ent, char *loc, int loclen)
+bool Team_GetLocationMsg(gentity_t *ent, char *loc, int loclen)
 {
 	locationData_t *best;
 
 	best = Team_GetLocation( ent );
 
 	if (!best)
-		return qfalse;
+		return false;
 
 	if (best->count) {
 		if (best->count < 0)
@@ -899,7 +899,7 @@ qboolean Team_GetLocationMsg(gentity_t *ent, char *loc, int loclen)
 	} else
 		Com_sprintf(loc, loclen, "%s", best->message);
 
-	return qtrue;
+	return true;
 }
 
 #define	MAX_TEAM_SPAWN_POINTS	32
@@ -910,7 +910,7 @@ gentity_t *SelectRandomTeamSpawnPoint( int teamstate, team_t team, int siegeClas
 	int			selection;
 	gentity_t	*spots[MAX_TEAM_SPAWN_POINTS];
 	char		*classname;
-	qboolean	mustBeEnabled = qfalse;
+	bool	mustBeEnabled = false;
 
 	if (teamstate == TEAM_BEGIN) {
 		if (team == TEAM_RED)
@@ -954,7 +954,7 @@ gentity_t *SelectRandomTeamSpawnPoint( int teamstate, team_t team, int siegeClas
 	return spots[ selection ];
 }
 
-gentity_t *SelectCTFSpawnPoint ( team_t team, int teamstate, vec3_t origin, vec3_t angles, qboolean isbot ) {
+gentity_t *SelectCTFSpawnPoint ( team_t team, int teamstate, vec3_t origin, vec3_t angles, bool isbot ) {
 	gentity_t	*spot;
 
 	spot = SelectRandomTeamSpawnPoint ( teamstate, team, -1 );

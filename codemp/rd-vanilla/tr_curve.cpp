@@ -104,14 +104,14 @@ static void MakeMeshNormals( int width, int height, drawVert_t ctrl[MAX_GRID_SIZ
 	int		x, y;
 	drawVert_t	*dv;
 	vec3_t		around[8], temp;
-	qboolean	good[8];
-	qboolean	wrapWidth, wrapHeight;
+	bool	good[8];
+	bool	wrapWidth, wrapHeight;
 	float		len;
 static	int	neighbors[8][2] = {
 	{0,1}, {1,1}, {1,0}, {1,-1}, {0,-1}, {-1,-1}, {-1,0}, {-1,1}
 	};
 
-	wrapWidth = qfalse;
+	wrapWidth = false;
 	for ( i = 0 ; i < height ; i++ ) {
 		VectorSubtract( ctrl[i][0].xyz, ctrl[i][width-1].xyz, delta );
 		len = VectorLengthSquared( delta );
@@ -120,10 +120,10 @@ static	int	neighbors[8][2] = {
 		}
 	}
 	if ( i == height ) {
-		wrapWidth = qtrue;
+		wrapWidth = true;
 	}
 
-	wrapHeight = qfalse;
+	wrapHeight = false;
 	for ( i = 0 ; i < width ; i++ ) {
 		VectorSubtract( ctrl[0][i].xyz, ctrl[height-1][i].xyz, delta );
 		len = VectorLengthSquared( delta );
@@ -132,7 +132,7 @@ static	int	neighbors[8][2] = {
 		}
 	}
 	if ( i == width) {
-		wrapHeight = qtrue;
+		wrapHeight = true;
 	}
 
 	for ( i = 0 ; i < width ; i++ ) {
@@ -142,7 +142,7 @@ static	int	neighbors[8][2] = {
 			VectorCopy( dv->xyz, base );
 			for ( k = 0 ; k < 8 ; k++ ) {
 				VectorClear( around[k] );
-				good[k] = qfalse;
+				good[k] = false;
 
 				for ( dist = 1 ; dist <= 3 ; dist++ ) {
 					x = i + neighbors[k][0] * dist;
@@ -169,7 +169,7 @@ static	int	neighbors[8][2] = {
 					if ( VectorNormalize2( temp, temp ) == 0 ) {
 						continue;				// degenerate edge, get more dist
 					} else {
-						good[k] = qtrue;
+						good[k] = true;
 						VectorCopy( temp, around[k] );
 						break;					// good edge
 					}
@@ -259,13 +259,13 @@ srfGridMesh_t *R_CreateSurfaceGridMesh(int width, int height,
 	size = (width * height - 1) * sizeof( drawVert_t ) + sizeof( *grid );
 
 #ifdef PATCH_STITCHING
-	grid = (struct srfGridMesh_s *)/*Hunk_Alloc*/ Z_Malloc( size, TAG_GRIDMESH, qfalse );
+	grid = (struct srfGridMesh_s *)/*Hunk_Alloc*/ Z_Malloc( size, TAG_GRIDMESH, false );
 	memset(grid, 0, size);
 
-	grid->widthLodError = (float *)/*Hunk_Alloc*/ Z_Malloc( width * 4, TAG_GRIDMESH, qfalse );
+	grid->widthLodError = (float *)/*Hunk_Alloc*/ Z_Malloc( width * 4, TAG_GRIDMESH, false );
 	memcpy( grid->widthLodError, errorTable[0], width * 4 );
 
-	grid->heightLodError = (float *)/*Hunk_Alloc*/ Z_Malloc( height * 4, TAG_GRIDMESH, qfalse );
+	grid->heightLodError = (float *)/*Hunk_Alloc*/ Z_Malloc( height * 4, TAG_GRIDMESH, false );
 	memcpy( grid->heightLodError, errorTable[1], height * 4 );
 #else
 	grid = Hunk_Alloc( size );

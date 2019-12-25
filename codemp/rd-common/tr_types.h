@@ -89,8 +89,6 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 extern int	skyboxportal;
 extern int	drawskyboxportal;
 
-typedef byte color4ub_t[4];
-
 typedef struct polyVert_s {
 	vec3_t		xyz;
 	float		st[2];
@@ -129,7 +127,7 @@ typedef struct miniRefEntity_s
 
 	// most recent data
 	matrix3_t			axis;			// rotation vectors
-	qboolean			nonNormalizedAxes;	// axis are not normalized, i.e. they have scale
+	bool			nonNormalizedAxes;	// axis are not normalized, i.e. they have scale
 	vec3_t				origin;				// also used as MODEL_BEAM's "from"
 
 	// previous data for frame interpolation
@@ -162,7 +160,7 @@ typedef struct refEntity_s {
 
 	// most recent data
 	matrix3_t			axis;			// rotation vectors
-	qboolean			nonNormalizedAxes;	// axis are not normalized, i.e. they have scale
+	bool			nonNormalizedAxes;	// axis are not normalized, i.e. they have scale
 	vec3_t				origin;				// also used as MODEL_BEAM's "from"
 
 	// previous data for frame interpolation
@@ -238,15 +236,15 @@ typedef struct refEntity_s {
 			float stscale;
 			float height;
 			float bias;
-			qboolean wrap;
+			bool wrap;
 		} cylinder;
 		struct
 		{
 			float width;
 			float deviation;
 			float stscale;
-			qboolean wrap;
-			qboolean taper;
+			bool wrap;
+			bool taper;
 		} electricity;
 	} data;
 
@@ -262,7 +260,7 @@ typedef struct refEntity_s {
 
 #define MDXABONEDEF
 #include "rd-common/mdx_format.h"
-#include "qcommon/qfiles.h"
+#include "qcommon/q_files.h"
 
 // skins allow models to be retextured without modifying the model file
 //this is a mock copy, renderers may have their own implementation.
@@ -297,7 +295,7 @@ typedef struct model_s {
 	mdxmHeader_t *mdxm;				// only if type == MOD_GL2M which is a GHOUL II Mesh file NOT a GHOUL II animation file
 	mdxaHeader_t *mdxa;				// only if type == MOD_GL2A which is a GHOUL II Animation file
 	int			 numLods;
-	qboolean	bspInstance;
+	bool	bspInstance;
 } model_t;
 
 #define	MAX_RENDER_STRINGS			8
@@ -350,10 +348,10 @@ typedef struct glconfig_s {
 
 	int						colorBits, depthBits, stencilBits;
 
-	qboolean				deviceSupportsGamma;
+	bool				deviceSupportsGamma;
 	textureCompression_t	textureCompression;
-	qboolean				textureEnvAddAvailable;
-	qboolean				clampToEdgeAvailable;
+	bool				textureEnvAddAvailable;
+	bool				clampToEdgeAvailable;
 
 	int						vidWidth, vidHeight;
 
@@ -362,6 +360,6 @@ typedef struct glconfig_s {
 	// synonymous with "does rendering consume the entire screen?", therefore
 	// a Voodoo or Voodoo2 will have this set to TRUE, as will a Win32 ICD that
 	// used CDS.
-	qboolean				isFullscreen;
-	qboolean				stereoEnabled;
+	bool				isFullscreen;
+	bool				stereoEnabled;
 } glconfig_t;

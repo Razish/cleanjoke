@@ -108,7 +108,7 @@ char *showPowersName[] =
 
 //Called from UI shared code. For now we'll just redirect to the normal anim load function.
 
-int UI_ParseAnimationFile(const char *filename, animation_t *animset, qboolean isHumanoid)
+int UI_ParseAnimationFile(const char *filename, animation_t *animset, bool isHumanoid)
 {
 	return BG_ParseAnimationFile(filename, animset, isHumanoid);
 }
@@ -117,7 +117,7 @@ static void CG_DrawZoomMask( void )
 {
 	vec4_t		color1;
 	float		level;
-	static qboolean	flip = qtrue;
+	static bool	flip = true;
 
 //	int ammo = cg_entities[0].gent->client->ps.ammo[weaponData[cent->currentState.weapon].ammoIndex];
 	float cx, cy;
@@ -180,7 +180,7 @@ static void CG_DrawZoomMask( void )
 			if (( off > 3.0f && i == -10 ) || i > -10 )
 			{
 				// draw the value, but add 200 just to bump the range up...arbitrary, so change it if you like
-				CG_DrawNumField( 155 + i * 10 + off * 10, 374, 3, val + 200, 24, 14, NUM_FONT_CHUNKY, qtrue );
+				CG_DrawNumField( 155 + i * 10 + off * 10, 374, 3, val + 200, 24, 14, NUM_FONT_CHUNKY, true );
 				CG_DrawPic( 245 + (i-1) * 10 + off * 10, 376, 6, 6, media.gfx.misc.white );
 			}
 		}
@@ -386,7 +386,7 @@ void CG_DrawHead( float x, float y, float w, float h, int clientNum, vec3_t head
 }
 
 // Used for both the status bar and the scoreboard
-void CG_DrawFlagModel( float x, float y, float w, float h, int team, qboolean force2D ) {
+void CG_DrawFlagModel( float x, float y, float w, float h, int team, bool force2D ) {
 	qhandle_t		cm;
 	float			len;
 	vec3_t			origin, angles;
@@ -521,7 +521,7 @@ void CG_DrawHealth( menuDef_t *menuHUD )
 			focusItem->window.rect.w,
 			focusItem->window.rect.h,
 			NUM_FONT_SMALL,
-			qfalse);
+			false);
 	}
 
 }
@@ -615,7 +615,7 @@ void CG_DrawArmor( menuDef_t *menuHUD )
 			focusItem->window.rect.w,
 			focusItem->window.rect.h,
 			NUM_FONT_SMALL,
-			qfalse);
+			false);
 	}
 
 	// If armor is low, flash a graphic to warn the player
@@ -631,22 +631,22 @@ void CG_DrawArmor( menuDef_t *menuHUD )
 				cg.HUDTickFlashTime = cg.time + 400;
 				if (cg.HUDArmorFlag)
 				{
-					cg.HUDArmorFlag = qfalse;
+					cg.HUDArmorFlag = false;
 				}
 				else
 				{
-					cg.HUDArmorFlag = qtrue;
+					cg.HUDArmorFlag = true;
 				}
 			}
 		}
 		else
 		{
-			cg.HUDArmorFlag=qtrue;
+			cg.HUDArmorFlag=true;
 		}
 	}
 	else						// No armor? Don't show it.
 	{
-		cg.HUDArmorFlag=qfalse;
+		cg.HUDArmorFlag=false;
 	}
 
 }
@@ -835,7 +835,7 @@ static void CG_DrawAmmo( centity_t	*cent,menuDef_t *menuHUD)
 				focusItem->window.rect.w,
 				focusItem->window.rect.h,
 				NUM_FONT_SMALL,
-				qfalse);
+				false);
 		}
 	}
 
@@ -885,7 +885,7 @@ void CG_DrawForcePower( menuDef_t *menuHUD )
 	float			value,inc,percent;
 	itemDef_t		*focusItem;
 	const int		maxForcePower = 100;
-	qboolean	flash=qfalse;
+	bool	flash=false;
 
 	// Can we find the menu?
 	if (!menuHUD)
@@ -896,7 +896,7 @@ void CG_DrawForcePower( menuDef_t *menuHUD )
 	// Make the hud flash by setting forceHUDTotalFlashTime above cg.time
 	if (cg.forceHUDTotalFlashTime > cg.time )
 	{
-		flash = qtrue;
+		flash = true;
 		if (cg.forceHUDNextFlashTime < cg.time)
 		{
 			cg.forceHUDNextFlashTime = cg.time + 400;
@@ -904,11 +904,11 @@ void CG_DrawForcePower( menuDef_t *menuHUD )
 
 			if (cg.forceHUDActive)
 			{
-				cg.forceHUDActive = qfalse;
+				cg.forceHUDActive = false;
 			}
 			else
 			{
-				cg.forceHUDActive = qtrue;
+				cg.forceHUDActive = true;
 			}
 
 		}
@@ -916,7 +916,7 @@ void CG_DrawForcePower( menuDef_t *menuHUD )
 	else	// turn HUD back on if it had just finished flashing time.
 	{
 		cg.forceHUDNextFlashTime = 0;
-		cg.forceHUDActive = qtrue;
+		cg.forceHUDActive = true;
 	}
 
 //	if (!cg.forceHUDActive)
@@ -1003,7 +1003,7 @@ void CG_DrawForcePower( menuDef_t *menuHUD )
 			focusItem->window.rect.w,
 			focusItem->window.rect.h,
 			NUM_FONT_SMALL,
-			qfalse);
+			false);
 	}
 }
 
@@ -1120,7 +1120,7 @@ static void CG_DrawSimpleForcePower( const centity_t *cent )
 {
 	uint32_t	calcColor;
 	char		num[16] = { 0 };
-	qboolean	flash = qfalse;
+	bool	flash = false;
 
 	if ( !cg.snap->ps.fd.forcePowersKnown )
 	{
@@ -1130,18 +1130,18 @@ static void CG_DrawSimpleForcePower( const centity_t *cent )
 	// Make the hud flash by setting forceHUDTotalFlashTime above cg.time
 	if ( cg.forceHUDTotalFlashTime > cg.time )
 	{
-		flash = qtrue;
+		flash = true;
 		if ( cg.forceHUDNextFlashTime < cg.time )
 		{
 			cg.forceHUDNextFlashTime = cg.time + 400;
 			trap->S_StartSound( NULL, 0, CHAN_LOCAL, media.sounds.null );
 			if ( cg.forceHUDActive )
 			{
-				cg.forceHUDActive = qfalse;
+				cg.forceHUDActive = false;
 			}
 			else
 			{
-				cg.forceHUDActive = qtrue;
+				cg.forceHUDActive = true;
 			}
 
 		}
@@ -1149,7 +1149,7 @@ static void CG_DrawSimpleForcePower( const centity_t *cent )
 	else	// turn HUD back on if it had just finished flashing time.
 	{
 		cg.forceHUDNextFlashTime = 0;
-		cg.forceHUDActive = qtrue;
+		cg.forceHUDActive = true;
 	}
 
 	// Determine the color of the numeric field
@@ -1196,7 +1196,7 @@ void CG_DrawHUD(centity_t	*cent)
 	{
 		// Draw the left HUD
 		menuHUD = Menus_FindByName("lefthud");
-		Menu_Paint( menuHUD, qtrue );
+		Menu_Paint( menuHUD, true );
 
 		if (menuHUD)
 		{
@@ -1278,7 +1278,7 @@ void CG_DrawHUD(centity_t	*cent)
 		}
 
 		menuHUD = Menus_FindByName("righthud");
-		Menu_Paint( menuHUD, qtrue );
+		Menu_Paint( menuHUD, true );
 
 		if (menuHUD)
 		{
@@ -1345,22 +1345,22 @@ void CG_DrawHUD(centity_t	*cent)
 
 #define MAX_SHOWPOWERS NUM_FORCE_POWERS
 
-qboolean ForcePower_Valid(int i)
+bool ForcePower_Valid(int i)
 {
 	if (i == FP_LEVITATION ||
 		i == FP_SABER_OFFENSE ||
 		i == FP_SABER_DEFENSE ||
 		i == FP_SABERTHROW)
 	{
-		return qfalse;
+		return false;
 	}
 
 	if (cg.snap->ps.fd.forcePowersKnown & (1 << i))
 	{
-		return qtrue;
+		return true;
 	}
 
-	return qfalse;
+	return false;
 }
 
 void CG_DrawForceSelect( void )
@@ -1622,7 +1622,7 @@ void CG_DrawInvenSelect( void )
 
 			trap->R_SetColor(colorTable[CT_ICON_BLUE]);
 			/*CG_DrawNumField (holdX + addX, y + smallIconSize, 2, cg.snap->ps.inventory[i], 6, 12,
-				NUM_FONT_SMALL,qfalse);
+				NUM_FONT_SMALL,false);
 				*/
 
 			holdX -= (smallIconSize+pad);
@@ -1638,7 +1638,7 @@ void CG_DrawInvenSelect( void )
 	//	addX = (float) bigIconSize * .75;
 		trap->R_SetColor(colorTable[CT_ICON_BLUE]);
 		/*CG_DrawNumField ((x-(bigIconSize/2)) + addX, y, 2, cg.snap->ps.inventory[cg.inventorySelect], 6, 12,
-			NUM_FONT_SMALL,qfalse);*/
+			NUM_FONT_SMALL,false);*/
 
 		itemNdex = BG_GetItemIndexByTag(cg.itemSelect, IT_HOLDABLE);
 		if (bg_itemlist[itemNdex].classname)
@@ -1696,7 +1696,7 @@ void CG_DrawInvenSelect( void )
 
 			trap->R_SetColor(colorTable[CT_ICON_BLUE]);
 			/*CG_DrawNumField (holdX + addX, y + smallIconSize, 2, cg.snap->ps.inventory[i], 6, 12,
-				NUM_FONT_SMALL,qfalse);*/
+				NUM_FONT_SMALL,false);*/
 
 			holdX += (smallIconSize+pad);
 		}
@@ -2397,7 +2397,7 @@ static float CG_DrawTimer( float y ) {
 	return y + BIGCHAR_HEIGHT + 4;
 }
 
-static float CG_DrawTeamOverlay( float y, qboolean right, qboolean upper ) {
+static float CG_DrawTeamOverlay( float y, bool right, bool upper ) {
 	int x, w, h, xx;
 	int i, j, len;
 	const char *p;
@@ -2496,7 +2496,7 @@ static float CG_DrawTeamOverlay( float y, qboolean right, qboolean upper ) {
 			xx = x + TINYCHAR_WIDTH;
 
 			CG_DrawStringExt( xx + xOffset, y,
-				ci->name, hcolor, qfalse, qfalse,
+				ci->name, hcolor, false, false,
 				TINYCHAR_WIDTH, TINYCHAR_HEIGHT, TEAM_OVERLAY_MAXNAME_WIDTH);
 
 			if (lwidth) {
@@ -2511,7 +2511,7 @@ static float CG_DrawTeamOverlay( float y, qboolean right, qboolean upper ) {
 //					((lwidth/2 - len/2) * TINYCHAR_WIDTH);
 				xx = x + TINYCHAR_WIDTH * 2 + TINYCHAR_WIDTH * pwidth;
 				CG_DrawStringExt( xx + xOffset, y,
-					p, hcolor, qfalse, qfalse, TINYCHAR_WIDTH, TINYCHAR_HEIGHT,
+					p, hcolor, false, false, TINYCHAR_WIDTH, TINYCHAR_HEIGHT,
 					TEAM_OVERLAY_MAXLOCATION_WIDTH);
 			}
 
@@ -2523,7 +2523,7 @@ static float CG_DrawTeamOverlay( float y, qboolean right, qboolean upper ) {
 				TINYCHAR_WIDTH * pwidth + TINYCHAR_WIDTH * lwidth;
 
 			CG_DrawStringExt( xx + xOffset, y,
-				st, hcolor, qfalse, qfalse,
+				st, hcolor, false, false,
 				TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 0 );
 
 			// draw weapon icon
@@ -2633,7 +2633,7 @@ static void CG_DrawUpperRight( void ) {
 	trap->R_SetColor( colorTable[CT_WHITE] );
 
 	if ( cgs.gametype >= GT_TEAM && cg_drawTeamOverlay.integer == 1 ) {
-		y = CG_DrawTeamOverlay( y, qtrue, qtrue );
+		y = CG_DrawTeamOverlay( y, true, true );
 	}
 	if ( cg_drawSnapshot.integer ) {
 		y = CG_DrawSnapshot( y );
@@ -2708,7 +2708,7 @@ static void CG_DrawReward( void ) {
 		CG_DrawPic( x, y, ICON_SIZE-4, ICON_SIZE-4, cg.rewardShader[0] );
 		Com_sprintf(buf, sizeof(buf), "%d", cg.rewardCount[0]);
 		x = ( SCREEN_WIDTH - SMALLCHAR_WIDTH * CG_DrawStrlen( buf ) ) / 2;
-		CG_DrawStringExt( x, y+ICON_SIZE, buf, color, qfalse, qtrue,
+		CG_DrawStringExt( x, y+ICON_SIZE, buf, color, false, true,
 								SMALLCHAR_WIDTH, SMALLCHAR_HEIGHT, 0 );
 	}
 	else {
@@ -2941,12 +2941,12 @@ void CG_CenterPrint( const char *str, int y, int charWidth ) {
 	}
 }
 
-qboolean BG_IsWhiteSpace( char c )
+bool BG_IsWhiteSpace( char c )
 {//this function simply checks to see if the given character is whitespace.
 	if ( c == ' ' || c == '\n' || c == '\0' )
-		return qtrue;
+		return true;
 
-	return qfalse;
+	return false;
 }
 static void CG_DrawCenterString( void ) {
 	char	*start;
@@ -3220,7 +3220,7 @@ void CG_LerpCrosshairPos( float *x, float *y )
 	cg_crosshairPrevPosY = *y;
 }
 
-static qboolean CG_WorldCoordToScreenCoordFloat(vec3_t worldCoord, float *x, float *y) {
+static bool CG_WorldCoordToScreenCoordFloat(vec3_t worldCoord, float *x, float *y) {
     vec3_t trans;
     float xc, yc;
     float px, py;
@@ -3237,12 +3237,12 @@ static qboolean CG_WorldCoordToScreenCoordFloat(vec3_t worldCoord, float *x, flo
 	// z = how far is the object in our forward direction
     z = DotProduct(trans, cg.refdef.viewaxis[0]);
     if (z <= 0.001)
-        return qfalse;
+        return false;
 
     *x = xc - DotProduct(trans, cg.refdef.viewaxis[1])*xc/(z*px);
     *y = yc - DotProduct(trans, cg.refdef.viewaxis[2])*yc/(z*py);
 
-    return qtrue;
+    return true;
 }
 
 vec3_t cg_crosshairPos={0,0,0};
@@ -3250,7 +3250,7 @@ static void CG_DrawCrosshair( vec3_t worldPoint, int chEntValid ) {
 	float		x, y, w, h, f, chX, chY;
 	vec4_t		ecolor = {0,0,0,0};
 	qhandle_t	hShader = 0;
-	qboolean	corona = qfalse;
+	bool	corona = false;
 	centity_t			*chEnt = chEntValid ? &cg_entities[cg.crosshairClientNum] : NULL;
 	const entityState_t	*chES = chEntValid ? &cg_entities[cg.crosshairClientNum].currentState : NULL;
 	const clientInfo_t	*chCI = chEntValid ? &cgs.clientinfo[chES->number] : NULL;
@@ -3393,7 +3393,7 @@ static void CG_DrawCrosshair( vec3_t worldPoint, int chEntValid ) {
 				ecolor[1] = 0.5f;
 				ecolor[2] = 1.0f;
 
-				corona = qtrue;
+				corona = true;
 			}
 			else if ( chES->eType == ET_MOVER && chES->teamowner ) {
 				// a team owns this - if it's my team green, if not red, if not teamplay then yellow
@@ -3513,16 +3513,16 @@ static void CG_DrawCrosshair( vec3_t worldPoint, int chEntValid ) {
 	trap->R_SetColor( NULL );
 }
 
-qboolean CG_WorldCoordToScreenCoord( vec3_t worldCoord, int *x, int *y ) {
+bool CG_WorldCoordToScreenCoord( vec3_t worldCoord, int *x, int *y ) {
 	float xF, yF;
 
 	if ( CG_WorldCoordToScreenCoordFloat( worldCoord, &xF, &yF ) ) {
 		*x = (int)xF;
 		*y = (int)yF;
-		return qtrue;
+		return true;
 	}
 
-	return qfalse;
+	return false;
 }
 
 int cg_saberFlashTime = 0;
@@ -3769,7 +3769,7 @@ static void CG_DrawHolocronIcons(void)
 	}
 }
 
-static qboolean CG_IsDurationPower(int power)
+static bool CG_IsDurationPower(int power)
 {
 	if (power == FP_HEAL ||
 		power == FP_SPEED ||
@@ -3779,10 +3779,10 @@ static qboolean CG_IsDurationPower(int power)
 		power == FP_ABSORB ||
 		power == FP_SEE)
 	{
-		return qtrue;
+		return true;
 	}
 
-	return qfalse;
+	return false;
 }
 
 static void CG_DrawActivePowers(void)
@@ -4062,7 +4062,7 @@ static void CG_ScanForCrosshairEntity( void ) {
 
 	if ( trace.entityNum < MAX_CLIENTS ) {
 		const entityState_t *chES = &cg_entities[trace.entityNum].currentState;
-		const qboolean isMindTricked = CG_IsMindTricked(
+		const bool isMindTricked = CG_IsMindTricked(
 			chES->trickedentindex, chES->trickedentindex2, chES->trickedentindex3, chES->trickedentindex4,
 			cg.snap->ps.clientNum
 		);
@@ -4110,7 +4110,7 @@ static void CG_DrawCrosshairNames( void ) {
 	vec4_t		tcolor;
 	char		*name;
 	int			baseColor;
-	qboolean	isVeh = qfalse;
+	bool	isVeh = false;
 
 	if ( !cg_drawCrosshair.integer ) {
 		return;
@@ -4289,7 +4289,7 @@ static void CG_DrawVote(void) {
 
 	// play a talk beep whenever it is modified
 	if ( cgs.voteModified ) {
-		cgs.voteModified = qfalse;
+		cgs.voteModified = false;
 		trap->S_StartLocalSound( media.sounds.null, CHAN_LOCAL_SOUND );
 	}
 
@@ -4360,7 +4360,7 @@ static void CG_DrawTeamVote(void) {
 
 	// play a talk beep whenever it is modified
 	if ( cgs.teamVoteModified[cs_offset] ) {
-		cgs.teamVoteModified[cs_offset] = qfalse;
+		cgs.teamVoteModified[cs_offset] = false;
 //		trap->S_StartLocalSound( media.sounds.null, CHAN_LOCAL_SOUND );
 	}
 
@@ -4411,7 +4411,7 @@ static void CG_DrawTeamVote(void) {
 	CG_DrawSmallString( 4, 90, s, 1.0F );
 }
 
-static qboolean CG_DrawScoreboard() {
+static bool CG_DrawScoreboard() {
 	return CG_DrawOldScoreboard();
 }
 
@@ -4420,13 +4420,13 @@ static void CG_DrawIntermission( void ) {
 	cg.scoreBoardShowing = CG_DrawScoreboard();
 }
 
-static qboolean CG_DrawFollow( void )
+static bool CG_DrawFollow( void )
 {
 	const char	*s;
 
 	if ( !(cg.snap->ps.pm_flags & PMF_FOLLOW) )
 	{
-		return qfalse;
+		return false;
 	}
 
 //	s = "following";
@@ -4459,7 +4459,7 @@ static qboolean CG_DrawFollow( void )
 	font.scale = 2.0f;
 	font.Paint ( 320 - font.Width ( s ) / 2, 80, s, colorWhite, 0 );
 
-	return qtrue;
+	return true;
 }
 
 static void CG_DrawWarmup( void ) {
@@ -4835,7 +4835,7 @@ int cgYsalTime = 0;
 int cgYsalFadeTime = 0;
 float cgYsalFadeVal = 0;
 
-qboolean gCGHasFallVector = qfalse;
+bool gCGHasFallVector = false;
 vec3_t gCGFallVector;
 
 // chatbox functionality -rww
@@ -5463,7 +5463,7 @@ static void CG_Draw2D( void ) {
 	}
 
 	if ( !cg_draw2D.integer ) {
-		gCGHasFallVector = qfalse;
+		gCGHasFallVector = false;
 		VectorClear( gCGFallVector );
 		return;
 	}
@@ -5620,14 +5620,14 @@ static void CG_Draw2D( void ) {
 		if (!gCGHasFallVector)
 		{
 			VectorCopy(cg.snap->ps.origin, gCGFallVector);
-			gCGHasFallVector = qtrue;
+			gCGHasFallVector = true;
 		}
 	}
 	else
 	{
 		if (gCGHasFallVector)
 		{
-			gCGHasFallVector = qfalse;
+			gCGHasFallVector = false;
 			VectorClear(gCGFallVector);
 		}
 	}
@@ -5666,7 +5666,7 @@ void CG_DrawMiscStaticModels( void ) {
 
 	ent.reType = RT_MODEL;
 	ent.frame = 0;
-	ent.nonNormalizedAxes = qtrue;
+	ent.nonNormalizedAxes = true;
 
 	// static models don't project shadows
 	ent.renderfx = RF_NOSHADOW;

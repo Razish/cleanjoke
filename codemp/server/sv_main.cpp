@@ -171,7 +171,7 @@ void SV_MasterHeartbeat( void ) {
 
 	// see if we haven't already resolved the name
 	if ( sv_master->modified || SV_MasterNeedsResolving(time) ) {
-		sv_master->modified = qfalse;
+		sv_master->modified = false;
 
 		g_lastResolveTime = time;
 
@@ -181,7 +181,7 @@ void SV_MasterHeartbeat( void ) {
 			// so we don't take repeated dns hits
 			Com_Printf( "Couldn't resolve address: %s\n", sv_master->string );
 			Cvar_Set( sv_master->name, "" );
-			sv_master->modified = qfalse;
+			sv_master->modified = false;
 			return;
 		}
 		if ( !strstr( ":", sv_master->string ) ) {
@@ -309,7 +309,7 @@ static leakyBucket_t *SVC_BucketForAddress( netadr_t address, int burst, int per
 	return NULL;
 }
 
-qboolean SVC_RateLimit( leakyBucket_t *bucket, int burst, int period ) {
+bool SVC_RateLimit( leakyBucket_t *bucket, int burst, int period ) {
 	if ( bucket != NULL ) {
 		int now = Sys_Milliseconds();
 		int interval = now - bucket->lastTime;
@@ -327,15 +327,15 @@ qboolean SVC_RateLimit( leakyBucket_t *bucket, int burst, int period ) {
 		if ( bucket->burst < burst ) {
 			bucket->burst++;
 
-			return qfalse;
+			return false;
 		}
 	}
 
-	return qtrue;
+	return true;
 }
 
 // Rate limit for a particular address
-qboolean SVC_RateLimitAddress( netadr_t from, int burst, int period ) {
+bool SVC_RateLimitAddress( netadr_t from, int burst, int period ) {
 	leakyBucket_t *bucket = SVC_BucketForAddress( from, burst, period );
 
 	return SVC_RateLimit( bucket, burst, period );
@@ -490,7 +490,7 @@ void SV_FlushRedirect( char *outputbuf ) {
 // Shift down the remaining args
 // Redirect all printfs
 void SVC_RemoteCommand( netadr_t from, msg_t *msg ) {
-	qboolean	valid;
+	bool	valid;
 	char		remaining[1024];
 	// TTimo - scaled down to accumulate, but not overflow anything network wise, print wise etc.
 	// (OOB messages are the bottleneck here)
@@ -517,10 +517,10 @@ void SVC_RemoteCommand( netadr_t from, msg_t *msg ) {
 			return;
 		}
 
-		valid = qfalse;
+		valid = false;
 		Com_Printf ("Bad rcon from %s: %s\n", NET_AdrToString (from), Cmd_ArgsFrom(2) );
 	} else {
-		valid = qtrue;
+		valid = true;
 		Com_Printf ("Rcon from %s: %s\n", NET_AdrToString (from), Cmd_ArgsFrom(2) );
 	}
 
@@ -744,13 +744,13 @@ void SV_CheckTimeouts( void ) {
 	}
 }
 
-qboolean SV_CheckPaused( void ) {
+bool SV_CheckPaused( void ) {
 	int		count;
 	client_t	*cl;
 	int		i;
 
 	if ( !cl_paused->integer ) {
-		return qfalse;
+		return false;
 	}
 
 	// only pause if there is just a single client connected
@@ -765,19 +765,19 @@ qboolean SV_CheckPaused( void ) {
 		// don't pause
 		if (sv_paused->integer)
 			Cvar_Set("sv_paused", "0");
-		return qfalse;
+		return false;
 	}
 
 	if (!sv_paused->integer)
 		Cvar_Set("sv_paused", "1");
-	return qtrue;
+	return true;
 }
 
 void SV_CheckCvars( void ) {
 	static int lastModHostname = -1, lastModFramerate = -1, lastModSnapsMin = -1, lastModSnapsMax = -1;
 	static int lastModSnapsPolicy = -1, lastModRatePolicy = -1, lastModClientRate = -1;
 	static int lastModMaxRate = -1, lastModMinRate = -1;
-	qboolean changed = qfalse;
+	bool changed = false;
 
 	if ( sv_hostname->modificationCount != lastModHostname ) {
 		char hostname[MAX_INFO_STRING];
@@ -790,7 +790,7 @@ void SV_CheckCvars( void ) {
 			if ( (*c == '\\') || (*c == ';') || (*c == '"'))
 			{
 				*c = '.';
-				changed = qtrue;
+				changed = true;
 			}
 			c++;
 		}

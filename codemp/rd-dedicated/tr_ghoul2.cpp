@@ -23,7 +23,7 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 #include "client/cl_public.h"
 #include "rd-dedicated/tr_local.h"
 #include "qcommon/matcomp.h"
-#include "qcommon/qcommon.h"
+#include "qcommon/q_common.h"
 #include "qcommon/com_cvars.h"
 #include "ghoul2/G2.h"
 #include "ghoul2/g2_local.h"
@@ -670,7 +670,7 @@ public:
 	surfaceInfo_v	&rootSList;
 	shader_t		*cust_shader;
 	int				fogNum;
-	qboolean		personalModel;
+	bool		personalModel;
 	CBoneCache		*boneCache;
 	int				renderfx;
 	skin_t			*skin;
@@ -687,7 +687,7 @@ public:
 	surfaceInfo_v	&initrootSList,
 	shader_t		*initcust_shader,
 	int				initfogNum,
-	qboolean		initpersonalModel,
+	bool		initpersonalModel,
 	CBoneCache		*initboneCache,
 	int				initrenderfx,
 	skin_t			*initskin,
@@ -3144,7 +3144,7 @@ Bone  52:   "face_always_":
 
 */
 
-qboolean R_LoadMDXM( model_t *mod, void *buffer, const char *mod_name, qboolean &bAlreadyCached ) {
+bool R_LoadMDXM( model_t *mod, void *buffer, const char *mod_name, bool &bAlreadyCached ) {
 	int					i,l, j;
 	mdxmHeader_t		*pinmodel, *mdxm;
 	mdxmLOD_t			*lod;
@@ -3169,13 +3169,13 @@ qboolean R_LoadMDXM( model_t *mod, void *buffer, const char *mod_name, qboolean 
 	if (version != MDXM_VERSION) {
 		Com_Printf (S_COLOR_YELLOW  "R_LoadMDXM: %s has wrong version (%i should be %i)\n",
 				 mod_name, version, MDXM_VERSION);
-		return qfalse;
+		return false;
 	}
 
 	mod->type	   = MOD_MDXM;
 	mod->dataSize += size;
 
-	qboolean bAlreadyFound = qfalse;
+	bool bAlreadyFound = false;
 	mdxm = mod->mdxm = (mdxmHeader_t*) //Hunk_Alloc( size );
 										RE_RegisterModels_Malloc(size, buffer, mod_name, &bAlreadyFound, TAG_MODEL_GLM);
 
@@ -3189,7 +3189,7 @@ qboolean R_LoadMDXM( model_t *mod, void *buffer, const char *mod_name, qboolean 
 
 		// Aaaargh. Kill me now...
 
-		bAlreadyCached = qtrue;
+		bAlreadyCached = true;
 		assert( mdxm == buffer );
 //		memcpy( mdxm, buffer, size );	// and don't do this now, since it's the same thing
 
@@ -3208,14 +3208,14 @@ qboolean R_LoadMDXM( model_t *mod, void *buffer, const char *mod_name, qboolean 
 	if (!mdxm->animIndex)
 	{
 		Com_Printf (S_COLOR_YELLOW  "R_LoadMDXM: missing animation file %s for mesh %s\n", mdxm->animName, mdxm->name);
-		return qfalse;
+		return false;
 	}
 
 	mod->numLods = mdxm->numLODs -1 ;	//copy this up to the model for ease of use - it wil get inced after this.
 
 	if (bAlreadyFound)
 	{
-		return qtrue;	// All done. Stop, go no further, do not LittleLong(), do not pass Go...
+		return true;	// All done. Stop, go no further, do not LittleLong(), do not pass Go...
 	}
 
 	bool isAnOldModelFile = false;
@@ -3306,7 +3306,7 @@ qboolean R_LoadMDXM( model_t *mod, void *buffer, const char *mod_name, qboolean 
 		// find the next LOD
 		lod = (mdxmLOD_t *)( (byte *)lod + lod->ofsEnd );
 	}
-	return qtrue;
+	return true;
 }
 
 //#define CREATE_LIMB_HIERARCHY
@@ -3351,7 +3351,7 @@ static const char *bottomBones[NUM_BOTTOMBONES] =
 	"lhand"
 };
 
-qboolean BoneIsRootParent(char *name)
+bool BoneIsRootParent(char *name)
 {
 	int i = 0;
 
@@ -3359,16 +3359,16 @@ qboolean BoneIsRootParent(char *name)
 	{
 		if (!Q_stricmp(name, rootParents[i]))
 		{
-			return qtrue;
+			return true;
 		}
 
 		i++;
 	}
 
-	return qfalse;
+	return false;
 }
 
-qboolean BoneIsOtherParent(char *name)
+bool BoneIsOtherParent(char *name)
 {
 	int i = 0;
 
@@ -3376,16 +3376,16 @@ qboolean BoneIsOtherParent(char *name)
 	{
 		if (!Q_stricmp(name, otherParents[i]))
 		{
-			return qtrue;
+			return true;
 		}
 
 		i++;
 	}
 
-	return qfalse;
+	return false;
 }
 
-qboolean BoneIsBottom(char *name)
+bool BoneIsBottom(char *name)
 {
 	int i = 0;
 
@@ -3393,13 +3393,13 @@ qboolean BoneIsBottom(char *name)
 	{
 		if (!Q_stricmp(name, bottomBones[i]))
 		{
-			return qtrue;
+			return true;
 		}
 
 		i++;
 	}
 
-	return qfalse;
+	return false;
 }
 
 void ShiftMemoryDown(mdxaSkelOffsets_t *offsets, mdxaHeader_t *mdxa, int boneIndex, byte **endMarker)
@@ -3460,8 +3460,8 @@ static const char *BoneHierarchyList[] =
 	0
 };
 
-//Gets the index of a child or parent. If child is passed as qfalse then parent is assumed.
-int BoneParentChildIndex(mdxaHeader_t *mdxa, mdxaSkelOffsets_t *offsets, mdxaSkel_t *boneInfo, qboolean child)
+//Gets the index of a child or parent. If child is passed as false then parent is assumed.
+int BoneParentChildIndex(mdxaHeader_t *mdxa, mdxaSkelOffsets_t *offsets, mdxaSkel_t *boneInfo, bool child)
 {
 	int i = 0;
 	int matchindex = -1;
@@ -3510,7 +3510,7 @@ int BoneParentChildIndex(mdxaHeader_t *mdxa, mdxaSkelOffsets_t *offsets, mdxaSke
 #endif //CREATE_LIMB_HIERARCHY
 
 // load a Ghoul 2 animation file
-qboolean R_LoadMDXA( model_t *mod, void *buffer, const char *mod_name, qboolean &bAlreadyCached ) {
+bool R_LoadMDXA( model_t *mod, void *buffer, const char *mod_name, bool &bAlreadyCached ) {
 
 	mdxaHeader_t		*pinmodel, *mdxa;
 	int					version;
@@ -3536,13 +3536,13 @@ qboolean R_LoadMDXA( model_t *mod, void *buffer, const char *mod_name, qboolean 
 	if (version != MDXA_VERSION) {
 		Com_Printf (S_COLOR_YELLOW  "R_LoadMDXA: %s has wrong version (%i should be %i)\n",
 				 mod_name, version, MDXA_VERSION);
-		return qfalse;
+		return false;
 	}
 
 	mod->type		= MOD_MDXA;
 	mod->dataSize  += size;
 
-	qboolean bAlreadyFound = qfalse;
+	bool bAlreadyFound = false;
 
 #ifdef CREATE_LIMB_HIERARCHY
 	oSize = size;
@@ -3573,7 +3573,7 @@ qboolean R_LoadMDXA( model_t *mod, void *buffer, const char *mod_name, qboolean 
 
 		// Aaaargh. Kill me now...
 
-		bAlreadyCached = qtrue;
+		bAlreadyCached = true;
 		assert( mdxa == buffer );
 //		memcpy( mdxa, buffer, size );	// and don't do this now, since it's the same thing
 #endif
@@ -3610,7 +3610,7 @@ qboolean R_LoadMDXA( model_t *mod, void *buffer, const char *mod_name, qboolean 
 
 					boneInfo = (mdxaSkel_t *)((byte *)mdxa + sizeof(mdxaHeader_t) + offsets->offsets[i]);
 
-					int newChild = BoneParentChildIndex(mdxa, offsets, boneInfo, qtrue);
+					int newChild = BoneParentChildIndex(mdxa, offsets, boneInfo, true);
 
 					if (newChild != -1)
 					{
@@ -3630,7 +3630,7 @@ qboolean R_LoadMDXA( model_t *mod, void *buffer, const char *mod_name, qboolean 
 
 						boneInfo = (mdxaSkel_t *)((byte *)mdxa + sizeof(mdxaHeader_t) + offsets->offsets[i]);
 
-						int newChild = BoneParentChildIndex(mdxa, offsets, boneInfo, qtrue);
+						int newChild = BoneParentChildIndex(mdxa, offsets, boneInfo, true);
 
 						if (newChild != -1)
 						{
@@ -3678,7 +3678,7 @@ qboolean R_LoadMDXA( model_t *mod, void *buffer, const char *mod_name, qboolean 
 					}
 
 					//Now that we have cleared the original parent of ownership, mark the bone's new parent.
-					int newParent = BoneParentChildIndex(mdxa, offsets, boneInfo, qfalse);
+					int newParent = BoneParentChildIndex(mdxa, offsets, boneInfo, false);
 
 					if (newParent != -1)
 					{
@@ -3696,14 +3696,14 @@ qboolean R_LoadMDXA( model_t *mod, void *buffer, const char *mod_name, qboolean 
 
  	if ( mdxa->numFrames < 1 ) {
 		Com_Printf (S_COLOR_YELLOW  "R_LoadMDXA: %s has no frames\n", mod_name );
-		return qfalse;
+		return false;
 	}
 
 	if (bAlreadyFound)
 	{
-		return qtrue;	// All done, stop here, do not LittleLong() etc. Do not pass go...
+		return true;	// All done, stop here, do not LittleLong() etc. Do not pass go...
 	}
 
-	return qtrue;
+	return true;
 }
 

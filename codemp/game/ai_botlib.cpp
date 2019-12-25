@@ -1,4 +1,4 @@
-#include "qcommon/qcommon.h"
+#include "qcommon/q_common.h"
 #include "game/g_local.h"
 #define BOTLIB_INTERNAL
 #include "game/ai_botlib.h"
@@ -137,7 +137,7 @@ aas_link_t *AAS_AllocAASLink( void ) {
 	return link;
 }
 
-qboolean AAS_AreaEntityCollision( int areanum, vec3_t start, vec3_t end, int presencetype, int passent, aas_trace_t *trace ) {
+bool AAS_AreaEntityCollision( int areanum, vec3_t start, vec3_t end, int presencetype, int passent, aas_trace_t *trace ) {
 	int collision;
 	vec3_t boxmins, boxmaxs;
 	aas_link_t *link;
@@ -148,7 +148,7 @@ qboolean AAS_AreaEntityCollision( int areanum, vec3_t start, vec3_t end, int pre
 	Com_Memset( &bsptrace, 0, sizeof(bsp_trace_t) ); //make compiler happy
 	//assume no collision
 	bsptrace.fraction = 1;
-	collision = qfalse;
+	collision = false;
 	for ( link = aasworld.arealinkedentities[areanum]; link; link = link->next_ent ) {
 		//ignore the pass entity
 		if ( link->entnum == passent ) {
@@ -156,7 +156,7 @@ qboolean AAS_AreaEntityCollision( int areanum, vec3_t start, vec3_t end, int pre
 		}
 
 		if ( AAS_EntityCollision( link->entnum, start, boxmins, boxmaxs, end, CONTENTS_SOLID|CONTENTS_PLAYERCLIP, &bsptrace ) ) {
-			collision = qtrue;
+			collision = true;
 		}
 	}
 	if ( collision ) {
@@ -165,9 +165,9 @@ qboolean AAS_AreaEntityCollision( int areanum, vec3_t start, vec3_t end, int pre
 		VectorCopy( bsptrace.endpos, trace->endpos );
 		trace->area = 0;
 		trace->planenum = 0;
-		return qtrue;
+		return true;
 	}
-	return qfalse;
+	return false;
 }
 
 int AAS_AreaGrounded( int areanum ) {
@@ -236,7 +236,7 @@ int AAS_BestReachableArea( vec3_t origin, vec3_t mins, vec3_t maxs, vec3_t goalo
 		else {
 			//it can very well happen that the AAS_PointAreaNum function tells that
 			//a point is in an area and that starting an AAS_TraceClientBBox from that
-			//point will return trace.startsolid qtrue
+			//point will return trace.startsolid true
 			VectorCopy( start, goalorigin );
 			return areanum;
 		}
@@ -322,15 +322,15 @@ void AAS_DeAllocAASLink( aas_link_t *link ) {
 	numaaslinks++;
 }
 
-qboolean AAS_EntityCollision( int entnum, vec3_t start, vec3_t boxmins, vec3_t boxmaxs, vec3_t end, int contentmask, bsp_trace_t *trace ) {
+bool AAS_EntityCollision( int entnum, vec3_t start, vec3_t boxmins, vec3_t boxmaxs, vec3_t end, int contentmask, bsp_trace_t *trace ) {
 	bsp_trace_t enttrace;
 
 	BotEntityTrace( &enttrace, start, boxmins, boxmaxs, end, entnum, contentmask );
 	if ( enttrace.fraction < trace->fraction ) {
 		Com_Memcpy( trace, &enttrace, sizeof(bsp_trace_t) );
-		return qtrue;
+		return true;
 	}
-	return qfalse;
+	return false;
 }
 
 void AAS_EntityInfo( int entnum, aas_entityinfo_t *info ) {
@@ -488,7 +488,7 @@ aas_trace_t AAS_TraceClientBBox( vec3_t start, vec3_t end, int presencetype, int
 		if ( tstack_p < tracestack ) {
 			tstack_p++;
 			//nothing was hit
-			trace.startsolid = qfalse;
+			trace.startsolid = false;
 			trace.fraction = 1.0;
 			//endpos is the end of the line
 			VectorCopy( end, trace.endpos );
@@ -512,12 +512,12 @@ aas_trace_t AAS_TraceClientBBox( vec3_t start, vec3_t end, int presencetype, int
 					&& tstack_p->start[1] == start[1]
 					&& tstack_p->start[2] == start[2] )
 				{
-					trace.startsolid = qtrue;
+					trace.startsolid = true;
 					trace.fraction = 0.0;
 					VectorClear( v1 );
 				}
 				else {
-					trace.startsolid = qfalse;
+					trace.startsolid = false;
 					VectorSubtract( end, start, v1 );
 					VectorSubtract( tstack_p->start, start, v2 );
 					trace.fraction = VectorLength( v2 ) / VectorNormalize( v1 );
@@ -559,12 +559,12 @@ aas_trace_t AAS_TraceClientBBox( vec3_t start, vec3_t end, int presencetype, int
 				&& tstack_p->start[1] == start[1]
 				&& tstack_p->start[2] == start[2] )
 			{
-				trace.startsolid = qtrue;
+				trace.startsolid = true;
 				trace.fraction = 0.0;
 				VectorClear( v1 );
 			}
 			else {
-				trace.startsolid = qfalse;
+				trace.startsolid = false;
 				VectorSubtract( end, start, v1 );
 				VectorSubtract( tstack_p->start, start, v2 );
 				trace.fraction = VectorLength( v2 ) / VectorNormalize( v1 );
@@ -757,10 +757,10 @@ int BotAllocWeaponState( void ) {
 void BotEntityTrace( bsp_trace_t *bsptrace, vec3_t start, vec3_t mins, vec3_t maxs, vec3_t end, int entnum, int contentmask ) {
 	trace_t trace;
 
-	trap->TraceEntity( &trace, start, mins, maxs, end, entnum, contentmask, qfalse );
+	trap->TraceEntity( &trace, start, mins, maxs, end, entnum, contentmask, false );
 	//copy the trace information
-	bsptrace->allsolid = (qboolean)trace.allsolid;
-	bsptrace->startsolid = (qboolean)trace.startsolid;
+	bsptrace->allsolid = (bool)trace.allsolid;
+	bsptrace->startsolid = (bool)trace.startsolid;
 	bsptrace->fraction = trace.fraction;
 	VectorCopy( trace.endpos, bsptrace->endpos );
 	bsptrace->plane.dist = trace.plane.dist;

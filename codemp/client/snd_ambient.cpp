@@ -122,7 +122,7 @@ ambientSet_t *CSetGroup::AddSet( const char *name )
 	ambientSet_t	*set;
 
 	//Allocate the memory
-	set = (ambientSet_t *) Z_Malloc( sizeof( ambientSet_t ), TAG_AMBIENTSET, qtrue);
+	set = (ambientSet_t *) Z_Malloc( sizeof( ambientSet_t ), TAG_AMBIENTSET, true);
 
 	//Set up some defaults
 	Q_strncpyz(set->name,name,sizeof(set->name));
@@ -507,14 +507,14 @@ static void AS_GetBModelSet( ambientSet_t &set )
 }
 
 // Parses an individual set group out of a set file buffer
-static qboolean AS_ParseSet( int setID, CSetGroup *sg )
+static bool AS_ParseSet( int setID, CSetGroup *sg )
 {
 	ambientSet_t	*set;
 	const char		*name;
 
 	//Make sure we're not overstepping the name array
 	if ( setID >= NUM_AS_SETS )
-		return qfalse;
+		return false;
 
 	//Reset the pointers for this run through
 	parsePos = 0;
@@ -557,7 +557,7 @@ static qboolean AS_ParseSet( int setID, CSetGroup *sg )
 		AS_SkipLine();
 	}
 
-	return qtrue;
+	return true;
 }
 
 // Parses the directory information out of the beginning of the file
@@ -603,13 +603,13 @@ static void AS_ParseHeader( void )
 }
 
 // Opens and parses a sound set file
-static qboolean AS_ParseFile( const char *filename, CSetGroup *sg )
+static bool AS_ParseFile( const char *filename, CSetGroup *sg )
 {
 	//Open the file and read the information from it
 	parseSize = FS_ReadFile( filename, (void **) &parseBuffer );
 
 	if ( parseSize <= 0 )
-		return qfalse;
+		return false;
 
 	//Parse the directory information out of the file
 	AS_ParseHeader();
@@ -621,7 +621,7 @@ static qboolean AS_ParseFile( const char *filename, CSetGroup *sg )
 	//Free the memory and close the file
 	FS_FreeFile( parseBuffer );
 
-	return qtrue;
+	return true;
 }
 
 // Main code
@@ -659,7 +659,7 @@ void AS_ParseSets( void )
 	AS_Init();
 
 	//Parse all the sets
-	if ( AS_ParseFile( AMBIENT_SET_FILENAME, aSets ) == qfalse ) {
+	if ( AS_ParseFile( AMBIENT_SET_FILENAME, aSets ) == false ) {
 		Com_Printf( S_COLOR_RED "ERROR: Couldn't load ambient sound sets from " AMBIENT_SET_FILENAME "\n" );
 	}
 

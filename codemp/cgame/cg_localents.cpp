@@ -121,10 +121,10 @@ void CG_FragmentBounceMark( localEntity_t *le, trace_t *trace ) {
 
 	if ( le->leMarkType == LEMT_BLOOD ) {
 	//	radius = 16 + (rand()&31);
-	//	CG_ImpactMark( media.gfx.null, trace->endpos, trace->plane.normal, Q_flrand(0.0f, 1.0f)*360, 1,1,1,1, qtrue, radius, qfalse );
+	//	CG_ImpactMark( media.gfx.null, trace->endpos, trace->plane.normal, Q_flrand(0.0f, 1.0f)*360, 1,1,1,1, true, radius, false );
 	} else if ( le->leMarkType == LEMT_BURN ) {
 	//	radius = 8 + (rand()&15);
-	//	CG_ImpactMark( media.gfx.null, trace->endpos, trace->plane.normal, Q_flrand(0.0f, 1.0f)*360, 1,1,1,1, qtrue, radius, qfalse );
+	//	CG_ImpactMark( media.gfx.null, trace->endpos, trace->plane.normal, Q_flrand(0.0f, 1.0f)*360, 1,1,1,1, true, radius, false );
 	}
 
 	// don't allow a fragment to make multiple marks, or they pile up while settling
@@ -319,7 +319,7 @@ static void CG_AddFadeScaleModel( localEntity_t *le )
 
 	frac *= frac * frac; // yes, this is completely ridiculous...but it causes the shell to grow slowly then "explode" at the end
 
-	ent->nonNormalizedAxes = qtrue;
+	ent->nonNormalizedAxes = true;
 
 	AxisCopy( axisDefault, ent->axis );
 
@@ -593,9 +593,9 @@ void CG_AddScorePlum( localEntity_t *le ) {
 		return;
 	}
 
-	negative = qfalse;
+	negative = false;
 	if (score < 0) {
-		negative = qtrue;
+		negative = true;
 		score = -score;
 	}
 

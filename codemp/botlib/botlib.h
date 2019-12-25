@@ -25,7 +25,9 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 // bot AI library
 
+#include "qcommon/q_math.h"
 #include "qcommon/q_shared.h"
+
 
 #define	BOTLIB_API_VERSION		2
 
@@ -125,8 +127,8 @@ typedef struct bsp_surface_s
 //a trace is returned when a box is swept through the world
 typedef struct bsp_trace_s
 {
-	qboolean		allsolid;	// if true, plane is not valid
-	qboolean		startsolid;	// if true, the initial point was in a solid area
+	bool		allsolid;	// if true, plane is not valid
+	bool		startsolid;	// if true, the initial point was in a solid area
 	float			fraction;	// time completed, 1.0 = didn't hit anything
 	vec3_t			endpos;		// final position
 	cplane_t		plane;		// surface normal at impact

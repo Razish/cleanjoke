@@ -255,7 +255,7 @@ void     Q3_SetVar         ( int taskID, int entID, const char *type_name, const
 void     Q3_SetVelocity    ( int entID, vec3_t angles );
 void     Q3_TaskIDClear    ( int *taskID );
 void     Q3_TaskIDComplete ( sharedEntity_t *ent, taskID_t taskType );
-qboolean Q3_TaskIDPending  ( sharedEntity_t *ent, taskID_t taskType );
+bool Q3_TaskIDPending  ( sharedEntity_t *ent, taskID_t taskType );
 void     Q3_TaskIDSet      ( sharedEntity_t *ent, taskID_t taskType, int taskID );
 
 #endif

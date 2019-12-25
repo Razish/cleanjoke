@@ -262,9 +262,9 @@ int CTaskManager::Update( void )
 	return returnVal;
 }
 
-qboolean CTaskManager::IsRunning( void )
+bool CTaskManager::IsRunning( void )
 {
-	return (qboolean)( m_tasks.empty() == false );
+	return (bool)( m_tasks.empty() == false );
 }
 
 inline bool CTaskManager::Check( int targetID, CBlock *block, int memberNum )

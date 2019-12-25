@@ -28,7 +28,7 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 #define	FX_SIZE_LINEAR		0x00000100
 
 // shoot
-void FX_DisruptorAltShot(				vec3_t start, vec3_t end, qboolean fullCharge );
+void FX_DisruptorAltShot(				vec3_t start, vec3_t end, bool fullCharge );
 void FX_DisruptorMainShot(				vec3_t start, vec3_t end );
 
 // hit wall
@@ -46,16 +46,16 @@ void FX_RocketHitWall(					vec3_t origin, vec3_t normal );
 void FX_BryarAltHitWall(				vec3_t origin, vec3_t normal, int power );
 
 // hit player
-void FX_BlasterWeaponHitPlayer(			vec3_t origin, vec3_t normal, qboolean humanoid );
-void FX_BowcasterHitPlayer(				vec3_t origin, vec3_t normal, qboolean humanoid );
-void FX_BryarAltHitPlayer(				vec3_t origin, vec3_t normal, qboolean humanoid );
-void FX_BryarHitPlayer(					vec3_t origin, vec3_t normal, qboolean humanoid );
-void FX_DEMP2_HitPlayer(				vec3_t origin, vec3_t normal, qboolean humanoid );
-void FX_DisruptorHitPlayer(				vec3_t origin, vec3_t normal, qboolean humanoid );
-void FX_FlechetteWeaponHitPlayer(		vec3_t origin, vec3_t normal, qboolean humanoid );
-void FX_RepeaterAltHitPlayer(			vec3_t origin, vec3_t normal, qboolean humanoid );
-void FX_RepeaterHitPlayer(				vec3_t origin, vec3_t normal, qboolean humanoid );
-void FX_RocketHitPlayer(				vec3_t origin, vec3_t normal, qboolean humanoid );
+void FX_BlasterWeaponHitPlayer(			vec3_t origin, vec3_t normal, bool humanoid );
+void FX_BowcasterHitPlayer(				vec3_t origin, vec3_t normal, bool humanoid );
+void FX_BryarAltHitPlayer(				vec3_t origin, vec3_t normal, bool humanoid );
+void FX_BryarHitPlayer(					vec3_t origin, vec3_t normal, bool humanoid );
+void FX_DEMP2_HitPlayer(				vec3_t origin, vec3_t normal, bool humanoid );
+void FX_DisruptorHitPlayer(				vec3_t origin, vec3_t normal, bool humanoid );
+void FX_FlechetteWeaponHitPlayer(		vec3_t origin, vec3_t normal, bool humanoid );
+void FX_RepeaterAltHitPlayer(			vec3_t origin, vec3_t normal, bool humanoid );
+void FX_RepeaterHitPlayer(				vec3_t origin, vec3_t normal, bool humanoid );
+void FX_RocketHitPlayer(				vec3_t origin, vec3_t normal, bool humanoid );
 
 // detonate
 void FX_DEMP2_AltDetonate(				vec3_t org, float size );

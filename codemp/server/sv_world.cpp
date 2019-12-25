@@ -37,11 +37,11 @@ clipHandle_t SV_ClipHandleForEntity( const sharedEntity_t *ent ) {
 	}
 	if ( ent->r.svFlags & SVF_CAPSULE ) {
 		// create a temp capsule from bounding box sizes
-		return CM_TempBoxModel( ent->r.mins, ent->r.maxs, qtrue );
+		return CM_TempBoxModel( ent->r.mins, ent->r.maxs, true );
 	}
 
 	// create a temp tree from bounding box sizes
-	return CM_TempBoxModel( ent->r.mins, ent->r.maxs, qfalse );
+	return CM_TempBoxModel( ent->r.mins, ent->r.maxs, false );
 }
 
 // ENTITY CHECKING
@@ -135,7 +135,7 @@ void SV_UnlinkEntity( sharedEntity_t *gEnt ) {
 
 	ent = SV_SvEntityForGentity( gEnt );
 
-	gEnt->r.linked = qfalse;
+	gEnt->r.linked = false;
 
 	ws = ent->worldSector;
 	if ( !ws ) {
@@ -315,7 +315,7 @@ void SV_LinkEntity( sharedEntity_t *gEnt ) {
 	ent->nextEntityInWorldSector = node->entities;
 	node->entities = ent;
 
-	gEnt->r.linked = qtrue;
+	gEnt->r.linked = true;
 }
 
 // AREA QUERY
@@ -541,10 +541,10 @@ static void SV_ClipMoveToEntities( moveclip_t *clip ) {
 		}
 
 		if ( trace.allsolid ) {
-			clip->trace.allsolid = qtrue;
+			clip->trace.allsolid = true;
 			trace.entityNum = touch->s.number;
 		} else if ( trace.startsolid ) {
-			clip->trace.startsolid = qtrue;
+			clip->trace.startsolid = true;
 			trace.entityNum = touch->s.number;
 
 			//rww - added this because we want to get the number of an ent even if our trace starts inside it.
@@ -559,7 +559,7 @@ static void SV_ClipMoveToEntities( moveclip_t *clip ) {
 
 			trace.entityNum = touch->s.number;
 			clip->trace = trace;
-			clip->trace.startsolid = (qboolean)((unsigned)clip->trace.startsolid | (unsigned)oldStart);
+			clip->trace.startsolid = (bool)((unsigned)clip->trace.startsolid | (unsigned)oldStart);
 		}
 
 		//rww - since this is multiplayer and we don't have the luxury of violating networking rules in horrible ways,

@@ -32,7 +32,8 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 #include <cmath>
 #include <string>
 
-CFxScheduler	theFxScheduler;
+// The choosen one
+CFxScheduler theFxScheduler;
 
 CMediaHandles &CMediaHandles::operator=(const CMediaHandles &that )
 {
@@ -650,7 +651,7 @@ void CFxScheduler::PlayEffect( const char *file, vec3_t origin, matrix3_t axis, 
 	}
 #endif
 
-	PlayEffect( mEffectIDs[sfile], origin, axis, boltInfo, ghoul2, fxParm, vol, rad, qfalse, iLoopTime, isRelative );
+	PlayEffect( mEffectIDs[sfile], origin, axis, boltInfo, ghoul2, fxParm, vol, rad, false, iLoopTime, isRelative );
 }
 
 int	totalPrimitives = 0;
@@ -909,7 +910,7 @@ void CFxScheduler::PlayEffect( const char *file, vec3_t origin, vec3_t forward, 
 	PlayEffect( mEffectIDs[sfile], origin, forward, vol, rad );
 }
 
-bool gEffectsInPortal = qfalse; //this is just because I don't want to have to add an mPortalEffect field to every actual effect.
+bool gEffectsInPortal = false; //this is just because I don't want to have to add an mPortalEffect field to every actual effect.
 
 // Handles determining if a scheduled effect should be created or not
 // If it should it handles converting the template effect into a real one.
@@ -919,7 +920,7 @@ void CFxScheduler::AddScheduledEffects( bool portal )
 	vec3_t						origin;
 	matrix3_t					axis;
 	int							oldEntNum = -1, oldBoltIndex = -1, oldModelNum = -1;
-	qboolean					doesBoltExist  = qfalse;
+	bool					doesBoltExist  = false;
 
 	if (portal)
 	{
@@ -1342,7 +1343,7 @@ void CFxScheduler::CreateEffect( CPrimitiveTemplate *fx, const vec3_t origin, ma
 			fx->mLength.end.GetVal(), fx->mLengthParm.GetVal(), fx->mAlpha.start.GetVal(), fx->mAlpha.end.GetVal(),
 			fx->mAlphaParm.GetVal(), sRGB, eRGB, fx->mRGBParm.GetVal(), fx->mLife.GetVal(),
 			fx->mMediaHandles.GetHandle(), flags, fx->mMatImpactFX, fxParm, ghoul2, entNum, modelNum, boltNum,
-			(qboolean)(fx->mSpawnFlags & FX_ORG2_FROM_TRACE)
+			(bool)(fx->mSpawnFlags & FX_ORG2_FROM_TRACE)
 		);
 	} break;
 
@@ -1439,7 +1440,7 @@ void CFxScheduler::CreateEffect( CPrimitiveTemplate *fx, const vec3_t origin, ma
 
 		theFxHelper.AddDecalToScene(
 			fx->mMediaHandles.GetHandle(), org, ax[0], fx->mRotation.GetVal(), sRGB[0], sRGB[1], sRGB[2],
-			fx->mAlpha.start.GetVal(), qtrue, fx->mSize.start.GetVal(), qfalse
+			fx->mAlpha.start.GetVal(), true, fx->mSize.start.GetVal(), false
 		);
 
 		if ( fx->mFlags & FX_GHOUL2_DECALS ) {

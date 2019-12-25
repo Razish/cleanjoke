@@ -91,7 +91,7 @@ set(MPCGameCommonFiles
 	"${MPDir}/qcommon/q_shared.cpp"
 	"${MPDir}/qcommon/disablewarnings.h"
 	"${MPDir}/qcommon/q_shared.h"
-	"${MPDir}/qcommon/qfiles.h"
+	"${MPDir}/qcommon/q_files.h"
 	"${MPDir}/qcommon/tags.h"
 
 	${SharedCommonFiles}

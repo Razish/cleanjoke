@@ -334,7 +334,7 @@ int PS_ReadEscapeCharacter(script_t *script, char *ch)
 // Reads C-like string. Escape characters are interpretted.
 // Quotes are included with the string.
 // Reads two strings with a white space between them as one string.
-// returns qtrue when a string was read succesfully
+// returns true when a string was read succesfully
 //	script	script to read from
 //	token	buffer to store the string
 int PS_ReadString(script_t *script, token_t *token, int quote)
@@ -570,14 +570,14 @@ int PS_ReadNumber(script_t *script, token_t *token)
 #endif //BINARYNUMBERS
 	else //decimal or octal integer or floating point number
 	{
-		octal = qfalse;
-		dot = qfalse;
-		if (*script->script_p == '0') octal = qtrue;
+		octal = false;
+		dot = false;
+		if (*script->script_p == '0') octal = true;
 		while(1)
 		{
 			c = *script->script_p;
-			if (c == '.') dot = qtrue;
-			else if (c == '8' || c == '9') octal = qfalse;
+			if (c == '.') dot = true;
+			else if (c == '8' || c == '9') octal = false;
 			else if (c < '0' || c > '9') break;
 			token->string[len++] = *script->script_p++;
 			if (len >= MAX_TOKEN - 1)

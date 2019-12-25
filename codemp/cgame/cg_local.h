@@ -142,14 +142,14 @@ typedef struct lerpFrame_s {
 
 	float		backlerp;
 
-	qboolean	lastFlip; //if does not match torsoFlip/legsFlip, restart the anim.
+	bool	lastFlip; //if does not match torsoFlip/legsFlip, restart the anim.
 
 	int			lastForcedFrame;
 
 	float		yawAngle;
-	qboolean	yawing;
+	bool	yawing;
 	float		pitchAngle;
-	qboolean	pitching;
+	bool	pitching;
 
 	float		yawSwingDif;
 
@@ -160,7 +160,7 @@ typedef struct lerpFrame_s {
 	float		animationSpeed;		// scale the animation speed
 	float		animationTorsoSpeed;
 
-	qboolean	torsoYawing;
+	bool	torsoYawing;
 } lerpFrame_t;
 
 typedef struct playerEntity_s {
@@ -172,7 +172,7 @@ typedef struct playerEntity_s {
 	// machinegun spinning
 	float			barrelAngle;
 	int				barrelTime;
-	qboolean		barrelSpinning;
+	bool		barrelSpinning;
 } playerEntity_t;
 
 // each client has an associated clientInfo_t that contains media references necessary to present the client model and
@@ -189,7 +189,7 @@ typedef struct playerEntity_s {
 							   //cycling through them and comparing for custom sounds.
 
 typedef struct clientInfo_s {
-	qboolean		infoValid;
+	bool		infoValid;
 
 	float			colorOverride[3];
 
@@ -224,7 +224,7 @@ typedef struct clientInfo_s {
 	int				wins, losses;	// in tourney mode
 
 	int				teamTask;		// task in teamplay (offence/defence)
-	qboolean		teamLeader;		// true when this is a team leader
+	bool		teamLeader;		// true when this is a team leader
 
 	int				powerups;		// so can display quad/flag status
 
@@ -252,11 +252,11 @@ typedef struct clientInfo_s {
 
 	int				brokenLimbs;
 
-	qboolean		deferred;
+	bool		deferred;
 
-	qboolean		newAnims;		// true if using the new mission pack animations
-	qboolean		fixedlegs;		// true if legs yaw is always the same as torso yaw
-	qboolean		fixedtorso;		// true if torso never changes yaw
+	bool		newAnims;		// true if using the new mission pack animations
+	bool		fixedlegs;		// true if legs yaw is always the same as torso yaw
+	bool		fixedtorso;		// true if torso never changes yaw
 
 	vec3_t			headOffset;		// move head in icon views
 	//footstep_t		footsteps;
@@ -327,8 +327,8 @@ typedef struct centity_s {
 	//from here up must be unified with bgEntity_t -rww
 
 	entityState_t	nextState;		// from cg.nextFrame, if available
-	qboolean		interpolate;	// true if next is valid to interpolate to
-	qboolean		currentValid;	// true if cg.frame holds this entity
+	bool		interpolate;	// true if next is valid to interpolate to
+	bool		currentValid;	// true if cg.frame holds this entity
 
 	int				muzzleFlashTime;	// move to playerEntity?
 	int				previousEvent;
@@ -349,7 +349,7 @@ typedef struct centity_s {
 //	vec3_t			errorOrigin;
 //	vec3_t			errorAngles;
 
-//	qboolean		extrapolated;	// false if origin / angles is an interpolation
+//	bool		extrapolated;	// false if origin / angles is an interpolation
 //	vec3_t			rawOrigin;
 	vec3_t			rawAngles;
 
@@ -362,8 +362,8 @@ typedef struct centity_s {
 	vec3_t			ragLastOrigin;
 	int				ragLastOriginTime;
 
-	qboolean		noLumbar; //if true only do anims and things on model_root instead of lower_lumbar, this will be the case for some NPCs.
-	qboolean		noFace;
+	bool		noLumbar; //if true only do anims and things on model_root instead of lower_lumbar, this will be the case for some NPCs.
+	bool		noFace;
 
 	int				eventAnimIndex;
 
@@ -406,8 +406,8 @@ typedef struct centity_s {
 	int				teamPowerEffectTime;
 	int				teamPowerType; //0 regen, 1 heal, 2 drain, 3 absorb
 
-	qboolean		isRagging;
-	qboolean		ownerRagging;
+	bool		isRagging;
+	bool		ownerRagging;
 	int				overridingBones;
 
 	int				bodyFadeTime;
@@ -418,16 +418,16 @@ typedef struct centity_s {
 
 	int				serverSaberHitIndex;
 	int				serverSaberHitTime;
-	qboolean		serverSaberFleshImpact; //true if flesh, false if anything else.
+	bool		serverSaberFleshImpact; //true if flesh, false if anything else.
 
-	qboolean		ikStatus;
+	bool		ikStatus;
 
-	qboolean		saberWasInFlight;
+	bool		saberWasInFlight;
 
 	float			smoothYaw;
 
 	int				uncloaking;
-	qboolean		cloaked;
+	bool		cloaked;
 
 	int				vChatTime;
 } centity_t;
@@ -439,7 +439,7 @@ typedef struct markPoly_s {
 	struct markPoly_s	*prevMark, *nextMark;
 	int			time;
 	qhandle_t	markShader;
-	qboolean	alphaFade;		// fade alpha instead of rgb
+	bool	alphaFade;		// fade alpha instead of rgb
 	float		color[4];
 	poly_t		poly;
 	polyVert_t	verts[MAX_VERTS_ON_POLY];
@@ -566,19 +566,19 @@ typedef struct localEntity_s {
 			// fight the power! open and close brackets in the same column!
 			float radius;
 			float dradius;
-			qboolean (*thinkFn)(struct localEntity_s *le);
+			bool (*thinkFn)(struct localEntity_s *le);
 			vec3_t	dir;	// magnitude is 1, but this is oldpos - newpos right before the
 							//particle is sent to the renderer
 			// may want to add something like particle::localEntity_s *le (for the particle's think fn)
 		} particle;
 		struct
 		{
-			qboolean	dontDie;
+			bool	dontDie;
 			vec3_t		dir;
 			float		variance;
 			int			delay;
 			int			nextthink;
-			qboolean	(*thinkFn)(struct localEntity_s *le);
+			bool	(*thinkFn)(struct localEntity_s *le);
 			int			data1;
 			int			data2;
 		} spawner;
@@ -605,7 +605,7 @@ typedef struct score_s {
 	int				defendCount;
 	int				assistCount;
 	int				captures;
-	qboolean	perfect;
+	bool	perfect;
 	int				team;
 } score_t;
 
@@ -614,7 +614,7 @@ typedef struct score_s {
 // weapon and its effects
 typedef struct weaponInfo_s {
 	//CJKTODO: all assets should be pointers to handles so we can load them in after initialising this struct
-	qboolean		registered;
+	bool		registered;
 	gitem_t			*item;
 
 	qhandle_t		handsModel;			// the hands don't actually draw, they just position the weapon
@@ -669,7 +669,7 @@ typedef struct weaponInfo_s {
 // that constains media references necessary to present the
 // item and its effects
 typedef struct itemInfo_s {
-	qboolean		registered;
+	bool		registered;
 	qhandle_t		models[MAX_ITEM_MODELS];
 	qhandle_t		icon;
 	void			*g2Models[MAX_ITEM_MODELS];
@@ -708,11 +708,11 @@ typedef struct cg_s {
 
 	int			clientNum;
 
-	qboolean	demoPlayback;
-	qboolean	levelShot;			// taking a level menu screenshot
+	bool	demoPlayback;
+	bool	levelShot;			// taking a level menu screenshot
 	int			deferredPlayerLoading;
-	qboolean	loading;			// don't defer players at initial startup
-	qboolean	intermissionStarted;	// don't play voice rewards, because game will end shortly
+	bool	loading;			// don't defer players at initial startup
+	bool	intermissionStarted;	// don't play voice rewards, because game will end shortly
 
 	// there are only one or two snapshot_t that are relevent at a time
 	int			latestSnapshotNum;	// the number of snapshots the client system has received
@@ -724,10 +724,10 @@ typedef struct cg_s {
 
 	float		frameInterpolation;	// (float)( cg.time - cg.frame->serverTime ) / (cg.nextFrame->serverTime - cg.frame->serverTime)
 
-	qboolean	mMapChange;
+	bool	mMapChange;
 
-	qboolean	thisFrameTeleport;
-	qboolean	nextFrameTeleport;
+	bool	thisFrameTeleport;
+	bool	nextFrameTeleport;
 
 	int			frametime;		// cg.time - cg.oldTime
 
@@ -740,18 +740,18 @@ typedef struct cg_s {
 	int			timelimitWarnings;	// 5 min, 1 min, overtime
 	int			fraglimitWarnings;
 
-	qboolean	mapRestart;			// set on a map restart to set back the weapon
+	bool	mapRestart;			// set on a map restart to set back the weapon
 
-	qboolean	renderingThirdPerson;		// during deaths, chasecams, etc
+	bool	renderingThirdPerson;		// during deaths, chasecams, etc
 
 	// prediction state
-	qboolean	hyperspace;				// true if prediction has hit a trigger_teleport
+	bool	hyperspace;				// true if prediction has hit a trigger_teleport
 	playerState_t	predictedPlayerState;
 
 	//centity_t		predictedPlayerEntity;
 	//rww - I removed this and made it use cg_entities[clnum] directly.
 
-	qboolean	validPPS;				// clear until the first call to CG_PredictPlayerState
+	bool	validPPS;				// clear until the first call to CG_PredictPlayerState
 	int			predictedErrorTime;
 	vec3_t		predictedError;
 
@@ -783,7 +783,7 @@ typedef struct cg_s {
 	refdef_t	refdef;
 
 	// zoom key
-	qboolean	zoomed;
+	bool	zoomed;
 	int			zoomTime;
 	float		zoomSensitivity;
 
@@ -796,8 +796,8 @@ typedef struct cg_s {
 	int			selectedScore;
 	int			teamScores[2];
 	score_t		scores[MAX_CLIENTS];
-	qboolean	showScores;
-	qboolean	scoreBoardShowing;
+	bool	showScores;
+	bool	scoreBoardShowing;
 	int			scoreFadeTime;
 	char		killerName[MAX_NETNAME];
 	char			spectatorList[MAX_STRING_CHARS];		// list of names
@@ -898,22 +898,22 @@ typedef struct cg_s {
 	float		xyspeed;
 	int     nextOrbitTime;
 
-	//qboolean cameraMode;		// if rendering from a loaded camera
+	//bool cameraMode;		// if rendering from a loaded camera
 
 	int			forceHUDTotalFlashTime;
 	int			forceHUDNextFlashTime;
-	qboolean	forceHUDActive;				// Flag to show force hud is off/on
+	bool	forceHUDActive;				// Flag to show force hud is off/on
 
 	// development tool
 	refEntity_t		testModelEntity;
 	char			testModelName[MAX_QPATH];
-	qboolean		testGun;
+	bool		testGun;
 
 	// HUD stuff
 	float			HUDTickFlashTime;
-	qboolean		HUDArmorFlag;
-	qboolean		HUDHealthFlag;
-	qboolean		iconHUDActive;
+	bool		HUDArmorFlag;
+	bool		HUDHealthFlag;
+	bool		iconHUDActive;
 	float			iconHUDPercent;
 	float			iconSelectTime;
 	float			invenSelectTime;
@@ -956,7 +956,7 @@ typedef struct cg_s {
 	chatBoxItem_t		chatItems[MAX_CHATBOX_ITEMS];
 	int					chatItemActive;
 
-	qboolean spawning;
+	bool spawning;
 	int	numSpawnVars;
 	char *spawnVars[MAX_SPAWN_VARS][2];	// key / value pairs
 	int numSpawnVarChars;
@@ -998,7 +998,7 @@ typedef struct cgscreffects_s
 
 	float		music_volume_multiplier;
 	int			music_volume_time;
-	qboolean	music_volume_set;
+	bool	music_volume_set;
 } cgscreffects_t;
 
 extern cgscreffects_t cgScreenEffects;
@@ -1044,7 +1044,7 @@ typedef struct cgs_s {
 	int				serverCommandSequence;	// reliable command stream counter
 	int				processedSnapshotNum;// the number of snapshots cgame has requested
 
-	qboolean		localServer;		// detected on startup by checking sv_running
+	bool		localServer;		// detected on startup by checking sv_running
 
 	// parsed from serverinfo
 	int				showDuelHealths;
@@ -1058,8 +1058,8 @@ typedef struct cgs_s {
 	int				capturelimit;
 	int				timelimit;
 	int				maxclients;
-	qboolean		needpass;
-	qboolean		jediVmerc;
+	bool		needpass;
+	bool		jediVmerc;
 	int				wDisable;
 	int				fDisable;
 
@@ -1071,13 +1071,13 @@ typedef struct cgs_s {
 	int				voteTime;
 	int				voteYes;
 	int				voteNo;
-	qboolean		voteModified;			// beep whenever changed
+	bool		voteModified;			// beep whenever changed
 	char			voteString[MAX_STRING_TOKENS];
 
 	int				teamVoteTime[2];
 	int				teamVoteYes[2];
 	int				teamVoteNo[2];
-	qboolean		teamVoteModified[2];	// beep whenever changed
+	bool		teamVoteModified[2];	// beep whenever changed
 	char			teamVoteString[2][MAX_STRING_TOKENS];
 
 	int				levelStartTime;
@@ -1096,7 +1096,7 @@ typedef struct cgs_s {
 	int				redflag, blueflag;		// flag status from configstrings
 	int				flagStatus;
 
-	qboolean  newHud;
+	bool  newHud;
 
 	// locally derived information from gamestate
 
@@ -1113,9 +1113,9 @@ typedef struct cgs_s {
 
 	int cursorX;
 	int cursorY;
-	qboolean eventHandling;
-	qboolean mouseCaptured;
-	qboolean sizingHud;
+	bool eventHandling;
+	bool mouseCaptured;
+	bool sizingHud;
 	void *capturedItem;
 	qhandle_t activeCursor;
 
@@ -1159,12 +1159,12 @@ void CG_RegisterCvars( void );
 void CG_UpdateCvars( void );
 const char *CG_ConfigString( int index );
 const char *CG_Argv( int arg );
-void CG_StartMusic( qboolean bForceStart );
+void CG_StartMusic( bool bForceStart );
 void CG_UpdateCvars( void );
 int CG_CrosshairPlayer( void );
 int CG_LastAttacker( void );
 void CG_LoadMenus(const char *menuFile);
-void CG_KeyEvent(int key, qboolean down);
+void CG_KeyEvent(int key, bool down);
 void CG_MouseEvent(int x, int y);
 void CG_EventHandling(int type);
 void CG_RankRunFrame( void );
@@ -1183,7 +1183,7 @@ void CG_TestModelPrevSkin_f (void);
 void CG_ZoomDown_f( void );
 void CG_ZoomUp_f( void );
 void CG_AddBufferedSound( sfxHandle_t sfx);
-void CG_DrawActiveFrame( int serverTime, stereoFrame_t stereoView, qboolean demoPlayback );
+void CG_DrawActiveFrame( int serverTime, stereoFrame_t stereoView, bool demoPlayback );
 void CG_TestG2Model_f (void);
 void CG_TestModelSurfaceOnOff_f(void);
 void CG_ListModelSurfaces_f (void);
@@ -1196,8 +1196,8 @@ void CG_DrawPic( float x, float y, float width, float height, qhandle_t hShader 
 void CG_DrawRotatePic( float x, float y, float width, float height,float angle, qhandle_t hShader );
 void CG_DrawRotatePic2( float x, float y, float width, float height,float angle, qhandle_t hShader );
 void CG_DrawString( float x, float y, const char *string, float charWidth, float charHeight, const float *modulate );
-void CG_DrawNumField (int x, int y, int width, int value,int charWidth,int charHeight,int style,qboolean zeroFill);
-void CG_DrawStringExt( int x, int y, const char *string, const float *setColor, qboolean forceColor, qboolean shadow, int charWidth, int charHeight, int maxChars );
+void CG_DrawNumField (int x, int y, int width, int value,int charWidth,int charHeight,int style,bool zeroFill);
+void CG_DrawStringExt( int x, int y, const char *string, const float *setColor, bool forceColor, bool shadow, int charWidth, int charHeight, int maxChars );
 void CG_DrawBigString( int x, int y, const char *s, float alpha );
 void CG_DrawBigStringColor( int x, int y, const char *s, vec4_t color );
 void CG_DrawSmallString( int x, int y, const char *s, float alpha );
@@ -1216,28 +1216,28 @@ void CG_AddLagometerSnapshotInfo( snapshot_t *snap );
 void CG_CenterPrint( const char *str, int y, int charWidth );
 void CG_DrawHead( float x, float y, float w, float h, int clientNum, vec3_t headAngles );
 void CG_DrawActive( stereoFrame_t stereoView );
-void CG_DrawFlagModel( float x, float y, float w, float h, int team, qboolean force2D );
+void CG_DrawFlagModel( float x, float y, float w, float h, int team, bool force2D );
 void CG_DrawTeamBackground( int x, int y, int w, int h, float alpha, int team );
 void CG_OwnerDraw(float x, float y, float w, float h, float text_x, float text_y, int ownerDraw, int ownerDrawFlags, int align, float special, float scale, vec4_t color, qhandle_t shader, int textStyle,int font);
 float CG_GetValue(int ownerDraw);
-qboolean CG_OwnerDrawVisible(int flags);
+bool CG_OwnerDrawVisible(int flags);
 void CG_RunMenuScript(char **args);
-qboolean CG_DeferMenuScript(char **args);
+bool CG_DeferMenuScript(char **args);
 void CG_ShowResponseHead(void);
 void CG_GetTeamColor(vec4_t *color);
 const char *CG_GetGameStatusText(void);
 const char *CG_GetKillerText(void);
 void CG_Draw3DModel( float x, float y, float w, float h, qhandle_t model, void *ghoul2, int g2radius, qhandle_t skin, vec3_t origin, vec3_t angles );
-qboolean CG_YourTeamHasFlag(void);
-qboolean CG_OtherTeamHasFlag(void);
+bool CG_YourTeamHasFlag(void);
+bool CG_OtherTeamHasFlag(void);
 qhandle_t CG_StatusHandle(int task);
-qboolean CG_RagDoll(centity_t *cent, vec3_t forcedAngles);
-qboolean CG_G2TraceCollide(trace_t *tr, const vec3_t mins, const vec3_t maxs, const vec3_t lastValidStart, const vec3_t lastValidEnd);
+bool CG_RagDoll(centity_t *cent, vec3_t forcedAngles);
+bool CG_G2TraceCollide(trace_t *tr, const vec3_t mins, const vec3_t maxs, const vec3_t lastValidStart, const vec3_t lastValidEnd);
 void CG_AddGhoul2Mark(int shader, float size, vec3_t start, vec3_t end, int entnum, vec3_t entposition, float entangle, void *ghoul2, vec3_t scale, int lifeTime);
 void CG_Player( centity_t *cent );
 void CG_ResetPlayerEntity( centity_t *cent );
 void CG_AddRefEntityWithPowerups( refEntity_t *ent, entityState_t *state, int team );
-void CG_NewClientInfo( int clientNum, qboolean entitiesInitialized );
+void CG_NewClientInfo( int clientNum, bool entitiesInitialized );
 sfxHandle_t	CG_CustomSound( int clientNum, const char *soundName );
 void CG_PlayerShieldHit(int entitynum, vec3_t angles, int amount);
 void CG_BuildSolidList( void );
@@ -1256,7 +1256,7 @@ void CG_S_AddRealLoopingSound(int entityNum, const vec3_t origin, const vec3_t v
 void CG_S_StopLoopingSound(int entityNum, sfxHandle_t sfx);
 void CG_S_UpdateLoopingSounds(int entityNum);
 void CG_SetEntitySoundPosition( centity_t *cent );
-void CG_AddPacketEntities( qboolean isPortal );
+void CG_AddPacketEntities( bool isPortal );
 void CG_ManualEntityRender(centity_t *cent);
 void CG_Beam( centity_t *cent );
 void CG_AdjustPositionForMover( const vec3_t in, int moverNum, int fromTime, int toTime, vec3_t out );
@@ -1271,17 +1271,17 @@ void CG_Weapon_f( void );
 void CG_WeaponClean_f( void );
 void CG_RegisterWeapon( int weaponNum);
 void CG_RegisterItemVisuals( int itemNum );
-void CG_FireWeapon( centity_t *cent, qboolean alt_fire );
-void CG_MissileHitWall(int weapon, int clientNum, vec3_t origin, vec3_t dir, impactSound_t soundType, qboolean alt_fire, int charge);
-void CG_MissileHitPlayer( int weapon, vec3_t origin, vec3_t dir, int entityNum, qboolean alt_fire);
+void CG_FireWeapon( centity_t *cent, bool alt_fire );
+void CG_MissileHitWall(int weapon, int clientNum, vec3_t origin, vec3_t dir, impactSound_t soundType, bool alt_fire, int charge);
+void CG_MissileHitPlayer( int weapon, vec3_t origin, vec3_t dir, int entityNum, bool alt_fire);
 void CG_AddViewWeapon (playerState_t *ps);
-void CG_AddPlayerWeapon( refEntity_t *parent, playerState_t *ps, centity_t *cent, int team, vec3_t newAngles, qboolean thirdPerson );
+void CG_AddPlayerWeapon( refEntity_t *parent, playerState_t *ps, centity_t *cent, int team, vec3_t newAngles, bool thirdPerson );
 void CG_DrawWeaponSelect( void );
 void CG_DrawIconBackground(void);
 void CG_OutOfAmmoChange( int oldWeapon );	// should this be in pmove?
 void	CG_InitMarkPolys( void );
 void	CG_AddMarks( void );
-void	CG_ImpactMark( qhandle_t markShader, const vec3_t origin, const vec3_t dir, float orientation, float r, float g, float b, float a, qboolean alphaFade, float radius, qboolean temporary );
+void	CG_ImpactMark( qhandle_t markShader, const vec3_t origin, const vec3_t dir, float orientation, float r, float g, float b, float a, bool alphaFade, float radius, bool temporary );
 void	CG_InitLocalEntities( void );
 localEntity_t	*CG_AllocLocalEntity( void );
 void	CG_AddLocalEntities( void );
@@ -1291,8 +1291,8 @@ void CG_GlassShatter(int entnum, vec3_t dmgPt, vec3_t dmgDir, float dmgRadius, i
 void CG_ScorePlum( int client, vec3_t org, int score );
 void CG_Chunks( int owner, vec3_t origin, const vec3_t normal, const vec3_t mins, const vec3_t maxs, float speed, int numChunks, material_t chunkType, int customChunk, float baseScale );
 void CG_MiscModelExplosion( vec3_t mins, vec3_t maxs, int size, material_t chunkType );
-localEntity_t *CG_MakeExplosion( vec3_t origin, vec3_t dir, qhandle_t hModel, int numframes, qhandle_t shader, int msec, qboolean isSprite, float scale, int flags );// Overloaded in single player
-void CG_SurfaceExplosion( vec3_t origin, vec3_t normal, float radius, float shake_speed, qboolean smoke );
+localEntity_t *CG_MakeExplosion( vec3_t origin, vec3_t dir, qhandle_t hModel, int numframes, qhandle_t shader, int msec, bool isSprite, float scale, int flags );// Overloaded in single player
+void CG_SurfaceExplosion( vec3_t origin, vec3_t normal, float radius, float shake_speed, bool smoke );
 void CG_TestLine( vec3_t start, vec3_t end, int time, unsigned int color, int radius);
 void CG_InitGlass( void );
 void CG_ProcessSnapshots( void );
@@ -1300,15 +1300,15 @@ void CG_LoadingString( const char *s );
 void CG_LoadingItem( int itemNum );
 void CG_LoadingClient( int clientNum );
 void CG_DrawInformation( void );
-qboolean	CG_SpawnString( const char *key, const char *defaultString, char **out );
-qboolean	CG_SpawnFloat( const char *key, const char *defaultString, float *out );
-qboolean	CG_SpawnInt( const char *key, const char *defaultString, int *out );
-qboolean	CG_SpawnBoolean( const char *key, const char *defaultString, qboolean *out );
-qboolean	CG_SpawnVector( const char *key, const char *defaultString, float *out );
+bool	CG_SpawnString( const char *key, const char *defaultString, char **out );
+bool	CG_SpawnFloat( const char *key, const char *defaultString, float *out );
+bool	CG_SpawnInt( const char *key, const char *defaultString, int *out );
+bool	CG_SpawnBoolean( const char *key, const char *defaultString, bool *out );
+bool	CG_SpawnVector( const char *key, const char *defaultString, float *out );
 void		CG_ParseEntitiesFromString( void );
-qboolean CG_DrawOldScoreboard( void );
+bool CG_DrawOldScoreboard( void );
 void CG_DrawOldTourneyScoreboard( void );
-qboolean CG_ConsoleCommand( void );
+bool CG_ConsoleCommand( void );
 void CG_InitConsoleCommands( void );
 void CG_ExecuteNewServerCommands( int latestSequence );
 void CG_ParseServerinfo( void );
@@ -1323,30 +1323,30 @@ void		BG_CycleForce(playerState_t *ps, int direction);
 const char *CG_GetStringEdString(char *refSection, char *refName);
 void FX_TurretProjectileThink(  centity_t *cent, const struct weaponInfo_s *weapon );
 void FX_TurretHitWall( vec3_t origin, vec3_t normal );
-void FX_TurretHitPlayer( vec3_t origin, vec3_t normal, qboolean humanoid );
+void FX_TurretHitPlayer( vec3_t origin, vec3_t normal, bool humanoid );
 void FX_ConcussionHitWall( vec3_t origin, vec3_t normal );
-void FX_ConcussionHitPlayer( vec3_t origin, vec3_t normal, qboolean humanoid );
+void FX_ConcussionHitPlayer( vec3_t origin, vec3_t normal, bool humanoid );
 void FX_ConcussionProjectileThink(  centity_t *cent, const struct weaponInfo_s *weapon );
 void FX_ConcAltShot( vec3_t start, vec3_t end );
 void CG_Spark( vec3_t origin, vec3_t dir );
 void FX_BryarHitWall( vec3_t origin, vec3_t normal );
 void FX_BryarAltHitWall( vec3_t origin, vec3_t normal, int power );
-void FX_BryarHitPlayer( vec3_t origin, vec3_t normal, qboolean humanoid );
-void FX_BryarAltHitPlayer( vec3_t origin, vec3_t normal, qboolean humanoid );
+void FX_BryarHitPlayer( vec3_t origin, vec3_t normal, bool humanoid );
+void FX_BryarAltHitPlayer( vec3_t origin, vec3_t normal, bool humanoid );
 void FX_BlasterProjectileThink( centity_t *cent, const struct weaponInfo_s *weapon );
 void FX_BlasterAltFireThink( centity_t *cent, const struct weaponInfo_s *weapon );
 void FX_BlasterWeaponHitWall( vec3_t origin, vec3_t normal );
-void FX_BlasterWeaponHitPlayer( vec3_t origin, vec3_t normal, qboolean humanoid );
+void FX_BlasterWeaponHitPlayer( vec3_t origin, vec3_t normal, bool humanoid );
 void FX_ForceDrained(vec3_t origin, vec3_t dir);
 void CG_Spark( vec3_t origin, vec3_t dir );
 void FX_BryarHitWall( vec3_t origin, vec3_t normal );
 void FX_BryarAltHitWall( vec3_t origin, vec3_t normal, int power );
-void FX_BryarHitPlayer( vec3_t origin, vec3_t normal, qboolean humanoid );
-void FX_BryarAltHitPlayer( vec3_t origin, vec3_t normal, qboolean humanoid );
+void FX_BryarHitPlayer( vec3_t origin, vec3_t normal, bool humanoid );
+void FX_BryarAltHitPlayer( vec3_t origin, vec3_t normal, bool humanoid );
 void FX_BlasterProjectileThink( centity_t *cent, const struct weaponInfo_s *weapon );
 void FX_BlasterAltFireThink( centity_t *cent, const struct weaponInfo_s *weapon );
 void FX_BlasterWeaponHitWall( vec3_t origin, vec3_t normal );
-void FX_BlasterWeaponHitPlayer( vec3_t origin, vec3_t normal, qboolean humanoid );
+void FX_BlasterWeaponHitPlayer( vec3_t origin, vec3_t normal, bool humanoid );
 void		CG_Init_CG(void);
 void		CG_Init_CGents(void);
 void CG_SetGhoul2Info( refEntity_t *ent, centity_t *cent);
@@ -1363,10 +1363,10 @@ int CG_HandleAppendedSkin( char *modelName );
 void CG_CacheG2AnimInfo( char *modelName );
 const char *CG_GetLocationString( const char *loc );
 float CG_RadiusForCent( centity_t *cent );
-qboolean CG_CalcMuzzlePoint( int entityNum, vec3_t muzzle );
-qboolean CG_CullPointAndRadius( const vec3_t pt, float radius );
+bool CG_CalcMuzzlePoint( int entityNum, vec3_t muzzle );
+bool CG_CullPointAndRadius( const vec3_t pt, float radius );
 void CG_G2ServerBoneAngles(centity_t *cent);
-qboolean CG_ThereIsAMaster(void);
+bool CG_ThereIsAMaster(void);
 void CG_PlayDoorSound( centity_t *cent, int type );
 void CG_PlayDoorLoopSound( centity_t *cent );
 void CG_ChatBox_AddString(char *chatStr);
@@ -1380,6 +1380,6 @@ markPoly_t	*CG_AllocMark( void );
 void CG_AddRadarEnt(centity_t *cent);
 void CG_AddBracketedEnt(centity_t *cent);
 void CG_Disintegration(centity_t *cent, refEntity_t *ent);
-qboolean CG_UsingEWeb(void);
+bool CG_UsingEWeb(void);
 void CG_CalcEntityLerpPositions( centity_t *cent );
 void CG_ActualLoadDeferredPlayers( void );

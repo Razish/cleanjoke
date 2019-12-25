@@ -21,7 +21,7 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "client/cl_cgameapi.h"
-#include "client/cl_local.h"
+#include "client/cl_public.h"
 #include "client/FxScheduler.h"
 #include "game/bg_public.h"
 #include "qcommon/com_cvars.h"
@@ -1043,7 +1043,7 @@ void CTail::CalcNewEndpoint(void)
 CCylinder::CCylinder(void)
 {
 	mRefEnt.reType = RT_CYLINDER;
-	mTraceEnd = qfalse;
+	mTraceEnd = false;
 }
 
 bool CCylinder::Cull(void)
@@ -1226,7 +1226,7 @@ void CEmitter::Draw(void)
 	// Emitters don't draw themselves, but they may need to add an attached model
 	if ( mFlags & FX_ATTACHED_MODEL )
 	{
-		mRefEnt.nonNormalizedAxes = qtrue;
+		mRefEnt.nonNormalizedAxes = true;
 
 		VectorCopy( mOrigin1, mRefEnt.origin );
 

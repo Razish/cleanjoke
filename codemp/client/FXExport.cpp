@@ -33,6 +33,7 @@ int	FX_RegisterEffect(const char *file)
 	return theFxScheduler.RegisterEffect(file, true);
 }
 
+// builds arbitrary perp. right vector, does a cross product to define up
 void FX_PlayEffect( const char *file, vec3_t org, vec3_t fwd, int vol, int rad )
 {
 #ifdef __FXCHECKER
@@ -53,7 +54,8 @@ void FX_PlayEffect( const char *file, vec3_t org, vec3_t fwd, int vol, int rad )
 	theFxScheduler.PlayEffect(file, org, fwd, vol, rad);
 }
 
-void FX_PlayEffectID( int id, vec3_t org, vec3_t fwd, int vol, int rad, qboolean isPortal )
+// builds arbitrary perp. right vector, does a cross product to define up
+void FX_PlayEffectID( int id, vec3_t org, vec3_t fwd, int vol, int rad, bool isPortal )
 {
 #ifdef __FXCHECKER
 	if (_isnan(org[0]) || _isnan(org[1]) || _isnan(org[2]))
@@ -74,9 +76,9 @@ void FX_PlayEffectID( int id, vec3_t org, vec3_t fwd, int vol, int rad, qboolean
 }
 
 void FX_PlayBoltedEffectID( int id, vec3_t org,
-						   const int boltInfo, CGhoul2Info_v *ghoul2, int iLooptime, qboolean isRelative )
+						   const int boltInfo, CGhoul2Info_v *ghoul2, int iLooptime, bool isRelative )
 {
-	theFxScheduler.PlayEffect(id, org, 0, boltInfo, ghoul2, -1, -1, -1, qfalse, iLooptime, !!isRelative  );
+	theFxScheduler.PlayEffect(id, org, 0, boltInfo, ghoul2, -1, -1, -1, false, iLooptime, !!isRelative  );
 }
 
 void FX_PlayEntityEffectID( int id, vec3_t org,
@@ -92,7 +94,7 @@ void FX_PlayEntityEffectID( int id, vec3_t org,
 	theFxScheduler.PlayEffect(id, org, axis, boltInfo, 0, -1, vol, rad );
 }
 
-void FX_AddScheduledEffects( qboolean portal )
+void FX_AddScheduledEffects( bool portal )
 {
 	theFxScheduler.AddScheduledEffects(!!portal);
 }
@@ -102,6 +104,7 @@ void FX_Draw2DEffects( float screenXScale, float screenYScale )
 	theFxScheduler.Draw2DEffects( screenXScale, screenYScale );
 }
 
+// called in CG_Init to purge the fx system.
 int FX_InitSystem( refdef_t* refdef )
 {
 	return FX_Init( refdef );
@@ -112,9 +115,10 @@ void FX_SetRefDefFromCGame( refdef_t* refdef )
 	FX_SetRefDef( refdef );
 }
 
-qboolean FX_FreeSystem( void )
+// ditches all active effects;
+bool FX_FreeSystem( void )
 {
-	return (qboolean)FX_Free( true );
+	return (bool)FX_Free( true );
 }
 
 void FX_AdjustTime( int time )

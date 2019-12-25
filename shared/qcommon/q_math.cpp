@@ -409,12 +409,12 @@ float Q_powf ( float x, int y )
 	return r;
 }
 
-qboolean Q_isnan (float f)
+bool Q_isnan (float f)
 {
 #ifdef _MSC_VER
-	return (qboolean)(_isnan (f) != 0);
+	return (bool)(_isnan (f) != 0);
 #else
-	return (qboolean)(isnan (f) != 0);
+	return (bool)(isnan (f) != 0);
 #endif
 }
 
@@ -500,18 +500,18 @@ float AngleDelta ( float angle1, float angle2 ) {
 
 // Returns false if the triangle is degenrate
 // The normal will point out of the clock for clockwise ordered points
-qboolean PlaneFromPoints( vec4_t plane, const vec3_t a, const vec3_t b, const vec3_t c ) {
+bool PlaneFromPoints( vec4_t plane, const vec3_t a, const vec3_t b, const vec3_t c ) {
 	vec3_t	d1, d2;
 
 	VectorSubtract( b, a, d1 );
 	VectorSubtract( c, a, d2 );
 	CrossProduct( d2, d1, plane );
 	if ( VectorNormalize( plane ) == 0 ) {
-		return qfalse;
+		return false;
 	}
 
 	plane[3] = DotProduct( a, plane );
-	return qtrue;
+	return true;
 }
 
 // From q3mme
@@ -631,7 +631,7 @@ void ProjectPointOnPlane( vec3_t dst, const vec3_t p, const vec3_t normal )
 	dst[2] = p[2] - d * n[2];
 }
 
-qboolean G_FindClosestPointOnLineSegment( const vec3_t start, const vec3_t end, const vec3_t from, vec3_t result )
+bool G_FindClosestPointOnLineSegment( const vec3_t start, const vec3_t end, const vec3_t from, vec3_t result )
 {
 	vec3_t	vecStart2From, vecStart2End, vecEnd2Start, vecEnd2From;
 	float	distEnd2From, distEnd2Result, theta, cos_theta, dot;
@@ -646,7 +646,7 @@ qboolean G_FindClosestPointOnLineSegment( const vec3_t start, const vec3_t end, 
 	{
 		//The perpendicular would be beyond or through the start point
 		VectorCopy( start, result );
-		return qfalse;
+		return false;
 	}
 
 	if ( dot == 1 )
@@ -660,7 +660,7 @@ qboolean G_FindClosestPointOnLineSegment( const vec3_t start, const vec3_t end, 
 		{
 			VectorCopy( end, result );
 		}
-		return qfalse;
+		return false;
 	}
 
 	//Try other end
@@ -672,7 +672,7 @@ qboolean G_FindClosestPointOnLineSegment( const vec3_t start, const vec3_t end, 
 	if ( dot <= 0 )
 	{//The perpendicular would be beyond or through the start point
 		VectorCopy( end, result );
-		return qfalse;
+		return false;
 	}
 
 	if ( dot == 1 )
@@ -685,7 +685,7 @@ qboolean G_FindClosestPointOnLineSegment( const vec3_t start, const vec3_t end, 
 		{
 			VectorCopy( end, result );
 		}
-		return qfalse;
+		return false;
 	}
 
 	//		      /|
@@ -710,7 +710,7 @@ qboolean G_FindClosestPointOnLineSegment( const vec3_t start, const vec3_t end, 
 	VectorMA( end, distEnd2Result, vecEnd2Start, result );
 
 	//perpendicular intersection is between the 2 endpoints
-	return qtrue;
+	return true;
 }
 
 float G_PointDistFromLineSegment( const vec3_t start, const vec3_t end, const vec3_t from )
@@ -1136,21 +1136,21 @@ float DotProduct( const vec3_t vec1, const vec3_t vec2 ) {
 	return vec1[0]*vec2[0] + vec1[1]*vec2[1] + vec1[2]*vec2[2];
 }
 
-qboolean VectorCompare( const vec3_t vec1, const vec3_t vec2 )
+bool VectorCompare( const vec3_t vec1, const vec3_t vec2 )
 {
-	return (qboolean)(vec1[0] == vec2[0] && vec1[1] == vec2[1] && vec1[2] == vec2[2]);
+	return (bool)(vec1[0] == vec2[0] && vec1[1] == vec2[1] && vec1[2] == vec2[2]);
 }
 
-qboolean VectorCompare2( const vec3_t v1, const vec3_t v2 )
+bool VectorCompare2( const vec3_t v1, const vec3_t v2 )
 {
 	if ( v1[0] > (v2[0] + 0.0001f) || v1[0] < (v2[0] - 0.0001f) ||
 			v1[1] > (v2[1] + 0.0001f) || v1[1] < (v2[1] + 0.0001f) ||
 			v1[2] > (v2[2] + 0.0001f) || v1[2] < (v2[2] + 0.0001f) )
 	{
-		return qfalse;
+		return false;
 	}
 
-	return qtrue;
+	return true;
 }
 
 void SnapVector( float *v )

@@ -44,13 +44,13 @@ static void CL_Netchan_Encode( msg_t *msg ) {
 
         msg->bit = 0;
         msg->readcount = 0;
-        msg->oob = (qboolean)0;
+        msg->oob = (bool)0;
 
         serverId = MSG_ReadLong(msg);
 	messageAcknowledge = MSG_ReadLong(msg);
 	reliableAcknowledge = MSG_ReadLong(msg);
 
-        msg->oob = (qboolean)soob;
+        msg->oob = (bool)soob;
         msg->bit = sbit;
         msg->readcount = srdc;
 
@@ -86,11 +86,11 @@ static void CL_Netchan_Decode( msg_t *msg ) {
         sbit = msg->bit;
         soob = msg->oob;
 
-        msg->oob = (qboolean)0;
+        msg->oob = (bool)0;
 
 	reliableAcknowledge = MSG_ReadLong(msg);
 
-        msg->oob = (qboolean)soob;
+        msg->oob = (bool)soob;
         msg->bit = sbit;
         msg->readcount = srdc;
 
@@ -138,14 +138,14 @@ void CL_Netchan_Transmit( netchan_t *chan, msg_t* msg ) {
 extern 	int oldsize;
 int newsize = 0;
 
-qboolean CL_Netchan_Process( netchan_t *chan, msg_t *msg ) {
+bool CL_Netchan_Process( netchan_t *chan, msg_t *msg ) {
 	int ret;
 //	int i;
 //	static		int newsize = 0;
 
 	ret = Netchan_Process( chan, msg );
 	if (!ret)
-		return qfalse;
+		return false;
 	CL_Netchan_Decode( msg );
 //	Huff_Decompress( msg, CL_DECODE_START );
 //	for(i=CL_DECODE_START+msg->readcount;i<msg->cursize;i++) {
@@ -155,5 +155,5 @@ qboolean CL_Netchan_Process( netchan_t *chan, msg_t *msg ) {
 //	}
 	newsize += msg->cursize;
 //	Com_Printf("saved %d to %d (%d%%)\n", (oldsize>>3), newsize, 100-(newsize*100/(oldsize>>3)));
-	return qtrue;
+	return true;
 }
