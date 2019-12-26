@@ -22,14 +22,18 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
 
-// Interpreter.h
+// ======================================================================
+// DEFINE
+// ======================================================================
 
 #define ICARUS_VERSION	1.33
 
 #define MAX_STRING_SIZE	256
 #define	MAX_VAR_NAME	64
 
-typedef float	vector_t[3];
+// ======================================================================
+// ENUM
+// ======================================================================
 
 //If you modify this, you MUST modify in g_ICARUScb.c as well.
 //Token defines
@@ -132,6 +136,10 @@ enum
 	NUM_MESSAGES,
 };
 
+// ======================================================================
+// STRUCT
+// ======================================================================
+
 #if !defined( _GAME ) && !defined( _CGAME ) && !defined( UI_BUILD )
 typedef struct variable_s
 {
@@ -140,10 +148,12 @@ typedef struct variable_s
 	void	*data;
 } variable_t;
 
-typedef std::map< std::string, variable_t * >	variable_m;
-typedef std::vector < variable_t * > variable_v;
+using variable_m = std::map<std::string, variable_t*>;
+using variable_v = std::vector <variable_t*>;
 
-//CInterpreter
+// ======================================================================
+// CLASS
+// ======================================================================
 
 class CInterpreter
 {
@@ -240,5 +250,4 @@ protected:
 	static keywordArray_t	m_typeKeywords[];			//Types
 	static keywordArray_t	m_conditionalKeywords[];	//Conditional
 };
-
-#endif
+#endif // !defined( _GAME ) && !defined( _CGAME ) && !defined( UI_BUILD )

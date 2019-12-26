@@ -29,7 +29,7 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 #include "game/bg_weapons.h"
 #include "game/anims.h"
-#include "rd-common/tr_types.h"
+#include "qcommon/q_shared.h"
 
 // definitions
 

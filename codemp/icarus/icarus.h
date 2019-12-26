@@ -23,18 +23,13 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 #pragma once
 
 // ICARUS Public Header File
+
+// ======================================================================
+// INCLUDE
+// ======================================================================
+
 // we never want to include an icarus file before sharedentity_t is declared.
-
-void *ICARUS_Malloc(int iSize);
-void  ICARUS_Free(void *pMem);
-
 #include "game/g_public.h"
-
-extern class CSequencer	*gSequencers[MAX_GENTITIES];
-extern class CTaskManager	*gTaskManagers[MAX_GENTITIES];
-
-#define STL_ITERATE( a, b )		for ( a = b.begin(); a != b.end(); ++a )
-#define STL_INSERT( a, b )		a.insert( a.end(), b );
 
 #include "icarus/tokenizer.h"
 #include "icarus/blockstream.h"
@@ -42,3 +37,24 @@ extern class CTaskManager	*gTaskManagers[MAX_GENTITIES];
 #include "icarus/sequencer.h"
 #include "icarus/taskmanager.h"
 #include "icarus/instance.h"
+
+// ======================================================================
+// DEFINE
+// ======================================================================
+
+#define STL_ITERATE( a, b )		for ( a = b.begin(); a != b.end(); ++a )
+#define STL_INSERT( a, b )		a.insert( a.end(), b );
+
+// ======================================================================
+// EXTERN VARIABLE
+// ======================================================================
+
+extern class CSequencer* gSequencers[MAX_GENTITIES];
+extern class CTaskManager* gTaskManagers[MAX_GENTITIES];
+
+// ======================================================================
+// FUNCTION
+// ======================================================================
+
+void ICARUS_Free(void* pMem);
+void* ICARUS_Malloc(int iSize);

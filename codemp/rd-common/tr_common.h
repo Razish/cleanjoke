@@ -42,6 +42,63 @@ extern refimport_t ri;
 #endif
 #define MAX_PRIMITIVES 3
 
+// surface geometry should not exceed these limits
+#define	SHADER_MAX_VERTEXES	1000
+#define	SHADER_MAX_INDEXES	(6*SHADER_MAX_VERTEXES)
+
+// .MD3 triangle model file format
+#define MD3_IDENT			(('3'<<24)+('P'<<16)+('D'<<8)+'I')
+#define MD3_VERSION			15
+
+// Light Style Constants
+#define LS_NORMAL		0x00
+#define LS_UNUSED		0xfe
+#define	LS_LSNONE		0xff //rww - changed name because it unhappily conflicts with a lightsaber state name and changing this is just easier
+
+
+typedef struct md3Frame_s
+{
+	vec3_t		bounds[2];
+	vec3_t		localOrigin;
+	float		radius;
+	char		name[16];
+} md3Frame_t;
+
+typedef struct md3Tag_s
+{
+	char		name[MAX_QPATH];	// tag name
+	vec3_t		origin;
+	matrix3_t	axis;
+} md3Tag_t;
+
+//	CHUNK			SIZE
+//	header			sizeof( md3Surface_t )
+//	shaders			sizeof( md3Shader_t ) * numShaders
+//	triangles[0]	sizeof( md3Triangle_t ) * numTriangles
+//	st				sizeof( md3St_t ) * numVerts
+//	XyzNormals		sizeof( md3XyzNormal_t ) * numVerts * numFrames
+typedef struct md3Surface_s
+{
+	int		ident;				//
+
+	char	name[MAX_QPATH];	// polyset name
+
+	int		flags;
+	int		numFrames;			// all surfaces in a model should have the same
+
+	int		numShaders;			// all surfaces in a model should have the same
+	int		numVerts;
+
+	int		numTriangles;
+	int		ofsTriangles;
+
+	int		ofsShaders;			// offset from start of md3Surface_t
+	int		ofsSt;				// texture coords are common for all frames
+	int		ofsXyzNormals;		// numVerts * numFrames
+
+	int		ofsEnd;				// next surface follows
+} md3Surface_t;
+
 // Noise Generation
 
 // Initialize the noise generator.

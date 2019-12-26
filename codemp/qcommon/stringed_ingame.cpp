@@ -931,7 +931,7 @@ const char *SE_Load( const char *psFileName, SE_BOOL bLoadDebug = SE_TRUE, SE_BO
 }
 
 // convenience-function for the main GetString call...
-
+// for convenience, two ways of getting at the same data...
 const char *SE_GetString( const char *psPackageReference, const char *psStringReference)
 {
 	char sReference[256];	// will always be enough, I've never seen one more than about 30 chars long
@@ -941,6 +941,7 @@ const char *SE_GetString( const char *psPackageReference, const char *psStringRe
 	return SE_GetString( Q_strupr(sReference) );
 }
 
+// for convenience, two ways of getting at the same data...
 const char *SE_GetString( const char *psPackageAndStringReference )
 {
 	char sReference[256];	// will always be enough, I've never seen one more than about 30 chars long
@@ -997,6 +998,7 @@ int	SE_GetFlags ( const char *psPackageAndStringReference )
 	return 0;
 }
 
+// general flag functions... (SEP_GetFlagMask() return should be used with SEP_GetFlags() return)
 int SE_GetNumFlags( void )
 {
 	return TheStringPackage.m_vstrFlagNames.size();
@@ -1067,7 +1069,7 @@ int SE_GetNumLanguages(void)
 }
 
 // SE_GetNumLanguages() must have been called before this...
-
+// eg "german"
 const char *SE_GetLanguageName( int iLangIndex )
 {
 	if ( iLangIndex < (int)gvLanguagesAvailable.size() )
@@ -1080,7 +1082,7 @@ const char *SE_GetLanguageName( int iLangIndex )
 }
 
 // SE_GetNumLanguages() must have been called before this...
-
+// eg "strings/german"
 const char *SE_GetLanguageDir( int iLangIndex )
 {
 	if ( iLangIndex < (int)gvLanguagesAvailable.size() )

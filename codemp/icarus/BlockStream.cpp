@@ -67,7 +67,7 @@ void CBlockMember::SetData( const char *data )
 	WriteDataPointer( data, strlen(data)+1 );
 }
 
-void CBlockMember::SetData( vector_t data )
+void CBlockMember::SetData( vec3_t data )
 {
 	WriteDataPointer( data, 3 );
 }
@@ -203,7 +203,7 @@ int CBlock::Write( int member_id, const char *member_data )
 	return true;
 }
 
-int CBlock::Write( int member_id, vector_t member_data )
+int CBlock::Write( int member_id, vec3_t member_data )
 {
 	CBlockMember *bMember;
 
@@ -211,7 +211,7 @@ int CBlock::Write( int member_id, vector_t member_data )
 
 	bMember->SetID( member_id );
 	bMember->SetData( member_data );
-	bMember->SetSize( sizeof(vector_t) );
+	bMember->SetSize( sizeof(vec3_t) );
 
 	AddMember( bMember );
 

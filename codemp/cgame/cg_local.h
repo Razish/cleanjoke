@@ -25,7 +25,6 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 #pragma once
 
 #include "qcommon/q_shared.h"
-#include "rd-common/tr_types.h"
 #include "game/bg_public.h"
 #include "cgame/cg_public.h"
 #include "ui/ui_shared.h"

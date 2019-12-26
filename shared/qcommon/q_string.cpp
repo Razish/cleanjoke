@@ -237,6 +237,7 @@ const char *Q_stristr( const char *s, const char *find )
 	return s;
 }
 
+// strlen that discounts Quake color sequences
 int Q_PrintStrlen( const char *string ) {
 	int			len;
 	const char	*p;
@@ -366,6 +367,8 @@ const char *Q_strchrs( const char *string, const char *search ) {
 #if defined(_MSC_VER)
 // Special wrapper function for Microsoft's broken _vsnprintf() function.
 // MinGW comes with its own snprintf() which is not broken.
+// vsnprintf is ISO/IEC 9899:1999
+// abstracting this to make it portable
 int Q_vsnprintf(char *str, size_t size, const char *format, va_list ap)
 {
 	int retval;

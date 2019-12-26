@@ -22,11 +22,18 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
 
+// ======================================================================
+// INCLUDE
+// ======================================================================
+
 #include "ghoul2/ghoul2_shared.h"
 #include "qcommon/q_shared.h"
 
-#ifdef _G2_GORE
+// ======================================================================
+// DEFINE / STRUCT / CLASS
+// ======================================================================
 
+#ifdef _G2_GORE
 #define MAX_LODS (8)
 struct GoreTextureCoordinates
 {

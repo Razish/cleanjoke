@@ -917,7 +917,7 @@ int CSequencer::EvaluateConditional( CBlock *block )
 {
 	CBlockMember	*bm;
 	char			tempString1[128], tempString2[128];
-	vector_t		vec;
+	vec3_t		vec;
 	int				id, i, oper, memberNum = 0;
 	char			*p1 = NULL, *p2 = NULL;
 	int				t1, t2;
@@ -1006,7 +1006,7 @@ int CSequencer::EvaluateConditional( CBlock *block )
 
 			case TK_VECTOR:
 				{
-					vector_t	vVal;
+					vec3_t	vVal;
 
 					if ( m_ie->I_GetVector( m_ownerID, type, name, vVal ) == false)
 						return false;
@@ -1172,7 +1172,7 @@ int CSequencer::EvaluateConditional( CBlock *block )
 
 			case TK_VECTOR:
 				{
-					vector_t	vVal;
+					vec3_t	vVal;
 
 					if ( m_ie->I_GetVector( m_ownerID, type, name, vVal ) == false)
 						return false;

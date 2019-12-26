@@ -25,10 +25,10 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 typedef unsigned int GLuint;
 
-#include "qcommon/q_files.h"
 #include "rd-common/tr_common.h"
 #include "rd-common/tr_public.h"
 #include "ghoul2/ghoul2_shared.h" //rwwRMG - added
+
 
 #define GL_INDEX_TYPE		GL_UNSIGNED_INT
 typedef unsigned int glIndex_t;

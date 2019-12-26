@@ -495,6 +495,32 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 //rww - conveniently toggle "gore" code, for model decals and stuff.
 #define _G2_GORE
 
+#define	LUMP_ENTITIES		0
+#define	LUMP_SHADERS		1
+#define	LUMP_PLANES			2
+#define	LUMP_NODES			3
+#define	LUMP_LEAFS			4
+#define	LUMP_LEAFSURFACES	5
+#define	LUMP_LEAFBRUSHES	6
+#define	LUMP_MODELS			7
+#define	LUMP_BRUSHES		8
+#define	LUMP_BRUSHSIDES		9
+#define	LUMP_DRAWVERTS		10
+#define	LUMP_DRAWINDEXES	11
+#define	LUMP_FOGS			12
+#define	LUMP_SURFACES		13
+#define	LUMP_LIGHTMAPS		14
+#define	LUMP_LIGHTGRID		15
+#define	LUMP_VISIBILITY		16
+#define LUMP_LIGHTARRAY		17
+#define	HEADER_LUMPS		18
+
+#define	MAXLIGHTMAPS	4
+
+// Must match define in stmparse.h
+#define STYLE_DROPSHADOW	0x80000000
+#define STYLE_BLINK			0x40000000
+
 // ======================================================================
 // UNION
 // ======================================================================
@@ -862,6 +888,15 @@ enum
 	FONT_LARGE,
 	FONT_SMALL2
 };
+
+typedef enum
+{
+	MST_BAD,
+	MST_PLANAR,
+	MST_PATCH,
+	MST_TRIANGLE_SOUP,
+	MST_FLARE
+} mapSurfaceType_t;
 
 // ======================================================================
 // STRUCT
@@ -1716,6 +1751,110 @@ typedef struct stringID_table_s
 	const char	*name;
 	int		id;
 } stringID_table_t;
+
+typedef struct lump_s
+{
+	int		fileofs, filelen;
+} lump_t;
+
+typedef struct dheader_s
+{
+	int			ident;
+	int			version;
+
+	lump_t		lumps[HEADER_LUMPS];
+} dheader_t;
+
+typedef struct dmodel_s
+{
+	float		mins[3], maxs[3];
+	int			firstSurface, numSurfaces;
+	int			firstBrush, numBrushes;
+} dmodel_t;
+
+typedef struct dshader_s
+{
+	char		shader[MAX_QPATH];
+	int			surfaceFlags;
+	int			contentFlags;
+} dshader_t;
+
+// planes x^1 is always the opposite of plane x
+typedef struct dplane_s
+{
+	float		normal[3];
+	float		dist;
+} dplane_t;
+
+typedef struct dnode_s
+{
+	int			planeNum;
+	int			children[2];	// negative numbers are -(leafs+1), not nodes
+	int			mins[3];		// for frustom culling
+	int			maxs[3];
+} dnode_t;
+
+typedef struct dleaf_s
+{
+	int			cluster;			// -1 = opaque cluster (do I still store these?)
+	int			area;
+
+	int			mins[3];			// for frustum culling
+	int			maxs[3];
+
+	int			firstLeafSurface;
+	int			numLeafSurfaces;
+
+	int			firstLeafBrush;
+	int			numLeafBrushes;
+} dleaf_t;
+
+typedef struct dbrushside_s
+{
+	int			planeNum;			// positive plane side faces out of the leaf
+	int			shaderNum;
+	int			drawSurfNum;
+} dbrushside_t;
+
+typedef struct dbrush_s
+{
+	int			firstSide;
+	int			numSides;
+	int			shaderNum;		// the shader that determines the contents flags
+} dbrush_t;
+
+typedef struct drawVert_s
+{
+	vec3_t		xyz;
+	float		st[2];
+	float		lightmap[MAXLIGHTMAPS][2];
+	vec3_t		normal;
+	byte		color[MAXLIGHTMAPS][4];
+} drawVert_t;
+
+typedef struct dsurface_s
+{
+	int			shaderNum;
+	int			fogNum;
+	int			surfaceType;
+
+	int			firstVert;
+	int			numVerts;
+
+	int			firstIndex;
+	int			numIndexes;
+
+	byte		lightmapStyles[MAXLIGHTMAPS], vertexStyles[MAXLIGHTMAPS];
+	int			lightmapNum[MAXLIGHTMAPS];
+	int			lightmapX[MAXLIGHTMAPS], lightmapY[MAXLIGHTMAPS];
+	int			lightmapWidth, lightmapHeight;
+
+	vec3_t		lightmapOrigin;
+	matrix3_t	lightmapVecs;	// for patches, [0] and [1] are lodbounds
+
+	int			patchWidth;
+	int			patchHeight;
+} dsurface_t;
 
 // ======================================================================
 // EXTERN VARIABLE

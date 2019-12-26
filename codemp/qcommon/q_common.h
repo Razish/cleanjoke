@@ -112,6 +112,8 @@ typedef void (*completionFunc_t)(char* args, int argNum);
 #define	CL_ENCODE_START		12
 #define CL_DECODE_START		4
 
+#define BSP_VERSION				1
+
 // ======================================================================
 // ENUM
 // ======================================================================
@@ -272,7 +274,6 @@ extern	fileHandle_t	com_journalDataFile;
 // FUNCTION
 // ======================================================================
 
-
 // MSG
 char *MSG_ReadBigString (msg_t *sb);
 char *MSG_ReadString (msg_t *sb);
@@ -366,7 +367,7 @@ char* Cmd_ArgsFrom(int arg);
 char* Cmd_Argv(int arg);
 char* Cmd_Cmd(void);
 char* Cmd_DescriptionString(const char* cmd_name);
-int	 Cmd_Argc(void);
+int Cmd_Argc(void);
 void Cbuf_AddText(const char* text);
 void Cbuf_Execute(void);
 void Cbuf_ExecuteText(int exec_when, const char* text);

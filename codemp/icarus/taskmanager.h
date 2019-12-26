@@ -22,19 +22,29 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
 
-// Task Manager header file
+// ======================================================================
+// INCLUDE
+// ======================================================================
 
 #include <map>
 #include <string>
 
 #include "icarus/sequencer.h"
+
+// ======================================================================
+// DEFINE
+// ======================================================================
+
 class CSequencer;
 
 #define MAX_TASK_NAME	64
-
 #define TASKFLAG_NORMAL	0x00000000
 
-const int RUNAWAY_LIMIT	= 256;
+constexpr int RUNAWAY_LIMIT	= 256;
+
+// ======================================================================
+// ENUM
+// ======================================================================
 
 enum
 {
@@ -50,7 +60,9 @@ enum
 	TASK_END,
 };
 
-// CTask
+// ======================================================================
+// CLASS
+// ======================================================================
 
 class CTask
 {
@@ -78,8 +90,6 @@ protected:
 	unsigned int	m_timeStamp;
 	CBlock	*m_block;
 };
-
-// CTaskGroup
 
 class CTaskGroup
 {
@@ -113,8 +123,6 @@ public:
 	int		m_numCompleted;
 	int		m_GUID;
 };
-
-// CTaskManager
 
 class CTaskManager
 {
@@ -162,7 +170,7 @@ protected:
 
 	inline bool Check( int targetID, CBlock *block, int memberNum );
 
-	int GetVector( int entID, CBlock *block, int &memberNum, vector_t &value );
+	int GetVector( int entID, CBlock *block, int &memberNum, vec3_t &value );
 	int GetFloat( int entID, CBlock *block, int &memberNum, float &value );
 	int Get( int entID, CBlock *block, int &memberNum, char **value );
 

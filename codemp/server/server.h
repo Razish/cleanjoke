@@ -23,16 +23,47 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
 
+// ======================================================================
+// INCLUDE
+// ======================================================================
+
 #include "qcommon/q_shared.h"
 #include "qcommon/q_common.h"
 #include "game/g_public.h"
 #include "game/bg_public.h"
 #include "rd-common/tr_public.h"
 
-#define	PERS_SCORE				0		// !!! MUST NOT CHANGE, SERVER AND
-										// GAME BOTH REFERENCE !!!
+// ======================================================================
+// DEFINE
+// ======================================================================
 
 #define	MAX_ENT_CLUSTERS	16
+
+#define SERVER_MAXBANS	1024
+
+// ======================================================================
+// ENUM
+// ======================================================================
+
+typedef enum
+{
+	SS_DEAD,			// no map loaded
+	SS_LOADING,			// spawning level entities
+	SS_GAME				// actively running
+} serverState_t;
+
+typedef enum {
+	CS_FREE,		// can be reused for a new connection
+	CS_ZOMBIE,		// client has been disconnected, but don't reuse
+					// connection for a couple seconds
+	CS_CONNECTED,	// has been assigned to a client_t, but no gamestate yet
+	CS_PRIMED,		// gamestate has been sent, but client hasn't sent a usercmd
+	CS_ACTIVE		// client is fully in game
+} clientState_t;
+
+// ======================================================================
+// STRUCT
+// ======================================================================
 
 typedef struct svEntity_s {
 	struct worldSector_s *worldSector;
@@ -45,12 +76,6 @@ typedef struct svEntity_s {
 	int			areanum, areanum2;
 	int			snapshotCounter;	// used to prevent double adding from portal views
 } svEntity_t;
-
-typedef enum {
-	SS_DEAD,			// no map loaded
-	SS_LOADING,			// spawning level entities
-	SS_GAME				// actively running
-} serverState_t;
 
 typedef struct server_s {
 	serverState_t	state;
@@ -105,17 +130,8 @@ typedef struct clientSnapshot_s {
 	int				messageSize;		// used to rate drop packets
 } clientSnapshot_t;
 
-typedef enum {
-	CS_FREE,		// can be reused for a new connection
-	CS_ZOMBIE,		// client has been disconnected, but don't reuse
-					// connection for a couple seconds
-	CS_CONNECTED,	// has been assigned to a client_t, but no gamestate yet
-	CS_PRIMED,		// gamestate has been sent, but client hasn't sent a usercmd
-	CS_ACTIVE		// client is fully in game
-} clientState_t;
-
 // struct to hold demo data for a single demo
-typedef struct {
+typedef struct demoInfo_s {
 	char		demoName[MAX_OSPATH];
 	bool	demorecording;
 	bool	demowaiting;	// don't record until a non-delta message is sent
@@ -206,26 +222,14 @@ typedef struct serverStatic_s {
 	bool	gameStarted;				// gvm is loaded
 } serverStatic_t;
 
-#define SERVER_MAXBANS	1024
 // Structure for managing bans
 typedef struct serverBan_s {
 	netadr_t ip;
 	// For a CIDR-Notation type suffix
 	int subnet;
-
 	bool isexception;
 } serverBan_t;
 
-extern	serverStatic_t	svs;				// persistant server info across maps
-extern	server_t		sv;					// cleared each map
-
-//FIXME: dedi server probably can't have this..
-extern	refexport_t		*re;					// interface to refresh .dll
-
-extern	serverBan_t serverBans[SERVER_MAXBANS];
-extern	int serverBansCount;
-
-// sv_main.c
 typedef struct leakyBucket_s leakyBucket_t;
 struct leakyBucket_s {
 	netadrtype_t	type;
@@ -242,147 +246,100 @@ struct leakyBucket_s {
 	leakyBucket_t *prev, *next;
 };
 
+// ======================================================================
+// EXTERN VARIABLE
+// ======================================================================
+
+extern	serverBan_t serverBans[SERVER_MAXBANS];
+extern	int serverBansCount;
+
 extern leakyBucket_t outboundLeakyBucket;
 
-bool SVC_RateLimit( leakyBucket_t *bucket, int burst, int period );
-bool SVC_RateLimitAddress( netadr_t from, int burst, int period );
-void SV_FinalMessage (char *message);
-void QDECL SV_SendServerCommand( client_t *cl, const char *fmt, ...);
+extern	serverStatic_t	svs;				// persistant server info across maps
+extern	server_t		sv;					// cleared each map
 
-void SV_AddOperatorCommands (void);
-void SV_RemoveOperatorCommands (void);
+//FIXME: dedi server probably can't have this..
+extern	refexport_t* re; // interface to refresh .dll
 
-void SV_MasterHeartbeat (void);
-void SV_MasterShutdown (void);
+// ======================================================================
+// FUNCTION
+// ======================================================================
 
-// sv_init.c
-void SV_SetConfigstring( int index, const char *val );
-void SV_GetConfigstring( int index, char *buffer, int bufferSize );
-void SV_UpdateConfigstrings( client_t *client );
-
-void SV_SetUserinfo( int index, const char *val );
-void SV_GetUserinfo( int index, char *buffer, int bufferSize );
-
-void SV_ChangeMaxClients( void );
-void SV_SpawnServer( char *server, bool killBots, ForceReload_e eForceReload );
-
-// sv_challenge.cpp
+bool SV_inPVS(const vec3_t p1, const vec3_t p2);
+bool SV_Netchan_Process(client_t* client, msg_t* msg);
+bool SV_VerifyChallenge(int receivedChallenge, netadr_t from);
+bool SVC_RateLimit(leakyBucket_t* bucket, int burst, int period);
+bool SVC_RateLimitAddress(netadr_t from, int burst, int period);
+char* SV_ExpandNewlines(char* in);
+clipHandle_t SV_ClipHandleForEntity(const sharedEntity_t* ent);
+const char* SV_GetStringEdString(char* refSection, char* refName);
+int BotImport_DebugPolygonCreate(int color, int numPoints, vec3_t* points);
+int SV_AreaEntities(const vec3_t mins, const vec3_t maxs, int* entityList, int maxcount);
+int SV_CreateChallenge(netadr_t from);
+int SV_PointContents(const vec3_t p, int passEntityNum);
+int	SV_BotAllocateClient(void);
+int	SV_BotGetConsoleMessage(int client, char* buf, int size);
+int	SV_BotGetSnapshotEntity(int client, int ent);
+int	SV_NumForGentity(sharedEntity_t* ent);
+playerState_t* SV_GameClientNum(int num);
+sharedEntity_t* SV_GEntityForSvEntity(svEntity_t* svEnt);
+sharedEntity_t* SV_GentityNum(int num);
+svEntity_t* SV_SvEntityForGentity(sharedEntity_t* gEnt);
+void Bot_FreeMemoryGame(void* ptr);
+void BotImport_DebugPolygonDelete(int id);
+void QDECL SV_SendServerCommand(client_t* cl, const char* fmt, ...);
+void SV_AddOperatorCommands(void);
+void SV_AddServerCommand(client_t* client, const char* cmd);
+void SV_AutoRecordDemo(client_t* cl);
+void SV_BeginAutoRecordDemos();
+void SV_BotCalculatePaths(int /*rmg*/);
+void SV_BotFrame(int time);
+void SV_BotFreeClient(int clientNum);
+void SV_BotInitBotLib(void);
+void SV_BotInitCvars(void);
+void SV_BotWaypointReception(int wpnum, wpobject_t** wps);
 void SV_ChallengeInit();
 void SV_ChallengeShutdown();
-int SV_CreateChallenge(netadr_t from);
-bool SV_VerifyChallenge(int receivedChallenge, netadr_t from);
-
-// sv_client.c
-void SV_GetChallenge( netadr_t from );
-
-void SV_DirectConnect( netadr_t from );
-
-void SV_SendClientMapChange( client_t *client );
-void SV_ExecuteClientMessage( client_t *cl, msg_t *msg );
-void SV_UserinfoChanged( client_t *cl );
-
-void SV_ClientEnterWorld( client_t *client, usercmd_t *cmd );
-void SV_DropClient( client_t *drop, const char *reason );
-
-void SV_ExecuteClientCommand( client_t *cl, const char *s, bool clientOK );
-void SV_ClientThink (client_t *cl, usercmd_t *cmd);
-
-void SV_WriteDownloadToClient( client_t *cl , msg_t *msg );
-
-// sv_ccmds.c
-void SV_Heartbeat_f( void );
-void SV_RecordDemo( client_t *cl, char *demoName );
-void SV_StopRecordDemo( client_t *cl );
-void SV_AutoRecordDemo( client_t *cl );
+void SV_ChangeMaxClients(void);
+void SV_ClearWorld(void);
+void SV_ClientEnterWorld(client_t* client, usercmd_t* cmd);
+void SV_ClientThink(client_t* cl, usercmd_t* cmd);
+void SV_ClipToEntity(trace_t* trace, const vec3_t start, const vec3_t mins, const vec3_t maxs, const vec3_t end, int entityNum, int contentmask, int capsule);
+void SV_CreateClientGameStateMessage(client_t* client, msg_t* msg);
+void SV_DirectConnect(netadr_t from);
+void SV_DropClient(client_t* drop, const char* reason);
+void SV_ExecuteClientCommand(client_t* cl, const char* s, bool clientOK);
+void SV_ExecuteClientMessage(client_t* cl, msg_t* msg);
+void SV_FinalMessage(char* message);
+void SV_GetChallenge(netadr_t from);
+void SV_GetConfigstring(int index, char* buffer, int bufferSize);
+void SV_GetUserinfo(int index, char* buffer, int bufferSize);
+void SV_Heartbeat_f(void);
+void SV_InitGameProgs(void);
+void SV_LinkEntity(sharedEntity_t* ent);
+void SV_MasterHeartbeat(void);
+void SV_MasterShutdown(void);
+void SV_Netchan_Transmit(client_t* client, msg_t* msg);	//int length, const byte *data );
+void SV_Netchan_TransmitNextFragment(netchan_t* chan);
+void SV_RecordDemo(client_t* cl, char* demoName);
+void SV_RemoveOperatorCommands(void);
+void SV_SectorList_f(void);
+void SV_SendClientGameState(client_t* client);
+void SV_SendClientMapChange(client_t* client);
+void SV_SendClientMessages(void);
+void SV_SendClientSnapshot(client_t* client);
+void SV_SendMessageToClient(msg_t* msg, client_t* client);
+void SV_SetConfigstring(int index, const char* val);
+void SV_SetUserinfo(int index, const char* val);
+void SV_SpawnServer(char* server, bool killBots, ForceReload_e eForceReload);
 void SV_StopAutoRecordDemos();
-void SV_BeginAutoRecordDemos();
-
-// sv_snapshot.c
-void SV_AddServerCommand( client_t *client, const char *cmd );
-void SV_UpdateServerCommandsToClient( client_t *client, msg_t *msg );
-void SV_WriteFrameToClient (client_t *client, msg_t *msg);
-void SV_SendMessageToClient( msg_t *msg, client_t *client );
-void SV_SendClientMessages( void );
-void SV_SendClientSnapshot( client_t *client );
-
-// sv_game.c
-int	SV_NumForGentity( sharedEntity_t *ent );
-sharedEntity_t *SV_GentityNum( int num );
-playerState_t *SV_GameClientNum( int num );
-svEntity_t	*SV_SvEntityForGentity( sharedEntity_t *gEnt );
-sharedEntity_t *SV_GEntityForSvEntity( svEntity_t *svEnt );
-void		SV_InitGameProgs ( void );
-bool	SV_inPVS (const vec3_t p1, const vec3_t p2);
-
-// sv_bot.c
-void		SV_BotFrame( int time );
-int			SV_BotAllocateClient(void);
-void		SV_BotFreeClient( int clientNum );
-
-void		SV_BotInitCvars(void);
-int			SV_BotGetSnapshotEntity( int client, int ent );
-int			SV_BotGetConsoleMessage( int client, char *buf, int size );
-
-void *Bot_GetMemoryGame(int size);
-void Bot_FreeMemoryGame(void *ptr);
-
-int BotImport_DebugPolygonCreate(int color, int numPoints, vec3_t *points);
-void BotImport_DebugPolygonDelete(int id);
-
-// high level object sorting to reduce interaction tests
-
-void SV_ClearWorld (void);
-// called after the world model has been loaded, before linking any entities
-
-void SV_UnlinkEntity( sharedEntity_t *ent );
-// call before removing an entity, and before trying to move one,
-// so it doesn't clip against itself
-
-void SV_LinkEntity( sharedEntity_t *ent );
-// Needs to be called any time an entity changes origin, mins, maxs,
-// or solid.  Automatically unlinks if needed.
-// sets ent->v.absmin and ent->v.absmax
-// sets ent->leafnums[] for pvs determination even if the entity
-// is not solid
-
-clipHandle_t SV_ClipHandleForEntity( const sharedEntity_t *ent );
-
-void SV_SectorList_f( void );
-
-int SV_AreaEntities( const vec3_t mins, const vec3_t maxs, int *entityList, int maxcount );
-// fills in a table of entity numbers with entities that have bounding boxes
-// that intersect the given area.  It is possible for a non-axial bmodel
-// to be returned that doesn't actually intersect the area on an exact
-// test.
-// returns the number of pointers filled in
-// The world entity is never returned in this list.
-
-int SV_PointContents( const vec3_t p, int passEntityNum );
-// returns the CONTENTS_* value from the world and all entities at the given point.
-
-void SV_Trace( trace_t *results, const vec3_t start, const vec3_t mins, const vec3_t maxs, const vec3_t end, int passEntityNum, int contentmask, int capsule, int traceFlags, int useLod );
-// mins and maxs are relative
-
-// if the entire move stays in a solid volume, trace.allsolid will be set,
-// trace.startsolid will be set, and trace.fraction will be 0
-
-// if the starting point is in a solid, it will be allowed to move out
-// to an open area
-
-// passEntityNum is explicitly excluded from clipping checks (normally ENTITYNUM_NONE)
-
-void SV_ClipToEntity( trace_t *trace, const vec3_t start, const vec3_t mins, const vec3_t maxs, const vec3_t end, int entityNum, int contentmask, int capsule );
-// clip to a specific entity
-
-// sv_net_chan.c
-void SV_Netchan_Transmit( client_t *client, msg_t *msg);	//int length, const byte *data );
-void SV_Netchan_TransmitNextFragment( netchan_t *chan );
-bool SV_Netchan_Process( client_t *client, msg_t *msg );
-char	*SV_ExpandNewlines( char *in );
-void SV_CreateClientGameStateMessage( client_t *client, msg_t *msg );
-const char *SV_GetStringEdString(char *refSection, char *refName);
-void SV_SendClientGameState( client_t *client );
-void SV_BotInitBotLib(void);
-void SV_WriteDemoMessage( client_t *cl, msg_t *msg, int headerBytes );
-void SV_BotWaypointReception(int wpnum, wpobject_t **wps);
-void SV_BotCalculatePaths( int /*rmg*/ );
+void SV_StopRecordDemo(client_t* cl);
+void SV_Trace(trace_t* results, const vec3_t start, const vec3_t mins, const vec3_t maxs, const vec3_t end, int passEntityNum, int contentmask, int capsule, int traceFlags, int useLod);
+void SV_UnlinkEntity(sharedEntity_t* ent);
+void SV_UpdateConfigstrings(client_t* client);
+void SV_UpdateServerCommandsToClient(client_t* client, msg_t* msg);
+void SV_UserinfoChanged(client_t* cl);
+void SV_WriteDemoMessage(client_t* cl, msg_t* msg, int headerBytes);
+void SV_WriteDownloadToClient(client_t* cl, msg_t* msg);
+void SV_WriteFrameToClient(client_t* client, msg_t* msg);
+void* Bot_GetMemoryGame(int size);

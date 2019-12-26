@@ -22,13 +22,19 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
 
-// ICARUS Intance header
+// ======================================================================
+// INCLUDE
+// ======================================================================
 
 #include "icarus/blockstream.h"
 #include "icarus/interface.h"
 #include "icarus/taskmanager.h"
 #include "icarus/sequence.h"
 #include "icarus/sequencer.h"
+
+// ======================================================================
+// CLASS
+// ======================================================================
 
 class ICARUS_Instance
 {
@@ -86,7 +92,6 @@ protected:
 	signal_m			m_signals;
 
 #ifdef _DEBUG
-
 	int	m_DEBUG_NumSequencerAlloc;
 	int	m_DEBUG_NumSequencerFreed;
 	int m_DEBUG_NumSequencerResidual;
@@ -94,7 +99,5 @@ protected:
 	int	m_DEBUG_NumSequenceAlloc;
 	int	m_DEBUG_NumSequenceFreed;
 	int m_DEBUG_NumSequenceResidual;
-
 #endif
-
 };

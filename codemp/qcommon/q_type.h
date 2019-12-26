@@ -64,4 +64,4 @@ using cvarHandle_t = int;
 
 using color4ub_t = byte[4];
 
-typedef unsigned memtag_t;
+using memtag_t = unsigned;

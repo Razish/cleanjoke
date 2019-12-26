@@ -592,38 +592,3 @@ int ICARUS_LinkEntity( int entID, CSequencer *sequencer, CTaskManager *taskManag
 
 	return true;
 }
-
-void Svcmd_ICARUS_f( void )
-{
-	//rwwFIXMEFIXME: Do something with this for debugging purposes at some point.
-	/*
-	char	*cmd = Cmd_Argv( 1 );
-
-	if ( Q_stricmp( cmd, "log" ) == 0 )
-	{
-		//g_ICARUSDebug->integer = WL_DEBUG;
-		if ( VALIDSTRING( Cmd_Argv( 2 ) ) )
-		{
-			sharedEntity_t	*ent = G_Find( NULL, FOFS( script_targetname ), gi.argv(2) );
-
-			if ( ent == NULL )
-			{
-				Com_Printf( "Entity \"%s\" not found!\n", gi.argv(2) );
-				return;
-			}
-
-			//Start logging
-			Com_Printf("Logging ICARUS info for entity %s\n", gi.argv(2) );
-
-			ICARUS_entFilter		= ( ent->s.number == ICARUS_entFilter ) ? -1 : ent->s.number;
-
-			return;
-		}
-
-		Com_Printf("Logging ICARUS info for all entities\n");
-
-		return;
-	}
-	*/
-	return;
-}

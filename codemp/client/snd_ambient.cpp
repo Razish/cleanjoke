@@ -26,7 +26,7 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 #include "client/snd_ambient.h"
 #include "client/snd_local.h"
 
-static const int MAX_SET_VOLUME =	255;
+static constexpr int MAX_SET_VOLUME = 255;
 
 static void AS_GetGeneralSet( ambientSet_t & );
 static void AS_GetLocalSet( ambientSet_t & );

@@ -342,7 +342,7 @@ int CTaskManager::GetFloat( int entID, CBlock *block, int &memberNum, float &val
 	return true;
 }
 
-int CTaskManager::GetVector( int entID, CBlock *block, int &memberNum, vector_t &value )
+int CTaskManager::GetVector( int entID, CBlock *block, int &memberNum, vec3_t &value )
 {
 	char	*name;
 	int		type, i;
@@ -427,7 +427,7 @@ int CTaskManager::GetVector( int entID, CBlock *block, int &memberNum, vector_t 
 int CTaskManager::Get( int entID, CBlock *block, int &memberNum, char **value )
 {
 	static	char	tempBuffer[128];	//FIXME: EEEK!
-	vector_t		vector;
+	vec3_t		vector;
 	char			*name, *tagName;
 	float			tagLookup;
 	int				type;
@@ -476,7 +476,7 @@ int CTaskManager::Get( int entID, CBlock *block, int &memberNum, char **value )
 
 		case TK_VECTOR:
 			{
-				vector_t	vval;
+				vec3_t	vval;
 
 				if ( (m_owner->GetInterface())->I_GetVector( entID, type, name, vval )  == false )
 				{
@@ -558,7 +558,7 @@ int CTaskManager::Get( int entID, CBlock *block, int &memberNum, char **value )
 	}
 	else if ( bm->GetID() == TK_VECTOR )
 	{
-		vector_t	vval;
+		vec3_t	vval;
 
 		memberNum++;
 
@@ -1035,7 +1035,7 @@ int CTaskManager::Sound( CTask *task )
 
 int CTaskManager::Rotate( CTask *task )
 {
-	vector_t	vector;
+	vec3_t	vector;
 	CBlock		*block = task->GetBlock();
 	char		*tagName;
 	float		tagLookup, duration;
@@ -1092,7 +1092,7 @@ int CTaskManager::Camera( CTask *task )
 {
 	interface_export_t	*ie = ( m_owner->GetInterface() );
 	CBlock		*block = task->GetBlock();
-	vector_t	vector, vector2;
+	vec3_t	vector, vector2;
 	float		type, fVal, fVal2, fVal3;
 	char		*sVal;
 	int			memberNum = 0;
@@ -1218,7 +1218,7 @@ int CTaskManager::Camera( CTask *task )
 
 int CTaskManager::Move( CTask *task )
 {
-	vector_t	vector, vector2;
+	vec3_t	vector, vector2;
 	CBlock		*block = task->GetBlock();
 	float		duration;
 	int			memberNum = 0;

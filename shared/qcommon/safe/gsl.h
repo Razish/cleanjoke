@@ -1,7 +1,15 @@
 #pragma once
 
+// ======================================================================
+// INCLUDE
+// ======================================================================
+
 // central point of include to simplify possible future swap for Microsoft's implementation
 #include <gsl/gsl-lite.h>
+
+// ======================================================================
+// DEFINE / FUNCTION
+// ======================================================================
 
 // the default cstring_view constructor from string literals includes the terminating null; this one does not.
 #if defined( _MSC_VER ) && _MSC_VER < 1900

@@ -25,9 +25,6 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 #include "qcommon/com_cvar.h"
 #include "qcommon/com_cvars.h"
 #include "qcommon/game_version.h"
-#include "qcommon/q_platform.h"
-#include "qcommon/q_shared.h"
-#include "qcommon/q_common.h"
 
 #ifdef _DEBUG
 cvar_t *fx_freeze;

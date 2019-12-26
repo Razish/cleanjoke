@@ -23,11 +23,11 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
 
-#include "qcommon/q_files.h"
 #include "rd-common/tr_public.h"
 #include "rd-common/tr_common.h"
 #include "ghoul2/ghoul2_shared.h" //rwwRMG - added
 #include "rd-vanilla/qgl.h"
+#include "rd-common/tr_types.h"
 
 #define GL_INDEX_TYPE		GL_UNSIGNED_INT
 typedef unsigned int glIndex_t;
@@ -43,6 +43,50 @@ typedef unsigned int glIndex_t;
 //#define MAX_SHADER_STATES 2048
 #define MAX_STATES_PER_SHADER 32
 #define MAX_STATE_NAME 32
+
+// vertex scales
+#define	MD3_XYZ_SCALE		(1.0/64)
+
+// Must match define in stmparse.h
+#define	SET_MASK			0x00ffffff
+
+typedef struct mapVert_s
+{
+	vec3_t		xyz;
+	float		st[2];
+	float		lightmap[MAXLIGHTMAPS][2];
+	vec3_t		normal;
+	byte		color[MAXLIGHTMAPS][4];
+} mapVert_t;
+
+typedef struct md3Shader_s
+{
+	char			name[MAX_QPATH];
+	int				shaderIndex;	// for in-game use
+} md3Shader_t;
+
+typedef struct md3Triangle_s
+{
+	int			indexes[3];
+} md3Triangle_t;
+
+typedef struct md3St_s
+{
+	float		st[2];
+} md3St_t;
+
+typedef struct md3XyzNormal_s
+{
+	short		xyz[3];
+	short		normal;
+} md3XyzNormal_t;
+
+typedef struct dfog_s
+{
+	char		shader[MAX_QPATH];
+	int			brushNum;
+	int			visibleSide;	// the brush side that ray tests need to clip against (-1 == none)
+} dfog_t;
 
 typedef enum
 {

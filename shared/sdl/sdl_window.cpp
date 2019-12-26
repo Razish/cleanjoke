@@ -86,7 +86,7 @@ const vidmode_t r_vidModes[] = {
     { "Mode 11: 856x480 (wide)", 856,	 480 },
     { "Mode 12: 2400x600(surround)",2400,600 }
 };
-static const int	s_numVidModes = ARRAY_LEN( r_vidModes );
+static const int s_numVidModes = ARRAY_LEN( r_vidModes );
 
 #define R_MODE_FALLBACK (4) // 640x480
 

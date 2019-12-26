@@ -22,19 +22,30 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
 
+// ======================================================================
+// INCLUDE
+// ======================================================================
+
 #include "qcommon/q_shared.h"	//needs to be in here for entityState_t
 #include "server/server.h"
 
 #include <vector>
 #include <map>
 
-// ROFF Defines
+// ======================================================================
+// DEFINE
+// ======================================================================
+
 #define ROFF_VERSION				1
 #define ROFF_NEW_VERSION			2
 #define ROFF_STRING					"ROFF"
 #define ROFF_SAMPLE_RATE			10	// 10hz
 #define ROFF_AUTO_FIX_BAD_ANGLES	// exporter can mess up angles,
-									//	defining this attempts to detect and fix these problems
+									// defining this attempts to detect and fix these problems
+
+// ======================================================================
+// CLASS
+// ======================================================================
 
 // The CROFFSystem object provides all of the functionality of ROFF caching, playback, and clean-up, plus some useful debug features.
 class CROFFSystem
@@ -167,5 +178,9 @@ public:
 	void		UpdateEntities(bool isClient);			// applys roff data to roffing entities.
 
 }; // class CROFFSystem
+
+// ======================================================================
+// EXTERN VARIABLE
+// ======================================================================
 
 extern CROFFSystem theROFFSystem;
