@@ -115,13 +115,13 @@ typedef enum {
 	F_PARM16			// Special case for parms
 } fieldtype_t;
 
-typedef struct field_s {
+typedef struct gfield_s {
 	const char	*name;
 	size_t		ofs;
 	fieldtype_t	type;
-} field_t;
+} gfield_t;
 
-const field_t fields[] = {
+const gfield_t fields[] = {
 	{ "alliedteam",         FOFS( alliedTeam ),                  F_INT },//for misc_turrets
 	{ "angerscript",        FOFS( behaviorSet[BSET_ANGER] ),     F_STRING },//name of script to run
 	{ "angle",              FOFS( s.angles ),                    F_ANGLEHACK },
@@ -476,18 +476,18 @@ char *G_NewString_Safe( const char *string )
 }
 
 static int fieldcmp( const void *a, const void *b ) {
-	return Q_stricmp( (const char *)a, ((field_t*)b)->name );
+	return Q_stricmp( (const char *)a, ((gfield_t*)b)->name );
 }
 
 // Takes a key/value pair and sets the binary values in a gentity
 void G_ParseField( const char *key, const char *value, gentity_t *ent )
 {
-	field_t	*f;
+	gfield_t	*f;
 	byte	*b;
 	float	v;
 	vec3_t	vec;
 
-	f = (field_t *)Q_LinearSearch( key, fields, ARRAY_LEN( fields ), sizeof( field_t ), fieldcmp );
+	f = (gfield_t *)Q_LinearSearch( key, fields, ARRAY_LEN( fields ), sizeof( gfield_t ), fieldcmp );
 	if ( f )
 	{// found it
 		b = (byte *)ent;

@@ -23,7 +23,15 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
 
+// ======================================================================
+// INCLUDE
+// ======================================================================
+
 #include <cstdint>
+
+// ======================================================================
+// DEFINE
+// ======================================================================
 
 using byte = unsigned char;
 using word = unsigned short;
@@ -55,3 +63,5 @@ using matrix3_t = vec3_t[3];
 using cvarHandle_t = int;
 
 using color4ub_t = byte[4];
+
+typedef unsigned memtag_t;

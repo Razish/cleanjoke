@@ -1522,6 +1522,7 @@ float S_GetSampleLengthInMilliSeconds( sfxHandle_t sfxHandle)
 }
 
 // If we are about to perform file access, clear the buffer so sound doesn't stutter.
+// call before filesystem access
 void S_ClearSoundBuffer( void ) {
 	int		clear;
 

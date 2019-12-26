@@ -25,6 +25,7 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 #include "qcommon/cm_public.h"
 #include "qcommon/com_cvar.h"
 #include "qcommon/com_cvars.h"
+#include "sys/sys_public.h"
 
 // Delta encode a client frame onto the network channel
 // A normal server packet will look like:

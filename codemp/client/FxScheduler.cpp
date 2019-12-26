@@ -27,6 +27,7 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 #include "game/bg_public.h"
 #include "qcommon/com_cvars.h"
 #include "qcommon/q_shared.h"
+#include "qcommon/q_math.h"
 
 #include <algorithm>
 #include <cmath>

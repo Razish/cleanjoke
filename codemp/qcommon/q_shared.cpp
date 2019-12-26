@@ -443,6 +443,7 @@ bool COM_ParseVec4( const char **buffer, vec4_t *c)
 	return false;
 }
 
+// data is an in/out parm, returns a parsed out token
 void COM_MatchToken( const char **buf_p, char *match ) {
 	char	*token;
 

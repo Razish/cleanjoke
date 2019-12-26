@@ -26,6 +26,7 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 #include "server/server.h"
 #include "qcommon/stringed_ingame.h"
+#include "sys/sys_public.h"
 
 #ifdef USE_INTERNAL_ZLIB
 #include "zlib/zlib.h"

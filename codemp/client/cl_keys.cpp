@@ -29,6 +29,7 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 #include "client/snd_public.h"
 #include "qcommon/com_cvar.h"
 #include "qcommon/com_cvars.h"
+#include "qcommon/q_common.h"
 #include "qcommon/stringed_ingame.h"
 
 /*
@@ -991,6 +992,7 @@ void Key_Bind_f( void ) {
 }
 
 // Writes lines containing "bind key value"
+// for writing the config files
 void Key_WriteBindings( fileHandle_t f ) {
 	FS_Printf( f, "unbindall\n" );
 	for ( size_t i=0; i<MAX_KEYS; i++ ) {
@@ -1048,6 +1050,8 @@ static void Key_CompleteBind( char *args, int argNum ) {
 	}
 }
 
+// the keyboard binding interface must be setup before execing
+// config files, but the rest of client startup will happen later
 void CL_InitKeyCommands( void ) {
 	// register our functions
 	Cmd_AddCommand( "bind", Key_Bind_f, "Bind a key to a console command" );
@@ -1273,6 +1277,7 @@ void CL_KeyEvent (int key, bool down, unsigned time) {
 }
 
 // Normal keyboard characters, already shifted / capslocked / etc
+// char events are for field typing, not game control
 void CL_CharEvent( int key ) {
 	// delete is not a printable character and is otherwise handled by Field_KeyDownEvent
 	if ( key == 127 )

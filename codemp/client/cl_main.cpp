@@ -462,6 +462,7 @@ void CL_ShutdownAll( bool shutdownRef ) {
 
 // Called by CL_MapLoading, CL_Connect_f, CL_PlayDemo_f, and CL_ParseGamestate the only ways a client gets into a game
 // Also called by Com_Error
+// dump all memory on an error
 void CL_FlushMemory( void ) {
 
 	// shutdown all the client stuff
@@ -539,6 +540,11 @@ static void CL_CheckForResend( void ) {
 
 // A local server is starting to load a map, so update the screen to let the user know about it, then dump all client
 //	memory on the hunk from cgame, ui, and renderer
+//
+// do a screen update before starting to load a map
+// when the server is going to load a new map, the entire hunk
+// will be cleared, so the client must shutdown cgame, ui, and
+// the renderer
 void CL_MapLoading( void ) {
 	if ( !cl_running->integer ) {
 		return;
@@ -1931,6 +1937,7 @@ void CL_InitRenderer( void ) {
 
 // After the server has cleared the hunk, these will need to be restarted
 // This is the only place that any of these functions are called from
+// start all the client stuff using the hunk
 void CL_StartHunkUsers( void ) {
 	if (!cl_running) {
 		return;
@@ -2422,6 +2429,7 @@ void CL_Shutdown( void ) {
 
 }
 
+// returns true if connected to a server
 bool CL_ConnectedToRemoteServer( void ) {
 	return (bool)( sv_running && !sv_running->integer && cls.state >= CA_CONNECTED && !clc.demoplaying );
 }

@@ -25,6 +25,7 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 #include "qcommon/q_common.h"
 #include "qcommon/com_cvar.h"
 #include "qcommon/com_cvars.h"
+#include "sys/sys_public.h"
 
 #ifdef _WIN32
 	#include <winsock.h>
@@ -194,6 +195,7 @@ static bool Sys_StringToSockaddr( const char *s, struct sockaddr_in *sadr )
 	return true;
 }
 
+//Does NOT parse port numbers, only base addresses.
 bool Sys_StringToAdr( const char *s, netadr_t *a ) {
 	struct sockaddr_in sadr;
 

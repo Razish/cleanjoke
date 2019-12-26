@@ -28,6 +28,7 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 #include "qcommon/com_cvar.h"
 #include "qcommon/com_cvars.h"
 #include "qcommon/game_version.h"
+#include "qcommon/huffman.h"
 #include "qcommon/stringed_ingame.h"
 #include "sys/sys_local.h"
 
@@ -308,6 +309,10 @@ bool Com_SafeMode( void ) {
 // If match is not NULL, only that cvar will be looked for.
 // That is necessary because cddir and basedir need to be set before the filesystem is started, but all other sets
 //	should be after execing the config and default.
+//
+// checks for and removes command line "+set var arg" constructs
+// if match is NULL, all set commands will be executed, otherwise
+// only a set with the exact name.  Only used during startup.
 void Com_StartupVariable( const char *match ) {
 	for (int i=0 ; i < com_numConsoleLines ; i++) {
 		Cmd_TokenizeString( com_consoleLines[i] );
@@ -921,6 +926,7 @@ static void Com_WriteConfig_f( void ) {
 	Com_WriteConfigToFile( filename );
 }
 
+// commandLine should not include the executable name (argv[0])
 void Com_Init( char *commandLine ) {
 	int		qport;
 
@@ -1320,204 +1326,6 @@ void Com_Shutdown (void)
 	MSG_shutdownHuffman();
 }
 
-void Field_Clear( field_t *edit ) {
-	memset(edit->buffer, 0, MAX_EDIT_LINE);
-	edit->cursor = 0;
-	edit->scroll = 0;
-}
-
-// CONSOLE LINE EDITING
-
-static const char *completionString;
-static char shortestMatch[MAX_TOKEN_CHARS];
-static int	matchCount;
-// field we are working on, passed to Field_AutoComplete(&g_consoleCommand for instance)
-static field_t *completionField;
-
-static void FindMatches( const char *s ) {
-	int		i;
-
-	if ( Q_stricmpn( s, completionString, strlen( completionString ) ) ) {
-		return;
-	}
-	matchCount++;
-	if ( matchCount == 1 ) {
-		Q_strncpyz( shortestMatch, s, sizeof( shortestMatch ) );
-		return;
-	}
-
-	// cut shortestMatch to the amount common with s
-	for ( i = 0 ; s[i] ; i++ ) {
-		if ( tolower(shortestMatch[i]) != tolower(s[i]) ) {
-			shortestMatch[i] = 0;
-			break;
-		}
-	}
-	if (!s[i])
-	{
-		shortestMatch[i] = 0;
-	}
-}
-
-static void PrintMatches( const char *s ) {
-	if ( !Q_stricmpn( s, shortestMatch, (int)strlen( shortestMatch ) ) ) {
-		const char *description = Cmd_DescriptionString( s );
-		Com_Printf( S_COLOR_GREY "Cmd   " S_COLOR_WHITE "%s\n", s );
-		if ( VALIDSTRING( description ) )
-			Com_Printf( S_COLOR_GREEN "      %s" S_COLOR_WHITE "\n", description );
-	}
-}
-
-#ifndef DEDICATED
-static void PrintKeyMatches( const char *s ) {
-	if ( !Q_stricmpn( s, shortestMatch, strlen( shortestMatch ) ) ) {
-		Com_Printf( S_COLOR_GREY "Key  " S_COLOR_WHITE "%s\n", s );
-	}
-}
-#endif
-
-static void PrintFileMatches( const char *s ) {
-	if ( !Q_stricmpn( s, shortestMatch, strlen( shortestMatch ) ) ) {
-		Com_Printf( S_COLOR_GREY "File " S_COLOR_WHITE "%s\n", s );
-	}
-}
-
-static void PrintCvarMatches( const char *s ) {
-	if ( !Q_stricmpn( s, shortestMatch, (int)strlen( shortestMatch ) ) ) {
-		char value[TRUNCATE_LENGTH] = {0};
-		const char *description = Cvar_DescriptionString( s );
-		Com_TruncateLongString( value, Cvar_VariableString( s ) );
-		Com_Printf( S_COLOR_GREY "Cvar  " S_COLOR_WHITE "%s = " S_COLOR_GREY "\"" S_COLOR_WHITE "%s" S_COLOR_GREY "\"" S_COLOR_WHITE "\n", s, value );
-		if ( VALIDSTRING( description ) )
-			Com_Printf( S_COLOR_GREEN "      %s" S_COLOR_WHITE "\n", description );
-	}
-}
-
-static char *Field_FindFirstSeparator( char *s ) {
-	for ( size_t i=0; i<strlen( s ); i++ ) {
-		if ( s[i] == ';' )
-			return &s[ i ];
-	}
-
-	return NULL;
-}
-
-static bool Field_Complete( void ) {
-	int completionOffset;
-
-	if ( matchCount == 0 )
-		return true;
-
-	completionOffset = strlen( completionField->buffer ) - strlen( completionString );
-
-	Q_strncpyz( &completionField->buffer[completionOffset], shortestMatch, sizeof( completionField->buffer ) - completionOffset );
-
-	completionField->cursor = strlen( completionField->buffer );
-
-	if ( matchCount == 1 ) {
-		Q_strcat( completionField->buffer, sizeof( completionField->buffer ), " " );
-		completionField->cursor++;
-		return true;
-	}
-
-	Com_Printf( "%c%s\n", CONSOLE_PROMPT_CHAR, completionField->buffer );
-
-	return false;
-}
-
-#ifndef DEDICATED
-void Field_CompleteKeyname( void )
-{
-	matchCount = 0;
-	shortestMatch[ 0 ] = 0;
-
-	Key_KeynameCompletion( FindMatches );
-
-	if( !Field_Complete( ) )
-		Key_KeynameCompletion( PrintKeyMatches );
-}
-#endif
-
-void Field_CompleteFilename( const char *dir, const char *ext, bool stripExt, bool allowNonPureFilesOnDisk )
-{
-	matchCount = 0;
-	shortestMatch[ 0 ] = 0;
-
-	FS_FilenameCompletion( dir, ext, stripExt, FindMatches, allowNonPureFilesOnDisk );
-
-	if ( !Field_Complete() )
-		FS_FilenameCompletion( dir, ext, stripExt, PrintFileMatches, allowNonPureFilesOnDisk );
-}
-
-void Field_CompleteCommand( char *cmd, bool doCommands, bool doCvars )
-{
-	int completionArgument = 0;
-
-	// Skip leading whitespace and quotes
-	cmd = Com_SkipCharset( cmd, " \"" );
-
-	Cmd_TokenizeStringIgnoreQuotes( cmd );
-	completionArgument = Cmd_Argc();
-
-	// If there is trailing whitespace on the cmd
-	if ( *(cmd + strlen( cmd )-1) == ' ' ) {
-		completionString = "";
-		completionArgument++;
-	}
-	else
-		completionString = Cmd_Argv( completionArgument - 1 );
-
-	if ( completionArgument > 1 ) {
-		const char *baseCmd = Cmd_Argv( 0 );
-		char *p;
-
-#ifndef DEDICATED
-		if ( baseCmd[0] == '\\' || baseCmd[0] == '/' )
-			baseCmd++;
-#endif
-
-		if( ( p = Field_FindFirstSeparator( cmd ) ) )
-			Field_CompleteCommand( p + 1, true, true ); // Compound command
-		else
-			Cmd_CompleteArgument( baseCmd, cmd, completionArgument );
-	}
-	else {
-		if ( completionString[0] == '\\' || completionString[0] == '/' )
-			completionString++;
-
-		matchCount = 0;
-		shortestMatch[ 0 ] = 0;
-
-		if ( strlen( completionString ) == 0 )
-			return;
-
-		if ( doCommands )
-			Cmd_CommandCompletion( FindMatches );
-
-		if ( doCvars )
-			Cvar_CommandCompletion( FindMatches );
-
-		if ( !Field_Complete() ) {
-			// run through again, printing matches
-			if ( doCommands )
-				Cmd_CommandCompletion( PrintMatches );
-
-			if ( doCvars )
-				Cvar_CommandCompletion( PrintCvarMatches );
-		}
-	}
-}
-
-// Perform Tab expansion
-void Field_AutoComplete( field_t *field ) {
-	if ( !field || !field->buffer[0] )
-		return;
-
-	completionField = field;
-
-	Field_CompleteCommand( completionField->buffer, true, true );
-}
-
 // fills string array with len radom bytes, peferably from the OS randomizer
 void Com_RandomBytes( byte *string, int len )
 {
@@ -1567,3 +1375,223 @@ uint32_t ConvertUTF8ToUTF32( char *utf8CurrentChar, char **utf8NextChar )
 
 	return utf32;
 }
+
+// FIELD
+// field we are working on, passed to Field_AutoComplete(&g_consoleCommand for instance)
+static field_t* completionField;
+static const char* completionString;
+static char shortestMatch[MAX_TOKEN_CHARS];
+static int	matchCount;
+
+static bool Field_Complete(void)
+{
+	int completionOffset;
+
+	if (matchCount == 0)
+		return true;
+
+	completionOffset = strlen(completionField->buffer) - strlen(completionString);
+
+	Q_strncpyz(&completionField->buffer[completionOffset], shortestMatch, sizeof(completionField->buffer) - completionOffset);
+
+	completionField->cursor = strlen(completionField->buffer);
+
+	if (matchCount == 1)
+	{
+		Q_strcat(completionField->buffer, sizeof(completionField->buffer), " ");
+		completionField->cursor++;
+		return true;
+	}
+
+	Com_Printf("%c%s\n", CONSOLE_PROMPT_CHAR, completionField->buffer);
+
+	return false;
+}
+
+static char* Field_FindFirstSeparator(char* s)
+{
+	for (size_t i = 0; i < strlen(s); i++)
+	{
+		if (s[i] == ';')
+			return &s[i];
+	}
+
+	return NULL;
+}
+
+static void FindMatches(const char* s)
+{
+	int		i;
+
+	if (Q_stricmpn(s, completionString, strlen(completionString)))
+	{
+		return;
+	}
+	matchCount++;
+	if (matchCount == 1)
+	{
+		Q_strncpyz(shortestMatch, s, sizeof(shortestMatch));
+		return;
+	}
+
+	// cut shortestMatch to the amount common with s
+	for (i = 0; s[i]; i++)
+	{
+		if (tolower(shortestMatch[i]) != tolower(s[i]))
+		{
+			shortestMatch[i] = 0;
+			break;
+		}
+	}
+	if (!s[i])
+	{
+		shortestMatch[i] = 0;
+	}
+}
+
+static void PrintMatches(const char* s)
+{
+	if (!Q_stricmpn(s, shortestMatch, (int)strlen(shortestMatch)))
+	{
+		const char* description = Cmd_DescriptionString(s);
+		Com_Printf(S_COLOR_GREY "Cmd   " S_COLOR_WHITE "%s\n", s);
+		if (VALIDSTRING(description))
+			Com_Printf(S_COLOR_GREEN "      %s" S_COLOR_WHITE "\n", description);
+	}
+}
+
+#ifndef DEDICATED
+static void PrintKeyMatches(const char* s)
+{
+	if (!Q_stricmpn(s, shortestMatch, strlen(shortestMatch)))
+	{
+		Com_Printf(S_COLOR_GREY "Key  " S_COLOR_WHITE "%s\n", s);
+	}
+}
+#endif
+
+static void PrintFileMatches(const char* s)
+{
+	if (!Q_stricmpn(s, shortestMatch, strlen(shortestMatch)))
+	{
+		Com_Printf(S_COLOR_GREY "File " S_COLOR_WHITE "%s\n", s);
+	}
+}
+
+static void PrintCvarMatches(const char* s)
+{
+	if (!Q_stricmpn(s, shortestMatch, (int)strlen(shortestMatch)))
+	{
+		char value[TRUNCATE_LENGTH] = { 0 };
+		const char* description = Cvar_DescriptionString(s);
+		Com_TruncateLongString(value, Cvar_VariableString(s));
+		Com_Printf(S_COLOR_GREY "Cvar  " S_COLOR_WHITE "%s = " S_COLOR_GREY "\"" S_COLOR_WHITE "%s" S_COLOR_GREY "\"" S_COLOR_WHITE "\n", s, value);
+		if (VALIDSTRING(description))
+			Com_Printf(S_COLOR_GREEN "      %s" S_COLOR_WHITE "\n", description);
+	}
+}
+
+// Perform Tab expansion
+void Field_AutoComplete(field_t* field)
+{
+	if (!field || !field->buffer[0])
+		return;
+
+	completionField = field;
+
+	Field_CompleteCommand(completionField->buffer, true, true);
+}
+
+void Field_Clear(field_t* edit)
+{
+	memset(edit->buffer, 0, MAX_EDIT_LINE);
+	edit->cursor = 0;
+	edit->scroll = 0;
+}
+
+void Field_CompleteCommand(char* cmd, bool doCommands, bool doCvars)
+{
+	int completionArgument = 0;
+
+	// Skip leading whitespace and quotes
+	cmd = Com_SkipCharset(cmd, " \"");
+
+	Cmd_TokenizeStringIgnoreQuotes(cmd);
+	completionArgument = Cmd_Argc();
+
+	// If there is trailing whitespace on the cmd
+	if (*(cmd + strlen(cmd) - 1) == ' ')
+	{
+		completionString = "";
+		completionArgument++;
+	}
+	else
+		completionString = Cmd_Argv(completionArgument - 1);
+
+	if (completionArgument > 1)
+	{
+		const char* baseCmd = Cmd_Argv(0);
+		char* p;
+
+#ifndef DEDICATED
+		if (baseCmd[0] == '\\' || baseCmd[0] == '/')
+			baseCmd++;
+#endif
+
+		if ((p = Field_FindFirstSeparator(cmd)))
+			Field_CompleteCommand(p + 1, true, true); // Compound command
+		else
+			Cmd_CompleteArgument(baseCmd, cmd, completionArgument);
+	}
+	else
+	{
+		if (completionString[0] == '\\' || completionString[0] == '/')
+			completionString++;
+
+		matchCount = 0;
+		shortestMatch[0] = 0;
+
+		if (strlen(completionString) == 0)
+			return;
+
+		if (doCommands)
+			Cmd_CommandCompletion(FindMatches);
+
+		if (doCvars)
+			Cvar_CommandCompletion(FindMatches);
+
+		if (!Field_Complete())
+		{
+			// run through again, printing matches
+			if (doCommands)
+				Cmd_CommandCompletion(PrintMatches);
+
+			if (doCvars)
+				Cvar_CommandCompletion(PrintCvarMatches);
+		}
+	}
+}
+
+void Field_CompleteFilename(const char* dir, const char* ext, bool stripExt, bool allowNonPureFilesOnDisk)
+{
+	matchCount = 0;
+	shortestMatch[0] = 0;
+
+	FS_FilenameCompletion(dir, ext, stripExt, FindMatches, allowNonPureFilesOnDisk);
+
+	if (!Field_Complete())
+		FS_FilenameCompletion(dir, ext, stripExt, PrintFileMatches, allowNonPureFilesOnDisk);
+}
+
+#ifndef DEDICATED
+void Field_CompleteKeyname(void)
+{
+	matchCount = 0;
+	shortestMatch[0] = 0;
+
+	Key_KeynameCompletion(FindMatches);
+
+	if (!Field_Complete())
+		Key_KeynameCompletion(PrintKeyMatches);
+}
+#endif

@@ -355,6 +355,7 @@ static FILE	*FS_FileForHandle( fileHandle_t f ) {
 	return fsh[f].handleFiles.file.o;
 }
 
+// forces flush on files we're writing to.
 void	FS_ForceFlush( fileHandle_t f ) {
 	FILE *file;
 
@@ -379,6 +380,7 @@ long FS_fplength(FILE *h)
 }
 
 // If this is called on a non-unique FILE (from a pak file), it will return the size of the pak file, not the expected size of the file.
+// doesn't work for files that are opened from a pack file
 int FS_filelength( fileHandle_t f ) {
 	FILE	*h;
 
@@ -811,6 +813,7 @@ void FS_Rename( const char *from, const char *to ) {
 //	* file in pak3 archive. subfile is closed with unzCloseCurrentFile, but the minizip handle to the pak3 remains open.
 //	* file in pak3 archive, opened with "unique" flag: This file did not use the system minizip handle to the pak3 file, but its own dedicated one.
 //		The dedicated handle is closed with unzClose.
+// note: you can't just fclose from another DLL, due to MS libc issues
 void FS_FCloseFile( fileHandle_t f ) {
 	FS_AssertInitialised();
 
@@ -830,6 +833,7 @@ void FS_FCloseFile( fileHandle_t f ) {
 	Com_Memset( &fsh[f], 0, sizeof( fsh[f] ) );
 }
 
+// will properly create any needed paths and deal with seperater character issues
 fileHandle_t FS_FOpenFileWrite( const char *filename, bool safe ) {
 	char			*ospath;
 	fileHandle_t	f;
@@ -1046,6 +1050,12 @@ extern bool		com_fullyInitialized;
 // Finds the file in the search path.
 // Returns filesize and an open FILE pointer.
 // Used for streaming data out of either a separate file or a ZIP file.
+//
+// if uniqueFILE is true, then a new FILE will be fopened even if the file
+// is found in an already open pak file.  If uniqueFILE is false, you must call
+// FS_FCloseFile instead of fclose, otherwise the pak FILE would be improperly closed
+// It is generally safe to always set uniqueFILE to true, because the majority of
+// file IO goes through FS_ReadFile, which Does The Right Thing already.
 long FS_FOpenFileRead( const char *filename, fileHandle_t *file, bool uniqueFILE ) {
 	searchpath_t	*search;
 	char			*netpath;
@@ -1379,7 +1389,7 @@ bool FS_FindPureDLL(const char *name)
 	return false;
 }
 
-// Properly handles partial reads
+// properly handles partial reads and reads from other dlls
 int FS_Read( void *buffer, int len, fileHandle_t f ) {
 	int		block, remaining;
 	int		read;
@@ -1469,6 +1479,7 @@ int FS_Write( const void *buffer, int len, fileHandle_t h ) {
 	return len;
 }
 
+// like fprintf
 void QDECL FS_Printf( fileHandle_t h, const char *fmt, ... ) {
 	va_list		argptr;
 	char		msg[MAXPRINTMSG];
@@ -1482,6 +1493,7 @@ void QDECL FS_Printf( fileHandle_t h, const char *fmt, ... ) {
 
 #define PK3_SEEK_BUFFER_SIZE 65536
 
+// seek on a file
 int FS_Seek( fileHandle_t f, long offset, int origin ) {
 	int		_origin;
 
@@ -1571,6 +1583,7 @@ int FS_Seek( fileHandle_t f, long offset, int origin ) {
 
 // CONVENIENCE FUNCTIONS FOR ENTIRE FILES
 
+// returns 1 if a file is in the PAK file, otherwise -1
 int	FS_FileIsInPAK(const char *filename, int *pChecksum ) {
 	searchpath_t	*search;
 	pack_t			*pak;
@@ -1629,6 +1642,13 @@ int	FS_FileIsInPAK(const char *filename, int *pChecksum ) {
 
 // Filename are relative to the quake search path
 // a null buffer will just return the file length without loading
+//
+// returns the length of the file
+// a null buffer will just return the file length without loading
+// as a quick check for existance. -1 length == not present
+// A 0 byte will always be appended at the end, so string ops are safe.
+// the buffer should be considered read-only, because it may be cached
+// for other uses.
 long FS_ReadFile( const char *qpath, void **buffer ) {
 	fileHandle_t	h;
 	byte*			buf;
@@ -1737,6 +1757,7 @@ long FS_ReadFile( const char *qpath, void **buffer ) {
 	return len;
 }
 
+// frees the memory returned by FS_ReadFile
 void FS_FreeFile( void *buffer ) {
 	FS_AssertInitialised();
 	if ( !buffer ) {
@@ -1747,6 +1768,7 @@ void FS_FreeFile( void *buffer ) {
 }
 
 // Filename are reletive to the quake search path
+// writes a complete file, creating any subdirectories needed
 void FS_WriteFile( const char *qpath, const void *buffer, int size ) {
 	fileHandle_t f;
 
@@ -2078,10 +2100,14 @@ char **FS_ListFilteredFiles( const char *path, const char *extension, char *filt
 	return listCopy;
 }
 
+// directory should not have either a leading or trailing /
+// if extension is "/", only subdirectories will be returned
+// the returned files will not include any directories or /
 char **FS_ListFiles( const char *path, const char *extension, int *numfiles ) {
 	return FS_ListFilteredFiles( path, extension, NULL, numfiles );
 }
 
+//rwwRMG - changed to fileList to not conflict with list type
 void FS_FreeFileList( char **fileList ) {
 	//rwwRMG - changed to fileList to not conflict with list type
 	int		i;
@@ -3035,6 +3061,8 @@ const char *FS_LoadedPakNames( void ) {
 
 // Returns a space separated string containing the pure checksums of all loaded pk3 files.
 // Servers with sv_pure use these checksums to compare with the checksums the clients send back to the server.
+// Returns a space separated string containing the checksums of all loaded pk3 files.
+// Servers with sv_pure set will get this string and pass it to clients.
 const char *FS_LoadedPakPureChecksums( void ) {
 	static char	info[BIG_INFO_STRING];
 	searchpath_t	*search;
@@ -3076,6 +3104,10 @@ const char *FS_ReferencedPakChecksums( void ) {
 // Returns a space separated string containing the pure checksums of all referenced pk3 files.
 // Servers with sv_pure set will get this string back from clients for pure validation
 // The string has a specific order, "cgame ui @ ref1 ref2 ref3 ..."
+// 
+// Returns a space separated string containing the checksums of all loaded
+// AND referenced pk3 files. Servers with sv_pure set will get this string
+// back from clients for pure validation
 const char *FS_ReferencedPakPureChecksums( void ) {
 	static char	info[BIG_INFO_STRING];
 	searchpath_t	*search;
@@ -3144,6 +3176,7 @@ const char *FS_ReferencedPakNames( void ) {
 	return info;
 }
 
+// clears referenced booleans on loaded pk3s
 void FS_ClearPakReferences( int flags ) {
 	searchpath_t *search;
 
@@ -3160,6 +3193,11 @@ void FS_ClearPakReferences( int flags ) {
 
 // If the string is empty, all data sources will be allowed.
 // If not empty, only pk3 files that match one of the space separated checksums will be checked for files, with the exception of .cfg and .dat files.
+//
+// If the string is empty, all data sources will be allowed.
+// If not empty, only pk3 files that match one of the space
+// separated checksums will be checked for files, with the
+// sole exception of .cfg files.
 void FS_PureServerSetLoadedPaks( const char *pakSums, const char *pakNames ) {
 	int		i, c, d;
 
@@ -3295,6 +3333,7 @@ void FS_InitFilesystem( void ) {
   // bk001208 - SafeMode see below, FIXME?
 }
 
+// shutdown and restart the filesystem so changes to fs_gamedir can take effect
 void FS_Restart( int checksumFeed ) {
 
 	// free anything we currently have loaded
@@ -3350,6 +3389,7 @@ bool FS_ConditionalRestart( int checksumFeed ) {
 }
 
 // Handle based file calls for virtual machines
+// opens a file for reading, writing, or appending depending on the value of mode
 int		FS_FOpenFileByMode( const char *qpath, fileHandle_t *f, fsMode_t mode ) {
 	int		r;
 	bool	sync;
@@ -3393,6 +3433,7 @@ int		FS_FOpenFileByMode( const char *qpath, fileHandle_t *f, fsMode_t mode ) {
 	return r;
 }
 
+// where are we?
 int		FS_FTell( fileHandle_t f ) {
 	int pos;
 	if (fsh[f].zipFile == true) {

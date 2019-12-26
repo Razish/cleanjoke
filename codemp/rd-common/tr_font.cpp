@@ -25,6 +25,7 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 #include "tr_local.h"
 #include "tr_cvars.h"
 #include "qcommon/stringed_ingame.h"
+#include "qcommon/q_math.h"
 
 // This file is shared in the single and multiplayer codebases, so be CAREFUL WHAT YOU ADD/CHANGE!!!!!
 

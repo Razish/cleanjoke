@@ -28,6 +28,7 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 // ======================================================================
 
 #include <cstdint>
+#include <math.h>
 
 #include "qcommon/q_type.h"
 
@@ -256,3 +257,8 @@ void VectorSet4(vec4_t vec, float x, float y, float z, float w);
 
 // VEC5
 void VectorSet5(vec5_t vec, float x, float y, float z, float w, float u);
+
+static inline int Round(float value)
+{
+	return((int)floorf(value + 0.5f));
+}

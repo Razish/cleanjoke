@@ -30,6 +30,7 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 #include "qcommon/com_cvar.h"
 #include "qcommon/com_cvars.h"
 #include "ui/ui_public.h"
+#include "sys/sys_public.h"
 #ifndef _WIN32
 #include <cmath>
 #endif

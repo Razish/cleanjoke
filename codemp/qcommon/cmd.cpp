@@ -58,6 +58,7 @@ static void Cmd_Wait_f( void ) {
 
 // COMMAND BUFFER
 
+// allocates an initial text buffer that will grow as needed
 void Cbuf_Init (void)
 {
 	cmd_text.data = cmd_text_buf;
@@ -106,6 +107,7 @@ void Cbuf_InsertText( const char *text ) {
 	cmd_text.cursize += len;
 }
 
+// this can be used in place of either Cbuf_AddText or Cbuf_InsertText
 void Cbuf_ExecuteText (int exec_when, const char *text)
 {
 	switch (exec_when)
@@ -130,6 +132,11 @@ void Cbuf_ExecuteText (int exec_when, const char *text)
 	}
 }
 
+// Pulls off \n terminated lines of text from the command buffer and sends
+// them through Cmd_ExecuteString.  Stops when the buffer is empty.
+// Normally called once per frame, but may be explicitly invoked.
+// Do not call inside a command function, or current args will be destroyed.
+// Command execution takes a null terminated string, breaks it into tokens, then searches for a command or variable that matches the first token.
 void Cbuf_Execute (void)
 {
 	int		i;
@@ -357,6 +364,9 @@ char *Cmd_Cmd(void)
 	}
 }*/
 
+// The functions that execute commands get their parameters with these
+// functions. Cmd_Argv () will return an empty string, not a NULL
+// if arg > argc, so string operations are allways safe.
 void Cmd_Args_Sanitize( size_t length, const char *strip, const char *repl )
 {
 	for ( int i = 1; i < cmd_argc; i++ )
@@ -483,6 +493,8 @@ void Cmd_TokenizeString( const char *text_in ) {
 	Cmd_TokenizeString2( text_in, false );
 }
 
+// Takes a null terminated string.  Does not need to be /n terminated.
+// breaks the string up into arg tokens.
 void Cmd_TokenizeStringIgnoreQuotes( const char *text_in ) {
 	Cmd_TokenizeString2( text_in, true );
 }
@@ -496,6 +508,11 @@ cmd_function_t *Cmd_FindCommand( const char *cmd_name )
 	return NULL;
 }
 
+// called by the init functions of other parts of the program to
+// register commands and functions to call for them.
+// The cmd_name is referenced later, so it should not be in temp memory
+// if function is NULL, the command will be forwarded to the server
+// as a clc_clientCommand instead of executed locally
 void	Cmd_AddCommand( const char *cmd_name, xcommand_t function, const char *cmd_desc ) {
 	cmd_function_t	*cmd;
 
@@ -605,6 +622,7 @@ void Cmd_Print( const cmd_function_t *cmd )
 	Com_Printf( "\n" );
 }
 
+// callback with each valid string
 void	Cmd_CommandCompletion( completionCallback_t callback ) {
 	cmd_function_t	*cmd;
 
@@ -621,6 +639,8 @@ void Cmd_CompleteArgument( const char *command, char *args, int argNum ) {
 }
 
 // A complete command line has been parsed, so try to execute it
+// Parses a single line of text into arguments and tries to execute it
+// as if it was typed at the console
 void	Cmd_ExecuteString( const char *text ) {
 	cmd_function_t	*cmd, **prev;
 

@@ -26,6 +26,7 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
  * by the location of a node within a doubly-linked list */
 
 #include "qcommon/q_common.h"
+#include "qcommon/huffman.h"
 
 static int			bloc = 0;
 
@@ -253,7 +254,7 @@ void Huff_addRef(huff_t* huff, byte ch) {
 }
 
 /* Get a symbol */
-int Huff_Receive (node_t *node, int *ch, byte *fin) {
+static int Huff_Receive (node_t *node, int *ch, byte *fin) {
 	while (node && node->symbol == INTERNAL_NODE) {
 		if (get_bit(fin)) {
 			node = node->right;
@@ -302,7 +303,7 @@ static void send(node_t *node, node_t *child, byte *fout) {
 }
 
 /* Send a symbol */
-void Huff_transmit (huff_t *huff, int ch, byte *fout) {
+static void Huff_transmit (huff_t *huff, int ch, byte *fout) {
 	int i;
 	if (huff->loc[ch] == NULL) {
 		/* node_t hasn't been transmitted, send a NYT, then the symbol */

@@ -28,6 +28,8 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 #include "server/sv_gameapi.h"
 #include "qcommon/com_cvar.h"
 #include "qcommon/com_cvars.h"
+#include "sys/sys_public.h"
+#include "qcommon/huffman.h"
 
 serverStatic_t	svs;				// persistant server info
 server_t		sv;					// local server

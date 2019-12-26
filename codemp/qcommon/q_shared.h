@@ -42,12 +42,13 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 #include <string.h>
 #include <time.h>
 
+#include "game/surfaceflags.h"			// shared with the q3map utility
 #include "qcommon/disablewarnings.h"
+#include "qcommon/q_color.h"
+#include "qcommon/q_math.h"
 #include "qcommon/q_platform.h"
 #include "qcommon/q_string.h"
 #include "qcommon/q_type.h"
-#include "qcommon/q_color.h"
-#include "qcommon/q_math.h"
 
 // ======================================================================
 // DEFINE
@@ -55,6 +56,14 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 // q_shared.h -- included first by ALL program modules.
 // A user mod should never modify this file
+
+#ifdef ERR_FATAL
+#undef ERR_FATAL			// this is be defined in malloc.h
+#endif
+
+#if defined(_DEBUG)
+#define HUNK_DEBUG
+#endif
 
 #define PARANOID // cry over spilled milk
 
@@ -174,26 +183,6 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 #define NULL ((void *)0)
 #endif
 
-// ======================================================================
-// UNION
-// ======================================================================
-
-// 32 bit field aliasing
-typedef union byteAlias_u {
-	float f;
-	int32_t i;
-	uint32_t ui;
-	bool qb;
-	byte b[4];
-	char c[4];
-} byteAlias_t;
-
-typedef union fileBuffer_u {
-	void *v;
-	char *c;
-	byte *b;
-} fileBuffer_t;
-
 #define INT_ID( a, b, c, d ) (uint32_t)((((a) & 0xff) << 24) | (((b) & 0xff) << 16) | (((c) & 0xff) << 8) | ((d) & 0xff))
 
 // the game guarantees that no string from the network will ever
@@ -230,14 +219,6 @@ typedef union fileBuffer_u {
 
 #define	MAX_SAY_TEXT	150
 
-// paramters for command buffer stuffing
-typedef enum {
-	EXEC_NOW,			// don't return until completed, a VM should NEVER use this,
-						// because some commands might cause the VM to be unloaded...
-	EXEC_INSERT,		// insert at current position, but don't run yet
-	EXEC_APPEND			// add to end of the command buffer (normal case)
-} cbufExec_t;
-
 // these aren't needed by any of the VMs.  put in another header?
 #define	MAX_MAP_AREA_BYTES		32		// bit vector of area visibility
 
@@ -248,37 +229,6 @@ typedef enum {
 #if !defined MAX_LIGHT_STYLES
 #define MAX_LIGHT_STYLES		64
 #endif
-
-//For system-wide prints
-enum WL_e {
-	WL_ERROR=1,
-	WL_WARNING,
-	WL_VERBOSE,
-	WL_DEBUG
-};
-
-extern float forceSpeedLevels[4];
-
-// print levels from renderer (FIXME: set up for game / cgame?)
-typedef enum {
-	PRINT_ALL,
-	PRINT_DEVELOPER,		// only print when "developer 1"
-	PRINT_WARNING,
-	PRINT_ERROR
-} printParm_t;
-
-#ifdef ERR_FATAL
-#undef ERR_FATAL			// this is be defined in malloc.h
-#endif
-
-// parameters to the main Error routine
-typedef enum {
-	ERR_FATAL,					// exit the entire game with a popup window
-	ERR_DROP,					// print to console and disconnect from game
-	ERR_SERVERDISCONNECT,		// don't kill server
-	ERR_DISCONNECT,				// client disconnected from the server
-	ERR_NEED_CD					// pop up the need-cd dialog
-} errorParm_t;
 
 // font rendering values used by ui and cgame
 
@@ -316,18 +266,6 @@ typedef enum {
 #define UI_INVERSE		0x00002000
 #define UI_PULSE		0x00004000
 
-#if defined(_DEBUG)
-	#define HUNK_DEBUG
-#endif
-
-typedef enum {
-	h_high,
-	h_low,
-	h_dontcare
-} ha_pref;
-
-void *Hunk_Alloc( int size, ha_pref preference );
-
 #define Com_Memset memset
 #define Com_Memcpy memcpy
 
@@ -336,6 +274,289 @@ void *Hunk_Alloc( int size, ha_pref preference );
 #define	CIN_hold	4
 #define CIN_silent	8
 #define CIN_shader	16
+
+#define	FORCE_LEVEL_4 (FORCE_LEVEL_3+1)
+#define	FORCE_LEVEL_5 (FORCE_LEVEL_4+1)
+
+//rww - bot stuff that needs to be shared
+#define MAX_WPARRAY_SIZE 4096
+#define MAX_NEIGHBOR_SIZE 32
+
+#define MAX_NEIGHBOR_LINK_DISTANCE 128
+#define MAX_NEIGHBOR_FORCEJUMP_LINK_DISTANCE 400
+
+#define DEFAULT_GRID_SPACING 400
+
+// all drawing is done to a 640*480 virtual screen size
+// and will be automatically scaled to the real resolution
+#define	SCREEN_WIDTH		640
+#define	SCREEN_HEIGHT		480
+
+#define TINYCHAR_WIDTH		(SMALLCHAR_WIDTH)
+#define TINYCHAR_HEIGHT		(SMALLCHAR_HEIGHT/2)
+
+#define SMALLCHAR_WIDTH		8
+#define SMALLCHAR_HEIGHT	16
+
+#define BIGCHAR_WIDTH		16
+#define BIGCHAR_HEIGHT		16
+
+#define	GIANTCHAR_WIDTH		32
+#define	GIANTCHAR_HEIGHT	48
+
+#define MAX_TOKENLENGTH		1024
+
+#ifndef TT_STRING
+//token types
+#define TT_STRING					1			// string
+#define TT_LITERAL					2			// literal
+#define TT_NUMBER					3			// number
+#define TT_NAME						4			// name
+#define TT_PUNCTUATION				5			// punctuation
+#endif
+
+#define TRUNCATE_LENGTH	64
+
+// CVARS (console variables)
+// Many variables can be used for cheating purposes, so when cheats is zero, force all unspecified variables to their default values.
+
+#define	CVAR_NONE			(0x00000000u)
+#define	CVAR_ARCHIVE		(0x00000001u) // set to cause it to be saved to configuration file. used for system variables, not for player specific configurations
+#define	CVAR_USERINFO		(0x00000002u) // sent to server on connect or change
+#define	CVAR_SERVERINFO		(0x00000004u) // sent in response to front end requests
+#define	CVAR_SYSTEMINFO		(0x00000008u) // these cvars will be duplicated on all clients
+#define	CVAR_INIT			(0x00000010u) // don't allow change from console at all, but can be set from the command line
+#define	CVAR_LATCH			(0x00000020u) // will only change when C code next does a Cvar_Get(), so it can't be changed without proper initialization.
+										  //	modified will be set, even though the value hasn't changed yet
+#define	CVAR_ROM			(0x00000040u) // display only, cannot be set by user at all (can be set by code)
+#define	CVAR_USER_CREATED	(0x00000080u) // created by a set command
+#define	CVAR_TEMP			(0x00000100u) // can be set even when cheats are disabled, but is not archived
+#define CVAR_CHEAT			(0x00000200u) // can not be changed if cheats are disabled
+#define CVAR_NORESTART		(0x00000400u) // do not clear when a cvar_restart is issued
+#define CVAR_INTERNAL		(0x00000800u) // cvar won't be displayed, ever (for passwords and such)
+#define	CVAR_PARENTAL		(0x00001000u) // lets cvar system know that parental stuff needs to be updated
+#define CVAR_SERVER_CREATED	(0x00002000u) // cvar was created by a server the client connected to.
+#define CVAR_VM_CREATED		(0x00004000u) // cvar was created exclusively in one of the VMs.
+#define CVAR_PROTECTED		(0x00008000u) // prevent modifying this var from VMs or the server
+#define CVAR_NODEFAULT		(0x00010000u) // do not write to config if matching with default value
+
+#define CVAR_ARCHIVE_ND		(CVAR_ARCHIVE | CVAR_NODEFAULT)
+
+// These flags are only returned by the Cvar_Flags() function
+#define CVAR_MODIFIED		(0x40000000u)	// Cvar was modified
+#define CVAR_NONEXISTENT	(0x80000000u)	// Cvar doesn't exist.
+
+#define	MAX_CVAR_VALUE_STRING	256
+
+// in order from highest priority to lowest
+// if none of the catchers are active, bound key strings will be executed
+#define KEYCATCH_CONSOLE		0x0001
+#define	KEYCATCH_UI				0x0002
+#define	KEYCATCH_MESSAGE		0x0004
+#define	KEYCATCH_CGAME			0x0008
+
+#define MAX_G2_COLLISIONS 16
+
+// ELEMENTS COMMUNICATED ACROSS THE NET
+#define	ANGLE2SHORT(x)	((int)((x)*65536/360) & 65535)
+#define	SHORT2ANGLE(x)	((x)*(360.0/65536))
+
+#define	SNAPFLAG_RATE_DELAYED	1
+#define	SNAPFLAG_NOT_ACTIVE		2	// snapshot used during connection and for zombies
+#define SNAPFLAG_SERVERCOUNT	4	// toggled every map_restart so transitions can be detected
+
+// per-level limits
+#define	MAX_CLIENTS			32		// absolute limit
+#define MAX_RADAR_ENTITIES	MAX_GENTITIES
+#define MAX_TERRAINS		1//32 //rwwRMG: inserted
+#define MAX_LOCATIONS		64
+
+#define	GENTITYNUM_BITS	10		// don't need to send any more
+#define	MAX_GENTITIES	(1<<GENTITYNUM_BITS)
+
+//I am reverting. I guess. For now.
+/*
+#define	GENTITYNUM_BITS		11
+							//rww - I am raising this 1 bit. SP actually has room for 1024 ents - none - world - 1 client.
+							//Which means 1021 useable entities. However we have 32 clients.. so if we keep our limit
+							//at 1024 we are not going to be able to load any SP levels at the edge of the ent limit.
+#define		MAX_GENTITIES	(1024+(MAX_CLIENTS-1))
+							//rww - we do have enough room to send over 2048 ents now. However, I cannot live with the guilt of
+							//actually increasing the entity limit to 2048 (as it would slow down countless things, and
+							//there are tons of ent list traversals all over the place). So I am merely going to give enough
+							//to compensate for our larger maxclients.
+*/
+
+// entitynums are communicated with GENTITY_BITS, so any reserved
+// values thatare going to be communcated over the net need to
+// also be in this range
+#define	ENTITYNUM_NONE		(MAX_GENTITIES-1)
+#define	ENTITYNUM_WORLD		(MAX_GENTITIES-2)
+#define	ENTITYNUM_MAX_NORMAL	(MAX_GENTITIES-2)
+
+// these are also in be_aas_def.h - argh (rjr)
+#define	MAX_MODELS			512		// these are sent over the net as -12 bits
+#define	MAX_SOUNDS			256		// so they cannot be blindly increased
+#define MAX_ICONS			64		// max registered icons you can have per map
+#define MAX_FX				64		// max effects strings, I'm hoping that 64 will be plenty
+
+#define MAX_SUB_BSP			32 //rwwRMG - added
+
+#define	MAX_G2BONES		64		//rww - changed from MAX_CHARSKINS to MAX_G2BONES. value still equal.
+
+#define MAX_AMBIENT_SETS		256 //rww - ambient soundsets must be sent over in config strings.
+
+#define	MAX_CONFIGSTRINGS	1700 //this is getting pretty high. Try not to raise it anymore than it already is.
+
+// these are the only configstrings that the system reserves, all the
+// other ones are strictly for servergame to clientgame communication
+#define	CS_SERVERINFO		0		// an info string with all the serverinfo cvars
+#define	CS_SYSTEMINFO		1		// an info string for server system to client system configuration (timescale, etc)
+
+#define	RESERVED_CONFIGSTRINGS	2	// game can't modify below this, only the system can
+
+#define	MAX_GAMESTATE_CHARS	16000
+
+#define TRACK_CHANNEL_MAX (NUM_TRACK_CHANNELS-50)
+
+// bit field limits
+#define	MAX_STATS				16
+#define	MAX_PERSISTANT			16
+#define	MAX_POWERUPS			16
+#define	MAX_WEAPONS				19
+#define MAX_AMMO_TRANSMIT		16 // This is needed because the ammo array is 19 but only 16 sized array is networked
+#define MAX_AMMO				MAX_WEAPONS
+
+#define	MAX_PS_EVENTS			2
+
+#define PS_PMOVEFRAMECOUNTBITS	6
+
+#define FORCE_LIGHTSIDE			1
+#define FORCE_DARKSIDE			2
+
+#define MAX_FORCE_RANK			7
+
+#define FALL_FADE_TIME			3000
+
+// usercmd_t->button bits, many of which are generated by the client system, so they aren't game/cgame only definitions
+#define	BUTTON_ATTACK			1
+#define	BUTTON_TALK				2			// displays talk balloon and disables actions
+#define	BUTTON_USE_HOLDABLE		4
+#define	BUTTON_GESTURE			8
+#define	BUTTON_WALKING			16			// walking can't just be infered from MOVE_RUN
+										// because a key pressed late in the frame will
+										// only generate a small move value for that frame
+										// walking will use different animations and
+										// won't generate footsteps
+#define	BUTTON_USE				32			// the ol' use key returns!
+#define BUTTON_FORCEGRIP		64			//
+#define BUTTON_ALT_ATTACK		128
+
+#define	BUTTON_ANY				256			// any key whatsoever
+
+#define BUTTON_FORCEPOWER		512			// use the "active" force power
+
+#define BUTTON_FORCE_LIGHTNING	1024
+
+#define BUTTON_FORCE_DRAIN		2048
+
+// Here's an interesting bit.  The bots in TA used buttons to do additional gestures.
+// I ripped them out because I didn't want too many buttons given the fact that I was already adding some for JK2.
+// We can always add some back in if we want though.
+/*
+#define BUTTON_AFFIRMATIVE	32
+#define	BUTTON_NEGATIVE		64
+
+#define BUTTON_GETFLAG		128
+#define BUTTON_GUARDBASE	256
+#define BUTTON_PATROL		512
+#define BUTTON_FOLLOWME		1024
+*/
+
+#define	MOVE_RUN			120			// if forwardmove or rightmove are >= MOVE_RUN,
+// then BUTTON_WALKING should be set
+
+// server browser sources
+#define AS_LOCAL			0
+#define AS_GLOBAL			1
+#define AS_FAVORITES		2
+
+#define AS_MPLAYER			3 // (Obsolete)
+
+#define	MAX_GLOBAL_SERVERS			2048
+#define	MAX_OTHER_SERVERS			128
+#define MAX_PINGREQUESTS			32
+#define MAX_SERVERSTATUSREQUESTS	16
+
+#define SAY_ALL		0
+#define SAY_TEAM	1
+#define SAY_TELL	2
+
+//rww - conveniently toggle "gore" code, for model decals and stuff.
+#define _G2_GORE
+
+// ======================================================================
+// UNION
+// ======================================================================
+
+// 32 bit field aliasing
+typedef union byteAlias_u {
+	float f;
+	int32_t i;
+	uint32_t ui;
+	bool qb;
+	byte b[4];
+	char c[4];
+} byteAlias_t;
+
+typedef union fileBuffer_u {
+	void *v;
+	char *c;
+	byte *b;
+} fileBuffer_t;
+
+// ======================================================================
+// ENUM
+// ======================================================================
+
+// paramters for command buffer stuffing
+typedef enum {
+	EXEC_NOW,			// don't return until completed, a VM should NEVER use this,
+						// because some commands might cause the VM to be unloaded...
+	EXEC_INSERT,		// insert at current position, but don't run yet
+	EXEC_APPEND			// add to end of the command buffer (normal case)
+} cbufExec_t;
+
+//For system-wide prints
+enum WL_e {
+	WL_ERROR=1,
+	WL_WARNING,
+	WL_VERBOSE,
+	WL_DEBUG
+};
+
+// print levels from renderer (FIXME: set up for game / cgame?)
+typedef enum {
+	PRINT_ALL,
+	PRINT_DEVELOPER,		// only print when "developer 1"
+	PRINT_WARNING,
+	PRINT_ERROR
+} printParm_t;
+
+// parameters to the main Error routine
+typedef enum {
+	ERR_FATAL,					// exit the entire game with a popup window
+	ERR_DROP,					// print to console and disconnect from game
+	ERR_SERVERDISCONNECT,		// don't kill server
+	ERR_DISCONNECT,				// client disconnected from the server
+	ERR_NEED_CD					// pop up the need-cd dialog
+} errorParm_t;
+
+typedef enum {
+	h_high,
+	h_low,
+	h_dontcare
+} ha_pref;
 
 enum saberBlockType_t : int32_t {
 	BLK_NO,
@@ -402,9 +623,6 @@ enum forcePowerLevels_t : int32_t {
 	NUM_FORCE_POWER_LEVELS
 };
 
-#define	FORCE_LEVEL_4 (FORCE_LEVEL_3+1)
-#define	FORCE_LEVEL_5 (FORCE_LEVEL_4+1)
-
 //rww - a C-ified structure version of the class which fires off callbacks and gives arguments to update ragdoll status.
 enum sharedERagPhase
 {
@@ -445,6 +663,209 @@ enum sharedERagEffector
 	RE_LFEMURX=				0x00800000, //"lfemurX"
 	RE_CEYEBROW=			0x01000000 //"ceyebrow"
 };
+
+enum sharedEIKMoveState
+{
+	IKS_NONE = 0,
+	IKS_DYNAMIC
+};
+
+//material stuff needs to be shared
+enum material_t : int32_t
+{
+	MAT_METAL = 0,	// scorched blue-grey metal
+	MAT_GLASS,		// not a real chunk type, just plays an effect with glass sprites
+	MAT_ELECTRICAL,	// sparks only
+	MAT_ELEC_METAL,	// sparks/electrical type metal
+	MAT_DRK_STONE,	// brown
+	MAT_LT_STONE,	// tan
+	MAT_GLASS_METAL,// glass sprites and METAl chunk
+	MAT_METAL2,		// electrical metal type
+	MAT_NONE,		// no chunks
+	MAT_GREY_STONE,	// grey
+	MAT_METAL3,		// METAL and METAL2 chunks
+	MAT_CRATE1,		// yellow multi-colored crate chunks
+	MAT_GRATE1,		// grate chunks
+	MAT_ROPE,		// for yavin trial...no chunks, just wispy bits
+	MAT_CRATE2,		// read multi-colored crate chunks
+	MAT_WHITE_METAL,// white angular chunks
+	MAT_SNOWY_ROCK,	// gray & brown chunks
+
+	NUM_MATERIALS
+};
+
+// mode parm for FS_FOpenFile
+typedef enum
+{
+	FS_READ,
+	FS_WRITE,
+	FS_APPEND,
+	FS_APPEND_SYNC
+} fsMode_t;
+
+typedef enum
+{
+	FS_SEEK_CUR,
+	FS_SEEK_END,
+	FS_SEEK_SET
+} fsOrigin_t;
+
+// sound channels
+// channel 0 never willingly overrides
+// other channels will allways override a playing sound on that channel
+typedef enum
+{
+	CHAN_AUTO,	//## %s !!"W:\game\base\!!sound\*.wav;*.mp3" # Auto-picks an empty channel to play sound on
+	CHAN_LOCAL,	//## %s !!"W:\game\base\!!sound\*.wav;*.mp3" # menu sounds, etc
+	CHAN_WEAPON,//## %s !!"W:\game\base\!!sound\*.wav;*.mp3"
+	CHAN_VOICE, //## %s !!"W:\game\base\!!sound\voice\*.wav;*.mp3" # Voice sounds cause mouth animation
+	CHAN_VOICE_ATTEN, //## %s !!"W:\game\base\!!sound\voice\*.wav;*.mp3" # Causes mouth animation but still use normal sound falloff
+	CHAN_ITEM,  //## %s !!"W:\game\base\!!sound\*.wav;*.mp3"
+	CHAN_BODY,	//## %s !!"W:\game\base\!!sound\*.wav;*.mp3"
+	CHAN_AMBIENT,//## %s !!"W:\game\base\!!sound\*.wav;*.mp3" # added for ambient sounds
+	CHAN_LOCAL_SOUND,	//## %s !!"W:\game\base\!!sound\*.wav;*.mp3" #chat messages, etc
+	CHAN_ANNOUNCER,		//## %s !!"W:\game\base\!!sound\*.wav;*.mp3" #announcer voices, etc
+	CHAN_LESS_ATTEN,	//## %s !!"W:\game\base\!!sound\*.wav;*.mp3" #attenuates similar to chan_voice, but uses empty channel auto-pick behaviour
+	CHAN_MENU1,		//## %s !!"W:\game\base\!!sound\*.wav;*.mp3" #menu stuff, etc
+	CHAN_VOICE_GLOBAL,  //## %s !!"W:\game\base\!!sound\voice\*.wav;*.mp3" # Causes mouth animation and is broadcast, like announcer
+	CHAN_MUSIC,	//## %s !!"W:\game\base\!!sound\*.wav;*.mp3" #music played as a looping sound - added by BTO (VV)
+} soundChannel_t;
+
+// all the different tracking "channels"
+typedef enum
+{
+	TRACK_CHANNEL_NONE = 50,
+	TRACK_CHANNEL_1,
+	TRACK_CHANNEL_2, // force speed
+	TRACK_CHANNEL_3, // force rage
+	TRACK_CHANNEL_4,
+	TRACK_CHANNEL_5, // force sight
+	NUM_TRACK_CHANNELS
+} trackchan_t;
+
+typedef enum
+{
+	SENTRY_NOROOM = 1,
+	SENTRY_ALREADYPLACED,
+	SHIELD_NOROOM,
+	SEEKER_ALREADYDEPLOYED
+} itemUseFail_t;
+
+typedef enum
+{
+	GENCMD_SABERSWITCH = 1,
+	GENCMD_ENGAGE_DUEL,
+	GENCMD_FORCE_HEAL,
+	GENCMD_FORCE_SPEED,
+	GENCMD_FORCE_THROW,
+	GENCMD_FORCE_PULL,
+	GENCMD_FORCE_DISTRACT,
+	GENCMD_FORCE_RAGE,
+	GENCMD_FORCE_PROTECT,
+	GENCMD_FORCE_ABSORB,
+	GENCMD_FORCE_HEALOTHER,
+	GENCMD_FORCE_FORCEPOWEROTHER,
+	GENCMD_FORCE_SEEING,
+	GENCMD_USE_SEEKER,
+	GENCMD_USE_FIELD,
+	GENCMD_USE_BACTA,
+	GENCMD_USE_ELECTROBINOCULARS,
+	GENCMD_ZOOM,
+	GENCMD_USE_SENTRY,
+	GENCMD_USE_JETPACK,
+	GENCMD_USE_BACTABIG,
+	GENCMD_USE_HEALTHDISP,
+	GENCMD_USE_AMMODISP,
+	GENCMD_USE_EWEB,
+	GENCMD_USE_CLOAK,
+	GENCMD_SABERATTACKCYCLE,
+	GENCMD_TAUNT,
+	GENCMD_BOW,
+	GENCMD_MEDITATE,
+	GENCMD_FLOURISH,
+	GENCMD_GLOAT
+} genCmds_t;
+
+typedef enum solid_e
+{
+	SOLID_NOT,					// no interaction with other objects
+	SOLID_TRIGGER,				// only touch when inside, after moving
+	SOLID_BBOX,					// touch on edge
+	SOLID_BSP,					// bsp clip, touch on edge
+	SOLID_BMODEL = 0xffffff,	// if entityState->solid == SOLID_BMODEL, modelindex is an inline model number
+} solid_t;
+
+typedef enum
+{
+	TR_STATIONARY,
+	TR_INTERPOLATE,				// non-parametric, but interpolate between snapshots
+	TR_LINEAR,
+	TR_LINEAR_STOP,
+	TR_NONLINEAR_STOP,
+	TR_SINE,					// value = base + sin( time / duration ) * delta
+	TR_GRAVITY
+} trType_t;
+
+typedef enum
+{
+	CA_UNINITIALIZED,
+	CA_DISCONNECTED, 	// not talking to a server
+	CA_AUTHORIZING,		// not used any more, was checking cd key
+	CA_CONNECTING,		// sending request packets to the server
+	CA_CHALLENGING,		// sending challenge packets to the server
+	CA_CONNECTED,		// netchan_t established, getting gamestate
+	CA_LOADING,			// only during cgame initialization, never during main loop
+	CA_PRIMED,			// got gamestate, waiting for first frame
+	CA_ACTIVE,			// game views should be displayed
+	CA_CINEMATIC		// playing a cinematic or a static pic, not connected to a server
+} connstate_t;
+
+// cinematic states
+typedef enum
+{
+	FMV_IDLE,
+	FMV_PLAY,		// play
+	FMV_EOF,		// all other conditions, i.e. stop/EOF/abort
+	FMV_ID_BLT,
+	FMV_ID_IDLE,
+	FMV_LOOPED,
+	FMV_ID_WAIT
+} e_status;
+
+// For ghoul2 axis use
+typedef enum Eorientations
+{
+	ORIGIN = 0,
+	POSITIVE_X,
+	POSITIVE_Z,
+	POSITIVE_Y,
+	NEGATIVE_X,
+	NEGATIVE_Z,
+	NEGATIVE_Y
+} orientations_t;
+
+// stuff to help out during development process, force reloading/uncacheing of certain filetypes...
+typedef enum
+{
+	eForceReload_NOTHING,
+	eForceReload_MODELS,
+	eForceReload_ALL
+
+} ForceReload_e;
+
+// NOTE: this must be kept up to date in menudef.h
+enum
+{
+	FONT_NONE,
+	FONT_SMALL = 1,
+	FONT_MEDIUM,
+	FONT_LARGE,
+	FONT_SMALL2
+};
+
+// ======================================================================
+// STRUCT
+// ======================================================================
 
 typedef struct sharedRagDollParams_s {
 	vec3_t angles;
@@ -505,45 +926,6 @@ typedef struct sharedSetBoneIKStateParams_s {
 	bool forceAnimOnBone; //normally if the bone has specified start/end frames already it will leave it alone.. if this is true, then the animation will be restarted on the bone with the specified frames anyway.
 } sharedSetBoneIKStateParams_t;
 
-enum sharedEIKMoveState
-{
-	IKS_NONE = 0,
-	IKS_DYNAMIC
-};
-
-//material stuff needs to be shared
-enum material_t : int32_t
-{
-	MAT_METAL = 0,	// scorched blue-grey metal
-	MAT_GLASS,		// not a real chunk type, just plays an effect with glass sprites
-	MAT_ELECTRICAL,	// sparks only
-	MAT_ELEC_METAL,	// sparks/electrical type metal
-	MAT_DRK_STONE,	// brown
-	MAT_LT_STONE,	// tan
-	MAT_GLASS_METAL,// glass sprites and METAl chunk
-	MAT_METAL2,		// electrical metal type
-	MAT_NONE,		// no chunks
-	MAT_GREY_STONE,	// grey
-	MAT_METAL3,		// METAL and METAL2 chunks
-	MAT_CRATE1,		// yellow multi-colored crate chunks
-	MAT_GRATE1,		// grate chunks
-	MAT_ROPE,		// for yavin trial...no chunks, just wispy bits
-	MAT_CRATE2,		// read multi-colored crate chunks
-	MAT_WHITE_METAL,// white angular chunks
-	MAT_SNOWY_ROCK,	// gray & brown chunks
-
-	NUM_MATERIALS
-};
-
-//rww - bot stuff that needs to be shared
-#define MAX_WPARRAY_SIZE 4096
-#define MAX_NEIGHBOR_SIZE 32
-
-#define MAX_NEIGHBOR_LINK_DISTANCE 128
-#define MAX_NEIGHBOR_FORCEJUMP_LINK_DISTANCE 400
-
-#define DEFAULT_GRID_SPACING 400
-
 typedef struct wpneighbor_s
 {
 	int num;
@@ -566,54 +948,6 @@ typedef struct wpobject_s
 	wpneighbor_t neighbors[MAX_NEIGHBOR_SIZE];
 } wpobject_t;
 
-// all drawing is done to a 640*480 virtual screen size
-// and will be automatically scaled to the real resolution
-#define	SCREEN_WIDTH		640
-#define	SCREEN_HEIGHT		480
-
-#define TINYCHAR_WIDTH		(SMALLCHAR_WIDTH)
-#define TINYCHAR_HEIGHT		(SMALLCHAR_HEIGHT/2)
-
-#define SMALLCHAR_WIDTH		8
-#define SMALLCHAR_HEIGHT	16
-
-#define BIGCHAR_WIDTH		16
-#define BIGCHAR_HEIGHT		16
-
-#define	GIANTCHAR_WIDTH		32
-#define	GIANTCHAR_HEIGHT	48
-
-char	*COM_SkipPath( char *pathname );
-const char	*COM_GetExtension( const char *name );
-void	COM_StripExtension( const char *in, char *out, int destsize );
-bool COM_CompareExtension(const char *in, const char *ext);
-void	COM_DefaultExtension( char *path, int maxSize, const char *extension );
-
-void	COM_BeginParseSession( const char *name );
-int		COM_GetCurrentParseLine( void );
-const char	*SkipWhitespace( const char *data, bool *hasNewLines );
-char	*COM_Parse( const char **data_p );
-char	*COM_ParseExt( const char **data_p, bool allowLineBreak );
-int		COM_Compress( char *data_p );
-void	COM_ParseError( char *format, ... );
-void	COM_ParseWarning( char *format, ... );
-bool COM_ParseString( const char **data, const char **s );
-bool COM_ParseInt( const char **data, int *i );
-bool COM_ParseFloat( const char **data, float *f );
-bool COM_ParseVec4( const char **buffer, vec4_t *c);
-//int		COM_ParseInfos( char *buf, int max, char infos[][MAX_INFO_STRING] );
-
-#define MAX_TOKENLENGTH		1024
-
-#ifndef TT_STRING
-//token types
-#define TT_STRING					1			// string
-#define TT_LITERAL					2			// literal
-#define TT_NUMBER					3			// number
-#define TT_NAME						4			// name
-#define TT_PUNCTUATION				5			// punctuation
-#endif
-
 typedef struct pc_token_s
 {
 	int type;
@@ -622,39 +956,6 @@ typedef struct pc_token_s
 	float floatvalue;
 	char string[MAX_TOKENLENGTH];
 } pc_token_t;
-
-// data is an in/out parm, returns a parsed out token
-
-void	COM_MatchToken( const char**buf_p, char *match );
-
-bool SkipBracedSection (const char **program, int depth);
-void SkipRestOfLine ( const char **data );
-
-void Parse1DMatrix (const char **buf_p, int x, float *m);
-void Parse2DMatrix (const char **buf_p, int y, int x, float *m);
-void Parse3DMatrix (const char **buf_p, int z, int y, int x, float *m);
-int Com_HexStrToInt( const char *str );
-
-int	QDECL Com_sprintf (char *dest, int size, const char *fmt, ...);
-
-char *Com_SkipTokens( char *s, int numTokens, char *sep );
-char *Com_SkipCharset( char *s, char *sep );
-
-void Com_RandomBytes( byte *string, int len );
-
-// mode parm for FS_FOpenFile
-typedef enum {
-	FS_READ,
-	FS_WRITE,
-	FS_APPEND,
-	FS_APPEND_SYNC
-} fsMode_t;
-
-typedef enum {
-	FS_SEEK_CUR,
-	FS_SEEK_END,
-	FS_SEEK_SET
-} fsOrigin_t;
 
 // 64-bit integers for global rankings interface
 // implemented as a struct for qvm compatibility
@@ -668,60 +969,6 @@ typedef struct qint64_s {
 	byte	b6;
 	byte	b7;
 } qint64;
-
-int FloatAsInt( float f );
-
-char	* QDECL va(const char *format, ...);
-
-#define TRUNCATE_LENGTH	64
-void Com_TruncateLongString( char *buffer, const char *s );
-
-// key / value info strings
-char *Info_ValueForKey( const char *s, const char *key );
-void Info_RemoveKey( char *s, const char *key );
-void Info_RemoveKey_Big( char *s, const char *key );
-void Info_SetValueForKey( char *s, const char *key, const char *value );
-void Info_SetValueForKey_Big( char *s, const char *key, const char *value );
-bool Info_Validate( const char *s );
-bool Info_NextPair( const char **s, char *key, char *value );
-
-// this is only here so the functions in q_shared.c and bg_*.c can link
-#if defined( _GAME ) || defined( _CGAME ) || defined( UI_BUILD )
-	extern NORETURN_PTR void (*Com_Error)( int level, const char *fmt, ... );
-	extern void (*Com_Printf)( const char *fmt, ... );
-#else
-	void NORETURN QDECL Com_Error( int level, const char *fmt, ... );
-	void QDECL Com_Printf( const char *fmt, ... );
-#endif
-
-// CVARS (console variables)
-// Many variables can be used for cheating purposes, so when cheats is zero, force all unspecified variables to their default values.
-
-#define	CVAR_NONE			(0x00000000u)
-#define	CVAR_ARCHIVE		(0x00000001u) // set to cause it to be saved to configuration file. used for system variables, not for player specific configurations
-#define	CVAR_USERINFO		(0x00000002u) // sent to server on connect or change
-#define	CVAR_SERVERINFO		(0x00000004u) // sent in response to front end requests
-#define	CVAR_SYSTEMINFO		(0x00000008u) // these cvars will be duplicated on all clients
-#define	CVAR_INIT			(0x00000010u) // don't allow change from console at all, but can be set from the command line
-#define	CVAR_LATCH			(0x00000020u) // will only change when C code next does a Cvar_Get(), so it can't be changed without proper initialization.
-                                          //	modified will be set, even though the value hasn't changed yet
-#define	CVAR_ROM			(0x00000040u) // display only, cannot be set by user at all (can be set by code)
-#define	CVAR_USER_CREATED	(0x00000080u) // created by a set command
-#define	CVAR_TEMP			(0x00000100u) // can be set even when cheats are disabled, but is not archived
-#define CVAR_CHEAT			(0x00000200u) // can not be changed if cheats are disabled
-#define CVAR_NORESTART		(0x00000400u) // do not clear when a cvar_restart is issued
-#define CVAR_INTERNAL		(0x00000800u) // cvar won't be displayed, ever (for passwords and such)
-#define	CVAR_PARENTAL		(0x00001000u) // lets cvar system know that parental stuff needs to be updated
-#define CVAR_SERVER_CREATED	(0x00002000u) // cvar was created by a server the client connected to.
-#define CVAR_VM_CREATED		(0x00004000u) // cvar was created exclusively in one of the VMs.
-#define CVAR_PROTECTED		(0x00008000u) // prevent modifying this var from VMs or the server
-#define CVAR_NODEFAULT		(0x00010000u) // do not write to config if matching with default value
-
-#define CVAR_ARCHIVE_ND		(CVAR_ARCHIVE | CVAR_NODEFAULT)
-
-// These flags are only returned by the Cvar_Flags() function
-#define CVAR_MODIFIED		(0x40000000u)	// Cvar was modified
-#define CVAR_NONEXISTENT	(0x80000000u)	// Cvar doesn't exist.
 
 // nothing outside the Cvar_*() functions should modify these fields!
 typedef struct cvar_s {
@@ -744,8 +991,6 @@ typedef struct cvar_s {
 	int				hashIndex;
 } cvar_t;
 
-#define	MAX_CVAR_VALUE_STRING	256
-
 //CJKTODO: modules should access cvar_t* directly
 // the modules that run in the virtual machine can't access the cvar_t directly,
 // so they must ask for structured updates
@@ -758,9 +1003,6 @@ typedef struct vmCvar_s {
 } vmCvar_t;
 
 // COLLISION DETECTION
-
-#include "game/surfaceflags.h"			// shared with the q3map utility
-
 typedef struct CollisionRecord_s {
 	float		mDistance;
 	int			mEntityNum;
@@ -776,9 +1018,8 @@ typedef struct CollisionRecord_s {
 	float		mBarycentricJ; // K = 1-I-J
 } CollisionRecord_t;
 
-#define MAX_G2_COLLISIONS 16
-
-typedef CollisionRecord_t G2Trace_t[MAX_G2_COLLISIONS];	// map that describes all of the parts of ghoul2 models that got hit
+// map that describes all of the parts of ghoul2 models that got hit
+using G2Trace_t = CollisionRecord_t[MAX_G2_COLLISIONS];
 
 // a trace is returned when a box is swept through the world
 typedef struct trace_s {
@@ -809,111 +1050,11 @@ typedef struct orientation_s {
 	matrix3_t	axis;
 } orientation_t;
 
-// in order from highest priority to lowest
-// if none of the catchers are active, bound key strings will be executed
-#define KEYCATCH_CONSOLE		0x0001
-#define	KEYCATCH_UI				0x0002
-#define	KEYCATCH_MESSAGE		0x0004
-#define	KEYCATCH_CGAME			0x0008
-
-// sound channels
-// channel 0 never willingly overrides
-// other channels will allways override a playing sound on that channel
-typedef enum {
-	CHAN_AUTO,	//## %s !!"W:\game\base\!!sound\*.wav;*.mp3" # Auto-picks an empty channel to play sound on
-	CHAN_LOCAL,	//## %s !!"W:\game\base\!!sound\*.wav;*.mp3" # menu sounds, etc
-	CHAN_WEAPON,//## %s !!"W:\game\base\!!sound\*.wav;*.mp3"
-	CHAN_VOICE, //## %s !!"W:\game\base\!!sound\voice\*.wav;*.mp3" # Voice sounds cause mouth animation
-	CHAN_VOICE_ATTEN, //## %s !!"W:\game\base\!!sound\voice\*.wav;*.mp3" # Causes mouth animation but still use normal sound falloff
-	CHAN_ITEM,  //## %s !!"W:\game\base\!!sound\*.wav;*.mp3"
-	CHAN_BODY,	//## %s !!"W:\game\base\!!sound\*.wav;*.mp3"
-	CHAN_AMBIENT,//## %s !!"W:\game\base\!!sound\*.wav;*.mp3" # added for ambient sounds
-	CHAN_LOCAL_SOUND,	//## %s !!"W:\game\base\!!sound\*.wav;*.mp3" #chat messages, etc
-	CHAN_ANNOUNCER,		//## %s !!"W:\game\base\!!sound\*.wav;*.mp3" #announcer voices, etc
-	CHAN_LESS_ATTEN,	//## %s !!"W:\game\base\!!sound\*.wav;*.mp3" #attenuates similar to chan_voice, but uses empty channel auto-pick behaviour
-	CHAN_MENU1,		//## %s !!"W:\game\base\!!sound\*.wav;*.mp3" #menu stuff, etc
-	CHAN_VOICE_GLOBAL,  //## %s !!"W:\game\base\!!sound\voice\*.wav;*.mp3" # Causes mouth animation and is broadcast, like announcer
-	CHAN_MUSIC,	//## %s !!"W:\game\base\!!sound\*.wav;*.mp3" #music played as a looping sound - added by BTO (VV)
-} soundChannel_t;
-
-// ELEMENTS COMMUNICATED ACROSS THE NET
-
-#define	ANGLE2SHORT(x)	((int)((x)*65536/360) & 65535)
-#define	SHORT2ANGLE(x)	((x)*(360.0/65536))
-
-#define	SNAPFLAG_RATE_DELAYED	1
-#define	SNAPFLAG_NOT_ACTIVE		2	// snapshot used during connection and for zombies
-#define SNAPFLAG_SERVERCOUNT	4	// toggled every map_restart so transitions can be detected
-
-// per-level limits
-#define	MAX_CLIENTS			32		// absolute limit
-#define MAX_RADAR_ENTITIES	MAX_GENTITIES
-#define MAX_TERRAINS		1//32 //rwwRMG: inserted
-#define MAX_LOCATIONS		64
-
-#define	GENTITYNUM_BITS	10		// don't need to send any more
-#define	MAX_GENTITIES	(1<<GENTITYNUM_BITS)
-
-//I am reverting. I guess. For now.
-/*
-#define	GENTITYNUM_BITS		11
-							//rww - I am raising this 1 bit. SP actually has room for 1024 ents - none - world - 1 client.
-							//Which means 1021 useable entities. However we have 32 clients.. so if we keep our limit
-							//at 1024 we are not going to be able to load any SP levels at the edge of the ent limit.
-#define		MAX_GENTITIES	(1024+(MAX_CLIENTS-1))
-							//rww - we do have enough room to send over 2048 ents now. However, I cannot live with the guilt of
-							//actually increasing the entity limit to 2048 (as it would slow down countless things, and
-							//there are tons of ent list traversals all over the place). So I am merely going to give enough
-							//to compensate for our larger maxclients.
-*/
-
-// entitynums are communicated with GENTITY_BITS, so any reserved
-// values thatare going to be communcated over the net need to
-// also be in this range
-#define	ENTITYNUM_NONE		(MAX_GENTITIES-1)
-#define	ENTITYNUM_WORLD		(MAX_GENTITIES-2)
-#define	ENTITYNUM_MAX_NORMAL	(MAX_GENTITIES-2)
-
-// these are also in be_aas_def.h - argh (rjr)
-#define	MAX_MODELS			512		// these are sent over the net as -12 bits
-#define	MAX_SOUNDS			256		// so they cannot be blindly increased
-#define MAX_ICONS			64		// max registered icons you can have per map
-#define MAX_FX				64		// max effects strings, I'm hoping that 64 will be plenty
-
-#define MAX_SUB_BSP			32 //rwwRMG - added
-
-#define	MAX_G2BONES		64		//rww - changed from MAX_CHARSKINS to MAX_G2BONES. value still equal.
-
-#define MAX_AMBIENT_SETS		256 //rww - ambient soundsets must be sent over in config strings.
-
-#define	MAX_CONFIGSTRINGS	1700 //this is getting pretty high. Try not to raise it anymore than it already is.
-
-// these are the only configstrings that the system reserves, all the
-// other ones are strictly for servergame to clientgame communication
-#define	CS_SERVERINFO		0		// an info string with all the serverinfo cvars
-#define	CS_SYSTEMINFO		1		// an info string for server system to client system configuration (timescale, etc)
-
-#define	RESERVED_CONFIGSTRINGS	2	// game can't modify below this, only the system can
-
-#define	MAX_GAMESTATE_CHARS	16000
 typedef struct gameState_s {
 	int			stringOffsets[MAX_CONFIGSTRINGS];
 	char		stringData[MAX_GAMESTATE_CHARS];
 	int			dataCount;
 } gameState_t;
-
-// all the different tracking "channels"
-typedef enum {
-	TRACK_CHANNEL_NONE = 50,
-	TRACK_CHANNEL_1,
-	TRACK_CHANNEL_2, // force speed
-	TRACK_CHANNEL_3, // force rage
-	TRACK_CHANNEL_4,
-	TRACK_CHANNEL_5, // force sight
-	NUM_TRACK_CHANNELS
-} trackchan_t;
-
-#define TRACK_CHANNEL_MAX (NUM_TRACK_CHANNELS-50)
 
 typedef struct forcedata_s {
 	int			forcePowerDebounce[NUM_FORCE_POWERS];	//for effects that must have an interval
@@ -971,32 +1112,6 @@ typedef struct forcedata_s {
 
 	int			privateDuelTime;
 } forcedata_t;
-
-typedef enum {
-	SENTRY_NOROOM = 1,
-	SENTRY_ALREADYPLACED,
-	SHIELD_NOROOM,
-	SEEKER_ALREADYDEPLOYED
-} itemUseFail_t;
-
-// bit field limits
-#define	MAX_STATS				16
-#define	MAX_PERSISTANT			16
-#define	MAX_POWERUPS			16
-#define	MAX_WEAPONS				19
-#define MAX_AMMO_TRANSMIT		16 // This is needed because the ammo array is 19 but only 16 sized array is networked
-#define MAX_AMMO				MAX_WEAPONS
-
-#define	MAX_PS_EVENTS			2
-
-#define PS_PMOVEFRAMECOUNTBITS	6
-
-#define FORCE_LIGHTSIDE			1
-#define FORCE_DARKSIDE			2
-
-#define MAX_FORCE_RANK			7
-
-#define FALL_FADE_TIME			3000
 
 // playerState_t is the information needed by both the client and server to predict player motion and actions
 // nothing outside of pmove should modify these, or some degree of prediction error will occur
@@ -1254,79 +1369,6 @@ typedef struct playerState_s {
 #endif
 } playerState_t;
 
-// usercmd_t->button bits, many of which are generated by the client system, so they aren't game/cgame only definitions
-#define	BUTTON_ATTACK			1
-#define	BUTTON_TALK				2			// displays talk balloon and disables actions
-#define	BUTTON_USE_HOLDABLE		4
-#define	BUTTON_GESTURE			8
-#define	BUTTON_WALKING			16			// walking can't just be infered from MOVE_RUN
-										// because a key pressed late in the frame will
-										// only generate a small move value for that frame
-										// walking will use different animations and
-										// won't generate footsteps
-#define	BUTTON_USE				32			// the ol' use key returns!
-#define BUTTON_FORCEGRIP		64			//
-#define BUTTON_ALT_ATTACK		128
-
-#define	BUTTON_ANY				256			// any key whatsoever
-
-#define BUTTON_FORCEPOWER		512			// use the "active" force power
-
-#define BUTTON_FORCE_LIGHTNING	1024
-
-#define BUTTON_FORCE_DRAIN		2048
-
-// Here's an interesting bit.  The bots in TA used buttons to do additional gestures.
-// I ripped them out because I didn't want too many buttons given the fact that I was already adding some for JK2.
-// We can always add some back in if we want though.
-/*
-#define BUTTON_AFFIRMATIVE	32
-#define	BUTTON_NEGATIVE		64
-
-#define BUTTON_GETFLAG		128
-#define BUTTON_GUARDBASE	256
-#define BUTTON_PATROL		512
-#define BUTTON_FOLLOWME		1024
-*/
-
-#define	MOVE_RUN			120			// if forwardmove or rightmove are >= MOVE_RUN,
-										// then BUTTON_WALKING should be set
-
-typedef enum
-{
-	GENCMD_SABERSWITCH = 1,
-	GENCMD_ENGAGE_DUEL,
-	GENCMD_FORCE_HEAL,
-	GENCMD_FORCE_SPEED,
-	GENCMD_FORCE_THROW,
-	GENCMD_FORCE_PULL,
-	GENCMD_FORCE_DISTRACT,
-	GENCMD_FORCE_RAGE,
-	GENCMD_FORCE_PROTECT,
-	GENCMD_FORCE_ABSORB,
-	GENCMD_FORCE_HEALOTHER,
-	GENCMD_FORCE_FORCEPOWEROTHER,
-	GENCMD_FORCE_SEEING,
-	GENCMD_USE_SEEKER,
-	GENCMD_USE_FIELD,
-	GENCMD_USE_BACTA,
-	GENCMD_USE_ELECTROBINOCULARS,
-	GENCMD_ZOOM,
-	GENCMD_USE_SENTRY,
-	GENCMD_USE_JETPACK,
-	GENCMD_USE_BACTABIG,
-	GENCMD_USE_HEALTHDISP,
-	GENCMD_USE_AMMODISP,
-	GENCMD_USE_EWEB,
-	GENCMD_USE_CLOAK,
-	GENCMD_SABERATTACKCYCLE,
-	GENCMD_TAUNT,
-	GENCMD_BOW,
-	GENCMD_MEDITATE,
-	GENCMD_FLOURISH,
-	GENCMD_GLOAT
-} genCmds_t;
-
 // usercmd_t is sent to the server each client frame
 typedef struct usercmd_s {
 	int				serverTime;
@@ -1440,24 +1482,6 @@ typedef struct addElectricityArgStruct_s {
 	qhandle_t shader;
 	int flags;
 } addElectricityArgStruct_t;
-
-typedef enum solid_e {
-	SOLID_NOT,					// no interaction with other objects
-	SOLID_TRIGGER,				// only touch when inside, after moving
-	SOLID_BBOX,					// touch on edge
-	SOLID_BSP,					// bsp clip, touch on edge
-	SOLID_BMODEL	= 0xffffff,	// if entityState->solid == SOLID_BMODEL, modelindex is an inline model number
-} solid_t;
-
-typedef enum {
-	TR_STATIONARY,
-	TR_INTERPOLATE,				// non-parametric, but interpolate between snapshots
-	TR_LINEAR,
-	TR_LINEAR_STOP,
-	TR_NONLINEAR_STOP,
-	TR_SINE,					// value = base + sin( time / duration ) * delta
-	TR_GRAVITY
-} trType_t;
 
 typedef struct trajectory_s {
 	trType_t	trType;
@@ -1627,21 +1651,7 @@ typedef struct entityState_s {
 	vec3_t		userVec2;
 } entityState_t;
 
-typedef enum {
-	CA_UNINITIALIZED,
-	CA_DISCONNECTED, 	// not talking to a server
-	CA_AUTHORIZING,		// not used any more, was checking cd key
-	CA_CONNECTING,		// sending request packets to the server
-	CA_CHALLENGING,		// sending challenge packets to the server
-	CA_CONNECTED,		// netchan_t established, getting gamestate
-	CA_LOADING,			// only during cgame initialization, never during main loop
-	CA_PRIMED,			// got gamestate, waiting for first frame
-	CA_ACTIVE,			// game views should be displayed
-	CA_CINEMATIC		// playing a cinematic or a static pic, not connected to a server
-} connstate_t;
-
 // real time
-
 typedef struct qtime_s {
 	int tm_sec;     /* seconds after the minute - [0,59] */
 	int tm_min;     /* minutes after the hour - [0,59] */
@@ -1654,49 +1664,9 @@ typedef struct qtime_s {
 	int tm_isdst;   /* daylight savings time flag */
 } qtime_t;
 
-// server browser sources
-#define AS_LOCAL			0
-#define AS_GLOBAL			1
-#define AS_FAVORITES		2
-
-#define AS_MPLAYER			3 // (Obsolete)
-
-// cinematic states
-typedef enum {
-	FMV_IDLE,
-	FMV_PLAY,		// play
-	FMV_EOF,		// all other conditions, i.e. stop/EOF/abort
-	FMV_ID_BLT,
-	FMV_ID_IDLE,
-	FMV_LOOPED,
-	FMV_ID_WAIT
-} e_status;
-
-#define	MAX_GLOBAL_SERVERS			2048
-#define	MAX_OTHER_SERVERS			128
-#define MAX_PINGREQUESTS			32
-#define MAX_SERVERSTATUSREQUESTS	16
-
-#define SAY_ALL		0
-#define SAY_TEAM	1
-#define SAY_TELL	2
-
 typedef struct mdxaBone_s {
 	float		matrix[3][4];
 } mdxaBone_t;
-
-// For ghoul2 axis use
-
-typedef enum Eorientations
-{
-	ORIGIN = 0,
-	POSITIVE_X,
-	POSITIVE_Z,
-	POSITIVE_Y,
-	NEGATIVE_X,
-	NEGATIVE_Z,
-	NEGATIVE_Y
-} orientations_t;
 
 // define the new memory tags for the zone, used by all modules now
 
@@ -1704,10 +1674,6 @@ typedef enum Eorientations
 typedef enum {
 	#include "qcommon/tags.h"
 } memtag;
-typedef unsigned memtag_t;
-
-//rww - conveniently toggle "gore" code, for model decals and stuff.
-#define _G2_GORE
 
 typedef struct SSkinGoreData_s
 {
@@ -1744,7 +1710,6 @@ typedef struct SSkinGoreData_s
 } SSkinGoreData;
 
 // String ID Tables
-
 #define ENUM2STRING(arg)   { #arg, arg }
 typedef struct stringID_table_s
 {
@@ -1752,35 +1717,70 @@ typedef struct stringID_table_s
 	int		id;
 } stringID_table_t;
 
-int GetIDForString ( const stringID_table_t *table, const char *string );
-const char *GetStringForID( stringID_table_t *table, int id );
+// ======================================================================
+// EXTERN VARIABLE
+// ======================================================================
 
-// stuff to help out during development process, force reloading/uncacheing of certain filetypes...
+extern float forceSpeedLevels[4];
 
-typedef enum
-{
-	eForceReload_NOTHING,
-//	eForceReload_BSP,	// not used in MP codebase
-	eForceReload_MODELS,
-	eForceReload_ALL
+// ======================================================================
+// FUNCTION
+// ======================================================================
 
-} ForceReload_e;
+// this is only here so the functions in q_shared.c and bg_*.c can link
+#if defined( _GAME ) || defined( _CGAME ) || defined( UI_BUILD )
+extern NORETURN_PTR void (*Com_Error)(int level, const char* fmt, ...);
+extern void (*Com_Printf)(const char* fmt, ...);
+#else
+void NORETURN QDECL Com_Error(int level, const char* fmt, ...);
+void QDECL Com_Printf(const char* fmt, ...);
+#endif
 
-// NOTE: this must be kept up to date in menudef.h
-enum {
-	FONT_NONE,
-	FONT_SMALL=1,
-	FONT_MEDIUM,
-	FONT_LARGE,
-	FONT_SMALL2
-};
-
-void NET_AddrToString( char *out, size_t size, void *addr );
-
-bool Q_InBitflags( const uint32_t *bits, int index, uint32_t bitsPerByte );
-void Q_AddToBitflags( uint32_t *bits, int index, uint32_t bitsPerByte );
-void Q_RemoveFromBitflags( uint32_t *bits, int index, uint32_t bitsPerByte );
-
-typedef int( *cmpFunc_t )(const void *a, const void *b);
-
-void *Q_LinearSearch( const void *key, const void *ptr, size_t count, size_t size, cmpFunc_t cmp );
+//int COM_ParseInfos( char *buf, int max, char infos[][MAX_INFO_STRING] );
+bool COM_CompareExtension(const char* in, const char* ext);
+bool COM_ParseFloat(const char** data, float* f);
+bool COM_ParseInt(const char** data, int* i);
+bool COM_ParseString(const char** data, const char** s);
+bool COM_ParseVec4(const char** buffer, vec4_t* c);
+bool Info_NextPair(const char** s, char* key, char* value);
+bool Info_Validate(const char* s);
+bool Q_InBitflags(const uint32_t* bits, int index, uint32_t bitsPerByte);
+bool SkipBracedSection(const char** program, int depth);
+char* COM_Parse(const char** data_p);
+char* COM_ParseExt(const char** data_p, bool allowLineBreak);
+char* Com_SkipCharset(char* s, char* sep);
+char* COM_SkipPath(char* pathname);
+char* Com_SkipTokens(char* s, int numTokens, char* sep);
+char* Info_ValueForKey(const char* s, const char* key);
+char* QDECL va(const char* format, ...);
+const char* COM_GetExtension(const char* name);
+const char* GetStringForID(stringID_table_t* table, int id);
+const char* SkipWhitespace(const char* data, bool* hasNewLines);
+int Com_HexStrToInt(const char* str);
+int FloatAsInt(float f);
+int GetIDForString(const stringID_table_t* table, const char* string);
+int	COM_Compress(char* data_p);
+int	COM_GetCurrentParseLine(void);
+int	QDECL Com_sprintf(char* dest, int size, const char* fmt, ...);
+typedef int(*cmpFunc_t)(const void* a, const void* b);
+void COM_BeginParseSession(const char* name);
+void COM_DefaultExtension(char* path, int maxSize, const char* extension);
+void COM_MatchToken(const char** buf_p, char* match);
+void COM_ParseError(char* format, ...);
+void COM_ParseWarning(char* format, ...);
+void Com_RandomBytes(byte* string, int len);
+void COM_StripExtension(const char* in, char* out, int destsize);
+void Com_TruncateLongString(char* buffer, const char* s);
+void Info_RemoveKey(char* s, const char* key);
+void Info_RemoveKey_Big(char* s, const char* key);
+void Info_SetValueForKey(char* s, const char* key, const char* value);
+void Info_SetValueForKey_Big(char* s, const char* key, const char* value);
+void NET_AddrToString(char* out, size_t size, void* addr);
+void Parse1DMatrix(const char** buf_p, int x, float* m);
+void Parse2DMatrix(const char** buf_p, int y, int x, float* m);
+void Parse3DMatrix(const char** buf_p, int z, int y, int x, float* m);
+void Q_AddToBitflags(uint32_t* bits, int index, uint32_t bitsPerByte);
+void Q_RemoveFromBitflags(uint32_t* bits, int index, uint32_t bitsPerByte);
+void SkipRestOfLine(const char** data);
+void* Hunk_Alloc(int size, ha_pref preference);
+void* Q_LinearSearch(const void* key, const void* ptr, size_t count, size_t size, cmpFunc_t cmp);

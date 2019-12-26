@@ -185,7 +185,6 @@ if(BuildMPEngine OR BuildMPDed)
 		# hack until we clean up renderer/engine cvars
 		"${MPDir}/qcommon/com_cvars.cpp"
 		"${MPDir}/qcommon/com_cvars.h"
-		"${MPDir}/qcommon/common.cpp"
 		"${MPDir}/qcommon/cvar.cpp"
 		"${MPDir}/qcommon/disablewarnings.h"
 		"${MPDir}/qcommon/files.cpp"
@@ -193,6 +192,7 @@ if(BuildMPEngine OR BuildMPDed)
 		"${MPDir}/qcommon/GenericParser2.cpp"
 		"${MPDir}/qcommon/GenericParser2.h"
 		"${MPDir}/qcommon/huffman.cpp"
+		"${MPDir}/qcommon/huffman.h"
 		"${MPDir}/qcommon/md4.cpp"
 		"${MPDir}/qcommon/md5.cpp"
 		"${MPDir}/qcommon/md5.h"
@@ -205,6 +205,7 @@ if(BuildMPEngine OR BuildMPDed)
 		"${MPDir}/qcommon/persistence.cpp"
 		"${MPDir}/qcommon/q_shared.cpp"
 		"${MPDir}/qcommon/q_shared.h"
+		"${MPDir}/qcommon/q_common.cpp"
 		"${MPDir}/qcommon/q_common.h"
 		"${MPDir}/qcommon/q_files.h"
 		"${MPDir}/qcommon/q_type.h"
