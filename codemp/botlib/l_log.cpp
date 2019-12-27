@@ -45,6 +45,7 @@ typedef struct logfile_s
 
 static logfile_t logfile;
 
+//open a log file
 void Log_Open(char *filename)
 {
 	if (!LibVarValue("log", "0")) return;
@@ -68,6 +69,7 @@ void Log_Open(char *filename)
 	botimport.Print(PRT_MESSAGE, "Opened log %s\n", logfile.filename);
 } //end of the function Log_Create
 
+//close the current log file
 void Log_Close(void)
 {
 	if (!logfile.fp) return;
@@ -80,11 +82,13 @@ void Log_Close(void)
 	botimport.Print(PRT_MESSAGE, "Closed log %s\n", logfile.filename);
 } //end of the function Log_Close
 
+//close log file if present
 void Log_Shutdown(void)
 {
 	if (logfile.fp) Log_Close();
 } //end of the function Log_Shutdown
 
+//write to the current opened log file
 void QDECL Log_Write(char *fmt, ...)
 {
 	va_list ap;
@@ -97,6 +101,7 @@ void QDECL Log_Write(char *fmt, ...)
 	fflush(logfile.fp);
 } //end of the function Log_Write
 
+//write to the current opened log file with a time stamp
 void QDECL Log_WriteTimeStamped(char *fmt, ...)
 {
 	va_list ap;
@@ -117,11 +122,13 @@ void QDECL Log_WriteTimeStamped(char *fmt, ...)
 	fflush(logfile.fp);
 } //end of the function Log_Write
 
+//returns a pointer to the log file
 FILE *Log_FilePointer(void)
 {
 	return logfile.fp;
 } //end of the function Log_FilePointer
 
+//flush log file
 void Log_Flush(void)
 {
 	if (logfile.fp) fflush(logfile.fp);

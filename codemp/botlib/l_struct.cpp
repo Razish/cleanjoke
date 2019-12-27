@@ -190,6 +190,7 @@ int ReadString(source_t *source, fielddef_t *fd, void *p)
 	return 1;
 } //end of the function ReadString
 
+//read a structure from a script
 int ReadStructure(source_t *source, structdef_t *def, char *structure)
 {
 	token_t token;
@@ -288,6 +289,7 @@ int WriteIndent(FILE *fp, int indent)
 	return true;
 } //end of the function WriteIndent
 
+//writes a float without traling zeros
 int WriteFloat(FILE *fp, float value)
 {
 	char buf[128];
@@ -392,6 +394,7 @@ int WriteStructWithIndent(FILE *fp, structdef_t *def, char *structure, int inden
 	return true;
 } //end of the function WriteStructWithIndent
 
+//write a structure to a file
 int WriteStructure(FILE *fp, structdef_t *def, char *structure)
 {
 	return WriteStructWithIndent(fp, def, structure, 0);

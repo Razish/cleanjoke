@@ -49,6 +49,9 @@ const ImageLoaderMap *FindImageLoader ( const char *extension )
 
 // Adds a new image loader to load the specified image file extension.
 // The 'extension' string should not begin with a period (full stop).
+//
+// Adds a new image loader to handle a new image type. 
+// The extension should not begin with a period (a full stop).
 bool R_ImageLoader_Add ( const char *extension, ImageLoaderFn imageLoader )
 {
 	if ( numImageLoaders >= MAX_IMAGE_LOADERS )

@@ -23,7 +23,11 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
 
-// tr_QuickSprite.h: interface for the CQuickSprite class.
+// interface for the CQuickSprite class.
+
+// ======================================================================
+// CLASS
+// ======================================================================
 
 class CQuickSpriteSystem
 {
@@ -49,5 +53,9 @@ public:
 
 			void Add(float *pointdata, color4ub_t color, vec2_t fog=NULL);
 };
+
+// ======================================================================
+// EXTERN VARIABLE
+// ======================================================================
 
 extern CQuickSpriteSystem SQuickSprite;

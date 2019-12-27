@@ -25,12 +25,16 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
 
+// ======================================================================
+// INCLUDE
+// ======================================================================
+
 #include "qcommon/q_shared.h"
 #include "client/cl_keycodes.h"
 
-
-
-// definitions
+// ======================================================================
+// DEFINE
+// ======================================================================
 
 #define ART_FX_BASE                "menu/art/fx_base"
 #define ART_FX_BLUE                "menu/art/fx_blue"
@@ -75,9 +79,9 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 #define STRING_POOL_SIZE           (2*1024*1024)
 #define WINDOW_INTRANSITIONMODEL   0x04000000	// delayed script waiting to run
 
-
-
-// enums
+// ======================================================================
+// ENUM
+// ======================================================================
 
 enum cursorFlags_e : uint32_t {
 	CURSOR_NONE =  0x0001,
@@ -134,9 +138,9 @@ enum itemFlags_e : uint32_t {
 	ITF_ISANYSABER =  (ITF_ISSABER|ITF_ISSABER2), // either saber
 };
 
-
-
-// structs
+// ======================================================================
+// STRUCT
+// ======================================================================
 
 // FIXME: combine flags into bitfields to save space
 // FIXME: consolidate all of the common stuff in one structure for menus and items
@@ -467,80 +471,82 @@ struct displayContextDef_t {
 	} ext;
 };
 
+// ======================================================================
+// EXTERN VARIABLE
+// ======================================================================
 
-
-// variables
 extern const char *HolocronIcons[NUM_FORCE_POWERS];
 
+// ======================================================================
+// FUNCTION
+// ======================================================================
 
-
-// functions
-bool             Color_Parse                 ( char **p, vec4_t *c );
-void                 Controls_GetConfig          ( void );
-void                 Controls_SetConfig          ( void );
-void                 Controls_SetDefaults        ( void );
-void                 Display_CacheAll            ( void );
-void                *Display_CaptureItem         ( int x, int y );
-int                  Display_CursorType          ( int x, int y );
-void                 Display_ExpandMacros        ( char *buff );
-displayContextDef_t *Display_GetContext          ( void );
-void                 Display_HandleKey           ( int key, bool down, int x, int y );
-bool             Display_KeyBindPending      ( void );
-bool             Display_MouseMove           ( void *p, int x, int y );
-bool             Float_Parse                 ( char **p, float *f );
-bool             Int_Parse                   ( char **p, int *i );
-void                 Init_Display                ( displayContextDef_t *dc );
-void                 Item_Init                   ( itemDef_t *item );
-void                 Item_RunScript              ( itemDef_t *item, const char *s );
-bool             ItemParse_asset_model_go    ( itemDef_t *item, const char *name, int *runTimeLength );
-bool             ItemParse_model_g2anim_go   ( itemDef_t *item, const char *animName );
-bool             ItemParse_model_g2skin_go   ( itemDef_t *item, const char *skinName );
-void                 LerpColor                   ( vec4_t a, vec4_t b, vec4_t c, float t );
-int                  Menu_Count                  ( void );
-itemDef_t           *Menu_FindItemByName         ( menuDef_t *menu, const char *p );
-menuDef_t           *Menu_GetFocused             ( void );
-itemDef_t           *Menu_GetMatchingItemByNumber( menuDef_t *menu, int index, const char *name );
-void                 Menu_HandleKey              ( menuDef_t *menu, int key, bool down );
-void                 Menu_HandleMouseMove        ( menuDef_t *menu, float x, float y );
-void                 Menu_Init                   ( menuDef_t *menu );
-void                 Menu_ItemDisable            ( menuDef_t *menu, const char *name, bool disableFlag );
-int                  Menu_ItemsMatchingGroup     ( menuDef_t *menu, const char *name );
-void                 Menu_New                    ( int handle );
-void                 Menu_Paint                  ( menuDef_t *menu, bool forcePaint );
-void                 Menu_PaintAll               ( void );
-void                 Menu_PostParse              ( menuDef_t *menu );
-void                 Menu_Reset                  ( void );
-void                 Menu_ScrollFeeder           ( menuDef_t *menu, int feeder, bool down );
-void                 Menu_SetFeederSelection     ( menuDef_t *menu, int feeder, int index, const char *name );
-void                 Menu_SetItemBackground      ( const menuDef_t *menu,const char *itemName, const char *background );
-void                 Menu_SetItemText            ( const menuDef_t *menu,const char *itemName, const char *text );
-void                 Menu_ShowGroup              ( menuDef_t *menu, const char *itemName, bool showFlag );
-void                 Menu_ShowItemByName         ( menuDef_t *menu, const char *p, bool bShow );
-void                 Menus_Activate              ( menuDef_t *menu );
-menuDef_t           *Menus_ActivateByName        ( const char *p );
-bool             Menus_AnyFullScreenVisible  ( void );
-void                 Menus_CloseAll              ( void );
-void                 Menus_CloseByName           ( const char *p );
-menuDef_t           *Menus_FindByName            ( const char *p );
-menuDef_t           *Menus_OpenByName            ( const char *p );
-void                 Menus_ShowByName            ( const char *p );
-bool             PC_Color_Parse              ( int handle, vec4_t *c );
-bool             PC_Float_Parse              ( int handle, float *f );
-bool             PC_Int_Parse                ( int handle, int *i );
-bool             PC_Rect_Parse               ( int handle, rectDef_t *r );
-bool             PC_Script_Parse             ( int handle, const char **out );
-bool             PC_String_Parse             ( int handle, const char **out );
-bool             Rect_Parse                  ( char **p, rectDef_t *r );
-bool             Script_Parse                ( char **p, const char **out );
-const char          *String_Alloc                ( const char *p );
-void                 String_Init                 ( void );
-bool             String_Parse                ( char **p, const char **out );
-void                 String_Report               ( void );
-void                *UI_Alloc                    ( int size );
-void                 UI_CleanupGhoul2            ( void );
-void                 UI_InitMemory               ( void );
-bool             UI_OutOfMemory              ( void );
-int                  UI_ParseAnimationFile       ( const char *filename, animation_t *animset, bool isHumanoid );
-void                 UI_SaberAttachToChar        ( itemDef_t *item );
-bool             UI_SaberSkinForSaber        ( const char *saberName, char *saberSkin );
-void                 UI_UpdateCharacterSkin      ( void );
+bool Color_Parse(char** p, vec4_t* c);
+bool Display_KeyBindPending(void);
+bool Display_MouseMove(void* p, int x, int y);
+bool Float_Parse(char** p, float* f);
+bool Int_Parse(char** p, int* i);
+bool ItemParse_asset_model_go(itemDef_t* item, const char* name, int* runTimeLength);
+bool ItemParse_model_g2anim_go(itemDef_t* item, const char* animName);
+bool ItemParse_model_g2skin_go(itemDef_t* item, const char* skinName);
+bool Menus_AnyFullScreenVisible(void);
+bool PC_Color_Parse(int handle, vec4_t* c);
+bool PC_Float_Parse(int handle, float* f);
+bool PC_Int_Parse(int handle, int* i);
+bool PC_Rect_Parse(int handle, rectDef_t* r);
+bool PC_Script_Parse(int handle, const char** out);
+bool PC_String_Parse(int handle, const char** out);
+bool Rect_Parse(char** p, rectDef_t* r);
+bool Script_Parse(char** p, const char** out);
+bool String_Parse(char** p, const char** out);
+bool UI_OutOfMemory(void);
+bool UI_SaberSkinForSaber(const char* saberName, char* saberSkin);
+const char* String_Alloc(const char* p);
+displayContextDef_t* Display_GetContext(void);
+int Display_CursorType(int x, int y);
+int Menu_Count(void);
+int Menu_ItemsMatchingGroup(menuDef_t* menu, const char* name);
+int UI_ParseAnimationFile(const char* filename, animation_t* animset, bool isHumanoid);
+itemDef_t* Menu_FindItemByName(menuDef_t* menu, const char* p);
+itemDef_t* Menu_GetMatchingItemByNumber(menuDef_t* menu, int index, const char* name);
+menuDef_t* Menu_GetFocused(void);
+menuDef_t* Menus_ActivateByName(const char* p);
+menuDef_t* Menus_FindByName(const char* p);
+menuDef_t* Menus_OpenByName(const char* p);
+void Controls_GetConfig(void);
+void Controls_SetConfig(void);
+void Controls_SetDefaults(void);
+void Display_CacheAll(void);
+void Display_ExpandMacros(char* buff);
+void Display_HandleKey(int key, bool down, int x, int y);
+void Init_Display(displayContextDef_t* dc);
+void Item_Init(itemDef_t* item);
+void Item_RunScript(itemDef_t* item, const char* s);
+void LerpColor(vec4_t a, vec4_t b, vec4_t c, float t);
+void Menu_HandleKey(menuDef_t* menu, int key, bool down);
+void Menu_HandleMouseMove(menuDef_t* menu, float x, float y);
+void Menu_Init(menuDef_t* menu);
+void Menu_ItemDisable(menuDef_t* menu, const char* name, bool disableFlag);
+void Menu_New(int handle);
+void Menu_Paint(menuDef_t* menu, bool forcePaint);
+void Menu_PaintAll(void);
+void Menu_PostParse(menuDef_t* menu);
+void Menu_Reset(void);
+void Menu_ScrollFeeder(menuDef_t* menu, int feeder, bool down);
+void Menu_SetFeederSelection(menuDef_t* menu, int feeder, int index, const char* name);
+void Menu_SetItemBackground(const menuDef_t* menu, const char* itemName, const char* background);
+void Menu_SetItemText(const menuDef_t* menu, const char* itemName, const char* text);
+void Menu_ShowGroup(menuDef_t* menu, const char* itemName, bool showFlag);
+void Menu_ShowItemByName(menuDef_t* menu, const char* p, bool bShow);
+void Menus_Activate(menuDef_t* menu);
+void Menus_CloseAll(void);
+void Menus_CloseByName(const char* p);
+void Menus_ShowByName(const char* p);
+void String_Init(void);
+void String_Report(void);
+void UI_CleanupGhoul2(void);
+void UI_InitMemory(void);
+void UI_SaberAttachToChar(itemDef_t* item);
+void UI_UpdateCharacterSkin(void);
+void* Display_CaptureItem(int x, int y);
+void* UI_Alloc(int size);

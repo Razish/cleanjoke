@@ -29,7 +29,6 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 #include "game/g_local.h"
 #include "game/b_public.h"
-#include "game/say.h"
 
 // ======================================================================
 // DEFINE

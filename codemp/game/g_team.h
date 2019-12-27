@@ -24,6 +24,10 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
 
+// ======================================================================
+// DEFINE
+// ======================================================================
+
 #define CTF_CAPTURE_BONUS		100		// what you get for capture
 #define CTF_TEAM_BONUS			25		// what your team gets for capture
 #define CTF_RECOVERY_BONUS		10		// what you get for recovery
@@ -49,24 +53,24 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 #define OVERLOAD_ATTACK_BASE_SOUND_TIME		20000
 
-// Prototypes
+// ======================================================================
+// FUNCTION
+// ======================================================================
 
+bool Team_GetLocationMsg(gentity_t* ent, char* loc, int loclen);
+const char* OtherTeamName(int team);
+const char* TeamColorString(int team);
+const char* TeamName(int team);
+gentity_t* SelectCTFSpawnPoint(team_t team, int teamstate, vec3_t origin, vec3_t angles, bool isbot);
 int OtherTeam(int team);
-const char *TeamName(int team);
-const char *OtherTeamName(int team);
-const char *TeamColorString(int team);
+int Pickup_Team(gentity_t* ent, gentity_t* other);
+locationData_t* Team_GetLocation(gentity_t* ent);
 void AddTeamScore(vec3_t origin, int team, int score);
-
-void Team_DroppedFlagThink(gentity_t *ent);
-void Team_FragBonuses(gentity_t *targ, gentity_t *inflictor, gentity_t *attacker);
-void Team_CheckHurtCarrier(gentity_t *targ, gentity_t *attacker);
+void CheckTeamStatus(void);
+void Team_CheckHurtCarrier(gentity_t* targ, gentity_t* attacker);
+void Team_DroppedFlagThink(gentity_t* ent);
+void Team_FragBonuses(gentity_t* targ, gentity_t* inflictor, gentity_t* attacker);
+void Team_FreeEntity(gentity_t* ent);
 void Team_InitGame(void);
 void Team_ReturnFlag(int team);
-void Team_FreeEntity(gentity_t *ent);
-gentity_t *SelectCTFSpawnPoint ( team_t team, int teamstate, vec3_t origin, vec3_t angles, bool isbot );
-locationData_t *Team_GetLocation(gentity_t *ent);
-bool Team_GetLocationMsg(gentity_t *ent, char *loc, int loclen);
-void TeamplayInfoMessage( gentity_t *ent );
-void CheckTeamStatus(void);
-
-int Pickup_Team( gentity_t *ent, gentity_t *other );
+void TeamplayInfoMessage(gentity_t* ent);

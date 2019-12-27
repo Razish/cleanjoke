@@ -85,6 +85,7 @@ void LibVarDeAlloc(libvar_t *v)
 	FreeMemory(v);
 } //end of the function LibVarDeAlloc
 
+//removes all library variables
 void LibVarDeAllocAll(void)
 {
 	libvar_t *v;
@@ -97,6 +98,7 @@ void LibVarDeAllocAll(void)
 	libvarlist = NULL;
 } //end of the function LibVarDeAllocAll
 
+//gets the library variable with the given name
 libvar_t *LibVarGet(char *var_name)
 {
 	libvar_t *v;
@@ -111,6 +113,7 @@ libvar_t *LibVarGet(char *var_name)
 	return NULL;
 } //end of the function LibVarGet
 
+//gets the string of the library variable with the given name
 char *LibVarGetString(char *var_name)
 {
 	libvar_t *v;
@@ -126,6 +129,7 @@ char *LibVarGetString(char *var_name)
 	} //end else
 } //end of the function LibVarGetString
 
+//gets the value of the library variable with the given name
 float LibVarGetValue(char *var_name)
 {
 	libvar_t *v;
@@ -141,6 +145,7 @@ float LibVarGetValue(char *var_name)
 	} //end else
 } //end of the function LibVarGetValue
 
+//creates the library variable if not existing already and returns it
 libvar_t *LibVar(char *var_name, char *value)
 {
 	libvar_t *v;
@@ -159,6 +164,7 @@ libvar_t *LibVar(char *var_name, char *value)
 	return v;
 } //end of the function LibVar
 
+//creates the library variable if not existing already and returns the value string
 char *LibVarString(char *var_name, char *value)
 {
 	libvar_t *v;
@@ -167,6 +173,7 @@ char *LibVarString(char *var_name, char *value)
 	return v->string;
 } //end of the function LibVarString
 
+//creates the library variable if not existing already and returns the value
 float LibVarValue(char *var_name, char *value)
 {
 	libvar_t *v;
@@ -175,6 +182,7 @@ float LibVarValue(char *var_name, char *value)
 	return v->value;
 } //end of the function LibVarValue
 
+//sets the library variable
 void LibVarSet(char *var_name, char *value)
 {
 	libvar_t *v;
@@ -197,6 +205,7 @@ void LibVarSet(char *var_name, char *value)
 	v->modified = true;
 } //end of the function LibVarSet
 
+//returns true if the library variable has been modified
 bool LibVarChanged(char *var_name)
 {
 	libvar_t *v;
@@ -212,6 +221,7 @@ bool LibVarChanged(char *var_name)
 	} //end else
 } //end of the function LibVarChanged
 
+//sets the library variable to unmodified
 void LibVarSetNotModified(char *var_name)
 {
 	libvar_t *v;

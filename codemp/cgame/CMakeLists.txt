@@ -44,7 +44,6 @@ set(MPCGameGameFiles
 	"${MPDir}/game/bg_local.h"
 	"${MPDir}/game/bg_public.h"
 	"${MPDir}/game/bg_weapons.h"
-	"${MPDir}/game/surfaceflags.h"
 	)
 source_group("game" FILES ${MPCGameGameFiles})
 set(MPCGameFiles ${MPCGameFiles} ${MPCGameGameFiles})

@@ -34,6 +34,7 @@ void user_flush_data( png_structp png_ptr ) {
 	//TODO: ri.FS_Flush?
 }
 
+// Save raw image data as PNG image file.
 int RE_SavePNG( const char *filename, byte *buf, size_t width, size_t height, int byteDepth ) {
 	fileHandle_t fp;
 	png_structp png_ptr = NULL;
@@ -291,6 +292,7 @@ void user_read_data( png_structp png_ptr, png_bytep data, png_size_t length ) {
 }
 
 // Loads a PNG image from file.
+// Load raw image data from PNG image.
 void LoadPNG ( const char *filename, byte **data, int *width, int *height )
 {
 	char *buf = NULL;

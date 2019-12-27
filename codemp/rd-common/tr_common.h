@@ -22,13 +22,20 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 ===========================================================================
 */
 
-#ifndef TR_COMMON_H
-#define TR_COMMON_H
+#pragma once
+
+// ======================================================================
+// INCLUDE
+// ======================================================================
 
 #include "rd-common/tr_public.h"
 #include "rd-common/tr_font.h"
 
-extern refimport_t ri;
+// ======================================================================
+// DEFINE
+// ======================================================================
+
+typedef void (*ImageLoaderFn)(const char* filename, byte** pic, int* width, int* height);
 
 #ifdef _WIN32
 	#define SWAPINTERVAL_FLAGS (CVAR_ARCHIVE_ND)
@@ -56,6 +63,9 @@ extern refimport_t ri;
 #define LS_UNUSED		0xfe
 #define	LS_LSNONE		0xff //rww - changed name because it unhappily conflicts with a lightsaber state name and changing this is just easier
 
+// ======================================================================
+// STRUCT
+// ======================================================================
 
 typedef struct md3Frame_s
 {
@@ -100,47 +110,25 @@ typedef struct md3Surface_s
 	int		ofsEnd;				// next surface follows
 } md3Surface_t;
 
-// Noise Generation
+// ======================================================================
+// EXTERN VARIABLE
+// ======================================================================
 
-// Initialize the noise generator.
-void R_NoiseInit( void );
+extern refimport_t ri;
 
-// Get random 4-component vector.
-float R_NoiseGet4f( float x, float y, float z, float t );
+// ======================================================================
+// FUNCTION
+// ======================================================================
 
-// Get the noise time.
-float GetNoiseTime( int t );
-
-// Image Loading
-
-// Initialize the image loader.
+bool R_ImageLoader_Add(const char* extension, ImageLoaderFn imageLoader);
+float GetNoiseTime(int t);
+float R_NoiseGet4f(float x, float y, float z, float t);
+int RE_SavePNG(const char* filename, byte* buf, size_t width, size_t height, int byteDepth);
+size_t RE_SaveJPGToBuffer(byte* buffer, size_t bufSize, int quality, int image_width, int image_height, byte* image_buffer, int padding);
+void LoadJPG(const char* filename, byte** pic, int* width, int* height);
+void LoadPNG(const char* filename, byte** data, int* width, int* height);
+void LoadTGA(const char* name, byte** pic, int* width, int* height);
 void R_ImageLoader_Init();
-
-typedef void (*ImageLoaderFn)( const char *filename, byte **pic, int *width, int *height );
-
-// Adds a new image loader to handle a new image type. The extension should not begin with a period (a full stop).
-bool R_ImageLoader_Add( const char *extension, ImageLoaderFn imageLoader );
-
-// Load an image from file.
-void R_LoadImage( const char *shortname, byte **pic, int *width, int *height );
-
-// Load raw image data from TGA image.
-void LoadTGA( const char *name, byte **pic, int *width, int *height );
-
-// Load raw image data from JPEG image.
-void LoadJPG( const char *filename, byte **pic, int *width, int *height );
-
-// Load raw image data from PNG image.
-void LoadPNG( const char *filename, byte **data, int *width, int *height );
-
-// Image saving
-
-// Convert raw image data to JPEG format and store in buffer.
-size_t RE_SaveJPGToBuffer( byte *buffer, size_t bufSize, int quality, int image_width, int image_height, byte *image_buffer, int padding );
-
-// Save raw image data as JPEG image file.
-void RE_SaveJPG( const char * filename, int quality, int image_width, int image_height, byte *image_buffer, int padding );
-
-// Save raw image data as PNG image file.
-int RE_SavePNG( const char *filename, byte *buf, size_t width, size_t height, int byteDepth );
-#endif
+void R_LoadImage(const char* shortname, byte** pic, int* width, int* height);
+void R_NoiseInit(void);
+void RE_SaveJPG(const char* filename, int quality, int image_width, int image_height, byte* image_buffer, int padding);

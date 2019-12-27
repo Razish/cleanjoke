@@ -22,11 +22,19 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 ===========================================================================
 */
 
-// g_public.h -- game module information visible to server
+// game module information visible to server
 
 #pragma once
 
+// ======================================================================
+// INCLUDE
+// ======================================================================
+
 #include "qcommon/q_shared.h"
+
+// ======================================================================
+// DEFINE
+// ======================================================================
 
 #define Q3_INFINITE			16777216
 
@@ -69,52 +77,15 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 #define G2TRFLAG_GETSURFINDEX	0x00000004 //will replace surfaceFlags with the ghoul2 surface index that was hit, if any.
 #define G2TRFLAG_THICK			0x00000008 //assures that the trace radius will be significantly large regardless of the trace box size.
 
-//this structure is shared by gameside and in-engine NPC nav routines.
-typedef struct failedEdge_e
-{
-	int	startID;
-	int	endID;
-	int checkTime;
-	int	entID;
-} failedEdge_t;
+#define	MAX_PARMS	16
+#define	MAX_PARM_STRING_LENGTH	MAX_QPATH//was 16, had to lengthen it so they could take a valid file path
 
-typedef struct entityShared_s {
-	bool	linked;				// false if not in any good cluster
-	int			linkcount;
+#define MAX_FAILED_NODES 8
 
-	int			svFlags;			// SVF_NOCLIENT, SVF_BROADCAST, etc
-	int			singleClient;		// only send to this client when SVF_SINGLECLIENT is set
+// ======================================================================
+// ENUM
+// ======================================================================
 
-	bool	bmodel;				// if false, assume an explicit mins / maxs bounding box
-									// only set by trap_SetBrushModel
-	vec3_t		mins, maxs;
-	int			contents;			// CONTENTS_TRIGGER, CONTENTS_SOLID, CONTENTS_BODY, etc
-									// a non-solid entity should set to 0
-
-	vec3_t		absmin, absmax;		// derived from mins/maxs and origin + rotation
-
-	// currentOrigin will be used for all collision detection and world linking.
-	// it will not necessarily be the same as the trajectory evaluation for the current
-	// time, because each entity must be moved one at a time after time is advanced
-	// to avoid simultanious collision issues
-	vec3_t		currentOrigin;
-	vec3_t		currentAngles;
-	bool	mIsRoffing;			// set to true when the entity is being roffed
-
-	// when a trace call is made and passEntityNum != ENTITYNUM_NONE,
-	// an ent will be excluded from testing if:
-	// ent->s.number == passEntityNum	(don't interact with self)
-	// ent->s.ownerNum = passEntityNum	(don't interact with your own missiles)
-	// entity[ent->s.ownerNum].ownerNum = passEntityNum	(don't interact with other missiles from owner)
-	int			ownerNum;
-
-	// mask of clients that this entity should be broadcast to
-	// the first 32 clients are represented by the first array index and the latter 32 clients are represented by the
-	//	second array index.
-	uint32_t	broadcastClients[2];
-} entityShared_t;
-
-//bstate.h
 typedef enum //# bState_e
 {//These take over only if script allows them to be autonomous
 	BS_DEFAULT = 0,//# default behavior for that NPC
@@ -138,23 +109,6 @@ typedef enum //# bState_e
 	BS_FLEE,//# Run away!
 	NUM_BSTATES
 } bState_t;
-
-enum
-{
-	EDGE_NORMAL,
-	EDGE_PATH,
-	EDGE_BLOCKED,
-	EDGE_FAILED,
-	EDGE_MOVEDIR
-};
-
-enum
-{
-	NODE_NORMAL,
-	NODE_START,
-	NODE_GOAL,
-	NODE_NAVGOAL,
-};
 
 typedef enum //# taskID_e
 {
@@ -197,16 +151,52 @@ typedef enum //# bSet_e
 	NUM_BSETS
 } bSet_t;
 
-#define	MAX_PARMS	16
-#define	MAX_PARM_STRING_LENGTH	MAX_QPATH//was 16, had to lengthen it so they could take a valid file path
+// ======================================================================
+// STRUCT
+// ======================================================================
+
+typedef struct entityShared_s {
+	bool	linked;				// false if not in any good cluster
+	int			linkcount;
+
+	int			svFlags;			// SVF_NOCLIENT, SVF_BROADCAST, etc
+	int			singleClient;		// only send to this client when SVF_SINGLECLIENT is set
+
+	bool	bmodel;				// if false, assume an explicit mins / maxs bounding box
+									// only set by trap_SetBrushModel
+	vec3_t		mins, maxs;
+	int			contents;			// CONTENTS_TRIGGER, CONTENTS_SOLID, CONTENTS_BODY, etc
+									// a non-solid entity should set to 0
+
+	vec3_t		absmin, absmax;		// derived from mins/maxs and origin + rotation
+
+	// currentOrigin will be used for all collision detection and world linking.
+	// it will not necessarily be the same as the trajectory evaluation for the current
+	// time, because each entity must be moved one at a time after time is advanced
+	// to avoid simultanious collision issues
+	vec3_t		currentOrigin;
+	vec3_t		currentAngles;
+	bool	mIsRoffing;			// set to true when the entity is being roffed
+
+	// when a trace call is made and passEntityNum != ENTITYNUM_NONE,
+	// an ent will be excluded from testing if:
+	// ent->s.number == passEntityNum	(don't interact with self)
+	// ent->s.ownerNum = passEntityNum	(don't interact with your own missiles)
+	// entity[ent->s.ownerNum].ownerNum = passEntityNum	(don't interact with other missiles from owner)
+	int			ownerNum;
+
+	// mask of clients that this entity should be broadcast to
+	// the first 32 clients are represented by the first array index and the latter 32 clients are represented by the
+	//	second array index.
+	uint32_t	broadcastClients[2];
+} entityShared_t;
+
 typedef struct parms_s {
 	char	parm[MAX_PARMS][MAX_PARM_STRING_LENGTH];
 } parms_t;
 
-#define MAX_FAILED_NODES 8
-
 // the server looks at a sharedEntity, which is the start of the game's gentity_t structure
-//mod authors should not touch this struct
+// mod authors should not touch this struct
 typedef struct sharedEntity_s {
 	//CJKFIXME: bgentity_t substruct
 	entityState_t	s;				// communicated by server to clients

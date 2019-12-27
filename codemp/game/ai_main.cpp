@@ -32,8 +32,8 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 #include "game/ai_main.h"
 #include "game/w_saber.h"
 
-#include "game/chars.h"
-#include "game/inv.h"
+#include "game/ai_chars.h"
+#include "game/g_inventory.h"
 
 /*
 #define BOT_CTF_DEBUG	1

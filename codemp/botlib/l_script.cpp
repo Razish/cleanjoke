@@ -156,6 +156,7 @@ void PS_CreatePunctuationTable(script_t *script, punctuation_t *punctuations)
 	} //end for
 } //end of the function PS_CreatePunctuationTable
 
+//returns a pointer to the punctuation with the given number
 const char *PunctuationFromNum(script_t *script, int num)
 {
 	int i;
@@ -167,6 +168,7 @@ const char *PunctuationFromNum(script_t *script, int num)
 	return "unkown punctuation";
 } //end of the function PunctuationFromNum
 
+//print a script error with filename and line number
 void QDECL ScriptError(script_t *script, char *str, ...)
 {
 	char text[1024];
@@ -182,6 +184,7 @@ void QDECL ScriptError(script_t *script, char *str, ...)
 #endif //BOTLIB
 } //end of the function ScriptError
 
+//print a script warning with filename and line number
 void QDECL ScriptWarning(script_t *script, char *str, ...)
 {
 	char text[1024];
@@ -197,6 +200,7 @@ void QDECL ScriptWarning(script_t *script, char *str, ...)
 #endif //BOTLIB
 } //end of the function ScriptWarning
 
+//set an array with punctuations, NULL restores default C/C++ set
 void SetScriptPunctuations(script_t *script, punctuation_t *p)
 {
 #ifdef PUNCTABLE
@@ -716,6 +720,7 @@ int PS_ReadPrimitive(script_t *script, token_t *token)
 	return 1;
 } //end of the function PS_ReadPrimitive
 
+//read a token from the script
 int PS_ReadToken(script_t *script, token_t *token)
 {
 	//if there is a token available (from UnreadToken)
@@ -785,6 +790,7 @@ int PS_ReadToken(script_t *script, token_t *token)
 	return 1;
 } //end of the function PS_ReadToken
 
+//expect a certain token
 int PS_ExpectTokenString(script_t *script, char *string)
 {
 	token_t token;
@@ -803,6 +809,7 @@ int PS_ExpectTokenString(script_t *script, char *string)
 	return 1;
 } //end of the function PS_ExpectToken
 
+//expect a certain token type
 int PS_ExpectTokenType(script_t *script, int type, int subtype, token_t *token)
 {
 	char str[MAX_TOKEN];
@@ -858,6 +865,7 @@ int PS_ExpectTokenType(script_t *script, int type, int subtype, token_t *token)
 	return 1;
 } //end of the function PS_ExpectTokenType
 
+//expect a token
 int PS_ExpectAnyToken(script_t *script, token_t *token)
 {
 	if (!PS_ReadToken(script, token))
@@ -871,6 +879,7 @@ int PS_ExpectAnyToken(script_t *script, token_t *token)
 	} //end else
 } //end of the function PS_ExpectAnyToken
 
+//returns true when the token is available
 int PS_CheckTokenString(script_t *script, char *string)
 {
 	token_t tok;
@@ -883,6 +892,7 @@ int PS_CheckTokenString(script_t *script, char *string)
 	return 0;
 } //end of the function PS_CheckTokenString
 
+//returns true and reads the token when a token with the given type is available
 int PS_CheckTokenType(script_t *script, int type, int subtype, token_t *token)
 {
 	token_t tok;
@@ -900,6 +910,7 @@ int PS_CheckTokenType(script_t *script, int type, int subtype, token_t *token)
 	return 0;
 } //end of the function PS_CheckTokenType
 
+//skip tokens until the given token string is read
 int PS_SkipUntilString(script_t *script, char *string)
 {
 	token_t token;
@@ -911,11 +922,13 @@ int PS_SkipUntilString(script_t *script, char *string)
 	return 0;
 } //end of the function PS_SkipUntilString
 
+//unread the last token read from the script
 void PS_UnreadLastToken(script_t *script)
 {
 	script->tokenavailable = 1;
 } //end of the function UnreadLastToken
 
+//unread the given token
 void PS_UnreadToken(script_t *script, token_t *token)
 {
 	Com_Memcpy(&script->token, token, sizeof(token_t));
@@ -935,6 +948,7 @@ char PS_NextWhiteSpaceChar(script_t *script)
 	} //end else
 } //end of the function PS_NextWhiteSpaceChar
 
+//remove any leading and trailing double quotes from the token
 void StripDoubleQuotes(char *string)
 {
 	if (*string == '\"')
@@ -947,6 +961,7 @@ void StripDoubleQuotes(char *string)
 	} //end if
 } //end of the function StripDoubleQuotes
 
+//remove any leading and trailing single quotes from the token
 void StripSingleQuotes(char *string)
 {
 	if (*string == '\'')
@@ -959,6 +974,7 @@ void StripSingleQuotes(char *string)
 	} //end if
 } //end of the function StripSingleQuotes
 
+//read a possible signed floating point number
 long double ReadSignedFloat(script_t *script)
 {
 	token_t token;
@@ -985,6 +1001,7 @@ long double ReadSignedFloat(script_t *script)
 	return sign * token.floatvalue;
 } //end of the function ReadSignedFloat
 
+//read a possible signed integer
 signed long int ReadSignedInt(script_t *script)
 {
 	token_t token;
@@ -1011,11 +1028,13 @@ signed long int ReadSignedInt(script_t *script)
 	return sign * token.intvalue;
 } //end of the function ReadSignedInt
 
+//set script flags
 void SetScriptFlags(script_t *script, int flags)
 {
 	script->flags = flags;
 } //end of the function SetScriptFlags
 
+//get script flags
 int GetScriptFlags(script_t *script)
 {
 	return script->flags;
@@ -1087,6 +1106,7 @@ int FileLength(FILE *fp)
 } //end of the function FileLength
 #endif
 
+//load a script from the given file at the given offset with the given length
 script_t *LoadScriptFile(const char *filename)
 {
 #ifdef BOTLIB
@@ -1151,6 +1171,7 @@ script_t *LoadScriptFile(const char *filename)
 	return script;
 } //end of the function LoadScriptFile
 
+//load a script from the given memory with the given length
 script_t *LoadScriptMemory(char *ptr, int length, char *name)
 {
 	void *buffer;
@@ -1190,6 +1211,7 @@ void FreeScript(script_t *script)
 	FreeMemory(script);
 } //end of the function FreeScript
 
+//set the base folder to load files from
 void PS_SetBaseFolder(char *path)
 {
 	Com_sprintf(basefolder, sizeof(basefolder), "%s", path);

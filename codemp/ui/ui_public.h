@@ -24,19 +24,25 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
 
+// ======================================================================
+// DEFINE
+// ======================================================================
+
 #define UI_API_VERSION 4
 #define UI_LEGACY_API_VERSION 7
 
-typedef struct uiClientState_s {
-	connstate_t		connState;
-	int				connectPacketCount;
-	int				clientNum;
-	char			servername[MAX_STRING_CHARS];
-	char			updateInfoString[MAX_STRING_CHARS];
-	char			messageString[MAX_STRING_CHARS];
-} uiClientState_t;
+#define SORT_HOST			0
+#define SORT_MAP			1
+#define SORT_CLIENTS		2
+#define SORT_GAME			3
+#define SORT_PING			4
 
-typedef enum uiMenuCommand_e {
+// ======================================================================
+// ENUM
+// ======================================================================
+
+typedef enum uiMenuCommand_e
+{
 	UIMENU_NONE,
 	UIMENU_MAIN,
 	UIMENU_INGAME,
@@ -48,11 +54,18 @@ typedef enum uiMenuCommand_e {
 	UIMENU_CLOSEALL
 } uiMenuCommand_t;
 
-#define SORT_HOST			0
-#define SORT_MAP			1
-#define SORT_CLIENTS		2
-#define SORT_GAME			3
-#define SORT_PING			4
+// ======================================================================
+// STRUCT
+// ======================================================================
+
+typedef struct uiClientState_s {
+	connstate_t		connState;
+	int				connectPacketCount;
+	int				clientNum;
+	char			servername[MAX_STRING_CHARS];
+	char			updateInfoString[MAX_STRING_CHARS];
+	char			messageString[MAX_STRING_CHARS];
+} uiClientState_t;
 
 typedef struct uiImport_s {
 	void			(*Print)								( const char *msg, ... );

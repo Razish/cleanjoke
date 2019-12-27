@@ -24,6 +24,10 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
 
+// ======================================================================
+// INCLUDE
+// ======================================================================
+
 #if defined( __LINT__ )
 #	include <GL/gl.h>
 #elif defined( _WIN32 )
@@ -51,6 +55,10 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 #endif
 
 #include "rd-vanilla/glext.h"
+
+// ======================================================================
+// DEFINE
+// ======================================================================
 
 #define qglAccum glAccum
 #define qglAlphaFunc glAlphaFunc
@@ -392,6 +400,10 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 #define qglVertex4sv glVertex4sv
 #define qglVertexPointer glVertexPointer
 #define qglViewport glViewport
+
+// ======================================================================
+// EXTERN VARIABLE
+// ======================================================================
 
 extern PFNGLACTIVETEXTUREARBPROC qglActiveTextureARB;
 extern PFNGLCLIENTACTIVETEXTUREARBPROC qglClientActiveTextureARB;

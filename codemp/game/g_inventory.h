@@ -24,6 +24,10 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
 
+// ======================================================================
+// DEFINE
+// ======================================================================
+
 #define INVENTORY_NONE				0
 //pickups
 #define INVENTORY_ARMOR				1

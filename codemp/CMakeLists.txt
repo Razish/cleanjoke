@@ -80,12 +80,6 @@ if(BuildMPEngine OR BuildMPDed)
 	source_group("botlib" FILES ${MPBotlibBotlibFiles})
 	set(MPBotlibFiles ${MPBotlibFiles} ${MPBotlibBotlibFiles})
 
-	set(MPBotlibGameFiles
-		"${MPDir}/game/surfaceflags.h"
-		)
-	source_group("game" FILES ${MPBotlibGameFiles})
-	set(MPBotlibFiles ${MPBotlibFiles} ${MPBotlibGameFiles})
-
 	set(MPBotlibCommonFiles
 		"${MPDir}/qcommon/cm_public.h"
 		"${MPDir}/qcommon/disablewarnings.h"
@@ -165,7 +159,6 @@ if(BuildMPEngine OR BuildMPDed)
 		"${MPDir}/game/bg_weapons.h"
 		"${MPDir}/botlib/botlib.h"
 		"${MPDir}/game/g_public.h"
-		"${MPDir}/game/surfaceflags.h"
 		)
 	source_group("game" FILES ${MPEngineAndDedGameFiles})
 	set(MPEngineAndDedFiles ${MPEngineAndDedFiles} ${MPEngineAndDedGameFiles})

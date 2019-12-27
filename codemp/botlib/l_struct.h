@@ -22,9 +22,11 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 ===========================================================================
 */
 
-// structure reading/writing
-
 #pragma once
+
+// ======================================================================
+// DEFINE
+// ======================================================================
 
 #define MAX_STRINGFIELD				80
 //field types
@@ -39,6 +41,10 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 #define FT_ARRAY						0x0100	// array of type
 #define FT_BOUNDED					0x0200	// bounded value
 #define FT_UNSIGNED					0x0400
+
+// ======================================================================
+// STRUCT
+// ======================================================================
 
 //structure field definition
 typedef struct fielddef_s
@@ -59,11 +65,11 @@ typedef struct structdef_s
 	fielddef_t *fields;
 } structdef_t;
 
-//read a structure from a script
-int ReadStructure(source_t *source, structdef_t *def, char *structure);
-//write a structure to a file
-int WriteStructure(FILE *fp, structdef_t *def, char *structure);
-//writes indents
-int WriteIndent(FILE *fp, int indent);
-//writes a float without traling zeros
-int WriteFloat(FILE *fp, float value);
+// ======================================================================
+// FUNCTION
+// ======================================================================
+
+int ReadStructure(source_t* source, structdef_t* def, char* structure);
+int WriteFloat(FILE* fp, float value);
+int WriteIndent(FILE* fp, int indent);
+int WriteStructure(FILE* fp, structdef_t* def, char* structure);

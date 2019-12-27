@@ -74,8 +74,10 @@ void UnlinkMemoryBlock(memoryblock_t *block)
 } //end of the function UnlinkMemoryBlock
 
 #ifdef MEMDEBUG
+//allocate a memory block of the given size
 void *GetMemoryDebug(unsigned long size, char *label, char *file, int line)
 #else
+//allocate a memory block of the given size
 void *GetMemory(unsigned long size)
 #endif //MEMDEBUG
 {
@@ -100,6 +102,7 @@ void *GetMemory(unsigned long size)
 } //end of the function GetMemoryDebug
 
 #ifdef MEMDEBUG
+//allocate a memory block of the given size and clear it
 void *GetClearedMemoryDebug(unsigned long size, char *label, char *file, int line)
 #else
 void *GetClearedMemory(unsigned long size)
@@ -116,6 +119,7 @@ void *GetClearedMemory(unsigned long size)
 } //end of the function GetClearedMemory
 
 #ifdef MEMDEBUG
+//allocate a memory block of the given size
 void *GetHunkMemoryDebug(unsigned long size, char *label, char *file, int line)
 #else
 void *GetHunkMemory(unsigned long size)
@@ -142,6 +146,7 @@ void *GetHunkMemory(unsigned long size)
 } //end of the function GetHunkMemoryDebug
 
 #ifdef MEMDEBUG
+//allocate a memory block of the given size and clear it
 void *GetClearedHunkMemoryDebug(unsigned long size, char *label, char *file, int line)
 #else
 void *GetClearedHunkMemory(unsigned long size)
@@ -206,6 +211,7 @@ int AvailableMemory(void)
 	return botimport.AvailableMemory();
 } //end of the function AvailableMemory
 
+//returns the size of the memory block in bytes
 int MemoryByteSize(void *ptr)
 {
 	memoryblock_t *block;
@@ -247,6 +253,7 @@ void PrintMemoryLabels(void)
 	} //end for
 } //end of the function PrintMemoryLabels
 
+//free all allocated memory
 void DumpMemory(void)
 {
 	memoryblock_t *block;
@@ -278,8 +285,10 @@ void *GetMemory(unsigned long size)
 } //end of the function GetMemory
 
 #ifdef MEMDEBUG
+//allocate a memory block of the given size and clear it
 void *GetClearedMemoryDebug(unsigned long size, char *label, char *file, int line)
 #else
+//allocate a memory block of the given size and clear it
 void *GetClearedMemory(unsigned long size)
 #endif //MEMDEBUG
 {
@@ -294,8 +303,10 @@ void *GetClearedMemory(unsigned long size)
 } //end of the function GetClearedMemory
 
 #ifdef MEMDEBUG
+//allocate a memory block of the given size
 void *GetHunkMemoryDebug(unsigned long size, char *label, char *file, int line)
 #else
+//allocate a memory block of the given size
 void *GetHunkMemory(unsigned long size)
 #endif //MEMDEBUG
 {
@@ -310,8 +321,10 @@ void *GetHunkMemory(unsigned long size)
 } //end of the function GetHunkMemory
 
 #ifdef MEMDEBUG
+//allocate a memory block of the given size and clear it
 void *GetClearedHunkMemoryDebug(unsigned long size, char *label, char *file, int line)
 #else
+//allocate a memory block of the given size and clear it
 void *GetClearedHunkMemory(unsigned long size)
 #endif //MEMDEBUG
 {
@@ -325,6 +338,7 @@ void *GetClearedHunkMemory(unsigned long size)
 	return ptr;
 } //end of the function GetClearedHunkMemory
 
+//free the given memory block
 void FreeMemory(void *ptr)
 {
 	unsigned long int *memid;
@@ -337,15 +351,18 @@ void FreeMemory(void *ptr)
 	} //end if
 } //end of the function FreeMemory
 
+//returns the amount available memory
 int AvailableMemory(void)
 {
 	return botimport.AvailableMemory();
 } //end of the function AvailableMemory
 
+//prints the total used memory size
 void PrintUsedMemorySize(void)
 {
 } //end of the function PrintUsedMemorySize
 
+//print all memory blocks with label
 void PrintMemoryLabels(void)
 {
 } //end of the function PrintMemoryLabels

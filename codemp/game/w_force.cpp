@@ -2099,13 +2099,14 @@ void ForceJumpCharge( gentity_t *self, usercmd_t *ucmd )
 	//trap->Print("%f\n", self->client->ps.fd.forceJumpCharge);
 }
 
-int WP_GetVelocityForForceJump( gentity_t *self, vec3_t jumpVel, usercmd_t *ucmd )
+void WP_GetVelocityForForceJump( gentity_t *self, vec3_t jumpVel, usercmd_t *ucmd )
 {
 	float pushFwd = 0, pushRt = 0;
 	vec3_t	view, forward, right;
 	VectorCopy( self->client->ps.viewangles, view );
 	view[0] = 0;
 	AngleVectors( view, forward, right, NULL );
+	
 	if ( ucmd->forwardmove && ucmd->rightmove )
 	{
 		if ( ucmd->forwardmove > 0 )
@@ -2162,26 +2163,6 @@ int WP_GetVelocityForForceJump( gentity_t *self, vec3_t jumpVel, usercmd_t *ucmd
 	VectorMA( self->client->ps.velocity, pushFwd, forward, jumpVel );
 	VectorMA( self->client->ps.velocity, pushRt, right, jumpVel );
 	jumpVel[2] += self->client->ps.fd.forceJumpCharge;
-	if ( pushFwd > 0 && self->client->ps.fd.forceJumpCharge > 200 )
-	{
-		return FJ_FORWARD;
-	}
-	else if ( pushFwd < 0 && self->client->ps.fd.forceJumpCharge > 200 )
-	{
-		return FJ_BACKWARD;
-	}
-	else if ( pushRt > 0 && self->client->ps.fd.forceJumpCharge > 200 )
-	{
-		return FJ_RIGHT;
-	}
-	else if ( pushRt < 0 && self->client->ps.fd.forceJumpCharge > 200 )
-	{
-		return FJ_LEFT;
-	}
-	else
-	{
-		return FJ_UP;
-	}
 }
 
 void ForceJump( gentity_t *self, usercmd_t *ucmd )
@@ -2546,15 +2527,6 @@ void G_LetGoOfWall( gentity_t *ent )
 		ent->client->ps.torsoTimer = 0;
 	}
 }
-
-float forcePushPullRadius[NUM_FORCE_POWER_LEVELS] =
-{
-	0,//none
-	384,//256,
-	448,//384,
-	512
-};
-//rwwFIXMEFIXME: incorporate this into the below function? Currently it's only being used by jedi AI
 
 void ForceThrow( gentity_t *self, bool pull )
 {

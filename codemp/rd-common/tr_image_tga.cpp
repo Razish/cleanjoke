@@ -47,8 +47,8 @@ typedef struct TGAHeader_s {
 #pragma pack(pop)
 
 // *pic == pic, else NULL for failed.
-//  returns false if found but had a format error, else true for either OK or not-found (there's a reason for this)
-
+// returns false if found but had a format error, else true for either OK or not-found (there's a reason for this)
+// Load raw image data from TGA image.
 void LoadTGA ( const char *name, byte **pic, int *width, int *height)
 {
 	char sErrorString[1024];

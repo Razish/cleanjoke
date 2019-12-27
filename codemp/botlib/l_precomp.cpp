@@ -76,6 +76,7 @@ define_t	*globaldefines = NULL;
 #endif
 bool	addGlobalDefine = false;
 
+//print a source error
 void QDECL SourceError(source_t *source, char *str, ...)
 {
 	char text[1024];
@@ -89,6 +90,7 @@ void QDECL SourceError(source_t *source, char *str, ...)
 #endif	//BOTLIB
 } //end of the function SourceError
 
+//print a source warning
 void QDECL SourceWarning(source_t *source, char *str, ...)
 {
 	char text[1024];
@@ -102,6 +104,7 @@ void QDECL SourceWarning(source_t *source, char *str, ...)
 #endif //BOTLIB
 } //end of the function ScriptWarning
 
+//initialise the precompiler
 void PC_Init( void ) {
 	//PC_InitTokenHeap();
 
@@ -515,6 +518,7 @@ void PC_FreeDefine(define_t *define)
 	FreeMemory(define);
 } //end of the function PC_FreeDefine
 
+//add builtin defines
 void PC_AddBuiltinDefines(source_t *source)
 {
 	int i;
@@ -876,6 +880,7 @@ int PC_Directive_include(source_t *source)
 } //end of the function PC_Directive_include
 
 // reads a token from the current line, continues reading on the next line only if a backslash '\' is encountered.
+// read a token only if on the same line, lines are concatenated with a slash
 int PC_ReadLine(source_t *source, token_t *token)
 {
 	int crossline;
@@ -895,6 +900,7 @@ int PC_ReadLine(source_t *source, token_t *token)
 	return true;
 } //end of the function PC_ReadLine
 
+//returns true if there was a white space in front of the token
 int PC_WhiteSpaceBeforeToken(token_t *token)
 {
 	return token->endwhitespace_p - token->whitespace_p > 0;
@@ -1170,6 +1176,7 @@ define_t *PC_DefineFromString(char *string)
 	return NULL;
 } //end of the function PC_DefineFromString
 
+//add a define to the source
 int PC_AddDefine(source_t *source, char *string)
 {
 	define_t *define;
@@ -2423,6 +2430,7 @@ int QuakeCMacro(source_t *source)
 } //end of the function QuakeCMacro
 #endif //QUAKEC
 
+//read a token from the source
 int PC_ReadToken(source_t *source, token_t *token)
 {
 	define_t *define;
@@ -2513,6 +2521,7 @@ int PC_ReadToken(source_t *source, token_t *token)
 	} //end while
 } //end of the function PC_ReadToken
 
+//expect a certain token
 int PC_ExpectTokenString(source_t *source, char *string)
 {
 	token_t token;
@@ -2531,6 +2540,7 @@ int PC_ExpectTokenString(source_t *source, char *string)
 	return true;
 } //end of the function PC_ExpectTokenString
 
+//expect a certain token type
 int PC_ExpectTokenType(source_t *source, int type, int subtype, token_t *token)
 {
 	char str[MAX_TOKEN];
@@ -2580,6 +2590,7 @@ int PC_ExpectTokenType(source_t *source, int type, int subtype, token_t *token)
 	return true;
 } //end of the function PC_ExpectTokenType
 
+//expect a token
 int PC_ExpectAnyToken(source_t *source, token_t *token)
 {
 	if (!PC_ReadToken(source, token))
@@ -2593,6 +2604,7 @@ int PC_ExpectAnyToken(source_t *source, token_t *token)
 	} //end else
 } //end of the function PC_ExpectAnyToken
 
+//returns true when the token is available
 int PC_CheckTokenString(source_t *source, char *string)
 {
 	token_t tok;
@@ -2605,6 +2617,7 @@ int PC_CheckTokenString(source_t *source, char *string)
 	return false;
 } //end of the function PC_CheckTokenString
 
+//returns true and reads the token when a token with the given type is available
 int PC_CheckTokenType(source_t *source, int type, int subtype, token_t *token)
 {
 	token_t tok;
@@ -2622,6 +2635,7 @@ int PC_CheckTokenType(source_t *source, int type, int subtype, token_t *token)
 	return false;
 } //end of the function PC_CheckTokenType
 
+//skip tokens until the given token string is read
 int PC_SkipUntilString(source_t *source, char *string)
 {
 	token_t token;
@@ -2633,16 +2647,19 @@ int PC_SkipUntilString(source_t *source, char *string)
 	return false;
 } //end of the function PC_SkipUntilString
 
+//unread the last token read from the script
 void PC_UnreadLastToken(source_t *source)
 {
 	PC_UnreadSourceToken(source, &source->token);
 } //end of the function PC_UnreadLastToken
 
+//unread the given token
 void PC_UnreadToken(source_t *source, token_t *token)
 {
 	PC_UnreadSourceToken(source, token);
 } //end of the function PC_UnreadToken
 
+//set the source include path
 void PC_SetIncludePath(source_t *source, char *path)
 {
 	size_t len;
@@ -2658,11 +2675,13 @@ void PC_SetIncludePath(source_t *source, char *path)
 	} //end if
 } //end of the function PC_SetIncludePath
 
+//set the punction set
 void PC_SetPunctuations(source_t *source, punctuation_t *p)
 {
 	source->punctuations = p;
 } //end of the function PC_SetPunctuations
 
+//load a source file
 source_t *LoadSourceFile(const char *filename)
 {
 	source_t *source;
@@ -2699,6 +2718,7 @@ source_t *LoadSourceFile(const char *filename)
 	return source;
 } //end of the function LoadSourceFile
 
+//load a source from memory
 source_t *LoadSourceMemory(char *ptr, int length, char *name)
 {
 	source_t *source;
@@ -2727,6 +2747,7 @@ source_t *LoadSourceMemory(char *ptr, int length, char *name)
 	return source;
 } //end of the function LoadSourceMemory
 
+//free the given source
 void FreeSource(source_t *source)
 {
 	script_t *script;
@@ -2889,6 +2910,7 @@ int PC_SourceFileAndLine(int handle, char *filename, int *line)
 	return true;
 } //end of the function PC_SourceFileAndLine
 
+//set the base folder to load files from
 void PC_SetBaseFolder(char *path)
 {
 	PS_SetBaseFolder(path);

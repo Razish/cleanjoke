@@ -40,7 +40,6 @@ set(MPUIGameFiles
 	"${MPDir}/game/bg_local.h"
 	"${MPDir}/game/bg_public.h"
 	"${MPDir}/game/bg_weapons.h"
-	"${MPDir}/game/surfaceflags.h"
 	)
 source_group("game" FILES ${MPUIGameFiles})
 set(MPUIFiles ${MPUIFiles} ${MPUIGameFiles})
