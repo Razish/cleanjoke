@@ -22,6 +22,10 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 ===========================================================================
 */
 
+// ======================================================================
+// DEFINE
+// ======================================================================
+
 #ifdef XCVAR_PROTO
 	#define XCVAR_DEF( name, defVal, update, flags ) extern vmCvar_t name;
 #endif

@@ -25,7 +25,6 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 #include "game/g_local.h"
 #include "ghoul2/G2.h"
-#include "game/bg_saga.h"
 #include "game/g_team.h"
 
 // g_client.c -- client functions that don't happen every frame

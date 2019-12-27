@@ -33,7 +33,6 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 #include "qcommon/game_version.h"
 #include "ui/ui_force.h"
 #include "cgame/animtable.h" //we want this to be compiled into the module because we access it in the shared module.
-#include "game/bg_saga.h"
 #include "ui/ui_shared.h"
 #include "ui/ui_fonts.h"
 #include "ui/menudef.h"

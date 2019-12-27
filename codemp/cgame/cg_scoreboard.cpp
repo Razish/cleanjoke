@@ -28,7 +28,6 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 #include "ui/ui_shared.h"
 #include "ui/ui_fonts.h"
 #include "ui/menudef.h"
-#include "game/bg_saga.h"
 
 #define	SCOREBOARD_X		(0)
 

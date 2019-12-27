@@ -26,6 +26,10 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 // bot characteristics
 
+// ======================================================================
+// DEFINE
+// ======================================================================
+
 //name
 #define CHARACTERISTIC_NAME							0	//string
 //gender of the bot

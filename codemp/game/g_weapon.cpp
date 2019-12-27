@@ -26,7 +26,6 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 // perform the server side effects of a weapon firing
 
 #include "game/g_local.h"
-#include "game/bg_saga.h"
 #include "ghoul2/G2.h"
 #include "qcommon/q_shared.h"
 

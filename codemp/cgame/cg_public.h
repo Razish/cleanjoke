@@ -24,21 +24,56 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
 
+// ======================================================================
+// INCLUDE
+// ======================================================================
+
 #include "qcommon/q_shared.h"
 #include "rd-common/tr_types.h"
+
+// ======================================================================
+// DEFINE
+// ======================================================================
 
 #define	CGAME_API_VERSION		2
 
 #define	CMD_BACKUP			64
 #define	CMD_MASK			(CMD_BACKUP - 1)
+
 // allow a lot of command backups for very fast systems
 // multiple commands may be combined into a single packet, so this
 // needs to be larger than PACKET_BACKUP
-
 #define	MAX_ENTITIES_IN_SNAPSHOT	256
 
-// snapshots are a view of the server at a given time
+//ragdoll callback structs -rww
+#define RAG_CALLBACK_NONE				0
+#define RAG_CALLBACK_DEBUGBOX			1
 
+#define RAG_CALLBACK_DEBUGLINE			2
+#define RAG_CALLBACK_BONESNAP			3
+#define RAG_CALLBACK_BONEIMPACT			4
+#define RAG_CALLBACK_BONEINSOLID		5
+#define RAG_CALLBACK_TRACELINE			6
+
+#define	MAX_CG_SHARED_BUFFER_SIZE		2048
+
+// ======================================================================
+// ENUM
+// ======================================================================
+
+typedef enum cgameEvent_e
+{
+	CGAME_EVENT_NONE = 0,
+	CGAME_EVENT_TEAMMENU,
+	CGAME_EVENT_SCOREBOARD,
+	CGAME_EVENT_EDITHUD
+} cgameEvent_t;
+
+// ======================================================================
+// STRUCT
+// ======================================================================
+
+// snapshots are a view of the server at a given time
 // Snapshots are generated at regular time intervals by the server,
 // but they may not be sent if a client's rate level is exceeded, or
 // they may be dropped by the network.
@@ -59,13 +94,6 @@ typedef struct snapshot_s {
 	int				numServerCommands;		// text based server commands to execute when this
 	int				serverCommandSequence;	// snapshot becomes current
 } snapshot_t;
-
-typedef enum cgameEvent_e {
-	CGAME_EVENT_NONE=0,
-	CGAME_EVENT_TEAMMENU,
-	CGAME_EVENT_SCOREBOARD,
-	CGAME_EVENT_EDITHUD
-} cgameEvent_t;
 
 typedef struct autoMapInput_s {
 	float		up;
@@ -153,16 +181,13 @@ typedef struct TCGPositionOnBolt_s {
 	vec3_t			modelScale;			// input
 } TCGPositionOnBolt;
 
-//ragdoll callback structs -rww
-#define RAG_CALLBACK_NONE				0
-#define RAG_CALLBACK_DEBUGBOX			1
 typedef struct ragCallbackDebugBox_s {
 	vec3_t			mins;
 	vec3_t			maxs;
 	int				duration;
 } ragCallbackDebugBox_t;
 
-#define RAG_CALLBACK_DEBUGLINE			2
+
 typedef struct ragCallbackDebugLine_s {
 	vec3_t			start;
 	vec3_t			end;
@@ -171,26 +196,26 @@ typedef struct ragCallbackDebugLine_s {
 	int				radius;
 } ragCallbackDebugLine_t;
 
-#define RAG_CALLBACK_BONESNAP			3
+
 typedef struct ragCallbackBoneSnap_s {
 	char			boneName[128]; //name of the bone in question
 	int				entNum; //index of entity who owns the bone in question
 } ragCallbackBoneSnap_t;
 
-#define RAG_CALLBACK_BONEIMPACT			4
+
 typedef struct ragCallbackBoneImpact_s {
 	char			boneName[128]; //name of the bone in question
 	int				entNum; //index of entity who owns the bone in question
 } ragCallbackBoneImpact_t;
 
-#define RAG_CALLBACK_BONEINSOLID		5
+
 typedef struct ragCallbackBoneInSolid_s {
 	vec3_t			bonePos; //world coordinate position of the bone
 	int				entNum; //index of entity who owns the bone in question
 	int				solidCount; //higher the count, the longer we've been in solid (the worse off we are)
 } ragCallbackBoneInSolid_t;
 
-#define RAG_CALLBACK_TRACELINE			6
+
 typedef struct ragCallbackTraceLine_s {
 	trace_t			tr;
 	vec3_t			start;
@@ -200,8 +225,6 @@ typedef struct ragCallbackTraceLine_s {
 	int				ignore;
 	int				mask;
 } ragCallbackTraceLine_t;
-
-#define	MAX_CG_SHARED_BUFFER_SIZE		2048
 
 typedef struct cgameImport_s {
 	// common

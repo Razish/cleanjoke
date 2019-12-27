@@ -24,7 +24,9 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
 
-#include "game/bg_saga.h"
+// ======================================================================
+// DEFINE
+// ======================================================================
 
 //#define FORCEJUMP_INSTANTMETHOD 1
 
@@ -55,9 +57,9 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 #define TABLE_BRANCH_DISTANCE      32
 #define WP_KEEP_FLAG_DIST          128
 
-
-
-// enums
+// ======================================================================
+// ENUM
+// ======================================================================
 
 enum botWeaponRange_e {
 	BWEAPONRANGE_MELEE = 1,
@@ -107,9 +109,9 @@ enum bot_teamplay_state_t {
 	TEAMPLAYSTATE_MAXTPSTATES
 };
 
-
-
-// structs
+// ======================================================================
+// STRUCT
+// ======================================================================
 
 struct botattachment_t {
 	int  level;
@@ -277,46 +279,47 @@ struct bot_state_t {
 	//end rww
 };
 
+// ======================================================================
+// EXTERN VARIABLE
+// ======================================================================
 
+extern gentity_t *eFlagRed;
+extern gentity_t *eFlagBlue;
+extern wpobject_t *flagRed;
+extern wpobject_t *flagBlue;
+extern float floattime;
+extern char gBotChatBuffer[MAX_CLIENTS][MAX_CHAT_BUFFER_SIZE];
+extern float gBotEdit;
+extern float gDeactivated;
+extern int gLastPrintedIndex;
+extern int gLevelFlags;
+extern wpobject_t *gWPArray[MAX_WPARRAY_SIZE];
+extern int gWPNum;
+extern int gWPRenderedFrame;
+extern float gWPRenderTime;
+extern int nodenum;
+extern nodeobject_t nodetable[MAX_NODETABLE_SIZE];
+extern wpobject_t *oFlagRed;
+extern wpobject_t *oFlagBlue;
 
-// variables
-extern gentity_t    *eFlagRed;
-extern gentity_t    *eFlagBlue;
-extern wpobject_t   *flagRed;
-extern wpobject_t   *flagBlue;
-extern float         floattime;
-extern char          gBotChatBuffer[MAX_CLIENTS][MAX_CHAT_BUFFER_SIZE];
-extern float         gBotEdit;
-extern float         gDeactivated;
-extern int           gLastPrintedIndex;
-extern int           gLevelFlags;
-extern wpobject_t   *gWPArray[MAX_WPARRAY_SIZE];
-extern int           gWPNum;
-extern int           gWPRenderedFrame;
-extern float         gWPRenderTime;
-extern int           nodenum;
-extern nodeobject_t  nodetable[MAX_NODETABLE_SIZE];
-extern wpobject_t   *oFlagRed;
-extern wpobject_t   *oFlagBlue;
+// ======================================================================
+// FUNCTION
+// ======================================================================
 
-
-
-// functions
-
-void *B_Alloc              ( int size );
-void *B_TempAlloc          ( int size );
-void  B_TempFree           ( int size );
-void  B_Free               ( void *ptr );
-int   BotDoChat            ( bot_state_t *bs, char *section, int always );
-int   BotGetWeaponRange    ( bot_state_t *bs );
-int   BotIsAChickenWuss    ( bot_state_t *bs );
-void  BotResetState        ( bot_state_t *bs );
-void  BotUtilizePersonality( bot_state_t *bs );
-void  BotWaypointRender    ( void );
-int   GetBestIdleGoal      ( bot_state_t *bs );
-int   GetNearestVisibleWP  ( vec3_t org, int ignore );
-void  LoadPath_ThisLevel   ( void );
-int   NumBots              ( void );
-int   OrgVisibleBox        ( vec3_t org1, vec3_t mins, vec3_t maxs, vec3_t org2, int ignore );
-int   PassLovedOneCheck    ( bot_state_t *bs, gentity_t *ent );
-void  StandardBotAI        ( bot_state_t *bs, float thinktime );
+int BotDoChat(bot_state_t* bs, char* section, int always);
+int BotGetWeaponRange(bot_state_t* bs);
+int BotIsAChickenWuss(bot_state_t* bs);
+int GetBestIdleGoal(bot_state_t* bs);
+int GetNearestVisibleWP(vec3_t org, int ignore);
+int NumBots(void);
+int OrgVisibleBox(vec3_t org1, vec3_t mins, vec3_t maxs, vec3_t org2, int ignore);
+int PassLovedOneCheck(bot_state_t* bs, gentity_t* ent);
+void B_Free(void* ptr);
+void B_TempFree(int size);
+void BotResetState(bot_state_t* bs);
+void BotUtilizePersonality(bot_state_t* bs);
+void BotWaypointRender(void);
+void LoadPath_ThisLevel(void);
+void StandardBotAI(bot_state_t* bs, float thinktime);
+void* B_Alloc(int size);
+void* B_TempAlloc(int size);

@@ -23,15 +23,26 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 ===========================================================================
 */
 
-#ifndef TR_PUBLIC_H
-#define TR_PUBLIC_H
+#pragma once
+
+// ======================================================================
+// INCLUDE
+// ======================================================================
 
 #include "rd-common/tr_types.h"
 #include "qcommon/MiniHeap.h"
 #include "qcommon/q_common.h"
 #include "ghoul2/ghoul2_shared.h"
 
+// ======================================================================
+// DEFINE
+// ======================================================================
+
 #define	REF_API_VERSION 9
+
+// ======================================================================
+// STRUCT
+// ======================================================================
 
 // these are the functions exported by the refresh module
 typedef struct refexport_s {
@@ -344,6 +355,3 @@ typedef struct refimport_s {
 #else
 	typedef	refexport_t* (QDECL *GetRefAPI_t) (int apiVersion, refimport_t *rimp);
 #endif
-
-#endif
-

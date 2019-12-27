@@ -24,15 +24,20 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
 
-// bg_public.h -- definitions shared by both the server game and client game modules
-
+// definitions shared by both the server game and client game modules
 // because games can change separately from the main system version, we need a second version that must match between game and cgame
+
+// ======================================================================
+// INCLUDE
+// ======================================================================
 
 #include "game/bg_weapons.h"
 #include "game/anims.h"
 #include "qcommon/q_shared.h"
 
-// definitions
+// ======================================================================
+// DEFINE
+// ======================================================================
 
 #define	AED_ARRAY_SIZE              (MAX_RANDOM_ANIM_SOUNDS+3)
 #define	AED_BOLTINDEX               1
@@ -175,9 +180,9 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 #error overflow: (CS_MAX) > MAX_CONFIGSTRINGS
 #endif
 
-
-
-// enums
+// ======================================================================
+// ENUM
+// ======================================================================
 
 enum eventBits_e : uint32_t {
 	EV_EVENT_BIT1 = 0x0100,
@@ -854,6 +859,7 @@ enum entityType_t {
 #ifdef LS_NONE
 #undef LS_NONE
 #endif
+
 enum saberMoveName_t {
 	//totally invalid
 	LS_INVALID	= -1,
@@ -1095,9 +1101,9 @@ enum saberTweaks_t : uint32_t {
 	ST_NO_DEACTIVATE =     0x0004,
 };
 
-
-
-// structs
+// ======================================================================
+// STRUCT
+// ======================================================================
 
 #pragma pack(push, 1)
 struct animation_t {
@@ -1287,161 +1293,161 @@ struct saberInfo_t {
 	float          splashKnockback, splashKnockback2;      // 0 - amount of splashKnockback, 100% at a distance of 0, 0% at a distance = splashRadius
 };
 
-
-
-// variables
+// ======================================================================
+// EXTERN VARIABLE
+// ======================================================================
 
 #ifndef _GAME
 extern bgLoadedEvents_t bgAllEvents[MAX_ANIM_FILES];
 extern int              bgNumAnimEvents;
 #endif
 
-extern stringID_table_t  animEventTypeTable[MAX_ANIM_EVENTS+1];
-extern const char       *bg_customSiegeSoundNames[MAX_CUSTOM_SIEGE_SOUNDS];
-extern gitem_t           bg_itemlist[];
-extern int               bg_numItems;
-extern animation_t       bgHumanoidAnimations[MAX_TOTALANIMATIONS];
-extern const char       *bgToggleableSurfaces[BG_NUM_TOGGLEABLE_SURFACES];
-extern const int         bgToggleableSurfaceDebris[BG_NUM_TOGGLEABLE_SURFACES];
-extern int               bgForcePowerCost[NUM_FORCE_POWERS][NUM_FORCE_POWER_LEVELS];
-extern bool          BGPAFtextLoaded;
-extern bgLoadedAnim_t    bgAllAnims[MAX_ANIM_FILES];
-extern stringID_table_t  footstepTypeTable[NUM_FOOTSTEP_TYPES+1];
-extern char             *forceMasteryLevels[NUM_FORCE_MASTERY_LEVELS];
-extern int               forceMasteryPoints[NUM_FORCE_MASTERY_LEVELS];
-extern int               forcePowerDarkLight[NUM_FORCE_POWERS];
-extern int               forcePowerSorted[NUM_FORCE_POWERS];
-extern const char       *gametypeStringShort[GT_MAX_GAME_TYPE];
-extern pmove_t          *pm;
-extern saberMoveData_t   saberMoveData[LS_MOVE_MAX];
-extern int               WeaponAttackAnim[WP_NUM_WEAPONS];
-extern int               WeaponReadyAnim[WP_NUM_WEAPONS];
-extern vec3_t            WP_MuzzlePoint[WP_NUM_WEAPONS];
+extern animation_t bgHumanoidAnimations[MAX_TOTALANIMATIONS];
+extern bgLoadedAnim_t bgAllAnims[MAX_ANIM_FILES];
+extern bool BGPAFtextLoaded;
+extern char *forceMasteryLevels[NUM_FORCE_MASTERY_LEVELS];
+extern const char *bg_customSiegeSoundNames[MAX_CUSTOM_SIEGE_SOUNDS];
+extern const char *bgToggleableSurfaces[BG_NUM_TOGGLEABLE_SURFACES];
+extern const char *gametypeStringShort[GT_MAX_GAME_TYPE];
+extern const int bgToggleableSurfaceDebris[BG_NUM_TOGGLEABLE_SURFACES];
+extern gitem_t bg_itemlist[];
+extern int bg_numItems;
+extern int bgForcePowerCost[NUM_FORCE_POWERS][NUM_FORCE_POWER_LEVELS];
+extern int forceMasteryPoints[NUM_FORCE_MASTERY_LEVELS];
+extern int forcePowerDarkLight[NUM_FORCE_POWERS];
+extern int forcePowerSorted[NUM_FORCE_POWERS];
+extern int WeaponAttackAnim[WP_NUM_WEAPONS];
+extern int WeaponReadyAnim[WP_NUM_WEAPONS];
+extern pmove_t *pm;
+extern saberMoveData_t saberMoveData[LS_MOVE_MAX];
+extern stringID_table_t animEventTypeTable[MAX_ANIM_EVENTS+1];
+extern stringID_table_t footstepTypeTable[NUM_FOOTSTEP_TYPES+1];
+extern vec3_t WP_MuzzlePoint[WP_NUM_WEAPONS];
 
-
-
-// functions
+// ======================================================================
+// FUNCTION
+// ======================================================================
 
 #ifndef _GAME
-int BG_ParseAnimationEvtFile( const char *as_filename, int animFileIndex, int eventFileIndex );
+int BG_ParseAnimationEvtFile(const char* as_filename, int animFileIndex, int eventFileIndex);
 #endif
 
-void           *BG_Alloc                              ( int size );
-void           *BG_AllocUnaligned                     ( int size );
-int             BG_AnimLength                         ( int index, animNumber_t anim );
-void            BG_AddPredictableEventToPlayerstate   ( int newEvent, int eventParm, playerState_t *ps );
-void            BG_BLADE_ActivateTrail                ( bladeInfo_t *blade, float duration );
-void            BG_BLADE_DeactivateTrail              ( bladeInfo_t *blade, float duration );
-int             BG_BrokenParryForAttack               ( int move );
-int             BG_BrokenParryForParry                ( int move );
-bool        BG_CanItemBeGrabbed                   ( int gametype, const entityState_t *ent, const playerState_t *ps );
-bool        BG_CanUseFPNow                        ( int gametype, playerState_t *ps, int time, forcePowers_t power );
-bool        BG_CheckIncrementLockAnim             ( int anim, int winOrLose );
-void            BG_ClearAnimsets                      ( void );
-void            BG_ClearRocketLock                    ( playerState_t *ps );
-void            BG_CycleInven                         ( playerState_t *ps, int direction );
-bool        BG_DirectFlippingAnim                 ( int anim );
-int             BG_EmplacedView                       ( vec3_t baseAngles, vec3_t angles, float *newYaw, float constraint );
-void            BG_EvaluateTrajectory                 ( const trajectory_t *tr, int atTime, vec3_t result );
-void            BG_EvaluateTrajectoryDelta            ( const trajectory_t *tr, int atTime, vec3_t result );
-gitem_t        *BG_FindItem                           ( const char *classname );
-gitem_t        *BG_FindItemForHoldable                ( holdable_t pw );
-gitem_t        *BG_FindItemForPowerup                 ( powerup_t pw );
-gitem_t        *BG_FindItemForWeapon                  ( weapon_t weapon );
-bool        BG_FlippingAnim                       ( int anim );
-void            BG_ForcePowerDrain                    ( playerState_t *ps, forcePowers_t forcePower, int overrideAmt );
-bool        BG_FullBodyTauntAnim                  ( int anim );
-void            BG_G2ATSTAngles                       ( void *ghoul2, int time, vec3_t cent_lerpAngles );
-void            BG_G2PlayerAngles                     ( void *ghoul2, int motionBolt, entityState_t *cent, int time, vec3_t cent_lerpOrigin, vec3_t cent_lerpAngles, matrix3_t legs, vec3_t legsAngles, bool *tYawing, bool *tPitching, bool *lYawing, float *tYawAngle, float *tPitchAngle, float *lYawAngle, int frametime, vec3_t turAngles, vec3_t modelScale, int ciLegs, int ciTorso, int *corrTime, vec3_t lookAngles, vec3_t lastHeadAngles, int lookTime, entityState_t *emplaced, int *crazySmoothFactor );
-int             BG_GetGametypeForString               ( const char *gametype );
-const char     *BG_GetGametypeString                  ( int gametype );
-int             BG_GetItemIndexByTag                  ( int tag, int type );
-bool        BG_GetRootSurfNameWithVariant         ( void *ghoul2, const char *rootSurfName, char *returnSurfName, int returnSize );
-void            BG_GiveMeVectorFromMatrix             ( mdxaBone_t *boltMatrix, int flags, vec3_t vec );
-bool        BG_HasAnimation                       ( int animIndex, int animation );
-bool        BG_HasYsalamiri                       ( int gametype, playerState_t *ps );
-bool        BG_InBackFlip                         ( int anim );
-bool        BG_InExtraDefenseSaberMove            ( int move );
-bool        BG_InDeathAnim                        ( int anim );
-int             BG_InGrappleMove                      ( int anim );
-void            BG_InitAnimsets                       ( void );
-bool        BG_InKataAnim                         ( int anim );
-bool        BG_InKnockDown                        ( int anim );
-bool        BG_InKnockDownOnGround                ( playerState_t *ps );
-bool        BG_InKnockDownOnly                    ( int anim );
-bool        BG_InReboundHold                      ( int anim );
-bool        BG_InReboundJump                      ( int anim );
-bool        BG_InReboundRelease                   ( int anim );
-bool        BG_InRoll                             ( playerState_t *ps, int anim );
-bool        BG_InSaberLock                        ( int anim );
-bool        BG_InSaberLockOld                     ( int anim );
-bool        BG_InSaberStandAnim                   ( int anim );
-bool        BG_InSpecialJump                      ( int anim );
-bool        BG_IsItemSelectable                   ( playerState_t *ps, int item );
-void            BG_IK_MoveArm                         ( void *ghoul2, int lHandBolt, int time, entityState_t *ent, int basePose, vec3_t desiredPos, bool *ikInProgress, vec3_t origin, vec3_t angles, vec3_t scale, int blendTime, bool forceHalt );
-bool        BG_KickingAnim                        ( int anim );
-bool        BG_KickMove                           ( int move );
-int             BG_KnockawayForParry                  ( int move );
-bool        BG_KnockDownable                      ( playerState_t *ps );
-bool        BG_LegalizedForcePowers               ( char *powerOut, size_t powerOutSize, int maxRank, bool freeSaber, int teamForce, int gametype, int fpDisabled );
-bool        BG_OutOfMemory                        ( void );
-int             BG_ParseAnimationFile                 ( const char *filename, animation_t *animSet, bool isHumanoid );
-int             BG_PickAnim                           ( int animIndex, int minAnim, int maxAnim );
-void            BG_PlayerStateToEntityState           ( playerState_t *ps, entityState_t *s, bool snap );
-void            BG_PlayerStateToEntityStateExtraPolate( playerState_t *ps, entityState_t *s, int time, bool snap );
-bool        BG_PlayerTouchesItem                  ( playerState_t *ps, entityState_t *item, int atTime );
-bool        BG_SaberInAttack                      ( int move );
-bool        BG_SaberInIdle                        ( int move );
-bool        BG_SaberInKata                        ( int saberMove );
-bool        BG_SaberInReturn                      ( int move );
-bool        BG_SaberInSpecial                     ( int move );
-bool        BG_SaberInSpecialAttack               ( int anim );
-bool        BG_SaberInTransitionAny               ( int move );
-bool        BG_SabersOff                          ( playerState_t *ps );
-void            BG_SaberStartTransAnim                ( int clientNum, int saberAnimLevel, int weapon, int anim, float *animSpeed, int broken );
-void            BG_SetAnim                            ( playerState_t *ps, animation_t *animations, int setAnimParts, int anim, int setAnimFlags );
-void            BG_SI_Activate                        ( saberInfo_t *saber );
-void            BG_SI_ActivateTrail                   ( saberInfo_t *saber, float duration );
-bool        BG_SI_Active                          ( saberInfo_t *saber );
-void            BG_SI_BladeActivate                   ( saberInfo_t *saber, int iBlade, bool bActive );
-void            BG_SI_Deactivate                      ( saberInfo_t *saber );
-void            BG_SI_DeactivateTrail                 ( saberInfo_t *saber, float duration );
-float           BG_SI_Length                          ( saberInfo_t *saber );
-float           BG_SI_LengthMax                       ( saberInfo_t *saber );
-void            BG_SI_SetDesiredLength                ( saberInfo_t *saber, float len, int bladeNum );
-void            BG_SI_SetLength                       ( saberInfo_t *saber, float length );
-void            BG_SI_SetLengthGradual                ( saberInfo_t *saber, int time );
-bool        BG_SpinningSaberAnim                  ( int anim );
-bool        BG_StabDownAnim                       ( int anim );
-char           *BG_StringAlloc                        ( const char *source );
-bool        BG_SuperBreakLoseAnim                 ( int anim );
-bool        BG_SuperBreakWinAnim                  ( int anim );
-void           *BG_TempAlloc                          ( int size );
-void            BG_TempFree                           ( int size );
-void            BG_TouchJumpPad                       ( playerState_t *ps, entityState_t *jumppad );
-bool        BG_ValidateSkinForTeam                ( const char *modelName, char *skinName, int team, float *colors );
-bgEntity_t     *PM_BGEntForNum                        ( int num );
-bool        PM_InKnockDown                        ( playerState_t *ps );
-bool        PM_RunningAnim                        ( int anim );
-int             PM_SaberBounceForAttack               ( int move );
-int             PM_SaberDeflectionForQuad             ( int quad );
-bool        PM_SaberInBounce                      ( int move );
-bool        PM_SaberInBrokenParry                 ( int move );
-bool        PM_SaberInDeflect                     ( int move );
-bool        PM_SaberInReturn                      ( int move );
-bool        PM_SaberInStart                       ( int move );
-bool        PM_SaberInTransition                  ( int move );
-void            PM_UpdateViewAngles                   ( playerState_t *ps, const usercmd_t *cmd );
-bool        PM_WalkingAnim                        ( int anim );
-void            Pmove                                 ( pmove_t *pmove );
-const char     *SaberColorToString                    ( saber_colors_t color );
-saber_colors_t  TranslateSaberColor                   ( const char *name );
-saberType_t     TranslateSaberType                    ( const char *name );
-float           vectoyaw                              ( const vec3_t vec );
-bool        WP_SaberBladeUseSecondBladeStyle      ( saberInfo_t *saber, int bladeNum );
-void            WP_SaberLoadParms                     ( void );
-void            WP_SaberGetHiltInfo                   ( const char *singleHilts[MAX_SABER_HILTS], const char *staffHilts[MAX_SABER_HILTS] );
-bool        WP_SaberParseParm                     ( const char *saberName, const char *parmname, char *saberData );
-bool        WP_SaberStyleValidForSaber            ( saberInfo_t *saber1, saberInfo_t *saber2, int saberHolstered, int saberAnimLevel );
-void            WP_SetSaber                           ( int entNum, saberInfo_t *sabers, int saberNum, const char *saberName );
-bool        WP_UseFirstValidSaberStyle            ( saberInfo_t *saber1, saberInfo_t *saber2, int saberHolstered, int *saberAnimLevel );
+bgEntity_t* PM_BGEntForNum(int num);
+bool BG_CanItemBeGrabbed(int gametype, const entityState_t* ent, const playerState_t* ps);
+bool BG_CanUseFPNow(int gametype, playerState_t* ps, int time, forcePowers_t power);
+bool BG_CheckIncrementLockAnim(int anim, int winOrLose);
+bool BG_DirectFlippingAnim(int anim);
+bool BG_FlippingAnim(int anim);
+bool BG_FullBodyTauntAnim(int anim);
+bool BG_GetRootSurfNameWithVariant(void* ghoul2, const char* rootSurfName, char* returnSurfName, int returnSize);
+bool BG_HasAnimation(int animIndex, int animation);
+bool BG_HasYsalamiri(int gametype, playerState_t* ps);
+bool BG_InBackFlip(int anim);
+bool BG_InDeathAnim(int anim);
+bool BG_InExtraDefenseSaberMove(int move);
+bool BG_InKataAnim(int anim);
+bool BG_InKnockDown(int anim);
+bool BG_InKnockDownOnGround(playerState_t* ps);
+bool BG_InKnockDownOnly(int anim);
+bool BG_InReboundHold(int anim);
+bool BG_InReboundJump(int anim);
+bool BG_InReboundRelease(int anim);
+bool BG_InRoll(playerState_t* ps, int anim);
+bool BG_InSaberLock(int anim);
+bool BG_InSaberLockOld(int anim);
+bool BG_InSaberStandAnim(int anim);
+bool BG_InSpecialJump(int anim);
+bool BG_IsItemSelectable(playerState_t* ps, int item);
+bool BG_KickingAnim(int anim);
+bool BG_KickMove(int move);
+bool BG_KnockDownable(playerState_t* ps);
+bool BG_LegalizedForcePowers(char* powerOut, size_t powerOutSize, int maxRank, bool freeSaber, int teamForce, int gametype, int fpDisabled);
+bool BG_OutOfMemory(void);
+bool BG_PlayerTouchesItem(playerState_t* ps, entityState_t* item, int atTime);
+bool BG_SaberInAttack(int move);
+bool BG_SaberInIdle(int move);
+bool BG_SaberInKata(int saberMove);
+bool BG_SaberInReturn(int move);
+bool BG_SaberInSpecial(int move);
+bool BG_SaberInSpecialAttack(int anim);
+bool BG_SaberInTransitionAny(int move);
+bool BG_SabersOff(playerState_t* ps);
+bool BG_SI_Active(saberInfo_t* saber);
+bool BG_SpinningSaberAnim(int anim);
+bool BG_StabDownAnim(int anim);
+bool BG_SuperBreakLoseAnim(int anim);
+bool BG_SuperBreakWinAnim(int anim);
+bool BG_ValidateSkinForTeam(const char* modelName, char* skinName, int team, float* colors);
+bool PM_InKnockDown(playerState_t* ps);
+bool PM_RunningAnim(int anim);
+bool PM_SaberInBounce(int move);
+bool PM_SaberInBrokenParry(int move);
+bool PM_SaberInDeflect(int move);
+bool PM_SaberInReturn(int move);
+bool PM_SaberInStart(int move);
+bool PM_SaberInTransition(int move);
+bool PM_WalkingAnim(int anim);
+bool WP_SaberBladeUseSecondBladeStyle(saberInfo_t* saber, int bladeNum);
+bool WP_SaberParseParm(const char* saberName, const char* parmname, char* saberData);
+bool WP_SaberStyleValidForSaber(saberInfo_t* saber1, saberInfo_t* saber2, int saberHolstered, int saberAnimLevel);
+bool WP_UseFirstValidSaberStyle(saberInfo_t* saber1, saberInfo_t* saber2, int saberHolstered, int* saberAnimLevel);
+char* BG_StringAlloc(const char* source);
+const char* BG_GetGametypeString(int gametype);
+const char* SaberColorToString(saber_colors_t color);
+float BG_SI_Length(saberInfo_t* saber);
+float BG_SI_LengthMax(saberInfo_t* saber);
+float vectoyaw(const vec3_t vec);
+gitem_t* BG_FindItem(const char* classname);
+gitem_t* BG_FindItemForHoldable(holdable_t pw);
+gitem_t* BG_FindItemForPowerup(powerup_t pw);
+gitem_t* BG_FindItemForWeapon(weapon_t weapon);
+int BG_AnimLength(int index, animNumber_t anim);
+int BG_BrokenParryForAttack(int move);
+int BG_BrokenParryForParry(int move);
+int BG_EmplacedView(vec3_t baseAngles, vec3_t angles, float* newYaw, float constraint);
+int BG_GetGametypeForString(const char* gametype);
+int BG_GetItemIndexByTag(int tag, int type);
+int BG_InGrappleMove(int anim);
+int BG_KnockawayForParry(int move);
+int BG_ParseAnimationFile(const char* filename, animation_t* animSet, bool isHumanoid);
+int BG_PickAnim(int animIndex, int minAnim, int maxAnim);
+int PM_SaberBounceForAttack(int move);
+int PM_SaberDeflectionForQuad(int quad);
+saber_colors_t TranslateSaberColor(const char* name);
+saberType_t TranslateSaberType(const char* name);
+void BG_AddPredictableEventToPlayerstate(int newEvent, int eventParm, playerState_t* ps);
+void BG_BLADE_ActivateTrail(bladeInfo_t* blade, float duration);
+void BG_BLADE_DeactivateTrail(bladeInfo_t* blade, float duration);
+void BG_ClearAnimsets(void);
+void BG_ClearRocketLock(playerState_t* ps);
+void BG_CycleInven(playerState_t* ps, int direction);
+void BG_EvaluateTrajectory(const trajectory_t* tr, int atTime, vec3_t result);
+void BG_EvaluateTrajectoryDelta(const trajectory_t* tr, int atTime, vec3_t result);
+void BG_ForcePowerDrain(playerState_t* ps, forcePowers_t forcePower, int overrideAmt);
+void BG_G2ATSTAngles(void* ghoul2, int time, vec3_t cent_lerpAngles);
+void BG_G2PlayerAngles(void* ghoul2, int motionBolt, entityState_t* cent, int time, vec3_t cent_lerpOrigin, vec3_t cent_lerpAngles, matrix3_t legs, vec3_t legsAngles, bool* tYawing, bool* tPitching, bool* lYawing, float* tYawAngle, float* tPitchAngle, float* lYawAngle, int frametime, vec3_t turAngles, vec3_t modelScale, int ciLegs, int ciTorso, int* corrTime, vec3_t lookAngles, vec3_t lastHeadAngles, int lookTime, entityState_t* emplaced, int* crazySmoothFactor);
+void BG_GiveMeVectorFromMatrix(mdxaBone_t* boltMatrix, int flags, vec3_t vec);
+void BG_IK_MoveArm(void* ghoul2, int lHandBolt, int time, entityState_t* ent, int basePose, vec3_t desiredPos, bool* ikInProgress, vec3_t origin, vec3_t angles, vec3_t scale, int blendTime, bool forceHalt);
+void BG_InitAnimsets(void);
+void BG_PlayerStateToEntityState(playerState_t* ps, entityState_t* s, bool snap);
+void BG_PlayerStateToEntityStateExtraPolate(playerState_t* ps, entityState_t* s, int time, bool snap);
+void BG_SaberStartTransAnim(int clientNum, int saberAnimLevel, int weapon, int anim, float* animSpeed, int broken);
+void BG_SetAnim(playerState_t* ps, animation_t* animations, int setAnimParts, int anim, int setAnimFlags);
+void BG_SI_Activate(saberInfo_t* saber);
+void BG_SI_ActivateTrail(saberInfo_t* saber, float duration);
+void BG_SI_BladeActivate(saberInfo_t* saber, int iBlade, bool bActive);
+void BG_SI_Deactivate(saberInfo_t* saber);
+void BG_SI_DeactivateTrail(saberInfo_t* saber, float duration);
+void BG_SI_SetDesiredLength(saberInfo_t* saber, float len, int bladeNum);
+void BG_SI_SetLength(saberInfo_t* saber, float length);
+void BG_SI_SetLengthGradual(saberInfo_t* saber, int time);
+void BG_TempFree(int size);
+void BG_TouchJumpPad(playerState_t* ps, entityState_t* jumppad);
+void PM_UpdateViewAngles(playerState_t* ps, const usercmd_t* cmd);
+void Pmove(pmove_t* pmove);
+void WP_SaberGetHiltInfo(const char* singleHilts[MAX_SABER_HILTS], const char* staffHilts[MAX_SABER_HILTS]);
+void WP_SaberLoadParms(void);
+void WP_SetSaber(int entNum, saberInfo_t* sabers, int saberNum, const char* saberName);
+void* BG_Alloc(int size);
+void* BG_AllocUnaligned(int size);
+void* BG_TempAlloc(int size);

@@ -24,7 +24,6 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "game/g_local.h"
-#include "game/bg_saga.h"
 #include "game/g_team.h"
 
 void DeathmatchScoreboardMessage( gentity_t *ent ) {

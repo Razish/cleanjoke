@@ -23,6 +23,10 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
 
+// ======================================================================
+// DEFINE
+// ======================================================================
+
 //Script flags
 #define	SCF_CROUCHED		0x00000001	//Force ucmd.upmove to be -127
 #define	SCF_WALKING			0x00000002	//Force BUTTON_WALKING to be pressed
@@ -55,4 +59,8 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 #define	ENEMY_POS_LAG_INTERVAL	100
 #define	ENEMY_POS_LAG_STEPS	(MAX_ENEMY_POS_LAG/ENEMY_POS_LAG_INTERVAL)
 
-void G_LoadBoltOns( void );
+// ======================================================================
+// FUNCTION
+// ======================================================================
+
+void G_LoadBoltOns(void);

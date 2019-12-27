@@ -27,7 +27,6 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 // executed by a key binding
 
 #include "cgame/cg_local.h"
-#include "game/bg_saga.h"
 #include "ui/ui_shared.h"
 
 void CG_TargetCommand_f( void ) {

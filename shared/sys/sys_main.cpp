@@ -97,11 +97,7 @@ char *Sys_DefaultAppPath(void)
 	return Sys_BinaryPath();
 }
 
-/*
-==================
-Sys_GetClipboardData
-==================
-*/
+// note that this isn't journaled...
 char *Sys_GetClipboardData( void ) {
 #ifdef DEDICATED
 	return NULL;

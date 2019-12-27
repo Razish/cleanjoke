@@ -24,11 +24,33 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
 
+// This crosses both client and server.  It could all be crammed into bg_public, but isolation of this type of data is best.
+
+// ======================================================================
+// INCLUDE
+// ======================================================================
+
 #include <cstdint>
 
-// Filename:-	bg_weapons.h
+// ======================================================================
+// DEFINE
+// ======================================================================
 
-// This crosses both client and server.  It could all be crammed into bg_public, but isolation of this type of data is best.
+//anything > this will be considered not player useable
+#define LAST_USEABLE_WEAPON			WP_BRYAR_OLD
+
+// Specific weapon information
+#define FIRST_WEAPON		WP_BRYAR_PISTOL		// this is the first weapon for next and prev weapon switching
+#define MAX_PLAYER_WEAPONS	WP_NUM_WEAPONS-1	// this is the max you can switch to and get with the give all.
+
+#define DEFAULT_SHOTGUN_SPREAD	700
+#define DEFAULT_SHOTGUN_COUNT	11
+
+#define	LIGHTNING_RANGE		768
+
+// ======================================================================
+// ENUM
+// ======================================================================
 
 enum weapon_t : int32_t {
 	WP_NONE,
@@ -63,9 +85,6 @@ enum weapon_t : int32_t {
 	WP_NUM_WEAPONS
 };
 
-//anything > this will be considered not player useable
-#define LAST_USEABLE_WEAPON			WP_BRYAR_OLD
-
 typedef enum //# ammo_e
 {
 	AMMO_NONE,
@@ -80,6 +99,10 @@ typedef enum //# ammo_e
 	AMMO_DETPACK,
 	AMMO_MAX
 } ammo_t;
+
+// ======================================================================
+// STRUCT
+// ======================================================================
 
 typedef struct weaponData_s
 {
@@ -112,15 +135,9 @@ typedef struct  ammoData_s
 	int		max;		// Max amount player can hold of ammo
 } ammoData_t;
 
-extern weaponData_t weaponData[WP_NUM_WEAPONS];
+// ======================================================================
+// EXTERN VARIABLE
+// ======================================================================
+
 extern ammoData_t ammoData[AMMO_MAX];
-
-// Specific weapon information
-
-#define FIRST_WEAPON		WP_BRYAR_PISTOL		// this is the first weapon for next and prev weapon switching
-#define MAX_PLAYER_WEAPONS	WP_NUM_WEAPONS-1	// this is the max you can switch to and get with the give all.
-
-#define DEFAULT_SHOTGUN_SPREAD	700
-#define DEFAULT_SHOTGUN_COUNT	11
-
-#define	LIGHTNING_RANGE		768
+extern weaponData_t weaponData[WP_NUM_WEAPONS];

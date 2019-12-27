@@ -87,11 +87,8 @@ const char *Sys_Dirname( char *path )
 	return dir;
 }
 
-/*
-================
-Sys_Milliseconds
-================
-*/
+// Sys_Milliseconds should only be used for profiling purposes,
+// any game related timing information should come from event timestamps
 int Sys_Milliseconds (bool baseTime)
 {
 	static int sys_timeBase = timeGetTime();
@@ -481,6 +478,7 @@ char **Sys_ListFiles( const char *directory, const char *extension, char *filter
 	return listCopy;
 }
 
+//rwwRMG - changed to fileList to not conflict with list type
 void	Sys_FreeFileList( char **psList ) {
 	int		i;
 

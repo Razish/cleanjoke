@@ -25,7 +25,6 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 #include "qcommon/q_shared.h"
 #include "game/bg_public.h"
-#include "game/bg_saga.h"
 #include "game/bg_weapons.h"
 
 #ifdef _GAME

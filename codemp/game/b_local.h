@@ -23,15 +23,20 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
 
-//B_local.h
-//re-added by MCG
+// ======================================================================
+// INCLUDE
+// ======================================================================
 
 #include "game/g_local.h"
 #include "game/b_public.h"
 #include "game/say.h"
 
-#define	AI_TIMERS 0//turn on to see print-outs of AI/nav timing
-// Navigation susbsystem
+// ======================================================================
+// DEFINE
+// ======================================================================
+
+#define	AI_TIMERS 0 //turn on to see print-outs of AI/nav timing
+					// Navigation susbsystem
 
 #define NAVF_DUCK			0x00000001
 #define NAVF_JUMP			0x00000002
@@ -44,22 +49,10 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 #define DEBUG_LEVEL_ERROR	1
 #define DEBUG_LEVEL_NONE	0
 
-#define MAX_GOAL_REACHED_DIST_SQUARED	256//16 squared
+#define MAX_GOAL_REACHED_DIST_SQUARED	256 //16 squared
 #define MIN_ANGLE_ERROR 0.01f
 
-#define MIN_ROCKET_DIST_SQUARED 16384//128*128
-
-void Debug_Printf( vmCvar_t *cv, int level, char *fmt, ... );
-
-//NPC_combat
-int ChooseBestWeapon( void );
-void ShootThink( void );
-void WeaponThink( bool inCombat );
-bool HaveWeapon( int weapon );
-bool CanShoot ( gentity_t *ent, gentity_t *shooter );
-bool EntIsGlass (gentity_t *check);
-bool ShotThroughGlass (trace_t *tr, gentity_t *target, vec3_t spot, int mask);
-bool ValidEnemy (gentity_t *ent);
+#define MIN_ROCKET_DIST_SQUARED 16384 //128*128
 
 #define COLLISION_RADIUS 32
 #define NUM_POSITIONS 30
@@ -79,23 +72,28 @@ bool ValidEnemy (gentity_t *ent);
 #define CHECK_FOV		4
 #define CHECK_SHOOT		8
 #define CHECK_VISRANGE	16
-bool CanSee ( gentity_t *ent );
-bool InFOV ( gentity_t *ent, gentity_t *from, int hFOV, int vFOV );
-bool InFOV2( vec3_t origin, gentity_t *from, int hFOV, int vFOV );
-bool InFOV3( vec3_t spot, vec3_t from, vec3_t fromAngles, int hFOV, int vFOV );
-bool InVisrange ( gentity_t *ent );
 
-void SetTeamNumbers (void);
-bool G_ActivateBehavior (gentity_t *self, int bset );
+// ======================================================================
+// FUNCTION
+// ======================================================================
 
-//NPC_combat
-float IdealDistance ( gentity_t *self );
-
-//g_utils
-bool G_CheckInSolid (gentity_t *self, bool fix);
-
-//MCG - End
-
-void ClearPlayerAlertEvents( void );
-
+bool CanSee(gentity_t* ent);
+bool CanShoot(gentity_t* ent, gentity_t* shooter);
+bool EntIsGlass(gentity_t* check);
+bool G_ActivateBehavior(gentity_t* self, int bset);
 bool G_BoundsOverlap(const vec3_t mins1, const vec3_t maxs1, const vec3_t mins2, const vec3_t maxs2);
+bool G_CheckInSolid(gentity_t* self, bool fix);
+bool HaveWeapon(int weapon);
+bool InFOV(gentity_t* ent, gentity_t* from, int hFOV, int vFOV);
+bool InFOV2(vec3_t origin, gentity_t* from, int hFOV, int vFOV);
+bool InFOV3(vec3_t spot, vec3_t from, vec3_t fromAngles, int hFOV, int vFOV);
+bool InVisrange(gentity_t* ent);
+bool ShotThroughGlass(trace_t* tr, gentity_t* target, vec3_t spot, int mask);
+bool ValidEnemy(gentity_t* ent);
+float IdealDistance(gentity_t* self);
+int ChooseBestWeapon(void);
+void ClearPlayerAlertEvents(void);
+void Debug_Printf(vmCvar_t* cv, int level, char* fmt, ...);
+void SetTeamNumbers(void);
+void ShootThink(void);
+void WeaponThink(bool inCombat);

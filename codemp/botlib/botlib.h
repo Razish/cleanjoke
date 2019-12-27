@@ -26,18 +26,18 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 // bot AI library
 
+// ======================================================================
+// INCLUDE
+// ======================================================================
+
 #include "qcommon/q_math.h"
 #include "qcommon/q_shared.h"
 
+// ======================================================================
+// DEFINE
+// ======================================================================
 
 #define	BOTLIB_API_VERSION		2
-
-struct bot_consolemessage_s;
-struct bot_match_s;
-struct bot_goal_s;
-struct bot_moveresult_s;
-struct bot_initmove_s;
-struct weaponinfo_s;
 
 #define BOTFILESBASEFOLDER		"botfiles"
 //debug line colors
@@ -101,6 +101,21 @@ struct weaponinfo_s;
 #define ACTION_FOLLOWME			0x8000000
 */
 
+// ======================================================================
+// FORWARD DECLARATION
+// ======================================================================
+
+struct bot_consolemessage_s;
+struct bot_match_s;
+struct bot_goal_s;
+struct bot_moveresult_s;
+struct bot_initmove_s;
+struct weaponinfo_s;
+
+// ======================================================================
+// STRUCT
+// ======================================================================
+
 //the bot input, will be converted to a usercmd_t
 typedef struct bot_input_s
 {
@@ -113,7 +128,6 @@ typedef struct bot_input_s
 } bot_input_t;
 
 #ifndef BSPTRACE
-
 #define BSPTRACE
 
 //bsp_trace_t hit surface

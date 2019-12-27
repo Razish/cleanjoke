@@ -22,6 +22,10 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
 
+// ======================================================================
+// INCLUDE
+// ======================================================================
+
 #ifdef DEDICATED
 #	ifdef _WIN32
 #		include <Windows.h>
@@ -30,7 +34,7 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 #		define Sys_LoadFunction(h,fn) (void*)GetProcAddress((HMODULE)h,fn)
 #		define Sys_LibraryError() "unknown"
 #	else
-#	include <dlfcn.h>
+#		include <dlfcn.h>
 #		define Sys_LoadLibrary(f) dlopen(f,RTLD_NOW)
 #		define Sys_UnloadLibrary(h) dlclose(h)
 #		define Sys_LoadFunction(h,fn) dlsym(h,fn)
@@ -45,4 +49,8 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 #	define Sys_LibraryError() SDL_GetError()
 #endif
 
-void * QDECL Sys_LoadDll(const char *name, bool useSystemLib);
+// ======================================================================
+// FUNCTION
+// ======================================================================
+
+void* QDECL Sys_LoadDll(const char* name, bool useSystemLib);

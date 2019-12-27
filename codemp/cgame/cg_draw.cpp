@@ -28,9 +28,6 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 #include <algorithm>
 
 #include "cgame/cg_local.h"
-
-#include "game/bg_saga.h"
-
 #include "ui/ui_shared.h"
 #include "ui/ui_public.h"
 #include "ui/ui_fonts.h"
