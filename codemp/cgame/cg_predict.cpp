@@ -37,6 +37,7 @@ static	int			cg_numTriggerEntities;
 static	centity_t	*cg_triggerEntities[MAX_ENTITIES_IN_SNAPSHOT];
 
 //is this client piloting this veh?
+// TODO CleanJoKe: unused
 static QINLINE bool CG_Piloting(int vehNum)
 {
 	centity_t *veh;

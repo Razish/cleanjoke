@@ -91,6 +91,7 @@ void CG_DrawTopBottom(float x, float y, float w, float h, float size) {
 }
 
 // real coords
+// TODO CleanJoKe: unused
 void CG_FillRect2( float x, float y, float width, float height, const float *color ) {
 	trap->R_SetColor( color );
 	trap->R_DrawStretchPic( x, y, width, height, 0, 0, 0, 0, media.gfx.misc.white);
@@ -222,6 +223,7 @@ void CG_DrawBigString( int x, int y, const char *s, float alpha ) {
 	CG_DrawStringExt( x, y, s, color, false, true, BIGCHAR_WIDTH, BIGCHAR_HEIGHT, 0 );
 }
 
+// TODO CleanJoKe: unused
 void CG_DrawBigStringColor( int x, int y, const char *s, vec4_t color ) {
 	CG_DrawStringExt( x, y, s, color, true, true, BIGCHAR_WIDTH, BIGCHAR_HEIGHT, 0 );
 }
@@ -234,6 +236,7 @@ void CG_DrawSmallString( int x, int y, const char *s, float alpha ) {
 	CG_DrawStringExt( x, y, s, color, false, false, SMALLCHAR_WIDTH, SMALLCHAR_HEIGHT, 0 );
 }
 
+// TODO CleanJoKe: unused
 void CG_DrawSmallStringColor( int x, int y, const char *s, vec4_t color ) {
 	CG_DrawStringExt( x, y, s, color, true, false, SMALLCHAR_WIDTH, SMALLCHAR_HEIGHT, 0 );
 }

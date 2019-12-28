@@ -211,6 +211,7 @@ static int CG_TeamScoreboard( int y, team_t team, float fade, int maxClients, in
 	return count;
 }
 
+// TODO CleanJoKe: unused
 int CG_GetTeamNonScoreCount(team_t team)
 {
 	int i = 0,count=0;

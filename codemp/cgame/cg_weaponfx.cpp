@@ -41,6 +41,7 @@ void FX_BlasterProjectileThink( centity_t *cent, const struct weaponInfo_s *weap
 	trap->FX_PlayEffectID( media.efx.null, cent->lerpOrigin, forward, -1, -1, false );
 }
 
+// TODO CleanJoKe: unused
 void FX_BlasterAltFireThink( centity_t *cent, const struct weaponInfo_s *weapon ) {
 	vec3_t forward;
 
@@ -212,6 +213,7 @@ void FX_DEMP2_HitPlayer( vec3_t origin, vec3_t normal, bool humanoid ) {
 	trap->FX_PlayEffectID( media.efx.null, origin, normal, -1, -1, false );
 }
 
+// TODO CleanJoKe: unused (useless?)
 void FX_DEMP2_AltBeam( vec3_t start, vec3_t end, vec3_t normal, /*bool spark,*/ vec3_t targ1, vec3_t targ2 ) {
 	// ...
 }
@@ -345,6 +347,7 @@ void FX_FlechetteAltProjectileThink( centity_t *cent, const struct weaponInfo_s 
 }
 
 // This effect is not generic because of possible enhancements
+// TODO CleanJoKe: unused (code commented)
 void FX_ForceDrained( vec3_t origin, vec3_t dir ) {
 	VectorScale( dir, -1.0, dir );
 	trap->FX_PlayEffectID( media.efx.null, origin, dir, -1, -1, false );

@@ -253,7 +253,7 @@ const char *CG_GetGameStatusText(void) {
 // maxX param is initially an X limit, but is also used as feedback. 0 = text was clipped to fit within, else maxX = next pos
 
 #define PIC_WIDTH 12
-
+// TODO CleanJoKe: unused
 void CG_DrawNewTeamInfo(rectDef_t *rect, float text_x, float text_y, float scale, vec4_t color, qhandle_t shader) {
 	int xx;
 	float y;
@@ -354,6 +354,7 @@ void CG_DrawNewTeamInfo(rectDef_t *rect, float text_x, float text_y, float scale
 	}
 }
 
+// TODO CleanJoKe: unused
 void CG_DrawTeamSpectators(rectDef_t *rect, float scale, vec4_t color, qhandle_t shader) {
 	if (cg.spectatorLen) {
 		float maxX;
@@ -412,6 +413,7 @@ void CG_DrawTeamSpectators(rectDef_t *rect, float scale, vec4_t color, qhandle_t
 	}
 }
 
+// TODO CleanJoKe: unused (can be used later?)
 void CG_DrawMedal(int ownerDraw, rectDef_t *rect, float scale, vec4_t color, qhandle_t shader) {
 	score_t *score = &cg.scores[cg.selectedScore];
 	float value = 0;
@@ -546,7 +548,8 @@ void CG_HideTeamMenu() {
 	Menus_CloseByName("getMenu");
 }
 
-void CG_ShowTeamMenu() {
+// TODO CleanJoKe: unused (code commented)
+static void CG_ShowTeamMenu() {
 	Menus_OpenByName("teamMenu");
 }
 
@@ -594,25 +597,18 @@ void CG_KeyEvent(int key, bool down) {
 	}
 }
 
-int CG_ClientNumFromName(const char *p) {
-	int i;
-	for (i = 0; i < cgs.maxclients; i++) {
-		if (cgs.clientinfo[i].infoValid && Q_stricmp(cgs.clientinfo[i].name, p) == 0) {
-			return i;
-		}
-	}
-	return -1;
-}
-
+// TODO CleanJoKe: unused
 void CG_ShowResponseHead(void) {
 	Menus_OpenByName("voiceMenu");
 	trap->Cvar_Set("cl_conXOffset", "72");
 	cg.voiceTime = cg.time;
 }
 
+// TODO CleanJoKe: useless ?
 void CG_RunMenuScript(char **args) {
 }
 
+// TODO CleanJoKe: useless ?
 bool CG_DeferMenuScript (char **args)
 {
 	return false;

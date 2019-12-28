@@ -314,6 +314,7 @@ void CG_ShaderStateChanged(void) {
 	}
 }
 
+// TODO CleanJoKe: unused
 void SetCustomSoundForType(clientInfo_t *ci, int setType, int index, sfxHandle_t sfx)
 {
 	switch (setType)

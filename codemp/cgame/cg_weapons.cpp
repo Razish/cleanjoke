@@ -29,6 +29,7 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 #include "ui/ui_fonts.h"
 
 // set up the appropriate ghoul2 info to a refent
+// TODO CleanJoKe: unused
 void CG_SetGhoul2InfoRef( refEntity_t *ent, refEntity_t	*s1)
 {
 	ent->ghoul2 = s1->ghoul2;

@@ -363,6 +363,7 @@ void CG_Draw3DModel( float x, float y, float w, float h, qhandle_t model, void *
 }
 
 // Used for both the status bar and the scoreboard
+// TODO CleanJoKe: unused
 void CG_DrawHead( float x, float y, float w, float h, int clientNum, vec3_t headAngles )
 {
 	clientInfo_t	*ci;
@@ -3177,7 +3178,8 @@ float cg_crosshairPrevPosX = 0;
 float cg_crosshairPrevPosY = 0;
 #define CRAZY_CROSSHAIR_MAX_ERROR_X	(100.0f*640.0f/480.0f)
 #define CRAZY_CROSSHAIR_MAX_ERROR_Y	(100.0f)
-void CG_LerpCrosshairPos( float *x, float *y )
+// TODO CleanJoKe: unused (code commented)
+static void CG_LerpCrosshairPos( float *x, float *y )
 {
 	if ( cg_crosshairPrevPosX )
 	{//blend from old pos
@@ -3586,6 +3588,7 @@ void CG_SaberClashFlare( void )
 	CG_DrawPic( x - ( v * 300 ), y - ( v * 300 ), v * 600, v * 600, media.gfx.null/*media.gfx.world.saberFlare "gfx/effects/saberFlare" */ );
 }
 
+// TODO CleanJoke: unused
 void CG_DottedLine( float x1, float y1, float x2, float y2, float dotSize, int numDots, vec4_t color, float alpha )
 {
 	float x, y, xDiff, yDiff, xStep, yStep;

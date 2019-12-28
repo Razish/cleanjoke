@@ -1702,7 +1702,8 @@ void CG_SetupFrustum( void ) {
 	}
 }
 
-//	CG_CullPoint - returns true if culled
+// CG_CullPoint - returns true if culled
+// TODO CleanJoKe: unused
 bool CG_CullPoint( vec3_t pt ) {
 	int i;
 	plane_t *frust;

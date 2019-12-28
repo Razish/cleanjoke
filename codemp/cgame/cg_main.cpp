@@ -406,6 +406,7 @@ void CG_StartMusic( bool bForceStart ) {
 	trap->S_StartBackgroundTrack( parm1, parm2, !bForceStart );
 }
 
+// TODO CleanJoKe: unused
 char *CG_GetMenuBuffer(const char *filename) {
 	int	len;
 	fileHandle_t	f;
@@ -1054,12 +1055,14 @@ void CG_AssetCache() {
 }
 
 // initialise the cg_entities structure - take into account the ghoul2 stl stuff in the active snap shots
+// TODO CleanJoKe: unused
 void CG_Init_CG(void)
 {
 	memset( &cg, 0, sizeof(cg));
 }
 
 // initialise the cg_entities structure - take into account the ghoul2 stl stuff
+// TODO CleanJoKe: unused
 void CG_Init_CGents(void)
 {
 	memset(&cg_entities, 0, sizeof(cg_entities));

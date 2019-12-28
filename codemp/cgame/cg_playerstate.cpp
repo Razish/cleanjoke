@@ -169,6 +169,7 @@ void CG_CheckPlayerstateEvents( playerState_t *ps, playerState_t *ops ) {
 	}
 }
 
+// TODO CleanJoKe: unused (code commented)
 void CG_CheckChangedPredictableEvents( playerState_t *ps ) {
 	int i;
 	int event;

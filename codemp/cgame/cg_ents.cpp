@@ -456,6 +456,7 @@ void CG_SetGhoul2Info( refEntity_t *ent, centity_t *cent)
 }
 
 // write in the axis and stuff
+// TODO CleanJoKe: unused
 void G2_BoltToGhoul2Model(centity_t *cent, refEntity_t *ent)
 {
 		// extract the wraith ID from the bolt info
@@ -2080,7 +2081,8 @@ static void CG_Item( centity_t *cent ) {
 	}
 }
 
-void CG_CreateDistortionTrailPart(centity_t *cent, float scale, vec3_t pos)
+// TODO CleanJoKe: unused (code commented)
+static void CG_CreateDistortionTrailPart(centity_t *cent, float scale, vec3_t pos)
 {
 	refEntity_t ent;
 	vec3_t ang;
@@ -3185,6 +3187,7 @@ functionend:
 	return;
 }
 
+// TODO CleanJoKe: unused
 void CG_Cube( vec3_t mins, vec3_t maxs, vec3_t color, float alpha )
 {
 	vec3_t	rot={0,0,0};

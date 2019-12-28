@@ -29,6 +29,7 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 #include "cgame/cg_media.h"
 
 // Bullets shot underwater
+// TODO CleanJoKe: unused
 void CG_BubbleTrail( vec3_t start, vec3_t end, float spacing ) {
 	vec3_t		move;
 	vec3_t		vec;
@@ -1066,6 +1067,7 @@ localEntity_t *CG_MakeExplosion( vec3_t origin, vec3_t dir,
 #define NUM_EXPLOSIONS	4
 
 // Adds an explosion to a surface
+// TODO CleanJoKe: unused (code commented)
 void CG_SurfaceExplosion( vec3_t origin, vec3_t normal, float radius, float shake_speed, bool smoke )
 {
 	localEntity_t	*le;
@@ -1168,6 +1170,7 @@ void CG_SurfaceExplosion( vec3_t origin, vec3_t normal, float radius, float shak
 	}
 }
 
+// TODO CleanJoKe: unused
 void CG_LaunchGib( vec3_t origin, vec3_t velocity, qhandle_t hModel ) {
 	localEntity_t	*le;
 	refEntity_t		*re;

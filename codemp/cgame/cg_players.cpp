@@ -2466,6 +2466,7 @@ void CG_TriggerAnimSounds( centity_t *cent )
 
 static bool CG_FirstAnimFrame(lerpFrame_t *lf, bool torsoOnly, float speedScale);
 
+// TODO CleanJoKe: unused
 bool CG_InRoll( centity_t *cent )
 {
 	switch ( (cent->currentState.legsAnim) )
@@ -2491,6 +2492,7 @@ bool CG_InRoll( centity_t *cent )
 	return false;
 }
 
+// TODO CleanJoKe: unused
 bool CG_InRollAnim( centity_t *cent )
 {
 	switch ( (cent->currentState.legsAnim) )
@@ -4348,6 +4350,7 @@ void CG_PlayerHitFX( centity_t *cent ) {
 	}
 }
 
+// TODO CleanJoKe: unused
 int CG_LightVerts( vec3_t normal, int numVerts, polyVert_t *verts )
 {
 	int				i, j;
@@ -4610,6 +4613,7 @@ void CG_DoSaber( vec3_t origin, vec3_t dir, float length, float lengthMax, float
 }
 
 // Can pass in NULL for the axis
+// TODO CleanJoKe: unused
 void CG_GetTagWorldPosition( refEntity_t *model, char *tag, vec3_t pos, matrix3_t axis )
 {
 	orientation_t	orientation;
@@ -5745,6 +5749,7 @@ void CG_AddLightningBeam(vec3_t start, vec3_t end)
 	trap->FX_AddBezier(&b);
 }
 
+// TODO CleanJoKe: unused
 void CG_AddRandomLightning(vec3_t start, vec3_t end)
 {
 	vec3_t inOrg, outOrg;
@@ -5920,7 +5925,7 @@ void CG_CacheG2AnimInfo(char *modelName)
 extern playerState_t *cgSendPS[MAX_GENTITIES];
 
 #define SMOOTH_G2ANIM_LERPANGLES
-
+// TODO CleanJoKe: unused
 void CG_G2Animated( centity_t *cent )
 {
 #ifdef SMOOTH_G2ANIM_LERPANGLES
