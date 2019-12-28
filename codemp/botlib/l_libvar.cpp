@@ -164,15 +164,6 @@ libvar_t *LibVar(char *var_name, char *value)
 	return v;
 } //end of the function LibVar
 
-//creates the library variable if not existing already and returns the value string
-char *LibVarString(char *var_name, char *value)
-{
-	libvar_t *v;
-
-	v = LibVar(var_name, value);
-	return v->string;
-} //end of the function LibVarString
-
 //creates the library variable if not existing already and returns the value
 float LibVarValue(char *var_name, char *value)
 {
@@ -204,31 +195,3 @@ void LibVarSet(char *var_name, char *value)
 	//variable is modified
 	v->modified = true;
 } //end of the function LibVarSet
-
-//returns true if the library variable has been modified
-bool LibVarChanged(char *var_name)
-{
-	libvar_t *v;
-
-	v = LibVarGet(var_name);
-	if (v)
-	{
-		return v->modified;
-	} //end if
-	else
-	{
-		return false;
-	} //end else
-} //end of the function LibVarChanged
-
-//sets the library variable to unmodified
-void LibVarSetNotModified(char *var_name)
-{
-	libvar_t *v;
-
-	v = LibVarGet(var_name);
-	if (v)
-	{
-		v->modified = false;
-	} //end if
-} //end of the function LibVarSetNotModified

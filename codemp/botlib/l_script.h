@@ -189,29 +189,16 @@ typedef struct script_s
 // FUNCTION
 // ======================================================================
 
-char PS_NextWhiteSpaceChar(script_t* script);
 const char* PunctuationFromNum(script_t* script, int num);
 int EndOfScript(script_t* script);
-int GetScriptFlags(script_t* script);
-int PS_CheckTokenString(script_t* script, char* string);
-int PS_CheckTokenType(script_t* script, int type, int subtype, token_t* token);
 int PS_ExpectAnyToken(script_t* script, token_t* token);
-int PS_ExpectTokenString(script_t* script, char* string);
-int PS_ExpectTokenType(script_t* script, int type, int subtype, token_t* token);
 int PS_ReadToken(script_t* script, token_t* token);
-int PS_SkipUntilString(script_t* script, char* string);
-long double ReadSignedFloat(script_t* script);
 script_t* LoadScriptFile(const char* filename);
 script_t* LoadScriptMemory(char* ptr, int length, char* name);
-signed long int ReadSignedInt(script_t* script);
 void FreeScript(script_t* script);
 void PS_SetBaseFolder(char* path);
-void PS_UnreadLastToken(script_t* script);
-void PS_UnreadToken(script_t* script, token_t* token);
 void QDECL ScriptError(script_t* script, char* str, ...) __attribute__((format(printf, 2, 3)));
 void QDECL ScriptWarning(script_t* script, char* str, ...) __attribute__((format(printf, 2, 3)));
-void ResetScript(script_t* script);
-void SetScriptFlags(script_t* script, int flags);
 void SetScriptPunctuations(script_t* script, punctuation_t* p);
 void StripDoubleQuotes(char* string);
 void StripSingleQuotes(char* string);

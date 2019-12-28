@@ -393,10 +393,3 @@ int WriteStructWithIndent(FILE *fp, structdef_t *def, char *structure, int inden
 	if (fprintf(fp, "}\r\n") < 0) return false;
 	return true;
 } //end of the function WriteStructWithIndent
-
-//write a structure to a file
-int WriteStructure(FILE *fp, structdef_t *def, char *structure)
-{
-	return WriteStructWithIndent(fp, def, structure, 0);
-} //end of the function WriteStructure
-

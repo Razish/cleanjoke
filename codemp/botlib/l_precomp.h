@@ -110,10 +110,8 @@ typedef struct source_s
 // STRUCT
 // ======================================================================
 
-int PC_AddDefine(source_t* source, char* string);
 int PC_AddGlobalDefine(char* string);
 int PC_CheckTokenString(source_t* source, char* string);
-int PC_CheckTokenType(source_t* source, int type, int subtype, token_t* token);
 int PC_ExpectAnyToken(source_t* source, token_t* token);
 int PC_ExpectTokenString(source_t* source, char* string);
 int PC_ExpectTokenType(source_t* source, int type, int subtype, token_t* token);
@@ -124,20 +122,13 @@ int PC_ReadLine(source_t* source, token_t* token);
 int PC_ReadToken(source_t* source, token_t* token);
 int PC_ReadTokenHandle(int handle, pc_token_t* pc_token);
 int PC_RemoveGlobalDefine(char* name);
-int PC_SkipUntilString(source_t* source, char* string);
 int PC_SourceFileAndLine(int handle, char* filename, int* line);
 int PC_WhiteSpaceBeforeToken(token_t* token);
 source_t* LoadSourceFile(const char* filename);
-source_t* LoadSourceMemory(char* ptr, int length, char* name);
 void FreeSource(source_t* source);
-void PC_AddBuiltinDefines(source_t* source);
 void PC_CheckOpenSourceHandles(void);
 void PC_Init(void);
 void PC_RemoveAllGlobalDefines(void);
-void PC_RemoveAllGlobalDefines(void);
-void PC_SetBaseFolder(char* path);
-void PC_SetIncludePath(source_t* source, char* path);
-void PC_SetPunctuations(source_t* source, punctuation_t* p);
 void PC_UnreadLastToken(source_t* source);
 void PC_UnreadToken(source_t* source, token_t* token);
 void QDECL SourceError(source_t* source, char* str, ...);

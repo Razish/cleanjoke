@@ -72,4 +72,3 @@ typedef struct structdef_s
 int ReadStructure(source_t* source, structdef_t* def, char* structure);
 int WriteFloat(FILE* fp, float value);
 int WriteIndent(FILE* fp, int indent);
-int WriteStructure(FILE* fp, structdef_t* def, char* structure);

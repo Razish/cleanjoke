@@ -28,10 +28,7 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 // FUNCTION
 // ======================================================================
 
-FILE* Log_FilePointer(void);
 void Log_Close(void);
-void Log_Flush(void);
 void Log_Open(char* filename);
 void Log_Shutdown(void);
 void QDECL Log_Write(char* fmt, ...);
-void QDECL Log_WriteTimeStamped(char* fmt, ...);

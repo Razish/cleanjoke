@@ -518,42 +518,6 @@ void PC_FreeDefine(define_t *define)
 	FreeMemory(define);
 } //end of the function PC_FreeDefine
 
-//add builtin defines
-void PC_AddBuiltinDefines(source_t *source)
-{
-	int i;
-	define_t *define;
-	const struct builtin
-	{
-		char *string;
-		int mBuiltin;
-	} builtin[] = { // bk001204 - brackets
-		{ "__LINE__",	BUILTIN_LINE },
-		{ "__FILE__",	BUILTIN_FILE },
-		{ "__DATE__",	BUILTIN_DATE },
-		{ "__TIME__",	BUILTIN_TIME },
-//		{ "__STDC__", BUILTIN_STDC },
-		{ NULL, 0 }
-	};
-
-	for (i = 0; builtin[i].string; i++)
-	{
-		define = (define_t *) GetMemory(sizeof(define_t));
-		Com_Memset(define, 0, sizeof(define_t));
-		define->name = (char *) GetMemory(strlen(builtin[i].string) + 1);
-		strcpy(define->name, builtin[i].string);
-		define->flags |= DEFINE_FIXED;
-		define->builtin = builtin[i].mBuiltin;
-		//add the define to the source
-#if DEFINEHASHING
-		PC_AddDefineToHash(define, source->definehash);
-#else
-		define->next = source->defines;
-		source->defines = define;
-#endif //DEFINEHASHING
-	} //end for
-} //end of the function PC_AddBuiltinDefines
-
 int PC_ExpandBuiltinDefine(source_t *source, token_t *deftoken, define_t *define,
 										token_t **firsttoken, token_t **lasttoken)
 {
@@ -1175,27 +1139,6 @@ define_t *PC_DefineFromString(char *string)
 
 	return NULL;
 } //end of the function PC_DefineFromString
-
-//add a define to the source
-int PC_AddDefine(source_t *source, char *string)
-{
-	define_t *define;
-
-	if ( addGlobalDefine )
-	{
-		return PC_AddGlobalDefine ( string );
-	}
-
-	define = PC_DefineFromString(string);
-	if (!define) return false;
-#if DEFINEHASHING
-	PC_AddDefineToHash(define, source->definehash);
-#else //DEFINEHASHING
-	define->next = source->defines;
-	source->defines = define;
-#endif //DEFINEHASHING
-	return true;
-} //end of the function PC_AddDefine
 
 // add a globals define that will be added to all opened sources
 int PC_AddGlobalDefine(char *string)
@@ -2617,36 +2560,6 @@ int PC_CheckTokenString(source_t *source, char *string)
 	return false;
 } //end of the function PC_CheckTokenString
 
-//returns true and reads the token when a token with the given type is available
-int PC_CheckTokenType(source_t *source, int type, int subtype, token_t *token)
-{
-	token_t tok;
-
-	if (!PC_ReadToken(source, &tok)) return false;
-	//if the type matches
-	if (tok.type == type &&
-			(tok.subtype & subtype) == subtype)
-	{
-		Com_Memcpy(token, &tok, sizeof(token_t));
-		return true;
-	} //end if
-
-	PC_UnreadSourceToken(source, &tok);
-	return false;
-} //end of the function PC_CheckTokenType
-
-//skip tokens until the given token string is read
-int PC_SkipUntilString(source_t *source, char *string)
-{
-	token_t token;
-
-	while(PC_ReadToken(source, &token))
-	{
-		if (!strcmp(token.string, string)) return true;
-	} //end while
-	return false;
-} //end of the function PC_SkipUntilString
-
 //unread the last token read from the script
 void PC_UnreadLastToken(source_t *source)
 {
@@ -2658,28 +2571,6 @@ void PC_UnreadToken(source_t *source, token_t *token)
 {
 	PC_UnreadSourceToken(source, token);
 } //end of the function PC_UnreadToken
-
-//set the source include path
-void PC_SetIncludePath(source_t *source, char *path)
-{
-	size_t len;
-
-	Q_strncpyz(source->includepath, path, MAX_PATH-1);
-
-	len = strlen(source->includepath);
-	//add trailing path seperator
-	if (len > 0 && source->includepath[len-1] != '\\' &&
-		source->includepath[len-1] != '/')
-	{
-		strcat(source->includepath, PATHSEPERATOR_STR);
-	} //end if
-} //end of the function PC_SetIncludePath
-
-//set the punction set
-void PC_SetPunctuations(source_t *source, punctuation_t *p)
-{
-	source->punctuations = p;
-} //end of the function PC_SetPunctuations
 
 //load a source file
 source_t *LoadSourceFile(const char *filename)
@@ -2717,35 +2608,6 @@ source_t *LoadSourceFile(const char *filename)
 	PC_AddGlobalDefinesToSource(source);
 	return source;
 } //end of the function LoadSourceFile
-
-//load a source from memory
-source_t *LoadSourceMemory(char *ptr, int length, char *name)
-{
-	source_t *source;
-	script_t *script;
-
-	PC_InitTokenHeap();
-
-	script = LoadScriptMemory(ptr, length, name);
-	if (!script) return NULL;
-	script->next = NULL;
-
-	source = (source_t *) GetMemory(sizeof(source_t));
-	Com_Memset(source, 0, sizeof(source_t));
-
-	strncpy(source->filename, name, MAX_PATH);
-	source->scriptstack = script;
-	source->tokens = NULL;
-	source->defines = NULL;
-	source->indentstack = NULL;
-	source->skip = 0;
-
-#if DEFINEHASHING
-	source->definehash = (struct define_s **)GetClearedMemory(DEFINEHASHSIZE * sizeof(define_t *));
-#endif //DEFINEHASHING
-	PC_AddGlobalDefinesToSource(source);
-	return source;
-} //end of the function LoadSourceMemory
 
 //free the given source
 void FreeSource(source_t *source)
@@ -2909,12 +2771,6 @@ int PC_SourceFileAndLine(int handle, char *filename, int *line)
 		*line = 0;
 	return true;
 } //end of the function PC_SourceFileAndLine
-
-//set the base folder to load files from
-void PC_SetBaseFolder(char *path)
-{
-	PS_SetBaseFolder(path);
-} //end of the function PC_SetBaseFolder
 
 void PC_CheckOpenSourceHandles(void)
 {

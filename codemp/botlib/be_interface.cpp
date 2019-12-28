@@ -45,31 +45,6 @@ int botDeveloper;
 //true if the library is setup
 bool botlibsetup = false;
 
-int Sys_MilliSeconds(void)
-{
-	return clock() * 1000 / CLOCKS_PER_SEC;
-} //end of the function Sys_MilliSeconds
-bool ValidClientNumber(int num, char *str)
-{
-	if (num < 0 || num > botlibglobals.maxclients)
-	{
-		//weird: the disabled stuff results in a crash
-		botimport.Print(PRT_ERROR, "%s: invalid client number %d, [0, %d]\n",
-										str, num, botlibglobals.maxclients);
-		return false;
-	} //end if
-	return true;
-} //end of the function BotValidateClientNumber
-bool ValidEntityNumber(int num, char *str)
-{
-	if (num < 0 || num > botlibglobals.maxentities)
-	{
-		botimport.Print(PRT_ERROR, "%s: invalid entity number %d, [0, %d]\n",
-										str, num, botlibglobals.maxentities);
-		return false;
-	} //end if
-	return true;
-} //end of the function BotValidateClientNumber
 bool BotLibSetup(char *str)
 {
 	if (!botlibglobals.botlibsetup)

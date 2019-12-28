@@ -43,13 +43,10 @@ typedef struct libvar_s
 // FUNCTION
 // ======================================================================
 
-bool LibVarChanged(char* var_name);
 char* LibVarGetString(char* var_name);
-char* LibVarString(char* var_name, char* value);
 float LibVarGetValue(char* var_name);
 float LibVarValue(char* var_name, char* value);
 libvar_t* LibVar(char* var_name, char* value);
 libvar_t* LibVarGet(char* var_name);
 void LibVarDeAllocAll(void);
 void LibVarSet(char* var_name, char* value);
-void LibVarSetNotModified(char* var_name);

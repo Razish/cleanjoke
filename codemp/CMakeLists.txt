@@ -58,7 +58,6 @@ if(BuildMPEngine OR BuildMPDed)
 		"${MPDir}/botlib/be_ea.h"
 		"${MPDir}/botlib/be_interface.h"
 		"${MPDir}/botlib/botlib.h"
-		"${MPDir}/botlib/l_crc.h"
 		"${MPDir}/botlib/l_libvar.h"
 		"${MPDir}/botlib/l_log.h"
 		"${MPDir}/botlib/l_memory.h"
@@ -69,7 +68,6 @@ if(BuildMPEngine OR BuildMPDed)
 
 		"${MPDir}/botlib/be_ea.cpp"
 		"${MPDir}/botlib/be_interface.cpp"
-		"${MPDir}/botlib/l_crc.cpp"
 		"${MPDir}/botlib/l_libvar.cpp"
 		"${MPDir}/botlib/l_log.cpp"
 		"${MPDir}/botlib/l_memory.cpp"
