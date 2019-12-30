@@ -46,14 +46,14 @@ void TIMER_Clear( void )
 	int i;
 	for (i = 0; i < MAX_GENTITIES; i++)
 	{
-		g_timers[i] = NULL;
+		g_timers[i] = nullptr;
 	}
 
 	for (i = 0; i < MAX_GTIMERS - 1; i++)
 	{
 		g_timerPool[i].next = &g_timerPool[i+1];
 	}
-	g_timerPool[MAX_GTIMERS-1].next = NULL;
+	g_timerPool[MAX_GTIMERS-1].next = nullptr;
 	g_timerFreeList = &g_timerPool[0];
 }
 
@@ -79,7 +79,7 @@ void TIMER_Clear2( gentity_t *ent )
 		// Splice the lists
 		p->next = g_timerFreeList;
 		g_timerFreeList = g_timers[ent->s.number];
-		g_timers[ent->s.number] = NULL;
+		g_timers[ent->s.number] = nullptr;
 		return;
 	}
 }
@@ -103,7 +103,7 @@ gtimer_t *TIMER_GetNew(int num, const char *identifier)
 
 	// No existing timer with this name was found, so grab one from the free list
 	if (!g_timerFreeList)
-		return NULL;
+		return nullptr;
 
 	p = g_timerFreeList;
 	g_timerFreeList = g_timerFreeList->next;
@@ -127,7 +127,7 @@ gtimer_t *TIMER_GetExisting(int num, const char *identifier)
 		p = p->next;
 	}
 
-	return NULL;
+	return nullptr;
 }
 
 void TIMER_Set( gentity_t *ent, const char *identifier, int duration )

@@ -446,7 +446,7 @@ void CM_TraceThroughBrush( traceWork_t *tw, trace_t &trace, cbrush_t *brush, boo
 
 	tw->enterFrac = -1.0f;
 	tw->leaveFrac = 1.0f;
-	tw->clipplane = NULL;
+	tw->clipplane = nullptr;
 
 	if ( !brush->numsides )
 	{
@@ -468,7 +468,7 @@ void CM_TraceThroughBrush( traceWork_t *tw, trace_t &trace, cbrush_t *brush, boo
 
 	tw->getout = false;
 	tw->startout = false;
-	tw->leadside = NULL;
+	tw->leadside = nullptr;
 
 	// compare the trace against all planes of the brush
 	// find the latest time the trace crosses a plane towards the interior
@@ -1064,7 +1064,7 @@ void CM_Trace( trace_t *trace, const vec3_t start, const vec3_t end,
 		return;	// map not loaded, shouldn't happen
 	}
 
-	// allow NULL to be passed in for 0,0,0
+	// allow nullptr to be passed in for 0,0,0
 	if ( !mins ) {
 		mins = vec3_origin;
 	}
@@ -1281,7 +1281,7 @@ void CM_Trace( trace_t *trace, const vec3_t start, const vec3_t end,
 void CM_BoxTrace( trace_t *results, const vec3_t start, const vec3_t end,
 						  const vec3_t mins, const vec3_t maxs,
 						  clipHandle_t model, int brushmask, int capsule ) {
-	CM_Trace( results, start, end, mins, maxs, model, vec3_origin, brushmask, capsule, NULL );
+	CM_Trace( results, start, end, mins, maxs, model, vec3_origin, brushmask, capsule, nullptr );
 }
 
 // Handles offseting and rotation of the end points for moving and rotating entities

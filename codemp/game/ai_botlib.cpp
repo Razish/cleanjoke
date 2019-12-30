@@ -7,16 +7,16 @@ aas_t             aasworld;
 bot_goalstate_t   *botgoalstates[MAX_CLIENTS+1];
 bot_movestate_t   *botmovestates[MAX_CLIENTS+1];
 bot_weaponstate_t *botweaponstates[MAX_CLIENTS+1];
-itemconfig_t      *itemconfig = NULL;
-levelitem_t       *freelevelitems = NULL;
-levelitem_t       *levelitems = NULL;
+itemconfig_t      *itemconfig = nullptr;
+levelitem_t       *freelevelitems = nullptr;
+levelitem_t       *levelitems = nullptr;
 int               numaaslinks = 0;
 int               numlevelitems = 0;
 /*
-levelitem_t     *levelitemheap = NULL;
-maplocation_t   *maplocations = NULL;
-campspot_t      *campspots = NULL;
-libvar_t        *droppedweight = NULL;
+levelitem_t     *levelitemheap = nullptr;
+maplocation_t   *maplocations = nullptr;
+campspot_t      *campspots = nullptr;
+libvar_t        *droppedweight = nullptr;
 */
 
 aas_link_t *AAS_AASLinkEntity( vec3_t absmins, vec3_t absmaxs, int entnum ) {
@@ -29,10 +29,10 @@ aas_link_t *AAS_AASLinkEntity( vec3_t absmins, vec3_t absmaxs, int entnum ) {
 
 	if ( !aasworld.loaded ) {
 		Com_Printf( "[ERROR] AAS_LinkEntity: aas not loaded\n" );
-		return NULL;
+		return nullptr;
 	}
 
-	areas = NULL;
+	areas = nullptr;
 
 	lstack_p = linkstack;
 	//we start with the whole line on the stack
@@ -70,14 +70,14 @@ aas_link_t *AAS_AASLinkEntity( vec3_t absmins, vec3_t absmaxs, int entnum ) {
 			link->entnum = entnum;
 			link->areanum = -nodenum;
 			//put the link into the double linked area list of the entity
-			link->prev_area = NULL;
+			link->prev_area = nullptr;
 			link->next_area = areas;
 			if ( areas ) {
 				areas->prev_area = link;
 			}
 			areas = link;
 			//put the link into the double linked entity list of the area
-			link->prev_ent = NULL;
+			link->prev_ent = nullptr;
 			link->next_ent = aasworld.arealinkedentities[-nodenum];
 			if ( aasworld.arealinkedentities[-nodenum] ) {
 				aasworld.arealinkedentities[-nodenum]->prev_ent = link;
@@ -125,13 +125,13 @@ aas_link_t *AAS_AllocAASLink( void ) {
 		if ( bot_developer.integer ) {
 			Com_Printf( "[FATAL] empty aas link heap\n" );
 		}
-		return NULL;
+		return nullptr;
 	}
 	if ( aasworld.freelinks ) {
 		aasworld.freelinks = aasworld.freelinks->next_ent;
 	}
 	if ( aasworld.freelinks ) {
-		aasworld.freelinks->prev_ent = NULL;
+		aasworld.freelinks->prev_ent = nullptr;
 	}
 	numaaslinks--;
 	return link;
@@ -314,10 +314,10 @@ void AAS_DeAllocAASLink( aas_link_t *link ) {
 	if ( aasworld.freelinks ) {
 		aasworld.freelinks->prev_ent = link;
 	}
-	link->prev_ent = NULL;
+	link->prev_ent = nullptr;
 	link->next_ent = aasworld.freelinks;
-	link->prev_area = NULL;
-	link->next_area = NULL;
+	link->prev_area = nullptr;
+	link->next_area = nullptr;
 	aasworld.freelinks = link;
 	numaaslinks++;
 }
@@ -701,7 +701,7 @@ void AddLevelItemToList( levelitem_t *li ) {
 	if ( levelitems ) {
 		levelitems->prev = li;
 	}
-	li->prev = NULL;
+	li->prev = nullptr;
 	li->next = levelitems;
 	levelitems = li;
 }
@@ -712,7 +712,7 @@ levelitem_t *AllocLevelItem( void ) {
 	li = freelevelitems;
 	if ( !li ) {
 		Com_Printf( "[FATAL] out of level items\n" );
-		return NULL;
+		return nullptr;
 	}
 
 	freelevelitems = freelevelitems->next;
@@ -786,7 +786,7 @@ void BotFreeGoalState( int handle ) {
 	}
 	BotFreeItemWeights( handle );
 	FreeMemory( botgoalstates[handle] );
-	botgoalstates[handle] = NULL;
+	botgoalstates[handle] = nullptr;
 }
 
 void BotFreeItemWeights( int goalstate ) {
@@ -814,7 +814,7 @@ void BotFreeMoveState( int handle ) {
 		return;
 	}
 	FreeMemory( botmovestates[handle] );
-	botmovestates[handle] = NULL;
+	botmovestates[handle] = nullptr;
 }
 
 void BotFreeWeaponState( int handle ) {
@@ -828,7 +828,7 @@ void BotFreeWeaponState( int handle ) {
 	}
 	BotFreeWeaponWeights( handle );
 	FreeMemory( botweaponstates[handle] );
-	botweaponstates[handle] = NULL;
+	botweaponstates[handle] = nullptr;
 }
 
 void BotFreeWeaponWeights( int weaponstate ) {
@@ -849,11 +849,11 @@ void BotFreeWeaponWeights( int weaponstate ) {
 bot_goalstate_t *BotGoalStateFromHandle( int handle ) {
 	if ( handle <= 0 || handle > MAX_CLIENTS ) {
 		Com_Printf( "[FATAL] goal state handle %d out of range\n", handle );
-		return NULL;
+		return nullptr;
 	}
 	if ( !botgoalstates[handle] ) {
 		Com_Printf( "[FATAL] invalid goal state %d\n", handle );
-		return NULL;
+		return nullptr;
 	}
 	return botgoalstates[handle];
 }
@@ -861,11 +861,11 @@ bot_goalstate_t *BotGoalStateFromHandle( int handle ) {
 bot_movestate_t *BotMoveStateFromHandle( int handle ) {
 	if ( handle <= 0 || handle > MAX_CLIENTS ) {
 		Com_Printf( "[FATAL] move state handle %d out of range\n", handle );
-		return NULL;
+		return nullptr;
 	}
 	if ( !botmovestates[handle] ) {
 		Com_Printf( "[FATAL] invalid move state %d\n", handle );
-		return NULL;
+		return nullptr;
 	}
 	return botmovestates[handle];
 }
@@ -977,7 +977,7 @@ void BotUpdateEntityItems( void ) {
 					//remove this level item
 					RemoveLevelItemFromList( li );
 					FreeLevelItem( li );
-					li = NULL;
+					li = nullptr;
 					break;
 				}
 				else {
@@ -1082,11 +1082,11 @@ void BotUpdateEntityItems( void ) {
 bot_weaponstate_t *BotWeaponStateFromHandle( int handle ) {
 	if ( handle <= 0 || handle > MAX_CLIENTS ) {
 		Com_Printf( "[FATAL] weapon state handle %d out of range\n", handle );
-		return NULL;
+		return nullptr;
 	}
 	if ( !botweaponstates[handle] ) {
 		Com_Printf( "[FATAL] invalid weapon state %d\n", handle );
-		return NULL;
+		return nullptr;
 	}
 	return botweaponstates[handle];
 }

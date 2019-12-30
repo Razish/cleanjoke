@@ -68,8 +68,8 @@ static bool		debugBlock;
 static vec3_t		debugBlockPoints[4];
 
 void CM_ClearLevelPatches( void ) {
-	debugPatchCollide = NULL;
-	debugFacet = NULL;
+	debugPatchCollide = nullptr;
+	debugFacet = nullptr;
 }
 
 static inline int CM_SignbitsForNormal( vec3_t normal ) {
@@ -323,7 +323,7 @@ static	patchPlane_t	planes[MAX_PATCH_PLANES];
 
 //static	int				numFacets;
 //static	facet_t			facets[MAX_PATCH_PLANES]; //maybe MAX_FACETS ??
-static		facet_t			*facets = NULL;
+static		facet_t			*facets = nullptr;
 
 #define	NORMAL_EPSILON	0.00015
 #define	DIST_EPSILON	0.0235

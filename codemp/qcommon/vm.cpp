@@ -29,7 +29,7 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 #include "qcommon/q_common.h"
 #include "qcommon/com_cvars.h"
 
-vm_t *currentVM = NULL;
+vm_t *currentVM = nullptr;
 
 static const char *vmNames[MAX_VM] = {
 	"jampgame",
@@ -49,8 +49,8 @@ const char *vmStrs[MAX_VM] = {
 //	cgvm = VM_Create( VM_CGAME );	// vmTable[VM_CGAME] is allocated
 //	CGVM_Init( foo, bar );			// internally may use VM_Call( cgvm, CGAME_INIT, foo, bar ) for legacy cgame modules
 //	cgvm = VM_Restart( cgvm );		// vmTable[VM_CGAME] is recreated, we update the cgvm pointer
-//	VM_Free( cgvm );				// vmTable[VM_CGAME] is deallocated and set to NULL
-//	cgvm = NULL;					// ...so we update the cgvm pointer
+//	VM_Free( cgvm );				// vmTable[VM_CGAME] is deallocated and set to nullptr
+//	cgvm = nullptr;					// ...so we update the cgvm pointer
 
 static vm_t *vmTable[MAX_VM];
 
@@ -69,7 +69,7 @@ vm_t *VM_Restart( vm_t *vm ) {
 }
 
 vm_t *VM_Create( vmSlots_t vmSlot ) {
-	vm_t *vm = NULL;
+	vm_t *vm = nullptr;
 
 	// see if we already have the VM
 	if ( vmTable[vmSlot] )
@@ -98,7 +98,7 @@ vm_t *VM_Create( vmSlots_t vmSlot ) {
 
 	VM_Free( vm );
 	Com_Printf( " failed!\n" );
-	return NULL;
+	return nullptr;
 }
 
 void VM_Free( vm_t *vm ) {
@@ -106,7 +106,7 @@ void VM_Free( vm_t *vm ) {
 		return;
 
 	// mark the slot as free
-	vmTable[vm->slot] = NULL;
+	vmTable[vm->slot] = nullptr;
 
 	if ( vm->dllHandle )
 		Sys_UnloadDll( vm->dllHandle );
@@ -115,29 +115,29 @@ void VM_Free( vm_t *vm ) {
 
 	Z_Free( vm );
 
-	currentVM = NULL;
+	currentVM = nullptr;
 }
 
 void VM_Clear( void ) {
 	for ( int i = 0; i < MAX_VM; i++ )
 		VM_Free( vmTable[i] );
 
-	currentVM = NULL;
+	currentVM = nullptr;
 }
 
 void VM_Shifted_Alloc( void **ptr, int size ) {
-	void *mem = NULL;
+	void *mem = nullptr;
 
 	if ( !currentVM ) {
 		assert( 0 );
-		*ptr = NULL;
+		*ptr = nullptr;
 		return;
 	}
 
 	mem = Z_Malloc( size + 1, TAG_VM_ALLOCATED, false );
 	if ( !mem ) {
 		assert( 0 );
-		*ptr = NULL;
+		*ptr = nullptr;
 		return;
 	}
 
@@ -147,7 +147,7 @@ void VM_Shifted_Alloc( void **ptr, int size ) {
 }
 
 void VM_Shifted_Free( void **ptr ) {
-	void *mem = NULL;
+	void *mem = nullptr;
 
 	if ( !currentVM ) {
 		assert( 0 );
@@ -161,5 +161,5 @@ void VM_Shifted_Free( void **ptr ) {
 	}
 
 	Z_Free( mem );
-	*ptr = NULL;
+	*ptr = nullptr;
 }

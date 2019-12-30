@@ -37,7 +37,7 @@ CBlockMember::CBlockMember( void )
 {
 	m_id = -1;
 	m_size = -1;
-	m_data = NULL;
+	m_data = nullptr;
 }
 
 CBlockMember::~CBlockMember( void )
@@ -47,10 +47,10 @@ CBlockMember::~CBlockMember( void )
 
 void CBlockMember::Free( void )
 {
-	if ( m_data != NULL )
+	if ( m_data != nullptr )
 	{
 		ICARUS_Free ( m_data );
-		m_data = NULL;
+		m_data = nullptr;
 
 		m_id = m_size = -1;
 	}
@@ -128,8 +128,8 @@ CBlockMember *CBlockMember::Duplicate( void )
 {
 	CBlockMember	*newblock = new CBlockMember;
 
-	if ( newblock == NULL )
-		return NULL;
+	if ( newblock == nullptr )
+		return nullptr;
 
 	newblock->SetData( m_data, m_size );
 	newblock->SetSize( m_size );
@@ -266,7 +266,7 @@ CBlockMember *CBlock::GetMember( int memberNum )
 {
 	if ( memberNum > GetNumMembers()-1 )
 	{
-		return NULL;
+		return nullptr;
 	}
 	return m_members[ memberNum ];
 }
@@ -275,7 +275,7 @@ void *CBlock::GetMemberData( int memberNum )
 {
 	if ( memberNum >= GetNumMembers() )
 	{
-		return NULL;
+		return nullptr;
 	}
 	return (void *) ((GetMember( memberNum ))->GetData());
 }
@@ -287,8 +287,8 @@ CBlock *CBlock::Duplicate( void )
 
 	newblock = new CBlock;
 
-	if ( newblock == NULL )
-		return NULL;
+	if ( newblock == nullptr )
+		return nullptr;
 
 	newblock->Create( m_id );
 
@@ -303,7 +303,7 @@ CBlock *CBlock::Duplicate( void )
 
 CBlockStream::CBlockStream( void )
 {
-	m_stream = NULL;
+	m_stream = nullptr;
 	m_streamPos = 0;
 }
 
@@ -366,7 +366,7 @@ int CBlockStream::Free( void )
 	//NOTENOTE: It is assumed that the user will free the passed memory block (m_stream) immediately after the run call
 	//			That's why this doesn't free the memory, it only clears its internal pointer
 
-	m_stream = NULL;
+	m_stream = nullptr;
 	m_streamPos = 0;
 
 	return true;
@@ -381,7 +381,7 @@ int CBlockStream::Create( char *filename )
 	COM_StripExtension( filename, m_fileName, sizeof(m_fileName) );
 	COM_DefaultExtension( m_fileName, sizeof(m_fileName), IBI_EXT );
 
-	if ( (m_fileHandle = fopen(m_fileName, "wb")) == NULL )
+	if ( (m_fileHandle = fopen(m_fileName, "wb")) == nullptr )
 	{
 		return false;
 	}
@@ -394,10 +394,10 @@ int CBlockStream::Create( char *filename )
 
 int CBlockStream::Init( void )
 {
-	m_fileHandle = NULL;
+	m_fileHandle = nullptr;
 	memset(m_fileName, 0, sizeof(m_fileName));
 
-	m_stream = NULL;
+	m_stream = nullptr;
 	m_streamPos = 0;
 
 	return true;

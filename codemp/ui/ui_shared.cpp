@@ -82,17 +82,17 @@ typedef struct scrollInfo_s {
 
 static scrollInfo_t scrollInfo;
 
-static void (*captureFunc) (void *p) = NULL;
-static void *captureData = NULL;
-static itemDef_t *itemCapture = NULL;   // item that has the mouse captured ( if any )
+static void (*captureFunc) (void *p) = nullptr;
+static void *captureData = nullptr;
+static itemDef_t *itemCapture = nullptr;   // item that has the mouse captured ( if any )
 
-displayContextDef_t *DC = NULL;
+displayContextDef_t *DC = nullptr;
 
 static bool g_waitingForKey = false;
 static bool g_editingField = false;
 
-static itemDef_t *g_bindItem = NULL;
-static itemDef_t *g_editItem = NULL;
+static itemDef_t *g_bindItem = nullptr;
+static itemDef_t *g_editItem = nullptr;
 
 menuDef_t Menus[MAX_MENUS];      // defined menus
 int menuCount = 0;               // how many
@@ -125,7 +125,7 @@ typedef struct  itemFlagsDef_s {
 
 const itemFlagsDef_t itemFlags[] = {
 	{ "WINDOW_INACTIVE", WINDOW_INACTIVE },
-	{ NULL,              0 }
+	{ nullptr,              0 }
 };
 
 void *UI_Alloc( int size ) {
@@ -136,7 +136,7 @@ void *UI_Alloc( int size ) {
 		if (DC->Print) {
 			DC->Print("UI_Alloc: Failure. Out of memory!\n");
 		}
-		return NULL;
+		return nullptr;
 	}
 
 	p = &memoryPool[allocPoint];
@@ -191,8 +191,8 @@ const char *String_Alloc(const char *p) {
 	stringDef_t *str, *last;
 	static const char *staticNULL = "";
 
-	if (p == NULL) {
-		return NULL;
+	if (p == nullptr) {
+		return nullptr;
 	}
 
 	if (*p == 0) {
@@ -231,7 +231,7 @@ const char *String_Alloc(const char *p) {
 		}
 
 		str  = (stringDef_t *) UI_Alloc(sizeof(stringDef_t));
-		str->next = NULL;
+		str->next = nullptr;
 		str->str = &strPool[ph];
 		if (last) {
 			last->next = str;
@@ -246,7 +246,7 @@ const char *String_Alloc(const char *p) {
 
 	//Increase STRING_POOL_SIZE.
 	Com_Printf( S_COLOR_RED, "String pool has been exhausted.\n" );
-	return NULL;
+	return nullptr;
 }
 
 void String_Report() {
@@ -439,7 +439,7 @@ bool String_Parse(char **p, const char **out) {
 	token = COM_ParseExt((const char **)p, false);
 	if (token && token[0] != 0) {
 		*(out) = String_Alloc(token);
-		return *(out)!=NULL;
+		return *(out)!=nullptr;
 	}
 	return false;
 }
@@ -512,7 +512,7 @@ void GradientBar_Paint(rectDef_t *rect, vec4_t color) {
 	// gradient bar takes two paints
 	DC->setColor( color );
 	DC->drawHandlePic(rect->x, rect->y, rect->w, rect->h, DC->Assets.gradientBar);
-	DC->setColor( NULL );
+	DC->setColor( nullptr );
 }
 
 // Initializes a window structure ( windowDef_t ) with defaults
@@ -553,7 +553,7 @@ void Window_Paint(windowDef_t *w, float fadeAmount, float fadeClamp, float fadeC
 	vec4_t color;
 	rectDef_t fillRect;
 
-	if ( w == NULL )
+	if ( w == nullptr )
 		return;
 
 	if ( debugMode ) {
@@ -578,7 +578,7 @@ void Window_Paint(windowDef_t *w, float fadeAmount, float fadeClamp, float fadeC
 			Fade( &w->flags, &w->backColor[3], fadeClamp, &w->nextTime, fadeCycle, true, fadeAmount );
 			DC->setColor( w->backColor );
 			DC->drawHandlePic( fillRect.x, fillRect.y, fillRect.w, fillRect.h, w->background );
-			DC->setColor( NULL );
+			DC->setColor( nullptr );
 		}
 		else {
 			DC->fillRect( fillRect.x, fillRect.y, fillRect.w, fillRect.h, w->backColor );
@@ -602,7 +602,7 @@ void Window_Paint(windowDef_t *w, float fadeAmount, float fadeClamp, float fadeC
 		if ( w->flags & WINDOW_FORECOLORSET )
 			DC->setColor(w->foreColor);
 		DC->drawHandlePic( fillRect.x, fillRect.y, fillRect.w, fillRect.h, w->background );
-		DC->setColor( NULL );
+		DC->setColor( nullptr );
 	}
 	else if ( w->style == WINDOW_STYLE_TEAMCOLOR ) {
 		if ( DC->getTeamColor ) {
@@ -645,13 +645,13 @@ void Window_Paint(windowDef_t *w, float fadeAmount, float fadeClamp, float fadeC
 		// top/bottom
 		DC->setColor( w->borderColor );
 		DC->drawTopBottom( w->rect.x, w->rect.y, w->rect.w, w->rect.h, w->borderSize );
-		DC->setColor( NULL );
+		DC->setColor( nullptr );
 	}
 	else if (w->border == WINDOW_BORDER_VERT) {
 		// left right
 		DC->setColor( w->borderColor );
 		DC->drawSides( w->rect.x, w->rect.y, w->rect.w, w->rect.h, w->borderSize );
-		DC->setColor( NULL );
+		DC->setColor( nullptr );
 	}
 	else if ( w->border == WINDOW_BORDER_KCGRADIENT ) {
 		// this is just two gradient bars along each horz edge
@@ -665,7 +665,7 @@ void Window_Paint(windowDef_t *w, float fadeAmount, float fadeClamp, float fadeC
 
 void Item_SetScreenCoords(itemDef_t *item, float x, float y)
 {
-	if (item == NULL)
+	if (item == nullptr)
 		return;
 
 	if (item->window.border != 0) {
@@ -699,7 +699,7 @@ void Item_UpdatePosition(itemDef_t *item)
 	float x, y;
 	menuDef_t *menu;
 
-	if (item == NULL || item->parent == NULL)
+	if (item == nullptr || item->parent == nullptr)
 		return;
 
 	menu = (menuDef_t *) item->parent;
@@ -720,7 +720,7 @@ void Menu_UpdatePosition(menuDef_t *menu) {
 	int i;
 	float x, y;
 
-	if (menu == NULL) {
+	if (menu == nullptr) {
 		return;
 	}
 
@@ -737,7 +737,7 @@ void Menu_UpdatePosition(menuDef_t *menu) {
 }
 
 void Menu_PostParse(menuDef_t *menu) {
-	if ( menu == NULL )
+	if ( menu == nullptr )
 		return;
 
 	if ( menu->fullScreen ) {
@@ -751,10 +751,10 @@ void Menu_PostParse(menuDef_t *menu) {
 
 itemDef_t *Menu_ClearFocus(menuDef_t *menu) {
 	int i;
-	itemDef_t *ret = NULL;
+	itemDef_t *ret = nullptr;
 
-	if ( menu == NULL )
-		return NULL;
+	if ( menu == nullptr )
+		return nullptr;
 
 	for ( i=0; i<menu->itemCount; i++ ) {
 		if ( menu->items[i]->window.flags & WINDOW_HASFOCUS )
@@ -808,7 +808,7 @@ itemDef_t *Menu_GetMatchingItemByNumber(menuDef_t *menu, int index, const char *
 			count++;
 		}
 	}
-	return NULL;
+	return nullptr;
 }
 
 bool Script_SetColor ( itemDef_t *item, char **args )
@@ -821,7 +821,7 @@ bool Script_SetColor ( itemDef_t *item, char **args )
 	// expecting type of color to set and 4 args for the color
 	if (String_Parse(args, &name))
 	{
-		out = NULL;
+		out = nullptr;
 		if (Q_stricmp(name, "backcolor") == 0)
 		{
 			out = &item->window.backColor;
@@ -969,8 +969,8 @@ bool Script_SetItemText(itemDef_t *item, char **args)
 
 itemDef_t *Menu_FindItemByName(menuDef_t *menu, const char *p) {
 	int i;
-	if (menu == NULL || p == NULL) {
-		return NULL;
+	if (menu == nullptr || p == nullptr) {
+		return nullptr;
 	}
 
 	for (i = 0; i < menu->itemCount; i++) {
@@ -979,7 +979,7 @@ itemDef_t *Menu_FindItemByName(menuDef_t *menu, const char *p) {
 		}
 	}
 
-	return NULL;
+	return nullptr;
 }
 
 bool Script_SetTeamColor(itemDef_t *item, char **args)
@@ -1030,9 +1030,9 @@ bool Script_SetItemColor(itemDef_t *item, char **args)
 		for (j = 0; j < count; j++)
 		{
 			item2 = Menu_GetMatchingItemByNumber((menuDef_t *) item->parent, j, itemname);
-			if (item2 != NULL)
+			if (item2 != nullptr)
 			{
-				out = NULL;
+				out = nullptr;
 				if (Q_stricmp(name, "backcolor") == 0)
 				{
 					out = &item2->window.backColor;
@@ -1119,9 +1119,9 @@ bool Script_SetItemColorCvar(itemDef_t *item, char **args)
 		for (j = 0; j < count; j++)
 		{
 			item2 = Menu_GetMatchingItemByNumber((menuDef_t *) item->parent, j, itemname);
-			if (item2 != NULL)
+			if (item2 != nullptr)
 			{
-				out = NULL;
+				out = nullptr;
 				if (Q_stricmp(name, "backcolor") == 0)
 				{
 					out = &item2->window.backColor;
@@ -1174,7 +1174,7 @@ bool Script_SetItemRect(itemDef_t *item, char **args)
 		for (j = 0; j < count; j++)
 		{
 			item2 = Menu_GetMatchingItemByNumber(menu, j, itemname);
-			if (item2 != NULL)
+			if (item2 != nullptr)
 			{
 				out = &item2->window.rect;
 
@@ -1200,7 +1200,7 @@ void Menu_ShowGroup (menuDef_t *menu, const char *groupName, bool showFlag)
 	for (j = 0; j < count; j++)
 	{
 		item = Menu_GetMatchingItemByNumber( menu, j, groupName);
-		if (item != NULL)
+		if (item != nullptr)
 		{
 			if (showFlag)
 			{
@@ -1220,7 +1220,7 @@ void Menu_ShowItemByName(menuDef_t *menu, const char *p, bool bShow) {
 	int count = Menu_ItemsMatchingGroup(menu, p);
 	for (i = 0; i < count; i++) {
 		item = Menu_GetMatchingItemByNumber(menu, i, p);
-		if (item != NULL) {
+		if (item != nullptr) {
 			if (bShow) {
 				item->window.flags |= WINDOW_VISIBLE;
 			} else {
@@ -1241,7 +1241,7 @@ void Menu_FadeItemByName(menuDef_t *menu, const char *p, bool fadeOut) {
 	int count = Menu_ItemsMatchingGroup(menu, p);
 	for (i = 0; i < count; i++) {
 		item = Menu_GetMatchingItemByNumber(menu, i, p);
-		if (item != NULL) {
+		if (item != nullptr) {
 			if (fadeOut) {
 				item->window.flags |= (WINDOW_FADINGOUT | WINDOW_VISIBLE);
 				item->window.flags &= ~WINDOW_FADINGIN;
@@ -1260,7 +1260,7 @@ menuDef_t *Menus_FindByName(const char *p) {
 			return &Menus[i];
 		}
 	}
-	return NULL;
+	return nullptr;
 }
 
 void Menus_ShowByName(const char *p) {
@@ -1293,7 +1293,7 @@ void Menus_CloseByName ( const char *p )
 	menuDef_t *menu = Menus_FindByName(p);
 
 	// If the menu wasnt found just exit
-	if (menu == NULL)
+	if (menu == nullptr)
 	{
 		return;
 	}
@@ -1316,7 +1316,7 @@ void Menus_CloseByName ( const char *p )
 			menuStack[openMenuCount]->window.flags |= WINDOW_HASFOCUS;
 
 			// Remove the top menu from the list
-			menuStack[openMenuCount] = NULL;
+			menuStack[openMenuCount] = nullptr;
 		}
 	}
 
@@ -1415,7 +1415,7 @@ void Menu_TransitionItemByName(menuDef_t *menu, const char *p, const rectDef_t *
 	for (i = 0; i < count; i++)
 	{
 		item = Menu_GetMatchingItemByNumber(menu, i, p);
-		if (item != NULL)
+		if (item != nullptr)
 		{
 			if (!rectFrom)
 			{
@@ -1449,7 +1449,7 @@ void Menu_Transition3ItemByName(menuDef_t *menu, const char *p, const float minx
 	for (i = 0; i < count; i++)
 	{
 		item = Menu_GetMatchingItemByNumber(menu, i, p);
-		if (item != NULL)
+		if (item != nullptr)
 		{
 			if ( item->type == ITEM_TYPE_MODEL )
 			{
@@ -1491,7 +1491,7 @@ void Menu_Transition3ItemByName(menuDef_t *menu, const char *p, const float minx
 #define MAX_DEFERRED_SCRIPT		2048
 
 char		ui_deferredScript [ MAX_DEFERRED_SCRIPT ];
-itemDef_t*	ui_deferredScriptItem = NULL;
+itemDef_t*	ui_deferredScriptItem = nullptr;
 
 // Defers the rest of the script based on the defer condition.
 // The deferred portion of the script can later be run with the "rundeferred"
@@ -1554,7 +1554,7 @@ void Menu_OrbitItemByName(menuDef_t *menu, const char *p, float x, float y, floa
 	int count = Menu_ItemsMatchingGroup(menu, p);
 	for (i = 0; i < count; i++) {
 		item = Menu_GetMatchingItemByNumber(menu, i, p);
-		if (item != NULL) {
+		if (item != nullptr) {
 			item->window.flags |= (WINDOW_ORBITING | WINDOW_VISIBLE);
 			item->window.offsetTime = time;
 			item->window.rectEffects.x = cx;
@@ -1576,7 +1576,7 @@ void Menu_ItemDisable(menuDef_t *menu, const char *name, bool disableFlag)
 	for (j = 0; j < count; j++)
 	{
 		itemFound = Menu_GetMatchingItemByNumber( menu, j, name);
-		if (itemFound != NULL)
+		if (itemFound != nullptr)
 		{
 			itemFound->disabled = disableFlag;
 			// Just in case it had focus
@@ -1642,7 +1642,7 @@ bool Script_Scale(itemDef_t *item, char **args)
 			for (j = 0; j < count; j++)
 			{
 				itemFound = Menu_GetMatchingItemByNumber( (menuDef_t *) item->parent, j, name);
-				if (itemFound != NULL)
+				if (itemFound != nullptr)
 				{
 					rectTo.h = itemFound->window.rect.h * scale;
 					rectTo.w = itemFound->window.rect.w * scale;
@@ -1758,7 +1758,7 @@ bool Script_Transition2(itemDef_t *item, char **args)
 //	transition3		lfvscr		(min extent) (max extent) (fovx,y)  20 25
 bool Script_Transition3(itemDef_t *item, char **args)
 {
-	const char *name = NULL, *value = NULL;
+	const char *name = nullptr, *value = nullptr;
 	float minx, miny, minz, maxx, maxy, maxz, fovtx, fovty;
 	int time;
 	float amt;
@@ -1918,7 +1918,7 @@ void Menu_SetItemBackground(const menuDef_t *menu,const char *itemName, const ch
 	for (j = 0; j < count; j++)
 	{
 		item = Menu_GetMatchingItemByNumber( (menuDef_t *) menu, j, itemName);
-		if (item != NULL)
+		if (item != nullptr)
 		{
 			item->window.background = DC->registerShaderNoMip(background);
 		}
@@ -1941,11 +1941,11 @@ void Menu_SetItemText(const menuDef_t *menu,const char *itemName, const char *te
 	for (j = 0; j < count; j++)
 	{
 		item = Menu_GetMatchingItemByNumber( (menuDef_t *) menu, j, itemName);
-		if (item != NULL)
+		if (item != nullptr)
 		{
 			if (text[0] == '*')
 			{
-				item->text = NULL;		// Null this out because this would take presidence over cvar text.
+				item->text = nullptr;		// Null this out because this would take presidence over cvar text.
 				item->cvar = text+1;
 				switch ( item->type )
 				{
@@ -2006,7 +2006,7 @@ void Item_RunScript(itemDef_t *item, const char *s)
 		{
 			const char *command;
 
-			// expect command then arguments, ; ends command, NULL ends script
+			// expect command then arguments, ; ends command, nullptr ends script
 			if (!String_Parse(&p, &command))
 			{
 				return;
@@ -2052,7 +2052,7 @@ bool Item_EnableShowViaCvar(itemDef_t *item, int flag) {
     p = script;
     while (1) {
       const char *val;
-      // expect value then ; or NULL, NULL ends list
+      // expect value then ; or nullptr, nullptr ends list
       if (!String_Parse(&p, &val)) {
 				return (item->cvarFlags & flag) ? false : true;
       }
@@ -2087,7 +2087,7 @@ bool Item_SetFocus(itemDef_t *item, float x, float y) {
 	bool playSound = false;
 	menuDef_t *parent;
 	// sanity check, non-null, not a decoration and does not already have the focus
-	if (item == NULL || item->window.flags & WINDOW_DECORATION || item->window.flags & WINDOW_HASFOCUS || !(item->window.flags & WINDOW_VISIBLE)) {
+	if (item == nullptr || item->window.flags & WINDOW_DECORATION || item->window.flags & WINDOW_HASFOCUS || !(item->window.flags & WINDOW_VISIBLE)) {
 		return false;
 	}
 
@@ -2302,10 +2302,10 @@ bool Item_TextScroll_HandleKey ( itemDef_t *item, int key, bool down, bool force
 			if (scrollPtr->startPos < 0)
 			{
 				scrollPtr->startPos = 0;
-				Display_MouseMove(NULL, DC->cursorx, DC->cursory);
+				Display_MouseMove(nullptr, DC->cursorx, DC->cursory);
 				return false;
 			}
-			Display_MouseMove(NULL, DC->cursorx, DC->cursory);
+			Display_MouseMove(nullptr, DC->cursorx, DC->cursory);
 			return true;
 		}
 		if ( key == A_MWHEELDOWN )
@@ -2315,10 +2315,10 @@ bool Item_TextScroll_HandleKey ( itemDef_t *item, int key, bool down, bool force
 			if (scrollPtr->startPos > max)
 			{
 				scrollPtr->startPos = max;
-				Display_MouseMove(NULL, DC->cursorx, DC->cursory);
+				Display_MouseMove(nullptr, DC->cursorx, DC->cursory);
 				return false;
 			}
-			Display_MouseMove(NULL, DC->cursorx, DC->cursory);
+			Display_MouseMove(nullptr, DC->cursorx, DC->cursory);
 			return true;
 		}
 
@@ -2797,7 +2797,7 @@ itemDef_t *Menu_HitTest(menuDef_t *menu, float x, float y) {
       return menu->items[i];
     }
   }
-  return NULL;
+  return nullptr;
 }
 
 void Item_SetMouseOver(itemDef_t *item, bool focus) {
@@ -2876,7 +2876,7 @@ bool Item_ListBox_HandleKey(itemDef_t *item, int key, bool down, bool force) {
 						listPtr->startPos = listPtr->cursorPos - viewmax + 1;
 					}
 					item->cursorPos = listPtr->cursorPos;
-					DC->feederSelection(item->special, item->cursorPos, NULL);
+					DC->feederSelection(item->special, item->cursorPos, nullptr);
 				}
 				else {
 					listPtr->startPos--;
@@ -2901,7 +2901,7 @@ bool Item_ListBox_HandleKey(itemDef_t *item, int key, bool down, bool force) {
 						listPtr->startPos = listPtr->cursorPos - viewmax + 1;
 					}
 					item->cursorPos = listPtr->cursorPos;
-					DC->feederSelection(item->special, item->cursorPos, NULL);
+					DC->feederSelection(item->special, item->cursorPos, nullptr);
 				}
 				else {
 					listPtr->startPos++;
@@ -2940,7 +2940,7 @@ bool Item_ListBox_HandleKey(itemDef_t *item, int key, bool down, bool force) {
 						listPtr->startPos = listPtr->cursorPos - viewmax + 1;
 					}
 					item->cursorPos = listPtr->cursorPos;
-					DC->feederSelection(item->special, item->cursorPos, NULL);
+					DC->feederSelection(item->special, item->cursorPos, nullptr);
 				}
 				else {
 					listPtr->startPos--;
@@ -2965,7 +2965,7 @@ bool Item_ListBox_HandleKey(itemDef_t *item, int key, bool down, bool force) {
 						listPtr->startPos = listPtr->cursorPos - viewmax + 1;
 					}
 					item->cursorPos = listPtr->cursorPos;
-					DC->feederSelection(item->special, item->cursorPos, NULL);
+					DC->feederSelection(item->special, item->cursorPos, nullptr);
 				}
 				else {
 					listPtr->startPos++;
@@ -2982,10 +2982,10 @@ bool Item_ListBox_HandleKey(itemDef_t *item, int key, bool down, bool force) {
 				if (listPtr->startPos < 0)
 				{
 					listPtr->startPos = 0;
-					Display_MouseMove(NULL, DC->cursorx, DC->cursory);
+					Display_MouseMove(nullptr, DC->cursorx, DC->cursory);
 					return false;
 				}
-				Display_MouseMove(NULL, DC->cursorx, DC->cursory);
+				Display_MouseMove(nullptr, DC->cursorx, DC->cursory);
 				return true;
 			}
 			if ( key == A_MWHEELDOWN )
@@ -2995,10 +2995,10 @@ bool Item_ListBox_HandleKey(itemDef_t *item, int key, bool down, bool force) {
 				if (listPtr->startPos > max)
 				{
 					listPtr->startPos = max;
-					Display_MouseMove(NULL, DC->cursorx, DC->cursory);
+					Display_MouseMove(nullptr, DC->cursorx, DC->cursory);
 					return false;
 				}
-				Display_MouseMove(NULL, DC->cursorx, DC->cursory);
+				Display_MouseMove(nullptr, DC->cursorx, DC->cursory);
 				return true;
 			}
 		}
@@ -3073,7 +3073,7 @@ bool Item_ListBox_HandleKey(itemDef_t *item, int key, bool down, bool force) {
 					listPtr->startPos = listPtr->cursorPos - viewmax + 1;
 				}
 				item->cursorPos = listPtr->cursorPos;
-				DC->feederSelection(item->special, item->cursorPos, NULL);
+				DC->feederSelection(item->special, item->cursorPos, nullptr);
 			}
 			else {
 				listPtr->startPos -= viewmax;
@@ -3097,7 +3097,7 @@ bool Item_ListBox_HandleKey(itemDef_t *item, int key, bool down, bool force) {
 					listPtr->startPos = listPtr->cursorPos - viewmax + 1;
 				}
 				item->cursorPos = listPtr->cursorPos;
-				DC->feederSelection(item->special, item->cursorPos, NULL);
+				DC->feederSelection(item->special, item->cursorPos, nullptr);
 			}
 			else {
 				listPtr->startPos += viewmax;
@@ -3127,7 +3127,7 @@ bool Item_YesNo_HandleKey(itemDef_t *item, int key) {
 
 int Item_Multi_CountSettings(itemDef_t *item) {
 	multiDef_t *multiPtr = item->typeData.multi;
-	if (multiPtr == NULL) {
+	if (multiPtr == nullptr) {
 		return 0;
 	}
 	return multiPtr->count;
@@ -3299,7 +3299,7 @@ itemDef_t *Menu_SetNextCursorItem(menuDef_t *menu) {
   }
 
 	menu->cursorItem = oldCursor;
-	return NULL;
+	return nullptr;
 }
 
 itemDef_t *Menu_SetPrevCursorItem(menuDef_t *menu) {
@@ -3329,7 +3329,7 @@ itemDef_t *Menu_SetPrevCursorItem(menuDef_t *menu) {
 		}
 	}
 	menu->cursorItem = oldCursor;
-	return NULL;
+	return nullptr;
 
 }
 
@@ -3356,7 +3356,7 @@ static void Item_TextField_Paste( itemDef_t *item ) {
 bool Item_TextField_HandleKey(itemDef_t *item, int key) {
 	char buff[2048];
 	int len;
-	itemDef_t *newItem = NULL;
+	itemDef_t *newItem = nullptr;
 	editFieldDef_t *editPtr = item->typeData.edit;
 
 	if (item->cvar) {
@@ -3946,7 +3946,7 @@ bool Item_Bind_HandleKey(itemDef_t *item, int key, bool down) {
 		return true;
 	}
 	else {
-		if ( !g_waitingForKey || g_bindItem == NULL ) {
+		if ( !g_waitingForKey || g_bindItem == nullptr ) {
 			return false;
 		}
 
@@ -3974,7 +3974,7 @@ bool Item_Bind_HandleKey(itemDef_t *item, int key, bool down) {
 				}
 				Controls_SetConfig();
 				g_waitingForKey = false;
-				g_bindItem = NULL;
+				g_bindItem = nullptr;
 				return true;
 
 			case '`':
@@ -4031,9 +4031,9 @@ bool Item_Bind_HandleKey(itemDef_t *item, int key, bool down) {
 bool Item_HandleKey(itemDef_t *item, int key, bool down) {
 	if (itemCapture) {
 		Item_StopCapture(itemCapture);
-		itemCapture = NULL;
+		itemCapture = nullptr;
 		captureFunc = 0;
-		captureData = NULL;
+		captureData = nullptr;
 	} else {
 		if ( down && ( key == A_MOUSE1 || key == A_MOUSE2 || key == A_MOUSE3 ) ) {
 			Item_StartCapture(item, key);
@@ -4216,22 +4216,22 @@ void Menu_HandleKey(menuDef_t *menu, int key, bool down) {
 	if ( g_editingField && down ) {
 		if ( !Item_TextField_HandleKey( g_editItem, key ) ) {
 			g_editingField = false;
-			g_editItem = NULL;
+			g_editItem = nullptr;
 			return;
 		}
 		else if ( key == A_MOUSE1 || key == A_MOUSE2 || key == A_MOUSE3 ) {
 			// switching fields so reset printed text of edit field
 			Leaving_EditField( g_editItem );
 			g_editingField = false;
-			g_editItem = NULL;
-			Display_MouseMove( NULL, DC->cursorx, DC->cursory );
+			g_editItem = nullptr;
+			Display_MouseMove( nullptr, DC->cursorx, DC->cursory );
 		}
 		else if ( key == A_TAB || key == A_CURSOR_UP || key == A_CURSOR_DOWN ) {
 			return;
 		}
 	}
 
-	if ( menu == NULL ) {
+	if ( menu == nullptr ) {
 		return;
 	}
 
@@ -4259,7 +4259,7 @@ void Menu_HandleKey(menuDef_t *menu, int key, bool down) {
 		return;
 	}
 
-	if ( item != NULL ) {
+	if ( item != nullptr ) {
 		if ( Item_HandleKey( item, key, down ) ) {
 			// It is possible for an item to be disable after Item_HandleKey is run (like in Voice Chat)
 			if ( !item->disabled ) {
@@ -4405,7 +4405,7 @@ void Rect_ToWindowCoords(rectDef_t *rect, windowDef_t *window) {
 void Item_SetTextExtents(itemDef_t *item, int *width, int *height, const char *text) {
 	const char *textPtr = (text) ? text : item->text;
 
-	if (textPtr == NULL ) {
+	if (textPtr == nullptr ) {
 		return;
 	}
 
@@ -4500,10 +4500,10 @@ void Item_Text_AutoWrapped_Paint(itemDef_t *item) {
 	vec4_t color;
 
 	textWidth = 0;
-	newLinePtr = NULL;
+	newLinePtr = nullptr;
 
-	if (item->text == NULL) {
-		if (item->cvar == NULL) {
+	if (item->text == nullptr) {
+		if (item->cvar == nullptr) {
 			return;
 		}
 		else {
@@ -4586,8 +4586,8 @@ void Item_Text_Wrapped_Paint(itemDef_t *item) {
 	// now paint the text and/or any optional images
 	// default to left
 
-	if (item->text == NULL) {
-		if (item->cvar == NULL) {
+	if (item->text == nullptr) {
+		if (item->cvar == nullptr) {
 			return;
 		}
 		else {
@@ -4641,8 +4641,8 @@ void Item_Text_Paint(itemDef_t *item) {
 		return;
 	}
 
-	if (item->text == NULL) {
-		if (item->cvar == NULL) {
+	if (item->text == nullptr) {
+		if (item->cvar == nullptr) {
 			return;
 		}
 		else {
@@ -5023,7 +5023,7 @@ void Item_Model_Paint(itemDef_t *item)
 	vec3_t			angles;
 	modelDef_t *modelPtr = item->typeData.model;
 
-	if (modelPtr == NULL)
+	if (modelPtr == nullptr)
 	{
 		return;
 	}
@@ -5221,7 +5221,7 @@ void Item_Model_Paint(itemDef_t *item)
 }
 
 void Item_Image_Paint(itemDef_t *item) {
-	if (item == NULL) {
+	if (item == nullptr) {
 		return;
 	}
 	DC->drawHandlePic(item->window.rect.x+1, item->window.rect.y+1, item->window.rect.w-2, item->window.rect.h-2, item->asset);
@@ -5320,7 +5320,7 @@ void Item_ListBox_Paint(itemDef_t *item) {
 	{//probably changed feeders, so reset
 		item->cursorPos = (count?count-1:count);
 		// NOTE : might consider moving this to any spot in here we change the cursor position
-		DC->feederSelection( item->special, item->cursorPos, NULL );
+		DC->feederSelection( item->special, item->cursorPos, nullptr );
 	}
 
 	// default is vertical if horizontal flag is not here
@@ -5610,7 +5610,7 @@ void Item_ListBox_Paint(itemDef_t *item) {
 						{
 							imageStartX = listPtr->columnInfo[j+1].pos;
 						}
-						DC->setColor( NULL );
+						DC->setColor( nullptr );
 						if (optionalImage3 >= 0)
 						{
 							DC->drawHandlePic(imageStartX - listPtr->elementHeight*3, y+listPtr->elementHeight+2, listPtr->elementHeight, listPtr->elementHeight, optionalImage3);
@@ -5660,7 +5660,7 @@ void Item_ListBox_Paint(itemDef_t *item) {
 
 void Item_OwnerDraw_Paint(itemDef_t *item) {
 
-	if (item == NULL) {
+	if (item == nullptr) {
 		return;
 	}
 
@@ -5725,7 +5725,7 @@ void Item_Paint(itemDef_t *item)
 	red[0] = red[3] = 1;
 	red[1] = red[2] = 0;
 
-	if (item == NULL)
+	if (item == nullptr)
 	{
 		return;
 	}
@@ -6304,7 +6304,7 @@ void Item_Paint(itemDef_t *item)
 	}
 
 	//FIXME: this might be bad
-	DC->setColor( NULL );
+	DC->setColor( nullptr );
 }
 
 void Menu_Init(menuDef_t *menu) {
@@ -6325,7 +6325,7 @@ itemDef_t *Menu_GetFocusedItem(menuDef_t *menu) {
 			}
 		}
 	}
-	return NULL;
+	return nullptr;
 }
 
 menuDef_t *Menu_GetFocused() {
@@ -6335,7 +6335,7 @@ menuDef_t *Menu_GetFocused() {
 			return &Menus[i];
 		}
 	}
-	return NULL;
+	return nullptr;
 }
 
 void Menu_ScrollFeeder(menuDef_t *menu, int feeder, bool down) {
@@ -6351,8 +6351,8 @@ void Menu_ScrollFeeder(menuDef_t *menu, int feeder, bool down) {
 }
 
 void Menu_SetFeederSelection(menuDef_t *menu, int feeder, int index, const char *name) {
-	if (menu == NULL) {
-		if (name == NULL) {
+	if (menu == nullptr) {
+		if (name == nullptr) {
 			menu = Menu_GetFocused();
 		} else {
 			menu = Menus_FindByName(name);
@@ -6369,7 +6369,7 @@ void Menu_SetFeederSelection(menuDef_t *menu, int feeder, int index, const char 
 					listPtr->startPos = 0;
 				}
 				menu->items[i]->cursorPos = index;
-				DC->feederSelection(menu->items[i]->special, menu->items[i]->cursorPos, NULL);
+				DC->feederSelection(menu->items[i]->special, menu->items[i]->cursorPos, nullptr);
 				return;
 			}
 		}
@@ -6389,12 +6389,12 @@ bool Menus_AnyFullScreenVisible( void ) {
 menuDef_t *Menus_ActivateByName(const char *p) {
 	menuDef_t *focus = Menu_GetFocused();
 
-	menuDef_t *m = NULL;
+	menuDef_t *m = nullptr;
 	for ( int i=0; i<menuCount; i++ ) {
 		if ( !Q_stricmp( Menus[i].window.name, p ) ) {
 			m = &Menus[i];
 			Menus_Activate( m );
-			if ( openMenuCount < MAX_OPEN_MENUS && focus != NULL ) {
+			if ( openMenuCount < MAX_OPEN_MENUS && focus != nullptr ) {
 				menuStack[openMenuCount++] = focus;
 			}
 		}
@@ -6423,7 +6423,7 @@ void Menu_HandleMouseMove(menuDef_t *menu, float x, float y) {
   bool focusSet = false;
 
   itemDef_t *overItem;
-  if (menu == NULL) {
+  if (menu == nullptr) {
     return;
   }
 
@@ -6497,7 +6497,7 @@ void Menu_HandleMouseMove(menuDef_t *menu, float x, float y) {
 void Menu_Paint(menuDef_t *menu, bool forcePaint) {
 	int i;
 
-	if (menu == NULL) {
+	if (menu == nullptr) {
 		return;
 	}
 
@@ -6654,7 +6654,7 @@ static keywordHash_t *KeywordHash_Find(keywordHash_t *table[], char *keyword)
 		if (!Q_stricmp(key->keyword, keyword))
 			return key;
 	}
-	return NULL;
+	return nullptr;
 }
 
 // Item Keyword Parse functions
@@ -6745,7 +6745,7 @@ struct uiG2PtrTracker_s
 	uiG2PtrTracker_t *next;
 };
 
-uiG2PtrTracker_t *ui_G2PtrTracker = NULL;
+uiG2PtrTracker_t *ui_G2PtrTracker = nullptr;
 
 //rww - UI G2 shared management functions.
 
@@ -6768,7 +6768,7 @@ void UI_InsertG2Pointer(void *ghoul2)
 	if (!(*nextFree))
 	{ //if we aren't reusing a chain then allocate space for it.
 		(*nextFree) = (uiG2PtrTracker_t *)BG_Alloc(sizeof(uiG2PtrTracker_t));
-		(*nextFree)->next = NULL;
+		(*nextFree)->next = nullptr;
 	}
 
 	(*nextFree)->ghoul2 = ghoul2;
@@ -6788,7 +6788,7 @@ void UI_ClearG2Pointer(void *ghoul2)
 	{
 		if (next->ghoul2 == ghoul2)
 		{ //found it, set it to null so we can reuse this link.
-			next->ghoul2 = NULL;
+			next->ghoul2 = nullptr;
 			break;
 		}
 
@@ -6855,7 +6855,7 @@ bool ItemParse_asset_model_go( itemDef_t *item, const char *name,int *runTimeLen
 					{ //If this isn't true the gla path must be messed up somehow.
 						strcpy(slash, "/animation.cfg");
 
-						animIndex = UI_ParseAnimationFile(GLAName, NULL, false);
+						animIndex = UI_ParseAnimationFile(GLAName, nullptr, false);
 						if (animIndex != -1)
 						{ //We parsed out the animation info for whatever model this is
 							animation_t *anim = &bgAllAnims[animIndex].anims[modelPtr->g2anim];
@@ -7224,7 +7224,7 @@ bool ItemParse_flag( itemDef_t *item, int handle)
 		}
 	}
 
-	if (itemFlags[i].string == NULL)
+	if (itemFlags[i].string == nullptr)
 	{
 		Com_Printf( S_COLOR_YELLOW "Unknown item style value '%s'\n", token.string );
 	}
@@ -8032,89 +8032,89 @@ bool ItemParse_isSaber2( itemDef_t *item, int handle  )
 }
 
 keywordHash_t itemParseKeywords[] = {
-	{ "action",           ItemParse_action,           NULL },
-	{ "addColorRange",    ItemParse_addColorRange,    NULL },
-	{ "align",            ItemParse_align,            NULL },
-	{ "appearance_slot",  ItemParse_Appearance_slot,  NULL },
-	{ "asset_model",      ItemParse_asset_model,      NULL },
-	{ "asset_shader",     ItemParse_asset_shader,     NULL },
-	{ "autowrapped",      ItemParse_autowrapped,      NULL },
-	{ "backcolor",        ItemParse_backcolor,        NULL },
-	{ "background",       ItemParse_background,       NULL },
-	{ "border",           ItemParse_border,           NULL },
-	{ "bordercolor",      ItemParse_bordercolor,      NULL },
-	{ "bordersize",       ItemParse_bordersize,       NULL },
-	{ "cinematic",        ItemParse_cinematic,        NULL },
-	{ "columns",          ItemParse_columns,          NULL },
-	{ "cvar",             ItemParse_cvar,             NULL },
-	{ "cvarFloat",        ItemParse_cvarFloat,        NULL },
-	{ "cvarFloatList",    ItemParse_cvarFloatList,    NULL },
-	{ "cvarStrList",      ItemParse_cvarStrList,      NULL },
-	{ "cvarTest",         ItemParse_cvarTest,         NULL },
-	{ "decoration",       ItemParse_decoration,       NULL },
-	{ "desctext",         ItemParse_descText,         NULL },
-	{ "disableCvar",      ItemParse_disableCvar,      NULL },
-	{ "doubleclick",      ItemParse_doubleClick,      NULL },
-	{ "elementheight",    ItemParse_elementheight,    NULL },
-	{ "elementtype",      ItemParse_elementtype,      NULL },
-	{ "elementwidth",     ItemParse_elementwidth,     NULL },
-	{ "enableCvar",       ItemParse_enableCvar,       NULL },
-	{ "feeder",           ItemParse_feeder,           NULL },
-	{ "flag",             ItemParse_flag,             NULL },
-	{ "focusSound",       ItemParse_focusSound,       NULL },
-	{ "font",             ItemParse_font,             NULL },
-	{ "forecolor",        ItemParse_forecolor,        NULL },
-	{ "group",            ItemParse_group,            NULL },
-	{ "hideCvar",         ItemParse_hideCvar,         NULL },
-	{ "horizontalscroll", ItemParse_horizontalscroll, NULL },
-	{ "invertyesno",      ItemParse_invertyesno,      NULL },
-	{ "isCharacter",      ItemParse_isCharacter,      NULL },
-	{ "isSaber",          ItemParse_isSaber,          NULL },
-	{ "isSaber2",         ItemParse_isSaber2,         NULL },
-	{ "leaveFocus",       ItemParse_leaveFocus,       NULL },
-	{ "lineHeight",       ItemParse_lineHeight,       NULL },
-	{ "maxChars",         ItemParse_maxChars,         NULL },
-	{ "maxLineChars",     ItemParse_maxLineChars,     NULL },
-	{ "maxPaintChars",    ItemParse_maxPaintChars,    NULL },
-	{ "model_angle",      ItemParse_model_angle,      NULL },
-	{ "model_fovx",       ItemParse_model_fovx,       NULL },
-	{ "model_fovy",       ItemParse_model_fovy,       NULL },
-	{ "model_g2anim",     ItemParse_model_g2anim,     NULL },
-	{ "model_g2maxs",     ItemParse_model_g2maxs,     NULL },
-	{ "model_g2mins",     ItemParse_model_g2mins,     NULL },
-	{ "model_g2scale",    ItemParse_model_g2scale,    NULL },
-	{ "model_g2skin",     ItemParse_model_g2skin,     NULL },
-	{ "model_origin",     ItemParse_model_origin,     NULL },
-	{ "model_rotation",   ItemParse_model_rotation,   NULL },
-	{ "mouseEnter",       ItemParse_mouseEnter,       NULL },
-	{ "mouseEnterText",   ItemParse_mouseEnterText,   NULL },
-	{ "mouseExit",        ItemParse_mouseExit,        NULL },
-	{ "mouseExitText",    ItemParse_mouseExitText,    NULL },
-	{ "name",             ItemParse_name,             NULL },
-	{ "notselectable",    ItemParse_notselectable,    NULL },
-	{ "onFocus",          ItemParse_onFocus,          NULL },
-	{ "outlinecolor",     ItemParse_outlinecolor,     NULL },
-	{ "ownerdraw",        ItemParse_ownerdraw,        NULL },
-	{ "ownerdrawFlag",    ItemParse_ownerdrawFlag,    NULL },
-	{ "rect",             ItemParse_rect,             NULL },
-	{ "rectcvar",         ItemParse_rectcvar,         NULL },
-	{ "scrollhidden",     ItemParse_scrollhidden,     NULL },
-	{ "showCvar",         ItemParse_showCvar,         NULL },
-	{ "special",          ItemParse_special,          NULL },
-	{ "style",            ItemParse_style,            NULL },
-	{ "text",             ItemParse_text,             NULL },
-	{ "text2",            ItemParse_text2,            NULL },
-	{ "text2alignx",      ItemParse_text2alignx,      NULL },
-	{ "text2aligny",      ItemParse_text2aligny,      NULL },
-	{ "textalign",        ItemParse_textalign,        NULL },
-	{ "textalignx",       ItemParse_textalignx,       NULL },
-	{ "textaligny",       ItemParse_textaligny,       NULL },
-	{ "textscale",        ItemParse_textscale,        NULL },
-	{ "textstyle",        ItemParse_textstyle,        NULL },
-	{ "type",             ItemParse_type,             NULL },
-	{ "visible",          ItemParse_visible,          NULL },
-	{ "wrapped",          ItemParse_wrapped,          NULL },
-	{ "xoffset",          ItemParse_xoffset,          NULL },
+	{ "action",           ItemParse_action,           nullptr },
+	{ "addColorRange",    ItemParse_addColorRange,    nullptr },
+	{ "align",            ItemParse_align,            nullptr },
+	{ "appearance_slot",  ItemParse_Appearance_slot,  nullptr },
+	{ "asset_model",      ItemParse_asset_model,      nullptr },
+	{ "asset_shader",     ItemParse_asset_shader,     nullptr },
+	{ "autowrapped",      ItemParse_autowrapped,      nullptr },
+	{ "backcolor",        ItemParse_backcolor,        nullptr },
+	{ "background",       ItemParse_background,       nullptr },
+	{ "border",           ItemParse_border,           nullptr },
+	{ "bordercolor",      ItemParse_bordercolor,      nullptr },
+	{ "bordersize",       ItemParse_bordersize,       nullptr },
+	{ "cinematic",        ItemParse_cinematic,        nullptr },
+	{ "columns",          ItemParse_columns,          nullptr },
+	{ "cvar",             ItemParse_cvar,             nullptr },
+	{ "cvarFloat",        ItemParse_cvarFloat,        nullptr },
+	{ "cvarFloatList",    ItemParse_cvarFloatList,    nullptr },
+	{ "cvarStrList",      ItemParse_cvarStrList,      nullptr },
+	{ "cvarTest",         ItemParse_cvarTest,         nullptr },
+	{ "decoration",       ItemParse_decoration,       nullptr },
+	{ "desctext",         ItemParse_descText,         nullptr },
+	{ "disableCvar",      ItemParse_disableCvar,      nullptr },
+	{ "doubleclick",      ItemParse_doubleClick,      nullptr },
+	{ "elementheight",    ItemParse_elementheight,    nullptr },
+	{ "elementtype",      ItemParse_elementtype,      nullptr },
+	{ "elementwidth",     ItemParse_elementwidth,     nullptr },
+	{ "enableCvar",       ItemParse_enableCvar,       nullptr },
+	{ "feeder",           ItemParse_feeder,           nullptr },
+	{ "flag",             ItemParse_flag,             nullptr },
+	{ "focusSound",       ItemParse_focusSound,       nullptr },
+	{ "font",             ItemParse_font,             nullptr },
+	{ "forecolor",        ItemParse_forecolor,        nullptr },
+	{ "group",            ItemParse_group,            nullptr },
+	{ "hideCvar",         ItemParse_hideCvar,         nullptr },
+	{ "horizontalscroll", ItemParse_horizontalscroll, nullptr },
+	{ "invertyesno",      ItemParse_invertyesno,      nullptr },
+	{ "isCharacter",      ItemParse_isCharacter,      nullptr },
+	{ "isSaber",          ItemParse_isSaber,          nullptr },
+	{ "isSaber2",         ItemParse_isSaber2,         nullptr },
+	{ "leaveFocus",       ItemParse_leaveFocus,       nullptr },
+	{ "lineHeight",       ItemParse_lineHeight,       nullptr },
+	{ "maxChars",         ItemParse_maxChars,         nullptr },
+	{ "maxLineChars",     ItemParse_maxLineChars,     nullptr },
+	{ "maxPaintChars",    ItemParse_maxPaintChars,    nullptr },
+	{ "model_angle",      ItemParse_model_angle,      nullptr },
+	{ "model_fovx",       ItemParse_model_fovx,       nullptr },
+	{ "model_fovy",       ItemParse_model_fovy,       nullptr },
+	{ "model_g2anim",     ItemParse_model_g2anim,     nullptr },
+	{ "model_g2maxs",     ItemParse_model_g2maxs,     nullptr },
+	{ "model_g2mins",     ItemParse_model_g2mins,     nullptr },
+	{ "model_g2scale",    ItemParse_model_g2scale,    nullptr },
+	{ "model_g2skin",     ItemParse_model_g2skin,     nullptr },
+	{ "model_origin",     ItemParse_model_origin,     nullptr },
+	{ "model_rotation",   ItemParse_model_rotation,   nullptr },
+	{ "mouseEnter",       ItemParse_mouseEnter,       nullptr },
+	{ "mouseEnterText",   ItemParse_mouseEnterText,   nullptr },
+	{ "mouseExit",        ItemParse_mouseExit,        nullptr },
+	{ "mouseExitText",    ItemParse_mouseExitText,    nullptr },
+	{ "name",             ItemParse_name,             nullptr },
+	{ "notselectable",    ItemParse_notselectable,    nullptr },
+	{ "onFocus",          ItemParse_onFocus,          nullptr },
+	{ "outlinecolor",     ItemParse_outlinecolor,     nullptr },
+	{ "ownerdraw",        ItemParse_ownerdraw,        nullptr },
+	{ "ownerdrawFlag",    ItemParse_ownerdrawFlag,    nullptr },
+	{ "rect",             ItemParse_rect,             nullptr },
+	{ "rectcvar",         ItemParse_rectcvar,         nullptr },
+	{ "scrollhidden",     ItemParse_scrollhidden,     nullptr },
+	{ "showCvar",         ItemParse_showCvar,         nullptr },
+	{ "special",          ItemParse_special,          nullptr },
+	{ "style",            ItemParse_style,            nullptr },
+	{ "text",             ItemParse_text,             nullptr },
+	{ "text2",            ItemParse_text2,            nullptr },
+	{ "text2alignx",      ItemParse_text2alignx,      nullptr },
+	{ "text2aligny",      ItemParse_text2aligny,      nullptr },
+	{ "textalign",        ItemParse_textalign,        nullptr },
+	{ "textalignx",       ItemParse_textalignx,       nullptr },
+	{ "textaligny",       ItemParse_textaligny,       nullptr },
+	{ "textscale",        ItemParse_textscale,        nullptr },
+	{ "textstyle",        ItemParse_textstyle,        nullptr },
+	{ "type",             ItemParse_type,             nullptr },
+	{ "visible",          ItemParse_visible,          nullptr },
+	{ "wrapped",          ItemParse_wrapped,          nullptr },
+	{ "xoffset",          ItemParse_xoffset,          nullptr },
 	{ 0,                  0,                          0 }
 };
 
@@ -8365,7 +8365,7 @@ static void Item_TextScroll_BuildLines ( itemDef_t* item )
 
 		/// arrgghh, this is gettng horrible now...
 
-		if (scrollPtr->pLines[ scrollPtr->iLineCount ] == NULL && strlen(sLineForDisplay))
+		if (scrollPtr->pLines[ scrollPtr->iLineCount ] == nullptr && strlen(sLineForDisplay))
 		{
 			// then this is the last line and we've just run out of text, no CR, no overflow etc...
 
@@ -8455,7 +8455,7 @@ static void Item_TextScroll_BuildLines ( itemDef_t* item )
 // init's special control types
 void Item_InitControls(itemDef_t *item)
 {
-	if (item == NULL)
+	if (item == nullptr)
 	{
 		return;
 	}
@@ -8862,42 +8862,42 @@ bool MenuParse_appearanceIncrement( itemDef_t *item, int handle )
 }
 
 keywordHash_t menuParseKeywords[] = {
-	{ "appearanceIncrement", MenuParse_appearanceIncrement, NULL },
-	{ "backcolor",           MenuParse_backcolor,           NULL },
-	{ "background",          MenuParse_background,          NULL },
-	{ "border",              MenuParse_border,              NULL },
-	{ "bordercolor",         MenuParse_bordercolor,         NULL },
-	{ "borderSize",          MenuParse_borderSize,          NULL },
-	{ "cinematic",           MenuParse_cinematic,           NULL },
-	{ "descAlignment",       MenuParse_descAlignment,       NULL },
-	{ "desccolor",           MenuParse_descColor,           NULL },
-	{ "descX",               MenuParse_descX,               NULL },
-	{ "descY",               MenuParse_descY,               NULL },
-	{ "descScale",           MenuParse_descScale,           NULL },
-	{ "disablecolor",        MenuParse_disablecolor,        NULL },
-	{ "fadeAmount",          MenuParse_fadeAmount,          NULL },
-	{ "fadeClamp",           MenuParse_fadeClamp,           NULL },
-	{ "fadeCycle",           MenuParse_fadeCycle,           NULL },
-	{ "focuscolor",          MenuParse_focuscolor,          NULL },
-	{ "font",                MenuParse_font,                NULL },
-	{ "forecolor",           MenuParse_forecolor,           NULL },
-	{ "fullscreen",          MenuParse_fullscreen,          NULL },
-	{ "itemDef",             MenuParse_itemDef,             NULL },
-	{ "name",                MenuParse_name,                NULL },
-	{ "onClose",             MenuParse_onClose,             NULL },
+	{ "appearanceIncrement", MenuParse_appearanceIncrement, nullptr },
+	{ "backcolor",           MenuParse_backcolor,           nullptr },
+	{ "background",          MenuParse_background,          nullptr },
+	{ "border",              MenuParse_border,              nullptr },
+	{ "bordercolor",         MenuParse_bordercolor,         nullptr },
+	{ "borderSize",          MenuParse_borderSize,          nullptr },
+	{ "cinematic",           MenuParse_cinematic,           nullptr },
+	{ "descAlignment",       MenuParse_descAlignment,       nullptr },
+	{ "desccolor",           MenuParse_descColor,           nullptr },
+	{ "descX",               MenuParse_descX,               nullptr },
+	{ "descY",               MenuParse_descY,               nullptr },
+	{ "descScale",           MenuParse_descScale,           nullptr },
+	{ "disablecolor",        MenuParse_disablecolor,        nullptr },
+	{ "fadeAmount",          MenuParse_fadeAmount,          nullptr },
+	{ "fadeClamp",           MenuParse_fadeClamp,           nullptr },
+	{ "fadeCycle",           MenuParse_fadeCycle,           nullptr },
+	{ "focuscolor",          MenuParse_focuscolor,          nullptr },
+	{ "font",                MenuParse_font,                nullptr },
+	{ "forecolor",           MenuParse_forecolor,           nullptr },
+	{ "fullscreen",          MenuParse_fullscreen,          nullptr },
+	{ "itemDef",             MenuParse_itemDef,             nullptr },
+	{ "name",                MenuParse_name,                nullptr },
+	{ "onClose",             MenuParse_onClose,             nullptr },
 	//JLFACCEPT MPMOVED
-	{ "onAccept",            MenuParse_onAccept,            NULL },
-	{ "onESC",               MenuParse_onESC,               NULL },
-	{ "outOfBoundsClick",    MenuParse_outOfBounds,         NULL },
-	{ "onOpen",              MenuParse_onOpen,              NULL },
-	{ "outlinecolor",        MenuParse_outlinecolor,        NULL },
-	{ "ownerdraw",           MenuParse_ownerdraw,           NULL },
-	{ "ownerdrawFlag",       MenuParse_ownerdrawFlag,       NULL },
-	{ "popup",               MenuParse_popup,               NULL },
-	{ "rect",                MenuParse_rect,                NULL },
-	{ "soundLoop",           MenuParse_soundLoop,           NULL },
-	{ "style",               MenuParse_style,               NULL },
-	{ "visible",             MenuParse_visible,             NULL },
+	{ "onAccept",            MenuParse_onAccept,            nullptr },
+	{ "onESC",               MenuParse_onESC,               nullptr },
+	{ "outOfBoundsClick",    MenuParse_outOfBounds,         nullptr },
+	{ "onOpen",              MenuParse_onOpen,              nullptr },
+	{ "outlinecolor",        MenuParse_outlinecolor,        nullptr },
+	{ "ownerdraw",           MenuParse_ownerdraw,           nullptr },
+	{ "ownerdrawFlag",       MenuParse_ownerdrawFlag,       nullptr },
+	{ "popup",               MenuParse_popup,               nullptr },
+	{ "rect",                MenuParse_rect,                nullptr },
+	{ "soundLoop",           MenuParse_soundLoop,           nullptr },
+	{ "style",               MenuParse_style,               nullptr },
+	{ "visible",             MenuParse_visible,             nullptr },
 	{ 0,                     0,                             0 }
 };
 
@@ -8997,7 +8997,7 @@ void *Display_CaptureItem(int x, int y) {
 			return &Menus[i];
 		}
 	}
-	return NULL;
+	return nullptr;
 }
 
 // FIXME:
@@ -9005,7 +9005,7 @@ bool Display_MouseMove(void *p, int x, int y) {
 	int i;
 	menuDef_t *menu = (menuDef_t *) p;
 
-	if (menu == NULL) {
+	if (menu == nullptr) {
     menu = Menu_GetFocused();
 		if (menu) {
 			if (menu->window.flags & WINDOW_POPUP) {
@@ -9041,7 +9041,7 @@ int Display_CursorType(int x, int y) {
 
 void Display_HandleKey(int key, bool down, int x, int y) {
 	menuDef_t *menu = (menuDef_t *) Display_CaptureItem(x, y);
-	if (menu == NULL) {
+	if (menu == nullptr) {
 		menu = Menu_GetFocused();
 	}
 	if (menu) {

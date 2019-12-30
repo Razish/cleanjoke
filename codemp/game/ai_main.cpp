@@ -96,7 +96,7 @@ void BotStraightTPOrderCheck(gentity_t *ent, int ordernum, bot_state_t *bs)
 		if (bs->squadLeader == ent)
 		{
 			bs->teamplayState = 0;
-			bs->squadLeader = NULL;
+			bs->squadLeader = nullptr;
 		}
 		break;
 	case TEAMPLAYSTATE_FOLLOWING:
@@ -193,7 +193,7 @@ void BotOrder(gentity_t *ent, int clientnum, int ordernum)
 			BotStraightTPOrderCheck(ent, ordernum, botstates[clientnum]);
 			botstates[clientnum]->state_Forced = ordernum;
 			botstates[clientnum]->chatObject = ent;
-			botstates[clientnum]->chatAltObject = NULL;
+			botstates[clientnum]->chatAltObject = nullptr;
 			if (BotDoChat(botstates[clientnum], "OrderAccepted", 1))
 			{
 				botstates[clientnum]->chatTeam = 1;
@@ -215,7 +215,7 @@ void BotOrder(gentity_t *ent, int clientnum, int ordernum)
 					BotStraightTPOrderCheck(ent, ordernum, botstates[i]);
 					botstates[i]->state_Forced = ordernum;
 					botstates[i]->chatObject = ent;
-					botstates[i]->chatAltObject = NULL;
+					botstates[i]->chatAltObject = nullptr;
 					if (BotDoChat(botstates[i], "OrderAccepted", 0))
 					{
 						botstates[i]->chatTeam = 1;
@@ -490,7 +490,7 @@ void BotInputToUserCommand(bot_input_t *bi, usercmd_t *ucmd, int delta_angles[3]
 	else angles[PITCH] = 0;
 	angles[YAW] = bi->viewangles[YAW];
 	angles[ROLL] = 0;
-	AngleVectors(angles, forward, right, NULL);
+	AngleVectors(angles, forward, right, nullptr);
 	//bot input speed is in the range [0, 400]
 	bi->speed = bi->speed * 127 / 400;
 	//set the view independent movement
@@ -845,7 +845,7 @@ int OrgVisible(vec3_t org1, vec3_t org2, int ignore)
 {
 	trace_t tr;
 
-	trap->Trace(&tr, org1, NULL, NULL, org2, ignore, MASK_SOLID, false, 0, 0 );
+	trap->Trace(&tr, org1, nullptr, nullptr, org2, ignore, MASK_SOLID, false, 0, 0 );
 
 	if (tr.fraction == 1)
 	{
@@ -861,11 +861,11 @@ int WPOrgVisible(gentity_t *bot, vec3_t org1, vec3_t org2, int ignore)
 	trace_t tr;
 	gentity_t *ownent;
 
-	trap->Trace(&tr, org1, NULL, NULL, org2, ignore, MASK_SOLID, false, 0, 0);
+	trap->Trace(&tr, org1, nullptr, nullptr, org2, ignore, MASK_SOLID, false, 0, 0);
 
 	if (tr.fraction == 1)
 	{
-		trap->Trace(&tr, org1, NULL, NULL, org2, ignore, MASK_PLAYERSOLID, false, 0, 0);
+		trap->Trace(&tr, org1, nullptr, nullptr, org2, ignore, MASK_PLAYERSOLID, false, 0, 0);
 
 		if (tr.fraction != 1 && tr.entityNum != ENTITYNUM_NONE && g_entities[tr.entityNum].s.eType == ET_SPECIAL)
 		{
@@ -894,7 +894,7 @@ int OrgVisibleBox(vec3_t org1, vec3_t mins, vec3_t maxs, vec3_t org2, int ignore
 
 	if (RMG.integer)
 	{
-		trap->Trace(&tr, org1, NULL, NULL, org2, ignore, MASK_SOLID, false, 0, 0);
+		trap->Trace(&tr, org1, nullptr, nullptr, org2, ignore, MASK_SOLID, false, 0, 0);
 	}
 	else
 	{
@@ -922,7 +922,7 @@ int CheckForFunc(vec3_t org, int ignore)
 
 	under[2] -= 64;
 
-	trap->Trace(&tr, org, NULL, NULL, under, ignore, MASK_SOLID, false, 0, 0);
+	trap->Trace(&tr, org, nullptr, nullptr, under, ignore, MASK_SOLID, false, 0, 0);
 
 	if (tr.fraction == 1)
 	{
@@ -1227,7 +1227,7 @@ void WPConstantRoutine(bot_state_t *bs)
 		else if (heightDif > 64 && !(bs->cur_ps.fd.forcePowersKnown & (1 << FP_LEVITATION)))
 		{ //this point needs force jump to reach and we don't have it
 			//Kill the current point and turn around
-			bs->wpCurrent = NULL;
+			bs->wpCurrent = nullptr;
 			if (bs->wpDirection)
 			{
 				bs->wpDirection = 0;
@@ -1342,15 +1342,15 @@ void WPTouchRoutine(bot_state_t *bs)
 		bs->isCamping > level.time)
 	{ //don't snipe/camp with a melee weapon, that would be silly
 		bs->isCamping = 0;
-		bs->wpCampingTo = NULL;
-		bs->wpCamping = NULL;
+		bs->wpCampingTo = nullptr;
+		bs->wpCamping = nullptr;
 	}
 
 	if (bs->wpDestination)
 	{
 		if (bs->wpCurrent->index == bs->wpDestination->index)
 		{
-			bs->wpDestination = NULL;
+			bs->wpDestination = nullptr;
 
 			if (bs->runningLikeASissy)
 			{ //this obviously means we're scared and running, so we'll want to keep our navigational priorities less delayed
@@ -1474,7 +1474,7 @@ int BotTrace_Jump(bot_state_t *bs, vec3_t traceto)
 	VectorSubtract(traceto, bs->origin, a);
 	vectoangles(a, a);
 
-	AngleVectors(a, fwd, NULL, NULL);
+	AngleVectors(a, fwd, nullptr, nullptr);
 
 	traceto_mod[0] = bs->origin[0] + fwd[0]*4;
 	traceto_mod[1] = bs->origin[1] + fwd[1]*4;
@@ -1537,7 +1537,7 @@ int BotTrace_Duck(bot_state_t *bs, vec3_t traceto)
 	VectorSubtract(traceto, bs->origin, a);
 	vectoangles(a, a);
 
-	AngleVectors(a, fwd, NULL, NULL);
+	AngleVectors(a, fwd, nullptr, nullptr);
 
 	traceto_mod[0] = bs->origin[0] + fwd[0]*4;
 	traceto_mod[1] = bs->origin[1] + fwd[1]*4;
@@ -1722,7 +1722,7 @@ void BotDamageNotification(gclient_t *bot, gentity_t *attacker)
 				i != bs_a->client &&
 				botstates[i]->lastAttacked == &g_entities[bot->ps.clientNum])
 			{
-				botstates[i]->lastAttacked = NULL;
+				botstates[i]->lastAttacked = nullptr;
 			}
 
 			i++;
@@ -1737,7 +1737,7 @@ void BotDamageNotification(gclient_t *bot, gentity_t *attacker)
 			if (botstates[i] &&
 				botstates[i]->lastAttacked == &g_entities[bot->ps.clientNum])
 			{
-				botstates[i]->lastAttacked = NULL;
+				botstates[i]->lastAttacked = nullptr;
 			}
 
 			i++;
@@ -2299,7 +2299,7 @@ gentity_t *GetNearestBadThing(bot_state_t *bs)
 
 			if (glen < bestdist*factor && BotPVSCheck(bs->origin, ent->s.pos.trBase))
 			{
-				trap->Trace(&tr, bs->origin, NULL, NULL, ent->s.pos.trBase, bs->client, MASK_SOLID, false, 0, 0);
+				trap->Trace(&tr, bs->origin, nullptr, nullptr, ent->s.pos.trBase, bs->client, MASK_SOLID, false, 0, 0);
 
 				if (tr.fraction == 1 || tr.entityNum == ent->s.number)
 				{
@@ -2346,7 +2346,7 @@ gentity_t *GetNearestBadThing(bot_state_t *bs)
 	}
 	else
 	{
-		return NULL;
+		return nullptr;
 	}
 }
 
@@ -2425,7 +2425,7 @@ int BotGetFlagBack(bot_state_t *bs)
 	int myFlag = 0;
 	int foundCarrier = 0;
 	int tempInt = 0;
-	gentity_t *ent = NULL;
+	gentity_t *ent = nullptr;
 	vec3_t usethisvec;
 
 	if (level.clients[bs->client].sess.sessionTeam == TEAM_RED)
@@ -2491,7 +2491,7 @@ int BotGuardFlagCarrier(bot_state_t *bs)
 	int enemyFlag = 0;
 	int foundCarrier = 0;
 	int tempInt = 0;
-	gentity_t *ent = NULL;
+	gentity_t *ent = nullptr;
 	vec3_t usethisvec;
 
 	if (level.clients[bs->client].sess.sessionTeam == TEAM_RED)
@@ -2650,7 +2650,7 @@ void GetNewFlagPoint(wpobject_t *wp, gentity_t *flagEnt, int team)
 //See if our CTF state should take priority in our nav routines
 int CTFTakesPriority(bot_state_t *bs)
 {
-	gentity_t *ent = NULL;
+	gentity_t *ent = nullptr;
 	int enemyFlag = 0;
 	int myFlag = 0;
 	int enemyHasOurFlag = 0;
@@ -2662,7 +2662,7 @@ int CTFTakesPriority(bot_state_t *bs)
 	int i = 0;
 	int idleWP;
 	int dosw = 0;
-	wpobject_t *dest_sw = NULL;
+	wpobject_t *dest_sw = nullptr;
 #ifdef BOT_CTF_DEBUG
 	vec3_t t;
 
@@ -2904,7 +2904,7 @@ int JMTakesPriority(bot_state_t *bs)
 {
 	int i = 0;
 	int wpClose = -1;
-	gentity_t *theImportantEntity = NULL;
+	gentity_t *theImportantEntity = nullptr;
 
 	if (level.gametype != GT_JEDIMASTER)
 	{
@@ -2962,7 +2962,7 @@ int JMTakesPriority(bot_state_t *bs)
 
 				if (!bs->wpDestination)
 				{
-					Com_Printf("IDEAL WAS NULL\n");
+					Com_Printf("IDEAL WAS nullptr\n");
 				}
 			}
 			*/
@@ -3126,7 +3126,7 @@ void GetIdealDestination(bot_state_t *bs)
 	}
 	else
 	{
-		badthing = NULL;
+		badthing = nullptr;
 	}
 
 	if (badthing && badthing->inuse &&
@@ -3136,7 +3136,7 @@ void GetIdealDestination(bot_state_t *bs)
 	}
 	else
 	{
-		bs->dangerousObject = NULL;
+		bs->dangerousObject = nullptr;
 	}
 
 	if (!badthing && bs->wpDestIgnoreTime > level.time)
@@ -3150,18 +3150,18 @@ void GetIdealDestination(bot_state_t *bs)
 		{
 			bs->wpStoreDest = bs->wpDestination;
 		}
-		bs->wpDestination = NULL;
+		bs->wpDestination = nullptr;
 		return;
 	}
 	else if (!badthing && bs->wpStoreDest)
 	{ //after we finish running away, switch back to our original destination
 		bs->wpDestination = bs->wpStoreDest;
-		bs->wpStoreDest = NULL;
+		bs->wpStoreDest = nullptr;
 	}
 
 	if (badthing && bs->wpCamping)
 	{
-		bs->wpCamping = NULL;
+		bs->wpCamping = nullptr;
 	}
 
 	if (bs->wpCamping)
@@ -3191,7 +3191,7 @@ void GetIdealDestination(bot_state_t *bs)
 		{
 			bs->wpStoreDest = bs->wpDestination;
 		}
-		bs->wpDestination = NULL;
+		bs->wpDestination = nullptr;
 
 		if (bs->wpDirection)
 		{
@@ -3545,7 +3545,7 @@ void BotDoTeamplayAI(bot_state_t *bs)
 
 	if (bs->teamplayState == TEAMPLAYSTATE_REGROUP)
 	{ //force to find a new leader
-		bs->squadLeader = NULL;
+		bs->squadLeader = nullptr;
 		bs->isSquadLeader = 0;
 	}
 }
@@ -3722,7 +3722,7 @@ void MeleeCombatHandling(bot_state_t *bs)
 
 	VectorSubtract(usethisvec, bs->origin, a);
 	vectoangles(a, a);
-	AngleVectors(a, fwd, NULL, NULL);
+	AngleVectors(a, fwd, nullptr, nullptr);
 
 	midorg[0] = bs->origin[0] + fwd[0]*bs->frame_Enemy_Len/2;
 	midorg[1] = bs->origin[1] + fwd[1]*bs->frame_Enemy_Len/2;
@@ -3821,7 +3821,7 @@ void SaberCombatHandling(bot_state_t *bs)
 
 	VectorSubtract(usethisvec, bs->origin, a);
 	vectoangles(a, a);
-	AngleVectors(a, fwd, NULL, NULL);
+	AngleVectors(a, fwd, nullptr, nullptr);
 
 	midorg[0] = bs->origin[0] + fwd[0]*bs->frame_Enemy_Len/2;
 	midorg[1] = bs->origin[1] + fwd[1]*bs->frame_Enemy_Len/2;
@@ -3918,7 +3918,7 @@ void SaberCombatHandling(bot_state_t *bs)
 
 					groundcheck[2] -= 64;
 
-					trap->Trace(&tr, bs->goalPosition, NULL, NULL, groundcheck, bs->client, MASK_SOLID, false, 0, 0);
+					trap->Trace(&tr, bs->goalPosition, nullptr, nullptr, groundcheck, bs->client, MASK_SOLID, false, 0, 0);
 
 					if (tr.fraction == 1.0f)
 					{ //don't back off of a ledge
@@ -3935,7 +3935,7 @@ void SaberCombatHandling(bot_state_t *bs)
 			}
 		}
 
-		/*AngleVectors(bs->viewangles, NULL, fwd, NULL);
+		/*AngleVectors(bs->viewangles, nullptr, fwd, nullptr);
 
 		if (bs->meleeStrafeDir)
 		{
@@ -4427,7 +4427,7 @@ int BotFallbackNavigation(bot_state_t *bs)
 
 	VectorCopy(bs->goalAngles, b_angle);
 
-	AngleVectors(b_angle, fwd, NULL, NULL);
+	AngleVectors(b_angle, fwd, nullptr, nullptr);
 
 	trto[0] = bs->origin[0] + fwd[0]*16;
 	trto[1] = bs->origin[1] + fwd[1]*16;
@@ -4648,7 +4648,7 @@ int BotSelectMelee(bot_state_t *bs)
 int GetLoveLevel(bot_state_t *bs, bot_state_t *love)
 {
 	int i = 0;
-	const char *lname = NULL;
+	const char *lname = nullptr;
 
 	if (level.gametype == GT_DUEL || level.gametype == GT_POWERDUEL)
 	{ //There is no love in 1-on-1
@@ -4750,7 +4750,7 @@ void BotLovedOneDied(bot_state_t *bs, bot_state_t *loved, int lovelevel)
 				//broke into the highest anger level
 				//CHAT: Hatred section
 				bs->chatObject = loved->lastHurt;
-				bs->chatAltObject = NULL;
+				bs->chatAltObject = nullptr;
 				BotDoChat(bs, "Hatred", 1);
 			}
 		}
@@ -4807,7 +4807,7 @@ void StrafeTracing(bot_state_t *bs)
 	maxs[1] = 15;
 	maxs[2] = 32;
 
-	AngleVectors(bs->viewangles, NULL, right, NULL);
+	AngleVectors(bs->viewangles, nullptr, right, nullptr);
 
 	if (bs->meleeStrafeDir)
 	{
@@ -4833,7 +4833,7 @@ void StrafeTracing(bot_state_t *bs)
 
 	drorg[2] -= 32;
 
-	trap->Trace(&tr, rorg, NULL, NULL, drorg, bs->client, MASK_SOLID, false, 0, 0);
+	trap->Trace(&tr, rorg, nullptr, nullptr, drorg, bs->client, MASK_SOLID, false, 0, 0);
 
 	if (tr.fraction == 1)
 	{ //this may be a dangerous ledge, so don't strafe over it just in case
@@ -4930,7 +4930,7 @@ gentity_t *CheckForFriendInLOF(bot_state_t *bs)
 	maxs[1] = 3;
 	maxs[2] = 3;
 
-	AngleVectors(bs->viewangles, fwd, NULL, NULL);
+	AngleVectors(bs->viewangles, fwd, nullptr, nullptr);
 
 	VectorCopy(bs->eye, trfrom);
 
@@ -4958,7 +4958,7 @@ gentity_t *CheckForFriendInLOF(bot_state_t *bs)
 		}
 	}
 
-	return NULL;
+	return nullptr;
 }
 
 void BotScanForLeader(bot_state_t *bs)
@@ -5006,7 +5006,7 @@ void BotReplyGreetings(bot_state_t *bs)
 			i != bs->client)
 		{
 			botstates[i]->chatObject = &g_entities[bs->client];
-			botstates[i]->chatAltObject = NULL;
+			botstates[i]->chatAltObject = nullptr;
 			if (BotDoChat(botstates[i], "ResponseGreetings", 0))
 			{
 				numhello++;
@@ -5026,7 +5026,7 @@ void BotReplyGreetings(bot_state_t *bs)
 void CTFFlagMovement(bot_state_t *bs)
 {
 	int diddrop = 0;
-	gentity_t *desiredDrop = NULL;
+	gentity_t *desiredDrop = nullptr;
 	vec3_t a, mins, maxs;
 	trace_t tr;
 
@@ -5052,17 +5052,17 @@ void CTFFlagMovement(bot_state_t *bs)
 			}
 			else
 			{
-				bs->wantFlag = NULL;
+				bs->wantFlag = nullptr;
 			}
 		}
 		else
 		{
-			bs->wantFlag = NULL;
+			bs->wantFlag = nullptr;
 		}
 	}
 	else if (bs->wantFlag)
 	{
-		bs->wantFlag = NULL;
+		bs->wantFlag = nullptr;
 	}
 
 	if (flagRed && flagBlue)
@@ -5104,13 +5104,13 @@ void CTFFlagMovement(bot_state_t *bs)
 //see if we want to make our detpacks blow up
 void BotCheckDetPacks(bot_state_t *bs)
 {
-	gentity_t *dp = NULL;
-	gentity_t *myDet = NULL;
+	gentity_t *dp = nullptr;
+	gentity_t *myDet = nullptr;
 	vec3_t a;
 	float enLen;
 	float myLen;
 
-	while ( (dp = G_Find( dp, FOFS(classname), "detpack") ) != NULL )
+	while ( (dp = G_Find( dp, FOFS(classname), "detpack") ) != nullptr )
 	{
 		if (dp && dp->parent && dp->parent->s.number == bs->client)
 		{
@@ -5214,13 +5214,13 @@ int BotSurfaceNear(bot_state_t *bs)
 	trace_t tr;
 	vec3_t fwd;
 
-	AngleVectors(bs->viewangles, fwd, NULL, NULL);
+	AngleVectors(bs->viewangles, fwd, nullptr, nullptr);
 
 	fwd[0] = bs->origin[0]+(fwd[0]*64);
 	fwd[1] = bs->origin[1]+(fwd[1]*64);
 	fwd[2] = bs->origin[2]+(fwd[2]*64);
 
-	trap->Trace(&tr, bs->origin, NULL, NULL, fwd, bs->client, MASK_SOLID, false, 0, 0);
+	trap->Trace(&tr, bs->origin, nullptr, nullptr, fwd, bs->client, MASK_SOLID, false, 0, 0);
 
 	if (tr.fraction != 1)
 	{
@@ -5327,9 +5327,9 @@ void StandardBotAI(bot_state_t *bs, float thinktime)
 
 	if (gDeactivated)
 	{
-		bs->wpCurrent = NULL;
-		bs->currentEnemy = NULL;
-		bs->wpDestination = NULL;
+		bs->wpCurrent = nullptr;
+		bs->currentEnemy = nullptr;
+		bs->wpDestination = nullptr;
 		bs->wpDirection = 0;
 		return;
 	}
@@ -5338,18 +5338,18 @@ void StandardBotAI(bot_state_t *bs, float thinktime)
 		g_entities[bs->client].client &&
 		g_entities[bs->client].client->sess.sessionTeam == TEAM_SPECTATOR)
 	{
-		bs->wpCurrent = NULL;
-		bs->currentEnemy = NULL;
-		bs->wpDestination = NULL;
+		bs->wpCurrent = nullptr;
+		bs->currentEnemy = nullptr;
+		bs->wpDestination = nullptr;
 		bs->wpDirection = 0;
 		return;
 	}
 
 	if (bot_forgimmick.integer)
 	{
-		bs->wpCurrent = NULL;
-		bs->currentEnemy = NULL;
-		bs->wpDestination = NULL;
+		bs->wpCurrent = nullptr;
+		bs->currentEnemy = nullptr;
+		bs->wpDestination = nullptr;
 		bs->wpDirection = 0;
 
 		if (bot_forgimmick.integer == 2)
@@ -5424,7 +5424,7 @@ void StandardBotAI(bot_state_t *bs, float thinktime)
 			{
 				//CHAT: Died
 				bs->chatObject = bs->lastHurt;
-				bs->chatAltObject = NULL;
+				bs->chatAltObject = nullptr;
 				BotDoChat(bs, "Died", 0);
 			}
 			else if (!PassLovedOneCheck(bs, bs->lastHurt) &&
@@ -5432,19 +5432,19 @@ void StandardBotAI(bot_state_t *bs, float thinktime)
 				PassLovedOneCheck(botstates[bs->lastHurt->s.number], &g_entities[bs->client]))
 			{ //killed by a bot that I love, but that does not love me
 				bs->chatObject = bs->lastHurt;
-				bs->chatAltObject = NULL;
+				bs->chatAltObject = nullptr;
 				BotDoChat(bs, "KilledOnPurposeByLove", 0);
 			}
 
 			bs->deathActivitiesDone = 1;
 		}
 
-		bs->wpCurrent = NULL;
-		bs->currentEnemy = NULL;
-		bs->wpDestination = NULL;
-		bs->wpCamping = NULL;
-		bs->wpCampingTo = NULL;
-		bs->wpStoreDest = NULL;
+		bs->wpCurrent = nullptr;
+		bs->currentEnemy = nullptr;
+		bs->wpDestination = nullptr;
+		bs->wpCamping = nullptr;
+		bs->wpCampingTo = nullptr;
+		bs->wpStoreDest = nullptr;
 		bs->wpDestIgnoreTime = 0;
 		bs->wpDestSwitchTime = 0;
 		bs->wpSeenTime = 0;
@@ -5482,14 +5482,14 @@ void StandardBotAI(bot_state_t *bs, float thinktime)
 	if (bs->revengeEnemy && bs->revengeEnemy->client &&
 		bs->revengeEnemy->client->pers.connected != CON_CONNECTED && bs->revengeEnemy->client->pers.connected != CON_CONNECTING)
 	{
-		bs->revengeEnemy = NULL;
+		bs->revengeEnemy = nullptr;
 		bs->revengeHateLevel = 0;
 	}
 
 	if (bs->currentEnemy && bs->currentEnemy->client &&
 		bs->currentEnemy->client->pers.connected != CON_CONNECTED && bs->currentEnemy->client->pers.connected != CON_CONNECTING)
 	{
-		bs->currentEnemy = NULL;
+		bs->currentEnemy = nullptr;
 	}
 
 	fjHalt = 0;
@@ -5726,13 +5726,13 @@ void StandardBotAI(bot_state_t *bs, float thinktime)
 	{
 		if (bs->isCamping < level.time)
 		{
-			bs->wpCamping = NULL;
+			bs->wpCamping = nullptr;
 			bs->isCamping = 0;
 		}
 
 		if (bs->currentEnemy && bs->frame_Enemy_Vis)
 		{
-			bs->wpCamping = NULL;
+			bs->wpCamping = nullptr;
 			bs->isCamping = 0;
 		}
 	}
@@ -5740,7 +5740,7 @@ void StandardBotAI(bot_state_t *bs, float thinktime)
 	if (bs->wpCurrent &&
 		(bs->wpSeenTime < level.time || bs->wpTravelTime < level.time))
 	{
-		bs->wpCurrent = NULL;
+		bs->wpCurrent = nullptr;
 	}
 
 	if (bs->currentEnemy)
@@ -5754,9 +5754,9 @@ void StandardBotAI(bot_state_t *bs, float thinktime)
 			{
 				//CHAT: Destroyed hated one [KilledHatedOne section]
 				bs->chatObject = bs->revengeEnemy;
-				bs->chatAltObject = NULL;
+				bs->chatAltObject = nullptr;
 				BotDoChat(bs, "KilledHatedOne", 1);
-				bs->revengeEnemy = NULL;
+				bs->revengeEnemy = nullptr;
 				bs->revengeHateLevel = 0;
 			}
 			else if (bs->currentEnemy->health < 1 && PassLovedOneCheck(bs, bs->currentEnemy) &&
@@ -5764,11 +5764,11 @@ void StandardBotAI(bot_state_t *bs, float thinktime)
 			{
 				//CHAT: Killed
 				bs->chatObject = bs->currentEnemy;
-				bs->chatAltObject = NULL;
+				bs->chatAltObject = nullptr;
 				BotDoChat(bs, "Killed", 0);
 			}
 
-			bs->currentEnemy = NULL;
+			bs->currentEnemy = nullptr;
 		}
 	}
 
@@ -5848,7 +5848,7 @@ void StandardBotAI(bot_state_t *bs, float thinktime)
 
 	if (bs->isSquadLeader && bs->squadLeader)
 	{ //we don't follow anyone if we are a leader
-		bs->squadLeader = NULL;
+		bs->squadLeader = nullptr;
 	}
 
 	//ESTABLISH VISIBILITIES AND DISTANCES FOR THE WHOLE FRAME HERE
@@ -5880,7 +5880,7 @@ void StandardBotAI(bot_state_t *bs, float thinktime)
 		{
 			bs->frame_Waypoint_Vis = 0;
 			bs->wpSeenTime = 0;
-			bs->wpDestination = NULL;
+			bs->wpDestination = nullptr;
 			bs->wpDestIgnoreTime = level.time + 5000;
 
 			if (bs->wpDirection)
@@ -6029,7 +6029,7 @@ void StandardBotAI(bot_state_t *bs, float thinktime)
 		{
 			if (TotalTrailDistance(bs->wpCurrent->index, bs->wpDestination->index, bs) == -1)
 			{
-				bs->wpDestination = NULL;
+				bs->wpDestination = nullptr;
 				bs->destinationGrabTime = level.time + 10000;
 			}
 		}
@@ -6070,7 +6070,7 @@ void StandardBotAI(bot_state_t *bs, float thinktime)
 			{
 				if (bs->wpDestination)
 				{
-					bs->wpDestination = NULL;
+					bs->wpDestination = nullptr;
 					bs->destinationGrabTime = level.time + 10000;
 				}
 
@@ -6122,7 +6122,7 @@ void StandardBotAI(bot_state_t *bs, float thinktime)
 	if (bs->iHaveNoIdeaWhereIAmGoing > level.time && !bs->currentEnemy)
 	{
 		VectorCopy(preFrameGAngles, bs->goalAngles);
-		bs->wpCurrent = NULL;
+		bs->wpCurrent = nullptr;
 		bs->wpSwitchTime = level.time + 150;
 		doingFallback = BotFallbackNavigation(bs);
 		bs->jumpTime = level.time + 150;
@@ -6427,7 +6427,7 @@ void StandardBotAI(bot_state_t *bs, float thinktime)
 			VectorCopy(a, bs->goalAngles);
 
 			if (InFieldOfVision(bs->viewangles, 30, a) &&
-				EntityVisibleBox(bs->origin, NULL, NULL, dif, bs->client, bs->shootGoal->s.number))
+				EntityVisibleBox(bs->origin, nullptr, nullptr, dif, bs->client, bs->shootGoal->s.number))
 			{
 				bs->doAttack = 1;
 			}
@@ -6652,7 +6652,7 @@ void StandardBotAI(bot_state_t *bs, float thinktime)
 			}
 
 			if (InFieldOfVision(bs->viewangles, 30, a) &&
-				EntityVisibleBox(bs->origin, NULL, NULL, bs->dangerousObject->r.currentOrigin, bs->client, bs->dangerousObject->s.number))
+				EntityVisibleBox(bs->origin, nullptr, nullptr, bs->dangerousObject->r.currentOrigin, bs->client, bs->dangerousObject->s.number))
 			{
 				bs->doAttack = 1;
 			}

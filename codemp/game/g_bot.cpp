@@ -82,7 +82,7 @@ int G_ParseInfos( char *buf, int max, char *infos[] ) {
 
 			token = COM_ParseExt( (const char **)(&buf), false );
 			if ( !token[0] ) {
-				strcpy( token, "<NULL>" );
+				strcpy( token, "<nullptr>" );
 			}
 			Info_SetValueForKey( info, key, token );
 		}
@@ -163,7 +163,7 @@ bool G_DoesMapSupportGametype(const char *mapname, int gametype)
 	int			typeBits = 0;
 	int			thisLevel = -1;
 	int			n = 0;
-	char		*type = NULL;
+	char		*type = nullptr;
 
 	if (!level.arenas.infos[0])
 	{
@@ -209,17 +209,17 @@ const char *G_RefreshNextMap(int gametype, bool forced)
 	int			thisLevel = 0;
 	int			desiredMap = 0;
 	int			n = 0;
-	char		*type = NULL;
+	char		*type = nullptr;
 	bool	loopingUp = false;
 
 	if (!g_autoMapCycle.integer && !forced)
 	{
-		return NULL;
+		return nullptr;
 	}
 
 	if (!level.arenas.infos[0])
 	{
-		return NULL;
+		return nullptr;
 	}
 
 	for( n = 0; n < level.arenas.num; n++ )
@@ -321,7 +321,7 @@ const char *G_GetArenaInfoByMap( const char *map ) {
 		}
 	}
 
-	return NULL;
+	return nullptr;
 }
 
 void G_AddRandomBot( int team ) {
@@ -643,15 +643,15 @@ bool G_BotConnect( int clientNum, bool restart ) {
 }
 
 static void G_AddBot( const char *name, float skill, const char *team, int delay, char *altname) {
-	gentity_t *bot = NULL;
+	gentity_t *bot = nullptr;
 	int       clientNum;
 	team_t    preTeam = TEAM_FREE;
 	char      userinfo[MAX_INFO_STRING] = {0};
-	char      *botinfo = NULL;
-	char      *key = NULL;
-	char      *s = NULL;
-	char      *botname = NULL;
-	char      *model = NULL;
+	char      *botinfo = nullptr;
+	char      *key = nullptr;
+	char      *s = nullptr;
+	char      *botname = nullptr;
+	char      *model = nullptr;
 
 	// have the server allocate a client slot
 	clientNum = trap->BotAllocateClient();
@@ -980,7 +980,7 @@ static void G_LoadBots( void ) {
 char *G_GetBotInfoByNumber( int num ) {
 	if( num < 0 || num >= level.bots.num ) {
 		trap->Print( S_COLOR_RED "Invalid bot number: %i\n", num );
-		return NULL;
+		return nullptr;
 	}
 	return level.bots.infos[num];
 }
@@ -996,7 +996,7 @@ char *G_GetBotInfoByName( const char *name ) {
 		}
 	}
 
-	return NULL;
+	return nullptr;
 }
 
 void G_InitBots( void ) {

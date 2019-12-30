@@ -823,7 +823,7 @@ bool CalculateEfficiency(gentity_t *ent, int *efficiency)
 #ifdef LOGGING_WEAPONS
 	float		fAccuracyRatio = 0, fBestRatio = 0;
 	int			i = 0, nShotsFired = 0, nShotsHit = 0, nBestPlayer = -1, tempEff = 0;
-	gentity_t	*player = NULL;
+	gentity_t	*player = nullptr;
 
 	for (i = 0; i < sv_maxclients.integer; i++)
 	{
@@ -864,7 +864,7 @@ bool CalculateSharpshooter(gentity_t *ent, int *frags)
 #ifdef LOGGING_WEAPONS
 	int			i = 0, nBestPlayer = -1, nKills = 0, nMostKills = 0,
 				playTime = (level.time - ent->client->pers.enterTime)/60000;
-	gentity_t	*player = NULL;
+	gentity_t	*player = nullptr;
 
 	// if this guy didn't get one kill per minute, reject him right now
 	if ( ((float)(G_WeaponLogKills[ent-g_entities][MOD_DISRUPTOR_SNIPER]))/((float)(playTime)) < 1.0 )
@@ -928,7 +928,7 @@ bool CalculateLogistics(gentity_t *ent, int *stuffUsed)
 #ifdef LOGGING_WEAPONS
 	int			i = 0, j = 0, nBestPlayer = -1, nStuffUsed = 0, nMostStuffUsed = 0,
 				nDifferent = 0, nMostDifferent = 0;
-	gentity_t	*player = NULL;
+	gentity_t	*player = nullptr;
 
 	for (i = 0; i < sv_maxclients.integer; i++)
 	{
@@ -982,7 +982,7 @@ bool CalculateTactician(gentity_t *ent, int *kills)
 #ifdef LOGGING_WEAPONS
 	int			i = 0, nBestPlayer = -1, nKills = 0, nMostKills = 0;
 	int			person = 0, weapon = 0;
-	gentity_t	*player = NULL;
+	gentity_t	*player = nullptr;
 	int			wasPickedUpBySomeone[WP_NUM_WEAPONS];
 	int			killsWithWeapon[WP_NUM_WEAPONS];
 	int			playTime = (level.time - ent->client->pers.enterTime)/60000;
@@ -1072,7 +1072,7 @@ bool CalculateDemolitionist(gentity_t *ent, int *kills)
 #ifdef LOGGING_WEAPONS
 	int			i = 0, nBestPlayer = -1, nKills = 0, nMostKills = 0,
 				playTime = (level.time - ent->client->pers.enterTime)/60000;
-	gentity_t	*player = NULL;
+	gentity_t	*player = nullptr;
 
 	for (i = 0; i < sv_maxclients.integer; i++)
 	{
@@ -1126,7 +1126,7 @@ bool CalculateTeamMVP(gentity_t *ent)
 {
 	int			i = 0, nBestPlayer = -1, nScore = 0, nHighestScore = 0,
 				team = ent->client->ps.persistant[PERS_TEAM];
-	gentity_t	*player = NULL;
+	gentity_t	*player = nullptr;
 
 	for (i = 0; i < sv_maxclients.integer; i++)
 	{
@@ -1156,7 +1156,7 @@ bool CalculateTeamDefender(gentity_t *ent)
 {
 	int			i = 0, nBestPlayer = -1, nScore = 0, nHighestScore = 0,
 				team = ent->client->ps.persistant[PERS_TEAM];
-	gentity_t	*player = NULL;
+	gentity_t	*player = nullptr;
 
 	/*
 	if (CalculateTeamMVP(ent))
@@ -1192,7 +1192,7 @@ bool CalculateTeamWarrior(gentity_t *ent)
 {
 	int			i = 0, nBestPlayer = -1, nScore = 0, nHighestScore = 0,
 				team = ent->client->ps.persistant[PERS_TEAM];
-	gentity_t	*player = NULL;
+	gentity_t	*player = nullptr;
 
 	/*
 	if (CalculateTeamMVP(ent) || CalculateTeamDefender(ent))
@@ -1228,7 +1228,7 @@ bool CalculateTeamCarrier(gentity_t *ent)
 {
 	int			i = 0, nBestPlayer = -1, nScore = 0, nHighestScore = 0,
 				team = ent->client->ps.persistant[PERS_TEAM];
-	gentity_t	*player = NULL;
+	gentity_t	*player = nullptr;
 
 	/*
 	if (CalculateTeamMVP(ent) || CalculateTeamDefender(ent) || CalculateTeamWarrior(ent))
@@ -1264,7 +1264,7 @@ bool CalculateTeamInterceptor(gentity_t *ent)
 {
 	int			i = 0, nBestPlayer = -1, nScore = 0, nHighestScore = 0,
 				team = ent->client->ps.persistant[PERS_TEAM];
-	gentity_t	*player = NULL;
+	gentity_t	*player = nullptr;
 
 	/*
 	if (CalculateTeamMVP(ent) || CalculateTeamDefender(ent) || CalculateTeamWarrior(ent) ||
@@ -1302,7 +1302,7 @@ bool CalculateTeamRedShirt(gentity_t *ent)
 {
 	int			i = 0, nBestPlayer = -1, nScore = 0, nHighestScore = 0,
 				team = ent->client->ps.persistant[PERS_TEAM];
-	gentity_t	*player = NULL;
+	gentity_t	*player = nullptr;
 
 	/*
 	if (CalculateTeamMVP(ent) || CalculateTeamDefender(ent) || CalculateTeamWarrior(ent) ||
@@ -1399,7 +1399,7 @@ int CalculateTeamAward(gentity_t *ent)
 bool CalculateSection31Award(gentity_t *ent)
 {
 	int			i = 0, frags = 0, efficiency = 0;
-	gentity_t	*player = NULL;
+	gentity_t	*player = nullptr;
 
 	for (i = 0; i < sv_maxclients.integer; i++)
 	{

@@ -91,7 +91,7 @@ void G_RunObject( gentity_t *ent )
 {
 	vec3_t		origin, oldOrg;
 	trace_t		tr;
-	gentity_t	*traceEnt = NULL;
+	gentity_t	*traceEnt = nullptr;
 
 	//FIXME: floaters need to stop floating up after a while, even if gravity stays negative?
 	if ( ent->s.pos.trType == TR_STATIONARY )//g_gravity.value <= 0 &&
@@ -278,7 +278,7 @@ void G_StartObjectMoving( gentity_t *object, vec3_t dir, float speed, trType_t t
 	*/
 
 	//FIXME: make these objects go through G_RunObject automatically, like missiles do
-	if ( object->think == NULL )
+	if ( object->think == nullptr )
 	{
 		object->nextthink = level.time + FRAMETIME;
 		object->think = G_RunObject;

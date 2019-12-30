@@ -428,7 +428,7 @@ public:
 
 	CToken* GetToken(unsigned onFlags = 0, unsigned offFlags = 0);
 	CToken* GetToken(keywordArray_t* keywords, unsigned onFlags, unsigned offFlags);
-	void PutBackToken(CToken* theToken, bool commented = false, const char *addedChars = NULL, bool bIgnoreThisTokenType = false);
+	void PutBackToken(CToken* theToken, bool commented = false, const char *addedChars = nullptr, bool bIgnoreThisTokenType = false);
 	bool RequireToken(int tokenType);
 	void ScanUntilToken(int tokenType);
 	void SkipToLineEnd();
@@ -449,7 +449,7 @@ public:
 	void GetCurFilename(char** filename);
 	int GetCurLine();
 
-	const char *LookupToken(int tokenID, keywordArray_t* theTable = NULL);
+	const char *LookupToken(int tokenID, keywordArray_t* theTable = nullptr);
 
 protected:
 	void SetError(int theError, const char *errString);
@@ -459,7 +459,7 @@ protected:
 	bool NextChar(byte& theByte);
 	byte Escapement();
 	void InsertSymbol(const char *theSymbol, int theValue);
-	void PutBackChar(byte theByte, int curLine = 0, const char *filename = NULL);
+	void PutBackChar(byte theByte, int curLine = 0, const char *filename = nullptr);
 	CToken* TokenFromName(const char *name);
 	CToken* HandleDirective();
 	CToken* HandleSlash();

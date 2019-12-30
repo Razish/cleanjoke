@@ -63,11 +63,11 @@ void auto_turret_die ( gentity_t *self, gentity_t *inflictor, gentity_t *attacke
 	vec3_t	forward = { 0,0, 1 }, pos;
 
 	// Turn off the thinking of the base & use it's targets
-	g_entities[self->r.ownerNum].think = NULL;
-	g_entities[self->r.ownerNum].use = NULL;
+	g_entities[self->r.ownerNum].think = nullptr;
+	g_entities[self->r.ownerNum].use = nullptr;
 
 	// clear my data
-	self->die = NULL;
+	self->die = nullptr;
 	self->takedamage = false;
 	self->s.health = self->health = 0;
 	self->s.loopSound = 0;
@@ -86,7 +86,7 @@ void auto_turret_die ( gentity_t *self, gentity_t *inflictor, gentity_t *attacke
 						self->splashDamage,
 						self->splashRadius,
 						attacker,
-						NULL,
+						nullptr,
 						MOD_UNKNOWN );
 	}
 
@@ -211,14 +211,14 @@ void turret_head_think( gentity_t *self )
 		trap->G2API_GetBoltMatrix( self->ghoul2, self->playerModel,
 					self->torsoBolt,
 					&boltMatrix, self->r.currentAngles, self->r.currentOrigin, (cg.time?cg.time:level.time),
-					NULL, self->s.modelScale );
+					nullptr, self->s.modelScale );
 
 		trap->G2API_GiveMeVectorFromMatrix( boltMatrix, ORIGIN, org );
 		trap->G2API_GiveMeVectorFromMatrix( boltMatrix, POSITIVE_Y, fwd );
 		*/
 		VectorCopy( top->r.currentOrigin, org );
 		org[2] += top->r.maxs[2]-8;
-		AngleVectors( top->r.currentAngles, fwd, NULL, NULL );
+		AngleVectors( top->r.currentAngles, fwd, nullptr, nullptr );
 
 		VectorMA( org, START_DIS, fwd, org );
 
@@ -276,7 +276,7 @@ static void turret_aim( gentity_t *self )
 		trap->G2API_GetBoltMatrix( self->ghoul2, self->playerModel,
 					self->torsoBolt,
 					&boltMatrix, self->r.currentAngles, self->s.origin, (cg.time?cg.time:level.time),
-					NULL, self->s.modelScale );
+					nullptr, self->s.modelScale );
 
 		trap->G2API_GiveMeVectorFromMatrix( boltMatrix, ORIGIN, org2 );
 		*/
@@ -348,7 +348,7 @@ static void turret_aim( gentity_t *self )
 static void turret_turnoff( gentity_t *self )
 {
 	gentity_t *top = &g_entities[self->r.ownerNum];
-	if ( top != NULL )
+	if ( top != nullptr )
 	{//still have a top
 		//stop it from rotating
 		VectorCopy( top->r.currentAngles, top->s.apos.trBase );
@@ -362,12 +362,12 @@ static void turret_turnoff( gentity_t *self )
 	//G_Sound( self, CHAN_BODY, G_SoundIndex( "sound/chars/turret/shutdown.wav" ));
 
 	// Clear enemy
-	self->enemy = NULL;
+	self->enemy = nullptr;
 }
 
 static void turret_sleep( gentity_t *self )
 {
-	if ( self->enemy == NULL )
+	if ( self->enemy == nullptr )
 	{
 		// we don't need to play sound
 		return;
@@ -377,7 +377,7 @@ static void turret_sleep( gentity_t *self )
 	self->aimDebounceTime = level.time + 5000;
 
 	// Clear enemy
-	self->enemy = NULL;
+	self->enemy = nullptr;
 }
 
 static bool turret_find_enemies( gentity_t *self )
@@ -454,7 +454,7 @@ static bool turret_find_enemies( gentity_t *self )
 		VectorCopy( target->r.currentOrigin, org );
 		org[2] += target->r.maxs[2]*0.5f;
 
-		trap->Trace( &tr, org2, NULL, NULL, org, self->s.number, MASK_SHOT, false, 0, 0 );
+		trap->Trace( &tr, org2, nullptr, nullptr, org, self->s.number, MASK_SHOT, false, 0, 0 );
 
 		if ( !tr.allsolid && !tr.startsolid && ( tr.fraction == 1.0 || tr.entityNum == target->s.number ))
 		{
@@ -523,11 +523,11 @@ void turret_base_think( gentity_t *self )
 	}
 	else if ( self->enemy->client && self->enemy->client->sess.sessionTeam == TEAM_SPECTATOR )
 	{//don't keep going after spectators
-		self->enemy = NULL;
+		self->enemy = nullptr;
 	}
 	else if ( self->enemy->client && self->enemy->client->tempSpectate >= level.time )
 	{//don't keep going after spectators
-		self->enemy = NULL;
+		self->enemy = nullptr;
 	}
 	else
 	{//FIXME: remain single-minded or look for a new enemy every now and then?
@@ -562,7 +562,7 @@ void turret_base_think( gentity_t *self )
 					{
 						org2[2] -= 10;
 					}
-					trap->Trace( &tr, org2, NULL, NULL, org, self->s.number, MASK_SHOT, false, 0, 0 );
+					trap->Trace( &tr, org2, nullptr, nullptr, org, self->s.number, MASK_SHOT, false, 0, 0 );
 
 					if ( !tr.allsolid && !tr.startsolid && tr.entityNum == self->enemy->s.number )
 					{
@@ -633,7 +633,7 @@ bool turret_base_spawn_top( gentity_t *base )
 	{
 		base->teamnodmg = atoi(base->team);
 	}
-	base->team = NULL;
+	base->team = nullptr;
 	top->teamnodmg = base->teamnodmg;
 	top->alliedTeam = base->alliedTeam;
 
@@ -812,7 +812,7 @@ void SP_misc_turret( gentity_t *base )
 	//base->playerModel = trap->G2API_InitGhoul2Model( base->ghoul2, "models/map_objects/imp_mine/turret_canon.glm", base->s.modelindex );
 	//base->s.radius = 80.0f;
 
-	//trap->G2API_SetBoneAngles( &base->ghoul2[base->playerModel], "Bone_body", vec3_origin, BONE_ANGLES_POSTMULT, POSITIVE_Y, POSITIVE_Z, POSITIVE_X, NULL );
+	//trap->G2API_SetBoneAngles( &base->ghoul2[base->playerModel], "Bone_body", vec3_origin, BONE_ANGLES_POSTMULT, POSITIVE_Y, POSITIVE_Z, POSITIVE_X, nullptr );
 	//base->torsoBolt = trap->G2API_AddBolt( &base->ghoul2[base->playerModel], "*flash03" );
 
 	G_SpawnString( "icon", "", &s );

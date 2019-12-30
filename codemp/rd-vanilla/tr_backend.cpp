@@ -55,7 +55,7 @@ void GL_Bind( image_t *image ) {
 	int texnum;
 
 	if ( !image ) {
-		ri.Printf( PRINT_ALL, S_COLOR_YELLOW  "GL_Bind: NULL image\n" );
+		ri.Printf( PRINT_ALL, S_COLOR_YELLOW  "GL_Bind: nullptr image\n" );
 		texnum = tr.defaultImage->texnum;
 	} else {
 		texnum = image->texnum;
@@ -612,7 +612,7 @@ void RB_RenderDrawSurfList( drawSurf_t *drawSurfs, int numDrawSurfs ) {
 	// draw everything
 	oldEntityNum = -1;
 	backEnd.currentEntity = &tr.worldEntity;
-	oldShader = NULL;
+	oldShader = nullptr;
 	oldFogNum = -1;
 	oldDepthRange = false;
 	oldDlighted = false;
@@ -748,7 +748,7 @@ void RB_RenderDrawSurfList( drawSurf_t *drawSurfs, int numDrawSurfs ) {
 		if (shader != oldShader || fogNum != oldFogNum || dlighted != oldDlighted
 			|| ( entityNum != oldEntityNum && !shader->entityMergable ) )
 		{
-			if (oldShader != NULL) {
+			if (oldShader != nullptr) {
 				RB_EndSurface();
 
 				if (!didShadowPass && shader && shader->sort > SS_BANNER)
@@ -837,7 +837,7 @@ void RB_RenderDrawSurfList( drawSurf_t *drawSurfs, int numDrawSurfs ) {
 	// draw the contents of the last shader batch
 	//assert(entityNum < MAX_GENTITIES);
 
-	if (oldShader != NULL) {
+	if (oldShader != nullptr) {
 		RB_EndSurface();
 	}
 
@@ -1214,7 +1214,7 @@ const void *RB_StretchPic ( const void *data ) {
 	tess.indexes[ numIndexes + 4 ] = numVerts + 0;
 	tess.indexes[ numIndexes + 5 ] = numVerts + 1;
 
-	byteAlias_t *baDest = NULL, *baSource = (byteAlias_t *)&backEnd.color2D;
+	byteAlias_t *baDest = nullptr, *baSource = (byteAlias_t *)&backEnd.color2D;
 	baDest = (byteAlias_t *)&tess.vertexColors[numVerts + 0]; baDest->ui = baSource->ui;
 	baDest = (byteAlias_t *)&tess.vertexColors[numVerts + 1]; baDest->ui = baSource->ui;
 	baDest = (byteAlias_t *)&tess.vertexColors[numVerts + 2]; baDest->ui = baSource->ui;
@@ -1300,7 +1300,7 @@ const void *RB_RotatePic ( const void *data )
 		tess.indexes[ numIndexes + 4 ] = numVerts + 0;
 		tess.indexes[ numIndexes + 5 ] = numVerts + 1;
 
-		byteAlias_t *baDest = NULL, *baSource = (byteAlias_t *)&backEnd.color2D;
+		byteAlias_t *baDest = nullptr, *baSource = (byteAlias_t *)&backEnd.color2D;
 		baDest = (byteAlias_t *)&tess.vertexColors[numVerts + 0]; baDest->ui = baSource->ui;
 		baDest = (byteAlias_t *)&tess.vertexColors[numVerts + 1]; baDest->ui = baSource->ui;
 		baDest = (byteAlias_t *)&tess.vertexColors[numVerts + 2]; baDest->ui = baSource->ui;
@@ -1394,7 +1394,7 @@ const void *RB_RotatePic2 ( const void *data )
 			tess.indexes[ numIndexes + 4 ] = numVerts + 0;
 			tess.indexes[ numIndexes + 5 ] = numVerts + 1;
 
-			byteAlias_t *baDest = NULL, *baSource = (byteAlias_t *)&backEnd.color2D;
+			byteAlias_t *baDest = nullptr, *baSource = (byteAlias_t *)&backEnd.color2D;
 			baDest = (byteAlias_t *)&tess.vertexColors[numVerts + 0]; baDest->ui = baSource->ui;
 			baDest = (byteAlias_t *)&tess.vertexColors[numVerts + 1]; baDest->ui = baSource->ui;
 			baDest = (byteAlias_t *)&tess.vertexColors[numVerts + 2]; baDest->ui = baSource->ui;
@@ -1597,7 +1597,7 @@ void RB_ShowImages( void ) {
 
 	int i=0;
 	   				 R_Images_StartIteration();
-	while ( (image = R_Images_GetNextIteration()) != NULL)
+	while ( (image = R_Images_GetNextIteration()) != nullptr)
 	{
 		w = glConfig.vidWidth / 20;
 		h = glConfig.vidHeight / 15;

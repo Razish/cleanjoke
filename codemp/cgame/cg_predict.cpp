@@ -555,7 +555,7 @@ void CG_PmoveClientPointerUpdate()
 	cg_pmove.baseEnt = (bgEntity_t *)cg_entities;
 	cg_pmove.entSize = sizeof(centity_t);
 
-	cg_pmove.ghoul2 = NULL;
+	cg_pmove.ghoul2 = nullptr;
 }
 
 //check if local client is on an eweb
@@ -632,7 +632,7 @@ void CG_PredictPlayerState( void ) {
 		}
 		else
 		{
-			cg_pmove.ghoul2 = NULL;
+			cg_pmove.ghoul2 = nullptr;
 		}
 	}
 

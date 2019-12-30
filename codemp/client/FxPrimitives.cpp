@@ -232,11 +232,11 @@ bool CParticle::UpdateOrigin(void)
 			{
 				if (mFlags & FX_GHOUL2_TRACE)
 				{
-					theFxHelper.G2Trace( trace, mOrigin1, NULL, NULL, new_origin, -1, MASK_PLAYERSOLID );
+					theFxHelper.G2Trace( trace, mOrigin1, nullptr, nullptr, new_origin, -1, MASK_PLAYERSOLID );
 				}
 				else
 				{
-					theFxHelper.Trace( trace, mOrigin1, NULL, NULL, new_origin, -1, MASK_SOLID );
+					theFxHelper.Trace( trace, mOrigin1, nullptr, nullptr, new_origin, -1, MASK_SOLID );
 				}
 			}
 
@@ -1065,7 +1065,7 @@ void CCylinder::UpdateLength(void)
 		trace_t tr;
 
 		VectorMA( mOrigin1, FX_MAX_TRACE_DIST, mRefEnt.axis[0], temp );
-		theFxHelper.Trace( tr, mOrigin1, NULL, NULL, temp, -1, MASK_SOLID );
+		theFxHelper.Trace( tr, mOrigin1, nullptr, nullptr, temp, -1, MASK_SOLID );
 		VectorSubtract( tr.endpos, mOrigin1, temp );
 		mLength = VectorLength(temp);
 	}

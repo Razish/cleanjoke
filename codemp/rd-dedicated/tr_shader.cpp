@@ -137,22 +137,22 @@ void R_RemapShader(const char *shaderName, const char *newShaderName, const char
 	qhandle_t	h;
 
 	sh = R_FindShaderByName( shaderName );
-	if (sh == NULL || sh == tr.defaultShader) {
+	if (sh == nullptr || sh == tr.defaultShader) {
 		h = RE_RegisterShaderLightMap(shaderName, lightmapsNone, stylesDefault);
 		sh = R_GetShaderByHandle(h);
 	}
-	if (sh == NULL || sh == tr.defaultShader) {
+	if (sh == nullptr || sh == tr.defaultShader) {
 		Com_Printf (S_COLOR_YELLOW  "WARNING: R_RemapShader: shader %s not found\n", shaderName );
 		return;
 	}
 
 	sh2 = R_FindShaderByName( newShaderName );
-	if (sh2 == NULL || sh2 == tr.defaultShader) {
+	if (sh2 == nullptr || sh2 == tr.defaultShader) {
 		h = RE_RegisterShaderLightMap(newShaderName, lightmapsNone, stylesDefault);
 		sh2 = R_GetShaderByHandle(h);
 	}
 
-	if (sh2 == NULL || sh2 == tr.defaultShader) {
+	if (sh2 == nullptr || sh2 == tr.defaultShader) {
 		Com_Printf (S_COLOR_YELLOW  "WARNING: R_RemapShader: new shader %s not found\n", newShaderName );
 		return;
 	}
@@ -166,7 +166,7 @@ void R_RemapShader(const char *shaderName, const char *newShaderName, const char
 			if (sh != sh2) {
 				sh->remappedShader = sh2;
 			} else {
-				sh->remappedShader = NULL;
+				sh->remappedShader = nullptr;
 			}
 		}
 	}
@@ -1107,7 +1107,7 @@ static bool ParseStage( shaderStage_t *stage, const char **text )
 			}
 			else
 			{
-				stage->bundle[0].image = NULL;
+				stage->bundle[0].image = nullptr;
 				return false;
 			}
 		}
@@ -1122,7 +1122,7 @@ static bool ParseStage( shaderStage_t *stage, const char **text )
 				Com_Printf (S_COLOR_YELLOW  "WARNING: missing parameter for 'clampmap' keyword in shader '%s'\n", shader.name );
 				return false;
 			}
-			stage->bundle[0].image = NULL;
+			stage->bundle[0].image = nullptr;
 			return false;
 		}
 
@@ -1154,7 +1154,7 @@ static bool ParseStage( shaderStage_t *stage, const char **text )
 				}
 				num = stage->bundle[0].numImageAnimations;
 				if ( num < MAX_IMAGE_ANIMATIONS ) {
-					stage->bundle[0].image = NULL;
+					stage->bundle[0].image = nullptr;
 					return false;
 				}
 			}
@@ -1764,7 +1764,7 @@ static void ParseSkyParms( const char **text ) {
 	if ( strcmp( token, "-" ) ) {
 		for (i=0 ; i<6 ; i++) {
 			Com_sprintf( pathname, sizeof(pathname), "%s_%s", token, suf[i] );
-			shader.sky->outerbox[i] = NULL;
+			shader.sky->outerbox[i] = nullptr;
 		}
 	}
 
@@ -2623,7 +2623,7 @@ static shader_t *FinishShader( void ) {
 }
 
 // Scans the combined text description of all the shader files for the given shader name.
-// If found, it will return a valid shader, otherwise returns NULL
+// If found, it will return a valid shader, otherwise returns nullptr
 static const char *FindShaderInShaderText( const char *shadername ) {
 	char *token;
 	const char *p;
@@ -2644,7 +2644,7 @@ static const char *FindShaderInShaderText( const char *shadername ) {
 	p = s_shaderText;
 
 	if ( !p ) {
-		return NULL;
+		return nullptr;
 	}
 
 	// look for label
@@ -2663,7 +2663,7 @@ static const char *FindShaderInShaderText( const char *shadername ) {
 		}
 	}
 
-	return NULL;
+	return nullptr;
 }
 
 // Will always return a valid shader, but it might be the default shader if the real one can't be found.
@@ -2672,7 +2672,7 @@ shader_t *R_FindShaderByName( const char *name ) {
 	int			hash;
 	shader_t	*sh;
 
-	if ( (name==NULL) || (name[0] == 0) ) {
+	if ( (name==nullptr) || (name[0] == 0) ) {
 		return tr.defaultShader;
 	}
 

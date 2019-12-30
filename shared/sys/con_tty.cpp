@@ -237,7 +237,7 @@ field_t *Hist_Prev( void )
 	hist_prev = hist_current + 1;
 	if (hist_prev >= hist_count)
 	{
-		return NULL;
+		return nullptr;
 	}
 	hist_current++;
 	return &(ttyEditLines[hist_current]);
@@ -260,7 +260,7 @@ field_t *Hist_Next( void )
 	}
 	if (hist_current == -1)
 	{
-		return NULL;
+		return nullptr;
 	}
 	return &(ttyEditLines[hist_current]);
 }
@@ -367,7 +367,7 @@ char *CON_Input( void )
 					TTY_con.buffer[TTY_con.cursor] = '\0';
 					CON_Back();
 				}
-				return NULL;
+				return nullptr;
 			}
 			// check if this is a control char
 			if ((key) && (key) < ' ')
@@ -405,7 +405,7 @@ char *CON_Input( void )
 					CON_Hide();
 					Field_AutoComplete( &TTY_con );
 					CON_Show();
-					return NULL;
+					return nullptr;
 				}
 				avail = read(STDIN_FILENO, &key, 1);
 				if (avail != -1)
@@ -427,7 +427,7 @@ char *CON_Input( void )
 										CON_Show();
 									}
 									CON_FlushIn();
-									return NULL;
+									return nullptr;
 									break;
 								case 'B':
 									history = Hist_Next();
@@ -441,22 +441,22 @@ char *CON_Input( void )
 									}
 									CON_Show();
 									CON_FlushIn();
-									return NULL;
+									return nullptr;
 									break;
 								case 'C':
-									return NULL;
+									return nullptr;
 								case 'D':
-									return NULL;
+									return nullptr;
 							}
 						}
 					}
 				}
 				Com_DPrintf("droping ISCTL sequence: %d, TTY_erase: %d\n", key, TTY_erase);
 				CON_FlushIn();
-				return NULL;
+				return nullptr;
 			}
 			if (TTY_con.cursor >= (int)sizeof(text) - 1)
-				return NULL;
+				return nullptr;
 			// push regular character
 			TTY_con.buffer[TTY_con.cursor] = key;
 			TTY_con.cursor++; // next char will always be '\0'
@@ -464,7 +464,7 @@ char *CON_Input( void )
 			size = write(STDOUT_FILENO, &key, 1);
 		}
 
-		return NULL;
+		return nullptr;
 	}
 	else if (stdin_active)
 	{
@@ -476,23 +476,23 @@ char *CON_Input( void )
 		FD_SET(STDIN_FILENO, &fdset); // stdin
 		timeout.tv_sec = 0;
 		timeout.tv_usec = 0;
-		if(select (STDIN_FILENO + 1, &fdset, NULL, NULL, &timeout) == -1 || !FD_ISSET(STDIN_FILENO, &fdset))
-			return NULL;
+		if(select (STDIN_FILENO + 1, &fdset, nullptr, nullptr, &timeout) == -1 || !FD_ISSET(STDIN_FILENO, &fdset))
+			return nullptr;
 
 		len = read(STDIN_FILENO, text, sizeof(text));
 		if (len == 0)
 		{ // eof!
 			stdin_active = false;
-			return NULL;
+			return nullptr;
 		}
 
 		if (len < 1)
-			return NULL;
+			return nullptr;
 		text[len-1] = 0;    // rip off the /n and terminate
 
 		return text;
 	}
-	return NULL;
+	return nullptr;
 }
 
 /*

@@ -42,6 +42,6 @@ void R_ShutdownFonts(void);
 void RE_Font_DrawString(int ox, int oy, const char* psText, const float* rgba, const int iFontHandle, int iMaxPixelWidth, const float fScale = 1.0f);
 
 // Dammit, I can't use this more elegant form because of !@#@!$%% VM code... (can't alter passed in ptrs, only contents of)
-//unsigned int AnyLanguage_ReadCharFromString( const char **ppsText, bool *pbIsTrailingPunctuation = NULL);
+//unsigned int AnyLanguage_ReadCharFromString( const char **ppsText, bool *pbIsTrailingPunctuation = nullptr);
 // so instead we have to use this messier method...
-unsigned int AnyLanguage_ReadCharFromString(const char* psText, int* piAdvanceCount, bool* pbIsTrailingPunctuation = NULL);
+unsigned int AnyLanguage_ReadCharFromString(const char* psText, int* piAdvanceCount, bool* pbIsTrailingPunctuation = nullptr);

@@ -95,7 +95,7 @@ void CL_ParsePacketEntities( msg_t *msg, clSnapshot_t *oldframe, clSnapshot_t *n
 
 	// delta from the entities present in oldframe
 	oldindex = 0;
-	oldstate = NULL;
+	oldstate = nullptr;
 	if (!oldframe) {
 		oldnum = 99999;
 	} else {
@@ -231,7 +231,7 @@ void CL_ParseSnapshot( msg_t *msg ) {
 	// message
 	if ( newSnap.deltaNum <= 0 ) {
 		newSnap.valid = true;		// uncompressed frame
-		old = NULL;
+		old = nullptr;
 		clc.demowaiting = false;	// we can start recording now
 	} else {
 		old = &cl.snapshots[newSnap.deltaNum & PACKET_MASK];
@@ -275,7 +275,7 @@ void CL_ParseSnapshot( msg_t *msg ) {
 	if ( old ) {
 		MSG_ReadDeltaPlayerstate( msg, &old->ps, &newSnap.ps );
 	} else {
-		MSG_ReadDeltaPlayerstate( msg, NULL, &newSnap.ps );
+		MSG_ReadDeltaPlayerstate( msg, nullptr, &newSnap.ps );
 	}
 
 	// read packet entities

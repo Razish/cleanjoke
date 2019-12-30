@@ -268,7 +268,7 @@ void Touch_Multi( gentity_t *self, gentity_t *other, trace_t *trace )
 	{//FACING
 		vec3_t	forward;
 
-		AngleVectors( other->client->ps.viewangles, forward, NULL, NULL );
+		AngleVectors( other->client->ps.viewangles, forward, nullptr, nullptr );
 
 		if ( DotProduct( self->movedir, forward ) < 0.5 )
 		{//Not Within 45 degrees
@@ -368,7 +368,7 @@ void Touch_Multi( gentity_t *self, gentity_t *other, trace_t *trace )
 		if (other->client->ps.torsoAnim != BOTH_BUTTON_HOLD &&
 			other->client->ps.torsoAnim != BOTH_CONSOLE1)
 		{
-			G_SetAnim( other, NULL, SETANIM_TORSO, BOTH_BUTTON_HOLD, SETANIM_FLAG_OVERRIDE|SETANIM_FLAG_HOLD, 0 );
+			G_SetAnim( other, nullptr, SETANIM_TORSO, BOTH_BUTTON_HOLD, SETANIM_FLAG_OVERRIDE|SETANIM_FLAG_HOLD, 0 );
 		}
 		else
 		{
@@ -473,7 +473,7 @@ void SP_trigger_multiple( gentity_t *ent )
 	if ( ent->team && ent->team[0] )
 	{
 		ent->alliedTeam = atoi(ent->team);
-		ent->team = NULL;
+		ent->team = nullptr;
 	}
 
 	InitTrigger( ent );
@@ -541,7 +541,7 @@ void SP_trigger_once( gentity_t *ent )
 	if ( ent->team && ent->team[0] )
 	{
 		ent->alliedTeam = atoi(ent->team);
-		ent->team = NULL;
+		ent->team = nullptr;
 	}
 
 	ent->delay *= 1000;//1 = 1 msec, 1000 = 1 sec
@@ -574,7 +574,7 @@ void Do_Strike(gentity_t *ent)
 	strikeFrom[2] = ent->r.absmax[2]-4.0f;
 
 	//now trace for damaging stuff, and do the effect
-	trap->Trace(&localTrace, strikeFrom, NULL, NULL, strikePoint, ent->s.number, MASK_PLAYERSOLID, false, 0, 0);
+	trap->Trace(&localTrace, strikeFrom, nullptr, nullptr, strikePoint, ent->s.number, MASK_PLAYERSOLID, false, 0, 0);
 	VectorCopy(localTrace.endpos, strikePoint);
 
 	if (localTrace.startsolid || localTrace.allsolid)
@@ -585,7 +585,7 @@ void Do_Strike(gentity_t *ent)
 
 	if (ent->radius)
 	{ //do a radius damage at the end pos
-		G_RadiusDamage(strikePoint, ent, ent->damage, ent->radius, ent, NULL, MOD_SUICIDE);
+		G_RadiusDamage(strikePoint, ent, ent->damage, ent->radius, ent, nullptr, MOD_SUICIDE);
 	}
 	else
 	{ //only damage individuals
@@ -593,7 +593,7 @@ void Do_Strike(gentity_t *ent)
 
 		if (trHit->inuse && trHit->takedamage)
 		{ //damage it then
-			G_Damage(trHit, ent, ent, NULL, trHit->r.currentOrigin, ent->damage, 0, MOD_SUICIDE);
+			G_Damage(trHit, ent, ent, nullptr, trHit->r.currentOrigin, ent->damage, 0, MOD_SUICIDE);
 		}
 	}
 
@@ -758,7 +758,7 @@ void trigger_push_touch (gentity_t *self, gentity_t *other, trace_t *trace ) {
 	{
 		if ( self->spawnflags & 8 )
 		{//NPCONLY
-			if ( other->NPC == NULL )
+			if ( other->NPC == nullptr )
 			{
 				return;
 			}
@@ -811,7 +811,7 @@ void trigger_push_touch (gentity_t *self, gentity_t *other, trace_t *trace ) {
 
 	if ( self->wait == -1 )
 	{
-		self->touch = NULL;
+		self->touch = nullptr;
 	}
 	else if ( self->wait > 0 )
 	{
@@ -1055,7 +1055,7 @@ void hurt_use( gentity_t *self, gentity_t *other, gentity_t *activator ) {
 	}
 	else
 	{
-		self->activator = NULL;
+		self->activator = nullptr;
 	}
 
 	G_ActivateBehavior(self,BSET_USE);
@@ -1143,11 +1143,11 @@ void hurt_touch( gentity_t *self, gentity_t *other, trace_t *trace ) {
 		}
 		if (self->activator && self->activator->inuse && self->activator->client)
 		{
-			G_Damage (other, self->activator, self->activator, NULL, NULL, dmg, dflags|DAMAGE_NO_PROTECTION, MOD_TRIGGER_HURT);
+			G_Damage (other, self->activator, self->activator, nullptr, nullptr, dmg, dflags|DAMAGE_NO_PROTECTION, MOD_TRIGGER_HURT);
 		}
 		else
 		{
-			G_Damage (other, self, self, NULL, NULL, dmg, dflags|DAMAGE_NO_PROTECTION, MOD_TRIGGER_HURT);
+			G_Damage (other, self, self, nullptr, nullptr, dmg, dflags|DAMAGE_NO_PROTECTION, MOD_TRIGGER_HURT);
 		}
 	}
 }
@@ -1273,9 +1273,9 @@ void SP_func_timer( gentity_t *self ) {
 gentity_t *asteroid_pick_random_asteroid( gentity_t *self )
 {
 	int			t_count = 0, pick;
-	gentity_t	*t = NULL;
+	gentity_t	*t = nullptr;
 
-	while ( (t = G_Find (t, FOFS(targetname), self->target)) != NULL )
+	while ( (t = G_Find (t, FOFS(targetname), self->target)) != nullptr )
 	{
 		if (t != self)
 		{
@@ -1285,7 +1285,7 @@ gentity_t *asteroid_pick_random_asteroid( gentity_t *self )
 
 	if(!t_count)
 	{
-		return NULL;
+		return nullptr;
 	}
 
 	if(t_count == 1)
@@ -1296,7 +1296,7 @@ gentity_t *asteroid_pick_random_asteroid( gentity_t *self )
 	//FIXME: need a seed
 	pick = Q_irand(1, t_count);
 	t_count = 0;
-	while ( (t = G_Find (t, FOFS(targetname), self->target)) != NULL )
+	while ( (t = G_Find (t, FOFS(targetname), self->target)) != nullptr )
 	{
 		if (t != self)
 		{
@@ -1312,7 +1312,7 @@ gentity_t *asteroid_pick_random_asteroid( gentity_t *self )
 			return t;
 		}
 	}
-	return NULL;
+	return nullptr;
 }
 
 int asteroid_count_num_asteroids( gentity_t *self )

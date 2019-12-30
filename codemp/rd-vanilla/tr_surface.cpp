@@ -1418,7 +1418,7 @@ void RB_SurfaceGrid( srfGridMesh_t *cv ) {
 	}
 }
 
-// NULL MODEL
+// nullptr MODEL
 
 // Draws x/y/z lines from the origin for orientation debugging
 static void RB_SurfaceAxis( void ) {

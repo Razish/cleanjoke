@@ -76,7 +76,7 @@ int ICARUS_RunScript( sharedEntity_t *ent, const char *name )
 	int len;
 
 	//Make sure the caller is valid
-	if ( gSequencers[ent->s.number] == NULL )
+	if ( gSequencers[ent->s.number] == nullptr )
 	{
 		//Com_Printf( "%s : entity is not a valid script user\n", ent->classname );
 		return false;
@@ -145,7 +145,7 @@ void ICARUS_Init( void )
 	//Create the ICARUS instance for this session
 	iICARUS = ICARUS_Instance::Create( &interface_export );
 
-	if ( iICARUS == NULL )
+	if ( iICARUS == nullptr )
 	{
 		Com_Error( ERR_DROP, "Unable to initialize ICARUS instance\n" );
 		return;
@@ -192,7 +192,7 @@ void ICARUS_Shutdown( void )
 	if ( iICARUS )
 	{
 		iICARUS->Delete();
-		iICARUS = NULL;
+		iICARUS = nullptr;
 	}
 }
 
@@ -211,7 +211,7 @@ void ICARUS_FreeEnt( sharedEntity_t *ent )
 	}
 
 	//Make sure the ent is valid
-	if ( gSequencers[ent->s.number] == NULL )
+	if ( gSequencers[ent->s.number] == nullptr )
 		return;
 
 	//Remove them from the ICARUSE_EntList list so that when their g_entity index is reused, ICARUS doesn't try to affect the new (incorrect) ent.
@@ -234,8 +234,8 @@ void ICARUS_FreeEnt( sharedEntity_t *ent )
 	iICARUS->DeleteSequencer( gSequencers[ent->s.number] );
 
 	//Clean up the pointers
-	gSequencers[ent->s.number]		= NULL;
-	gTaskManagers[ent->s.number]	= NULL;
+	gSequencers[ent->s.number]		= nullptr;
+	gTaskManagers[ent->s.number]	= nullptr;
 }
 
 // Determines whether or not an entity needs ICARUS information
@@ -290,7 +290,7 @@ bool ICARUS_RegisterScript( const char *name, bool bCalledDuringInterrogate /* =
 	bufferlist_t::iterator	ei;
 	pscript_t	*pscript;
 	char		newname[MAX_FILENAME_LENGTH];
-	char		*buffer = NULL;	// lose compiler warning about uninitialised vars
+	char		*buffer = nullptr;	// lose compiler warning about uninitialised vars
 	long		length;
 
 	//Make sure this isn't already cached
@@ -362,7 +362,7 @@ void ICARUS_InterrogateScript( const char *filename )
 	CBlockMember	*blockMember;
 	CBlock			block;
 
-	if (!Q_stricmp(filename,"NULL") || !Q_stricmp(filename,"default"))
+	if (!Q_stricmp(filename,"nullptr") || !Q_stricmp(filename,"default"))
 		return;
 
 	// ensure "scripts" (Q3_SCRIPT_DIR), which will be missing if this was called recursively...
@@ -538,7 +538,7 @@ void ICARUS_PrecacheEnt( sharedEntity_t *ent )
 
 	for ( i = 0; i < NUM_BSETS; i++ )
 	{
-		if ( ent->behaviorSet[i] == NULL )
+		if ( ent->behaviorSet[i] == nullptr )
 			continue;
 
 		if ( GetIDForString( BSTable, ent->behaviorSet[i] ) == -1 )
@@ -556,13 +556,13 @@ void ICARUS_InitEnt( sharedEntity_t *ent )
 {
 	//Make sure this is a fresh ent
 	assert( iICARUS );
-	assert( gTaskManagers[ent->s.number] == NULL );
-	assert( gSequencers[ent->s.number] == NULL );
+	assert( gTaskManagers[ent->s.number] == nullptr );
+	assert( gSequencers[ent->s.number] == nullptr );
 
-	if ( gSequencers[ent->s.number] != NULL )
+	if ( gSequencers[ent->s.number] != nullptr )
 		return;
 
-	if ( gTaskManagers[ent->s.number] != NULL )
+	if ( gTaskManagers[ent->s.number] != nullptr )
 		return;
 
 	//Create the sequencer and setup the task manager
@@ -583,7 +583,7 @@ int ICARUS_LinkEntity( int entID, CSequencer *sequencer, CTaskManager *taskManag
 {
 	sharedEntity_t	*ent = SV_GentityNum(entID);
 
-	if ( ent == NULL )
+	if ( ent == nullptr )
 		return false;
 
 	gSequencers[ent->s.number] = sequencer;

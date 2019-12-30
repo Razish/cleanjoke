@@ -374,7 +374,7 @@ public:
 	{
 		if ( numFree == 0 )
 		{
-			return NULL;
+			return nullptr;
 		}
 
 		T *ptr = new (&pool[freeAndAllocated[0]]) T;
@@ -396,8 +396,8 @@ public:
 
 		highWatermark = 0;
 		numFree = N;
-		freeAndAllocated = NULL;
-		pool = NULL;
+		freeAndAllocated = nullptr;
+		pool = nullptr;
 	}
 
 	bool OwnsPtr ( const T *ptr ) const
@@ -467,13 +467,13 @@ class PagedPoolAllocator
 
 		T *Alloc ()
 		{
-			T *ptr = NULL;
-			for ( int i = 0; i < numPages && ptr == NULL; i++ )
+			T *ptr = nullptr;
+			for ( int i = 0; i < numPages && ptr == nullptr; i++ )
 			{
 				ptr = pages[i].Alloc ();
 			}
 
-			if ( ptr == NULL )
+			if ( ptr == nullptr )
 			{
 				PoolAllocator<T, N> *newPages = new PoolAllocator<T, N>[numPages + 1] ();
 				for ( int i = 0; i < numPages; i++ )
@@ -485,9 +485,9 @@ class PagedPoolAllocator
 				pages = newPages;
 
 				ptr = pages[numPages].Alloc ();
-				if ( ptr == NULL )
+				if ( ptr == nullptr )
 				{
-					return NULL;
+					return nullptr;
 				}
 
 				numPages++;
@@ -613,7 +613,7 @@ private:
 	void	AddPrimitiveToEffect( SEffectTemplate *fx, CPrimitiveTemplate *prim );
 	int		ParseEffect( const char *file, CGPGroup *base );
 
-	void	CreateEffect( CPrimitiveTemplate *fx, const vec3_t origin, matrix3_t axis, int lateTime, int fxParm = -1,  CGhoul2Info_v *ghoul2 = NULL, int entNum = -1, int modelNum = -1, int boltNum = -1);
+	void	CreateEffect( CPrimitiveTemplate *fx, const vec3_t origin, matrix3_t axis, int lateTime, int fxParm = -1,  CGhoul2Info_v *ghoul2 = nullptr, int entNum = -1, int modelNum = -1, int boltNum = -1);
 	void	CreateEffect( CPrimitiveTemplate *fx, SScheduledEffect *schedFx );
 
 public:
@@ -626,12 +626,12 @@ public:
 	//rww - maybe this should be done differently.. it's more than a bit confusing.
 	//Remind me when I don't have 50 files checked out.
 	void	PlayEffect( int id, vec3_t org, vec3_t fwd, int vol = -1, int rad = -1, bool isPortal = false );				// builds arbitrary perp. right vector, does a cross product to define up
-	void	PlayEffect( int id, vec3_t origin, matrix3_t axis, const int boltInfo=-1, CGhoul2Info_v *ghoul2 = NULL,
+	void	PlayEffect( int id, vec3_t origin, matrix3_t axis, const int boltInfo=-1, CGhoul2Info_v *ghoul2 = nullptr,
 				int fxParm = -1, int vol = -1, int rad = -1, bool isPortal = false, int iLoopTime = 0, bool isRelative = false  );
 	void	PlayEffect( const char *file, vec3_t org, int vol = -1, int rad = -1 );					// uses a default up axis
 	void	PlayEffect( const char *file, vec3_t org, vec3_t fwd, int vol = -1, int rad = -1 );		// builds arbitrary perp. right vector, does a cross product to define up
 	void	PlayEffect( const char *file, vec3_t origin,
-				matrix3_t axis, const int boltInfo = -1, CGhoul2Info_v *ghoul2 = NULL, int fxParm = -1, int vol = -1, int rad = -1, int iLoopTime = 0, bool isRelative = false );
+				matrix3_t axis, const int boltInfo = -1, CGhoul2Info_v *ghoul2 = nullptr, int fxParm = -1, int vol = -1, int rad = -1, int iLoopTime = 0, bool isRelative = false );
 
 	void	StopEffect( const char *file, const int boltInfo, bool isPortal = false );	//find a scheduled Looping effect with these parms and kill it
 	void	AddScheduledEffects( bool portal );								// call once per CGame frame

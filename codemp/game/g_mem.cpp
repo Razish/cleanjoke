@@ -52,7 +52,7 @@ void *G_Alloc( int size ) {
 
 	if ( size <= 0 ) {
 		trap->Error( ERR_DROP, "G_Alloc: zero-size allocation\n", size );
-		return NULL;
+		return nullptr;
 	}
 
 	if ( g_debugAlloc.integer ) {
@@ -61,7 +61,7 @@ void *G_Alloc( int size ) {
 
 	if ( allocPoint + size > POOLSIZE ) {
 		trap->Error( ERR_DROP, "G_Alloc: failed on allocation of %i bytes\n", size ); // bk010103 - was %u, but is signed
-		return NULL;
+		return nullptr;
 	}
 
 	p = &memoryPool[allocPoint];

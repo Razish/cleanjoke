@@ -86,6 +86,6 @@ typedef struct interface_export_s
 	//Save / Load functions
 	int				(*I_WriteSaveData)(unsigned long chid, const void* data, int length);
 	// Below changed by BTO (VV). Visual C++ 7.1 compiler no longer allows default args on function pointers. Ack.
-	int				(*I_ReadSaveData)(unsigned long chid, void* address, int length /* , void **addressptr = NULL */);
+	int				(*I_ReadSaveData)(unsigned long chid, void* address, int length /* , void **addressptr = nullptr */);
 	int				(*I_LinkEntity)(int entID, CSequencer* sequencer, CTaskManager* taskManager);
 } interface_export_t;

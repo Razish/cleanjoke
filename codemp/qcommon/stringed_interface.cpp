@@ -37,10 +37,10 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 #include <string>
 
 // this just gets the binary of the file into memory, so I can parse it. Called by main SGE loader
-//  returns either char * of loaded file, else NULL for failed-to-open...
+//  returns either char * of loaded file, else nullptr for failed-to-open...
 unsigned char *SE_LoadFileData( const char *psFileName, int *piLoadedLength /* = 0 */)
 {
-	unsigned char *psReturn = NULL;
+	unsigned char *psReturn = nullptr;
 	if ( piLoadedLength )
 	{
 		*piLoadedLength = 0;
@@ -112,7 +112,7 @@ static void SE_R_ListFiles( const char *psExtension, const char *psDir, std::str
 
 		// read it in...
 
-/*		byte *pbData = NULL;
+/*		byte *pbData = nullptr;
 		int iSize = FS_ReadFile( sFilename, (void **)&pbData);
 
 		if (pbData)

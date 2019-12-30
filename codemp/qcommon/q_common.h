@@ -373,7 +373,7 @@ void Cbuf_AddText(const char* text);
 void Cbuf_Execute(void);
 void Cbuf_ExecuteText(int exec_when, const char* text);
 void Cbuf_Init(void);
-void Cmd_AddCommand(const char* cmd_name, xcommand_t function, const char* cmd_desc = NULL);
+void Cmd_AddCommand(const char* cmd_name, xcommand_t function, const char* cmd_desc = nullptr);
 void Cmd_AddCommandList(const cmdList_t* cmdList);
 void Cmd_Args_Sanitize(size_t length = MAX_CVAR_VALUE_STRING, const char* strip = "\n\r;", const char* repl = "   ");
 void Cmd_ArgsBuffer(char* buffer, int bufferLength);

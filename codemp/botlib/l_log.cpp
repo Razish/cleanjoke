@@ -78,7 +78,7 @@ void Log_Close(void)
 		botimport.Print(PRT_ERROR, "can't close log file %s\n", logfile.filename);
 		return;
 	} //end if
-	logfile.fp = NULL;
+	logfile.fp = nullptr;
 	botimport.Print(PRT_MESSAGE, "Closed log %s\n", logfile.filename);
 } //end of the function Log_Close
 

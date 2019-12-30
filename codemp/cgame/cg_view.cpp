@@ -260,7 +260,7 @@ static void CG_ResetThirdPersonViewDamp(void)
 		cameraFocusAngles[PITCH] = -89.0;
 	}
 
-	AngleVectors(cameraFocusAngles, camerafwd, NULL, cameraup);
+	AngleVectors(cameraFocusAngles, camerafwd, nullptr, cameraup);
 
 	// Set the cameraIdealTarget
 	CG_CalcIdealThirdPersonViewTarget();
@@ -493,7 +493,7 @@ static void CG_OffsetThirdPersonView( void )
 			cameraFocusAngles[PITCH] = -80.0;
 		}
 
-		AngleVectors(cameraFocusAngles, camerafwd, NULL, cameraup);
+		AngleVectors(cameraFocusAngles, camerafwd, nullptr, cameraup);
 
 		deltayaw = fabs(cameraFocusAngles[YAW] - cameraLastYaw);
 		if (deltayaw > 180.0f)
@@ -926,7 +926,7 @@ static bool CG_ThirdPersonActionCam(void)
 
 	//trace to the desired pos to see how far that way we can actually go before we hit something
 	//the endpos will be valid for our desiredpos no matter what
-	CG_Trace(&tr, cent->lerpOrigin, NULL, NULL, desiredPos, cent->currentState.number, MASK_SOLID);
+	CG_Trace(&tr, cent->lerpOrigin, nullptr, nullptr, desiredPos, cent->currentState.number, MASK_SOLID);
 	VectorCopy(tr.endpos, desiredPos);
 
 	if ((cg.time - cg_actionCamLastTime) > 300)
@@ -955,7 +955,7 @@ static bool CG_ThirdPersonActionCam(void)
 	}
 
 	//Make sure the point is alright
-	CG_Trace(&tr, cent->lerpOrigin, NULL, NULL, cg.refdef.vieworg, cent->currentState.number, MASK_SOLID);
+	CG_Trace(&tr, cent->lerpOrigin, nullptr, nullptr, cg.refdef.vieworg, cent->currentState.number, MASK_SOLID);
 	VectorCopy(tr.endpos, cg.refdef.vieworg);
 
 	VectorSubtract(cent->lerpOrigin, cg.refdef.vieworg, positionDir);
@@ -1117,7 +1117,7 @@ static void CG_PowerupTimerSounds( void ) {
 			continue;
 		}
 		if ( ( t - cg.time ) / POWERUP_BLINK_TIME != ( t - cg.oldTime ) / POWERUP_BLINK_TIME ) {
-			//trap->S_StartSound( NULL, cg.snap->ps.clientNum, CHAN_ITEM, media.sounds.null );
+			//trap->S_StartSound( nullptr, cg.snap->ps.clientNum, CHAN_ITEM, media.sounds.null );
 		}
 	}
 }

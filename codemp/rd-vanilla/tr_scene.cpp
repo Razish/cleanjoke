@@ -106,9 +106,9 @@ void RE_AddPolyToScene( qhandle_t hShader, int numVerts, const polyVert_t *verts
 	}
 
 	if ( !hShader ) {
-		ri.Printf( PRINT_ALL, S_COLOR_YELLOW  "WARNING: RE_AddPolyToScene: NULL poly shader(%i)\n", hShader );
+		ri.Printf( PRINT_ALL, S_COLOR_YELLOW  "WARNING: RE_AddPolyToScene: nullptr poly shader(%i)\n", hShader );
 	#ifdef PARANOID
-		//assert( !"RE_AddPolyToScene: NULL poly shader" );
+		//assert( !"RE_AddPolyToScene: nullptr poly shader" );
 	#endif
 		return;
 	}
@@ -138,7 +138,7 @@ void RE_AddPolyToScene( qhandle_t hShader, int numVerts, const polyVert_t *verts
 		r_numpolyverts += numVerts;
 
 		// if no world is loaded
-		if ( tr.world == NULL ) {
+		if ( tr.world == nullptr ) {
 			fogIndex = 0;
 		}
 		// see if it is in a fog volume
@@ -307,7 +307,7 @@ void RE_RenderScene( const refdef_t *fd ) {
 	startTime = ri.Milliseconds()*timescale->value;
 
 	if (!tr.world && !( fd->rdflags & RDF_NOWORLDMODEL ) ) {
-		Com_Error (ERR_DROP, "R_RenderScene: NULL worldmodel");
+		Com_Error (ERR_DROP, "R_RenderScene: nullptr worldmodel");
 	}
 
 	memcpy( tr.refdef.text, fd->text, sizeof( tr.refdef.text ) );

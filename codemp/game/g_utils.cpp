@@ -172,8 +172,8 @@ void G_TeamCommand( team_t team, char *cmd ) {
 
 // Searches all active entities for the next one that holds the matching string at fieldofs (use the FOFS() macro) in
 //	the structure.
-// Searches beginning at the entity after from, or the beginning if NULL
-// NULL will be returned if the end of the list is reached.
+// Searches beginning at the entity after from, or the beginning if nullptr
+// nullptr will be returned if the end of the list is reached.
 gentity_t *G_Find (gentity_t *from, int fieldofs, const char *match)
 {
 	char	*s;
@@ -194,7 +194,7 @@ gentity_t *G_Find (gentity_t *from, int fieldofs, const char *match)
 			return from;
 	}
 
-	return NULL;
+	return nullptr;
 }
 
 // given an origin and a radius, return all entities that are in use that are within the list
@@ -327,14 +327,14 @@ void G_SetAnim(gentity_t *ent, usercmd_t *ucmd, int setAnimParts, int anim, int 
 // Selects a random entity from among the targets
 gentity_t *G_PickTarget (char *targetname)
 {
-	gentity_t	*ent = NULL;
+	gentity_t	*ent = nullptr;
 	int		num_choices = 0;
 	gentity_t	*choice[MAXCHOICES];
 
 	if (!targetname)
 	{
-		trap->Print("G_PickTarget called with NULL targetname\n");
-		return NULL;
+		trap->Print("G_PickTarget called with nullptr targetname\n");
+		return nullptr;
 	}
 
 	while(1)
@@ -350,7 +350,7 @@ gentity_t *G_PickTarget (char *targetname)
 	if (!num_choices)
 	{
 		trap->Print("G_PickTarget: target %s not found\n", targetname);
-		return NULL;
+		return nullptr;
 	}
 
 	return choice[rand() % num_choices];
@@ -387,8 +387,8 @@ void G_UseTargets2( gentity_t *ent, gentity_t *activator, const char *string ) {
 		return;
 	}
 
-	t = NULL;
-	while ( (t = G_Find (t, FOFS(targetname), string)) != NULL ) {
+	t = nullptr;
+	while ( (t = G_Find (t, FOFS(targetname), string)) != nullptr ) {
 		if ( t == ent ) {
 			trap->Print ("WARNING: Entity used itself.\n");
 		} else {
@@ -461,7 +461,7 @@ void G_SetMovedir( vec3_t angles, vec3_t movedir ) {
 	} else if ( VectorCompare (angles, VEC_DOWN) ) {
 		VectorCopy (MOVEDIR_DOWN, movedir);
 	} else {
-		AngleVectors (angles, movedir, NULL, NULL);
+		AngleVectors (angles, movedir, nullptr, nullptr);
 	}
 	VectorClear( angles );
 }
@@ -559,7 +559,7 @@ gentity_t *G_Spawn( void ) {
 	int			i, force;
 	gentity_t	*e;
 
-	e = NULL;	// shut up warning
+	e = nullptr;	// shut up warning
 	i = 0;		// shut up warning
 	for ( force = 0 ; force < 2 ; force++ ) {
 		// if we go through all entities and can't find one to free,
@@ -863,7 +863,7 @@ void G_KillBox (gentity_t *ent) {
 		}
 
 		// nail it
-		G_Damage ( hit, ent, ent, NULL, NULL,
+		G_Damage ( hit, ent, ent, nullptr, nullptr,
 			100000, DAMAGE_NO_PROTECTION, MOD_TELEFRAG);
 	}
 
@@ -1190,7 +1190,7 @@ void TryUse( gentity_t *ent )
 	viewspot[2] += ent->client->ps.viewheight;
 
 	VectorCopy( viewspot, src );
-	AngleVectors( ent->client->ps.viewangles, vf, NULL, NULL );
+	AngleVectors( ent->client->ps.viewangles, vf, nullptr, nullptr );
 
 	VectorMA( src, USE_DISTANCE, vf, dest );
 
@@ -1224,7 +1224,7 @@ void TryUse( gentity_t *ent )
 		}
 		else
 		{
-			G_SetAnim( ent, NULL, SETANIM_TORSO, BOTH_BUTTON_HOLD, SETANIM_FLAG_OVERRIDE|SETANIM_FLAG_HOLD, 0 );
+			G_SetAnim( ent, nullptr, SETANIM_TORSO, BOTH_BUTTON_HOLD, SETANIM_FLAG_OVERRIDE|SETANIM_FLAG_HOLD, 0 );
 		}
 		ent->client->ps.weaponTime = ent->client->ps.torsoTimer;
 		return;
@@ -1239,7 +1239,7 @@ void TryUse( gentity_t *ent )
 		}
 		else
 		{
-			G_SetAnim( ent, NULL, SETANIM_TORSO, BOTH_BUTTON_HOLD, SETANIM_FLAG_OVERRIDE|SETANIM_FLAG_HOLD, 0 );
+			G_SetAnim( ent, nullptr, SETANIM_TORSO, BOTH_BUTTON_HOLD, SETANIM_FLAG_OVERRIDE|SETANIM_FLAG_HOLD, 0 );
 		}
 		ent->client->ps.weaponTime = ent->client->ps.torsoTimer;
 		/*
@@ -1251,7 +1251,7 @@ void TryUse( gentity_t *ent )
 		*/
 		if ( target->touch == Touch_Button )
 		{//pretend we touched it
-			target->touch(target, ent, NULL);
+			target->touch(target, ent, nullptr);
 		}
 		else
 		{
@@ -1754,7 +1754,7 @@ void G_GetBoltPosition( gentity_t *self, int boltIndex, vec3_t pos, int modelInd
 		return;
 	}
 
-	trap->G2API_GetBoltMatrix( self->ghoul2, modelIndex, boltIndex, &boltMatrix, angles, self->r.currentOrigin, level.time, NULL, self->modelScale );
+	trap->G2API_GetBoltMatrix( self->ghoul2, modelIndex, boltIndex, &boltMatrix, angles, self->r.currentOrigin, level.time, nullptr, self->modelScale );
 	if ( pos ) {
 		BG_GiveMeVectorFromMatrix( &boltMatrix, ORIGIN, result );
 		VectorCopy( result, pos );
@@ -1764,7 +1764,7 @@ void G_GetBoltPosition( gentity_t *self, int boltIndex, vec3_t pos, int modelInd
 extern stringID_table_t BSTable[];
 extern stringID_table_t BSETTable[];
 bool G_ActivateBehavior( gentity_t *self, int bset ) {
-	char *bs_name = NULL;
+	char *bs_name = nullptr;
 
 	if ( !self ) {
 		return false;
@@ -1792,7 +1792,7 @@ bool InFront( vec3_t spot, vec3_t from, vec3_t fromAngles, float threshHold )
 
 	VectorCopy( fromAngles, angles );
 	angles[0] = 0;
-	AngleVectors( angles, forward, NULL, NULL );
+	AngleVectors( angles, forward, nullptr, nullptr );
 
 	dot = DotProduct( dir, forward );
 

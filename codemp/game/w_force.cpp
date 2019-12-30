@@ -1082,7 +1082,7 @@ void ForceTeamHeal( gentity_t *self )
 	int numpl = 0;
 	int pl[MAX_CLIENTS];
 	int healthadd = 0;
-	gentity_t *te = NULL;
+	gentity_t *te = nullptr;
 
 	if ( self->health <= 0 )
 	{
@@ -1187,7 +1187,7 @@ void ForceTeamForceReplenish( gentity_t *self )
 	int numpl = 0;
 	int pl[MAX_CLIENTS];
 	int poweradd = 0;
-	gentity_t *te = NULL;
+	gentity_t *te = nullptr;
 
 	if ( self->health <= 0 )
 	{
@@ -1309,12 +1309,12 @@ void ForceGrip( gentity_t *self )
 
 	VectorCopy(self->client->ps.origin, tfrom);
 	tfrom[2] += self->client->ps.viewheight;
-	AngleVectors(self->client->ps.viewangles, fwd, NULL, NULL);
+	AngleVectors(self->client->ps.viewangles, fwd, nullptr, nullptr);
 	tto[0] = tfrom[0] + fwd[0]*MAX_GRIP_DISTANCE;
 	tto[1] = tfrom[1] + fwd[1]*MAX_GRIP_DISTANCE;
 	tto[2] = tfrom[2] + fwd[2]*MAX_GRIP_DISTANCE;
 
-	trap->Trace(&tr, tfrom, NULL, NULL, tto, self->s.number, MASK_PLAYERSOLID, false, 0, 0);
+	trap->Trace(&tr, tfrom, nullptr, nullptr, tto, self->s.number, MASK_PLAYERSOLID, false, 0, 0);
 
 	if ( tr.fraction != 1.0 &&
 		tr.entityNum != ENTITYNUM_NONE &&
@@ -1641,7 +1641,7 @@ void ForceShootLightning( gentity_t *self )
 	{
 		return;
 	}
-	AngleVectors( self->client->ps.viewangles, forward, NULL, NULL );
+	AngleVectors( self->client->ps.viewangles, forward, nullptr, nullptr );
 	VectorNormalize( forward );
 
 	if ( self->client->ps.fd.forcePowerLevel[FP_LIGHTNING] > FORCE_LEVEL_2 )
@@ -1917,7 +1917,7 @@ int ForceShootDrain( gentity_t *self )
 	{
 		return 0;
 	}
-	AngleVectors( self->client->ps.viewangles, forward, NULL, NULL );
+	AngleVectors( self->client->ps.viewangles, forward, nullptr, nullptr );
 	VectorNormalize( forward );
 
 	if ( self->client->ps.fd.forcePowerLevel[FP_DRAIN] > FORCE_LEVEL_2 )
@@ -2105,7 +2105,7 @@ void WP_GetVelocityForForceJump( gentity_t *self, vec3_t jumpVel, usercmd_t *ucm
 	vec3_t	view, forward, right;
 	VectorCopy( self->client->ps.viewangles, view );
 	view[0] = 0;
-	AngleVectors( view, forward, right, NULL );
+	AngleVectors( view, forward, right, nullptr );
 	
 	if ( ucmd->forwardmove && ucmd->rightmove )
 	{
@@ -2300,13 +2300,13 @@ void ForceTelepathy(gentity_t *self)
 
 	// check for direct target
 	VectorCopy( self->client->ps.viewangles, fwdangles );
-	AngleVectors( fwdangles, forward, right, NULL );
+	AngleVectors( fwdangles, forward, right, nullptr );
 	VectorCopy( self->client->ps.origin, tfrom );
 	tfrom[2] += self->client->ps.viewheight;
 	tto[0] = tfrom[0] + forward[0]*MAX_TRICK_DISTANCE/2;
 	tto[1] = tfrom[1] + forward[1]*MAX_TRICK_DISTANCE/2;
 	tto[2] = tfrom[2] + forward[2]*MAX_TRICK_DISTANCE/2;
-	trap->Trace( &tr, tfrom, NULL, NULL, tto, self->s.number, MASK_PLAYERSOLID, false, 0, 0 );
+	trap->Trace( &tr, tfrom, nullptr, nullptr, tto, self->s.number, MASK_PLAYERSOLID, false, 0, 0 );
 
 	if (self->client->ps.fd.forcePowerLevel[FP_TELEPATHY] == FORCE_LEVEL_1)
 	{
@@ -2634,7 +2634,7 @@ void ForceThrow( gentity_t *self, bool pull )
 	}
 
 	VectorCopy( self->client->ps.viewangles, fwdangles );
-	AngleVectors( fwdangles, forward, right, NULL );
+	AngleVectors( fwdangles, forward, right, nullptr );
 	VectorCopy( self->client->ps.origin, center );
 
 	for ( i = 0 ; i < 3 ; i++ )
@@ -2672,12 +2672,12 @@ void ForceThrow( gentity_t *self, bool pull )
 	{ //can only push/pull targeted things at level 1
 		VectorCopy(self->client->ps.origin, tfrom);
 		tfrom[2] += self->client->ps.viewheight;
-		AngleVectors(self->client->ps.viewangles, fwd, NULL, NULL);
+		AngleVectors(self->client->ps.viewangles, fwd, nullptr, nullptr);
 		tto[0] = tfrom[0] + fwd[0]*radius/2;
 		tto[1] = tfrom[1] + fwd[1]*radius/2;
 		tto[2] = tfrom[2] + fwd[2]*radius/2;
 
-		trap->Trace(&tr, tfrom, NULL, NULL, tto, self->s.number, MASK_PLAYERSOLID, false, 0, 0);
+		trap->Trace(&tr, tfrom, nullptr, nullptr, tto, self->s.number, MASK_PLAYERSOLID, false, 0, 0);
 
 		if (tr.fraction != 1.0 &&
 			tr.entityNum != ENTITYNUM_NONE)
@@ -2773,7 +2773,7 @@ void ForceThrow( gentity_t *self, bool pull )
 		}
 		else
 		{
-			ent = NULL;
+			ent = nullptr;
 		}
 
 		if (!ent)
@@ -3154,7 +3154,7 @@ void ForceThrow( gentity_t *self, bool pull )
 				VectorCopy(self->client->ps.origin, trFrom);
 				trFrom[2] += self->client->ps.viewheight;
 
-				AngleVectors( self->client->ps.viewangles, forward, NULL, NULL );
+				AngleVectors( self->client->ps.viewangles, forward, nullptr, nullptr );
 				VectorNormalize( forward );
 				VectorMA( trFrom, radius, forward, end );
 				trap->Trace( &tr, trFrom, vec3_origin, vec3_origin, end, self->s.number, MASK_SHOT, false, 0, 0 );
@@ -3223,7 +3223,7 @@ void ForceThrow( gentity_t *self, bool pull )
 			}
 			else if ( Q_stricmp( "func_button", push_list[x]->classname ) == 0 )
 			{//pretend you pushed it
-				Touch_Button( push_list[x], self, NULL );
+				Touch_Button( push_list[x], self, nullptr );
 				continue;
 			}
 		}
@@ -3395,7 +3395,7 @@ void DoGripAction(gentity_t *self, forcePowers_t forcePower)
 
 	VectorSubtract(gripEnt->client->ps.origin, self->client->ps.origin, a);
 
-	trap->Trace(&tr, self->client->ps.origin, NULL, NULL, gripEnt->client->ps.origin, self->s.number, MASK_PLAYERSOLID, false, 0, 0);
+	trap->Trace(&tr, self->client->ps.origin, nullptr, nullptr, gripEnt->client->ps.origin, self->s.number, MASK_PLAYERSOLID, false, 0, 0);
 
 	gripLevel = WP_AbsorbConversion(gripEnt, gripEnt->client->ps.fd.forcePowerLevel[FP_ABSORB], self, FP_GRIP, self->client->ps.fd.forcePowerLevel[FP_GRIP], forcePowerNeeded[self->client->ps.fd.forcePowerLevel[FP_GRIP]][FP_GRIP]);
 
@@ -3434,7 +3434,7 @@ void DoGripAction(gentity_t *self, forcePowers_t forcePower)
 	if (self->client->ps.fd.forcePowerDebounce[FP_GRIP] < level.time)
 	{ //2 damage per second while choking, resulting in 10 damage total (not including The Squeeze<tm>)
 		self->client->ps.fd.forcePowerDebounce[FP_GRIP] = level.time + 1000;
-		G_Damage(gripEnt, self, self, NULL, NULL, 2, DAMAGE_NO_ARMOR, MOD_FORCE_DARK);
+		G_Damage(gripEnt, self, self, nullptr, nullptr, 2, DAMAGE_NO_ARMOR, MOD_FORCE_DARK);
 	}
 
 	Jetpack_Off(gripEnt); //make sure the guy being gripped has his jetpack off.
@@ -3470,7 +3470,7 @@ void DoGripAction(gentity_t *self, forcePowers_t forcePower)
 		if ((level.time - gripEnt->client->ps.fd.forceGripStarted) > 3000 && !self->client->ps.fd.forceGripDamageDebounceTime)
 		{ //if we managed to lift him into the air for 2 seconds, give him a crack
 			self->client->ps.fd.forceGripDamageDebounceTime = 1;
-			G_Damage(gripEnt, self, self, NULL, NULL, 20, DAMAGE_NO_ARMOR, MOD_FORCE_DARK);
+			G_Damage(gripEnt, self, self, nullptr, nullptr, 20, DAMAGE_NO_ARMOR, MOD_FORCE_DARK);
 
 			//Must play custom sounds on the actual entity. Don't use G_Sound (it creates a temp entity for the sound)
 			G_EntitySound( gripEnt, CHAN_VOICE, G_SoundIndex(va( "*choke%d.wav", Q_irand( 1, 3 ) )) );
@@ -3505,7 +3505,7 @@ void DoGripAction(gentity_t *self, forcePowers_t forcePower)
 			float nvLen = 0;
 
 			VectorCopy(gripEnt->client->ps.origin, start_o);
-			AngleVectors(self->client->ps.viewangles, fwd, NULL, NULL);
+			AngleVectors(self->client->ps.viewangles, fwd, nullptr, nullptr);
 			fwd_o[0] = self->client->ps.origin[0] + fwd[0]*128;
 			fwd_o[1] = self->client->ps.origin[1] + fwd[1]*128;
 			fwd_o[2] = self->client->ps.origin[2] + fwd[2]*128;
@@ -3556,7 +3556,7 @@ void DoGripAction(gentity_t *self, forcePowers_t forcePower)
 		if ((level.time - gripEnt->client->ps.fd.forceGripStarted) > 3000 && !self->client->ps.fd.forceGripDamageDebounceTime)
 		{ //if we managed to lift him into the air for 2 seconds, give him a crack
 			self->client->ps.fd.forceGripDamageDebounceTime = 1;
-			G_Damage(gripEnt, self, self, NULL, NULL, 40, DAMAGE_NO_ARMOR, MOD_FORCE_DARK);
+			G_Damage(gripEnt, self, self, nullptr, nullptr, 40, DAMAGE_NO_ARMOR, MOD_FORCE_DARK);
 
 			//Must play custom sounds on the actual entity. Don't use G_Sound (it creates a temp entity for the sound)
 			G_EntitySound( gripEnt, CHAN_VOICE, G_SoundIndex(va( "*choke%d.wav", Q_irand( 1, 3 ) )) );
@@ -4084,7 +4084,7 @@ void FindGenericEnemyIndex(gentity_t *self)
 	int i = 0;
 	float tlen;
 	gentity_t *ent;
-	gentity_t *besten = NULL;
+	gentity_t *besten = nullptr;
 	float blen = 99999999.9f;
 	vec3_t a;
 
@@ -4260,7 +4260,7 @@ void SeekerDroneUpdate(gentity_t *self)
 		//org is now where the thing should be client-side because it uses the same time-based offset
 		if (self->client->ps.droneFireTime < level.time)
 		{
-			trap->Trace(&tr, org, NULL, NULL, en->client->ps.origin, -1, MASK_SOLID, false, 0, 0);
+			trap->Trace(&tr, org, nullptr, nullptr, en->client->ps.origin, -1, MASK_SOLID, false, 0, 0);
 
 			if (tr.fraction == 1 && !tr.startsolid && !tr.allsolid)
 			{

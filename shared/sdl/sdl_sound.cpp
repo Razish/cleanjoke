@@ -111,7 +111,7 @@ SNDDMA_PrintAudiospec
 */
 static void SNDDMA_PrintAudiospec(const char *str, const SDL_AudioSpec *spec)
 {
-	const char	*fmt = NULL;
+	const char	*fmt = nullptr;
 
 	Com_Printf( "%s:\n", str );
 
@@ -209,7 +209,7 @@ bool SNDDMA_Init(int sampleFrequencyInKHz)
 	desired.channels = (int) s_sdlChannels->value;
 	desired.callback = SNDDMA_AudioCallback;
 
-	dev = SDL_OpenAudioDevice( NULL, 0, &desired, &obtained, 0 );
+	dev = SDL_OpenAudioDevice( nullptr, 0, &desired, &obtained, 0 );
 	if ( !dev )
 	{
 		Com_Printf("SDL_OpenAudioDevice() failed: %s\n", SDL_GetError());
@@ -278,7 +278,7 @@ void SNDDMA_Shutdown(void)
 	SDL_CloseAudioDevice(dev);
 	SDL_QuitSubSystem(SDL_INIT_AUDIO);
 	free(dma.buffer);
-	dma.buffer = NULL;
+	dma.buffer = nullptr;
 	dmapos = dmasize = 0;
 	snd_inited = false;
 	Com_Printf("SDL audio device shut down.\n");

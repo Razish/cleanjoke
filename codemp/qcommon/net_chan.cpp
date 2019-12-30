@@ -542,7 +542,7 @@ void QDECL NET_OutOfBandData( netsrc_t sock, netadr_t adr, byte *format, int len
 // Traps "localhost" for loopback, passes everything else to system
 bool	NET_StringToAdr( const char *s, netadr_t *a ) {
 	char	base[MAX_STRING_CHARS];
-	char	*port = NULL;
+	char	*port = nullptr;
 
 	if (!strcmp (s, "localhost")) {
 		Com_Memset (a, 0, sizeof(*a));

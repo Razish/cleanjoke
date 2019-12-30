@@ -304,7 +304,7 @@ void RB_DoShadowTessEnd( vec3_t lightPos )
 //	if ( facing[ triangleFromEdge[ v1 ][ v2 ] ] && !facing[ triangleFromEdge[ v2 ][ v1 ] )
 void RB_ShadowTessEnd( void )
 {
-	RB_DoShadowTessEnd(NULL);
+	RB_DoShadowTessEnd(nullptr);
 }
 
 // Darken everything that is is a shadow volume.
@@ -420,7 +420,7 @@ void RB_CaptureScreenImage(void)
 	//using this method, we could pixel-filter the texture and all sorts of crazy stuff.
 	//but, it is slow as hell.
 	/*
-	static byte *tmp = NULL;
+	static byte *tmp = nullptr;
 	if (!tmp)
 	{
 		tmp = (byte *)Z_Malloc((sizeof(byte)*4)*(glConfig.vidWidth*glConfig.vidHeight), TAG_ICARUS, true);

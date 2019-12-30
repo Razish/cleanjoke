@@ -206,7 +206,7 @@ void TeleportPlayer( gentity_t *player, vec3_t origin, vec3_t angles ) {
 
 	// spit the player out
 	if ( !noAngles ) {
-		AngleVectors( angles, player->client->ps.velocity, NULL, NULL );
+		AngleVectors( angles, player->client->ps.velocity, nullptr, nullptr );
 		VectorScale( player->client->ps.velocity, 400, player->client->ps.velocity );
 		player->client->ps.pm_time = 160;		// hold time
 		player->client->ps.pm_flags |= PMF_TIME_KNOCKBACK;
@@ -633,7 +633,7 @@ void SP_terrain(gentity_t *ent)
 void G_PortalifyEntities(gentity_t *ent)
 {
 	int i = 0;
-	gentity_t *scan = NULL;
+	gentity_t *scan = nullptr;
 
 	while (i < MAX_GENTITIES)
 	{
@@ -911,7 +911,7 @@ void HolocronThink(gentity_t *ent)
 			//copy to person carrying's origin before popping out of them
 			HolocronPopOut(ent);
 			ent->enemy->client->ps.holocronsCarried[ent->count] = 0;
-			ent->enemy = NULL;
+			ent->enemy = nullptr;
 
 			goto justthink;
 		}
@@ -934,7 +934,7 @@ void HolocronThink(gentity_t *ent)
 			VectorCopy(ent->enemy->client->ps.origin, ent->r.currentOrigin);
 			//copy to person carrying's origin before popping out of them
 			HolocronPopOut(ent);
-			ent->enemy = NULL;
+			ent->enemy = nullptr;
 
 			goto justthink;
 		}
@@ -946,7 +946,7 @@ void HolocronThink(gentity_t *ent)
 				ent->enemy->client->ps.holocronBits &= ~(1 << ent->count);
 				ent->enemy->client->ps.holocronsCarried[ent->count] = 0;
 			}
-			ent->enemy = NULL;
+			ent->enemy = nullptr;
 			HolocronRespawn(ent);
 			VectorCopy(ent->s.origin2, ent->s.pos.trBase);
 			VectorCopy(ent->s.origin2, ent->s.origin);
@@ -1051,7 +1051,7 @@ void SP_misc_holocron(gentity_t *ent)
 	//No longer doing this, causing too many complaints about accidentally setting no force powers at all
 	//and starting a holocron game (making it basically just FFA)
 
-	ent->enemy = NULL;
+	ent->enemy = nullptr;
 
 	ent->flags = FL_BOUNCE_HALF;
 
@@ -1173,7 +1173,7 @@ void check_recharge(gentity_t *ent)
 		}
 		ent->s.loopSound = 0;
 		ent->s.loopIsSoundset = false;
-		ent->activator = NULL;
+		ent->activator = nullptr;
 		ent->fly_sound_debounce_time = 0;
 	}
 
@@ -2067,7 +2067,7 @@ void fx_runner_link( gentity_t *ent )
 	if ( ent->target && ent->target[0] )
 	{
 		// try to use the target to override the orientation
-		gentity_t	*target = NULL;
+		gentity_t	*target = nullptr;
 
 		target = G_Find( target, FOFS(targetname), ent->target );
 
@@ -2089,7 +2089,7 @@ void fx_runner_link( gentity_t *ent )
 	// don't really do anything with this right now other than do a check to warn the designers if the target2 is bogus
 	if ( ent->target2 && ent->target2[0] )
 	{
-		gentity_t	*target = NULL;
+		gentity_t	*target = nullptr;
 
 		target = G_Find( target, FOFS(targetname), ent->target2 );
 
@@ -2315,7 +2315,7 @@ void Use_Target_Screenshake( gentity_t *ent, gentity_t *other, gentity_t *activa
 		bGlobal = true;
 	}
 
-	G_ScreenShake(ent->s.origin, NULL, ent->speed, ent->genericValue5, bGlobal);
+	G_ScreenShake(ent->s.origin, nullptr, ent->speed, ent->genericValue5, bGlobal);
 }
 
 void SP_target_screenshake(gentity_t *ent)
@@ -2394,7 +2394,7 @@ void maglock_link( gentity_t *self )
 	trace_t	trace;
 	gentity_t *traceEnt;
 
-	AngleVectors( self->s.angles, forward, NULL, NULL );
+	AngleVectors( self->s.angles, forward, nullptr, nullptr );
 	VectorMA( self->s.origin, 128, forward, end );
 	VectorMA( self->s.origin, -4, forward, start );
 
@@ -2527,7 +2527,7 @@ void faller_think(gentity_t *ent)
 		ent->genericValue8 = 0;
 	}
 
-	G_RunExPhys(ent, gravity, mass, bounce, true, NULL, 0);
+	G_RunExPhys(ent, gravity, mass, bounce, true, nullptr, 0);
 	VectorScale(ent->epVelocity, 10.0f, ent->s.pos.trDelta);
 	ent->nextthink = level.time + 25;
 }
@@ -2645,7 +2645,7 @@ tagOwner_t *FirstFreeTagOwner(void)
 	}
 
 	Com_Printf("WARNING: MAX_TAG_OWNERS (%i) REF TAG LIMIT HIT\n", MAX_TAG_OWNERS);
-	return NULL;
+	return nullptr;
 }
 
 reference_tag_t *FirstFreeRefTag(tagOwner_t *tagOwner)
@@ -2664,7 +2664,7 @@ reference_tag_t *FirstFreeRefTag(tagOwner_t *tagOwner)
 	}
 
 	Com_Printf("WARNING: MAX_TAGS (%i) REF TAG LIMIT HIT\n", MAX_TAGS);
-	return NULL;
+	return nullptr;
 }
 
 void TAG_Init( void )
@@ -2697,12 +2697,12 @@ tagOwner_t	*TAG_FindOwner( const char *owner )
 		i++;
 	}
 
-	return NULL;
+	return nullptr;
 }
 
 reference_tag_t	*TAG_Find( const char *owner, const char *name )
 {
-	tagOwner_t	*tagOwner = NULL;
+	tagOwner_t	*tagOwner = nullptr;
 	int i = 0;
 
 	if (owner && owner[0])
@@ -2721,7 +2721,7 @@ reference_tag_t	*TAG_Find( const char *owner, const char *name )
 
 		if (!tagOwner)
 		{
-			return NULL;
+			return nullptr;
 		}
 	}
 
@@ -2739,7 +2739,7 @@ reference_tag_t	*TAG_Find( const char *owner, const char *name )
 
 	if (!tagOwner)
 	{
-		return NULL;
+		return nullptr;
 	}
 
 	i = 0;
@@ -2752,19 +2752,19 @@ reference_tag_t	*TAG_Find( const char *owner, const char *name )
 		i++;
 	}
 
-	return NULL;
+	return nullptr;
 }
 
 reference_tag_t	*TAG_Add( const char *name, const char *owner, vec3_t origin, vec3_t angles, int radius, int flags )
 {
-	reference_tag_t	*tag = NULL;
-	tagOwner_t	*tagOwner = NULL;
+	reference_tag_t	*tag = nullptr;
+	tagOwner_t	*tagOwner = nullptr;
 
 	//Make sure this tag's name isn't alread in use
 	if ( TAG_Find( owner, name ) )
 	{
 		Com_Printf(S_COLOR_RED"Duplicate tag name \"%s\"\n", name );
-		return NULL;
+		return nullptr;
 	}
 
 	//Attempt to add this to the owner's list
@@ -2795,7 +2795,7 @@ reference_tag_t	*TAG_Add( const char *name, const char *owner, vec3_t origin, ve
 	if (!tag)
 	{
 		assert(0);
-		return NULL;
+		return nullptr;
 	}
 
 	//Copy the information
@@ -2807,7 +2807,7 @@ reference_tag_t	*TAG_Add( const char *name, const char *owner, vec3_t origin, ve
 	if ( !name || !name[0] )
 	{
 		Com_Printf(S_COLOR_RED"ERROR: Nameless ref_tag found at (%i %i %i)\n", (int)origin[0], (int)origin[1], (int)origin[2]);
-		return NULL;
+		return nullptr;
 	}
 
 	//Copy the name
@@ -2844,7 +2844,7 @@ int	TAG_GetOrigin2( const char *owner, const char *name, vec3_t origin )
 {
 	reference_tag_t	*tag = TAG_Find( owner, name );
 
-	if( tag == NULL )
+	if( tag == nullptr )
 	{
 		return 0;
 	}
@@ -2955,7 +2955,7 @@ void ref_link ( gentity_t *ent )
 	if ( ent->target )
 	{
 		//TODO: Find the target and set our angles to that direction
-		gentity_t	*target = G_Find( NULL, FOFS(targetname), ent->target );
+		gentity_t	*target = G_Find( nullptr, FOFS(targetname), ent->target );
 		vec3_t	dir;
 
 		if ( target )
@@ -3055,7 +3055,7 @@ gclient_t *G_ClientForShooter(void)
 	}
 
 	Com_Error(ERR_DROP, "No free shooter clients - hit MAX_SHOOTERS");
-	return NULL;
+	return nullptr;
 }
 
 void G_FreeClientForShooter(gclient_t *cl)
@@ -3103,7 +3103,7 @@ void misc_weapon_shooter_aim( gentity_t *self )
 	//update my aim
 	if ( self->target )
 	{
-		gentity_t *targ = G_Find( NULL, FOFS(targetname), self->target );
+		gentity_t *targ = G_Find( nullptr, FOFS(targetname), self->target );
 		if ( targ )
 		{
 			self->enemy = targ;
@@ -3116,7 +3116,7 @@ void misc_weapon_shooter_aim( gentity_t *self )
 		}
 		else
 		{
-			self->enemy = NULL;
+			self->enemy = nullptr;
 		}
 	}
 }
@@ -3155,7 +3155,7 @@ void SP_misc_weapon_shooter( gentity_t *self )
 	else
 	{//just set aim angles
 		VectorCopy( self->s.angles, self->client->ps.viewangles );
-		AngleVectors( self->s.angles, self->pos1, NULL, NULL );
+		AngleVectors( self->s.angles, self->pos1, nullptr, nullptr );
 	}
 
 	//set up to fire when used

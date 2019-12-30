@@ -77,9 +77,9 @@ void Com_EndRedirect (void)
 		rd_flush(rd_buffer);
 	}
 
-	rd_buffer = NULL;
+	rd_buffer = nullptr;
 	rd_buffersize = 0;
-	rd_flush = NULL;
+	rd_flush = nullptr;
 }
 
 // Both client and server can use this, and it will output to the appropriate place.
@@ -307,12 +307,12 @@ bool Com_SafeMode( void ) {
 }
 
 // Searches for command line parameters that are set commands.
-// If match is not NULL, only that cvar will be looked for.
+// If match is not nullptr, only that cvar will be looked for.
 // That is necessary because cddir and basedir need to be set before the filesystem is started, but all other sets
 //	should be after execing the config and default.
 //
 // checks for and removes command line "+set var arg" constructs
-// if match is NULL, all set commands will be executed, otherwise
+// if match is nullptr, all set commands will be executed, otherwise
 // only a set with the exact name.  Only used during startup.
 void Com_StartupVariable( const char *match ) {
 	for (int i=0 ; i < com_numConsoleLines ; i++) {
@@ -416,7 +416,7 @@ char *Com_StringContains(char *str1, char *str2, int casesensitive) {
 			return str1;
 		}
 	}
-	return NULL;
+	return nullptr;
 }
 
 int Com_Filter(char *filter, char *name, int casesensitive)
@@ -536,7 +536,7 @@ int Com_RealTime(qtime_t *qtime) {
 	time_t t;
 	struct tm *tms;
 
-	t = time(NULL);
+	t = time(nullptr);
 	if (!qtime)
 		return t;
 	tms = localtime(&t);
@@ -826,7 +826,7 @@ static void Com_InitRand(void)
 	if(Sys_RandomBytes((byte *) &seed, sizeof(seed)))
 		srand(seed);
 	else
-		srand(time(NULL));
+		srand(time(nullptr));
 }
 
 // Error string for the given error code (from Com_Error).
@@ -952,7 +952,7 @@ void Com_Init( char *commandLine ) {
 		Cbuf_Init ();
 
 		// override anything from the config files with command line args
-		Com_StartupVariable( NULL );
+		Com_StartupVariable( nullptr );
 
 		Com_InitZoneMemoryVars();
 		Cmd_Init ();
@@ -986,7 +986,7 @@ void Com_Init( char *commandLine ) {
 		Com_ExecuteCfg();
 
 		// override anything from the config files with command line args
-		Com_StartupVariable( NULL );
+		Com_StartupVariable( nullptr );
 
 		// allocate the stack based hunk allocator
 		Com_InitHunkMemory();
@@ -1417,7 +1417,7 @@ static char* Field_FindFirstSeparator(char* s)
 			return &s[i];
 	}
 
-	return NULL;
+	return nullptr;
 }
 
 static void FindMatches(const char* s)

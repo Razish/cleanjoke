@@ -66,7 +66,7 @@ int			MP3Stream_Decode		( LP_MP3STREAM lpMP3Stream,  bool bDoingMusic );
 bool	MP3_FakeUpWAVInfo		( const char *psLocalFilename, void *pvData, int iDataLen, int iUnpackedDataLength, int &format, int &rate, int &width,
                                         int &channels, int &samples, int &dataofs, bool bStereoDesired = false );
 bool	MP3_IsValid				( const char *psLocalFilename, void *pvData, int iDataLen, bool bStereoDesired = false );
-bool	MP3_ReadSpecialTagInfo	( byte *pbLoadedFile, int iLoadedFileLen, id3v1_1** ppTAG = NULL, int *piUncompressedSize = NULL, float *pfMaxVol = NULL);
+bool	MP3_ReadSpecialTagInfo	( byte *pbLoadedFile, int iLoadedFileLen, id3v1_1** ppTAG = nullptr, int *piUncompressedSize = nullptr, float *pfMaxVol = nullptr);
 bool	MP3Stream_GetSamples	( channel_t *ch, int startingSampleNum, int count, short *buf, bool bStereo );
 bool	MP3Stream_InitFromFile	( sfx_t* sfx, byte *pbSrcData, int iSrcDatalen, const char *psSrcDataFilename, int iMP3UnPackedSize, bool bStereoDesired = false );
 bool	MP3Stream_InitPlayingTimeFields( LP_MP3STREAM lpMP3Stream, const char *psLocalFilename, void *pvData, int iDataLen, bool bStereoDesired = false);

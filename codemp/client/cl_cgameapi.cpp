@@ -187,12 +187,12 @@ extern bool cl_bUseFighterPitch; //cl_input.cpp
 // wrappers and such
 
 static void CL_AddCgameCommand( const char *cmdName ) {
-	Cmd_AddCommand( cmdName, NULL );
+	Cmd_AddCommand( cmdName, nullptr );
 }
 
 static void CL_CM_LoadMap( const char *mapname, bool subBSP ) {
 	if ( subBSP )	CM_LoadSubBSP( va( "maps/%s.bsp", mapname+1 ), false );
-	else			CM_LoadMap( mapname, true, NULL );
+	else			CM_LoadMap( mapname, true, nullptr );
 }
 
 static void CL_GetGlconfig( glconfig_t *glconfig ) {
@@ -943,5 +943,5 @@ void CL_BindCGame( void ) {
 void CL_UnbindCGame( void ) {
 	CGVM_Shutdown();
 	VM_Free( cgvm );
-	cgvm = NULL;
+	cgvm = nullptr;
 }

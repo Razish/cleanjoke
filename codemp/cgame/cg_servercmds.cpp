@@ -76,7 +76,7 @@ static void CG_ParseScores( void ) {
 
 		cg.scores[i].team = cgs.clientinfo[cg.scores[i].client].team;
 	}
-	CG_SetScoreSelection( NULL );
+	CG_SetScoreSelection( nullptr );
 }
 
 #define TEAMINFO_OFFSET (6)
@@ -109,7 +109,7 @@ static void CG_ParseTeamInfo( void ) {
 // This is called explicitly when the gamestate is first received, and whenever the server updates any serverinfo
 //	flagged cvars
 void CG_ParseServerinfo( void ) {
-	const char *info = NULL;
+	const char *info = nullptr;
 	char *mapname;
 	int i, value;
 
@@ -130,8 +130,8 @@ void CG_ParseServerinfo( void ) {
 	// this changes on map_restart, attempt to precache weapons
 	value = atoi( Info_ValueForKey( info, "g_weaponDisable" ) );
 	if ( cgs.wDisable != value ) {
-		gitem_t *item = NULL;
-		itemInfo_t *itemInfo = NULL;
+		gitem_t *item = nullptr;
+		itemInfo_t *itemInfo = nullptr;
 
 		cgs.wDisable = value;
 
@@ -560,19 +560,19 @@ static void CG_ConfigStringModified( void ) {
 void CG_KillCEntityG2(int entNum)
 {
 	int j;
-	clientInfo_t *ci = (entNum < MAX_CLIENTS) ? &cgs.clientinfo[entNum] : NULL;
+	clientInfo_t *ci = (entNum < MAX_CLIENTS) ? &cgs.clientinfo[entNum] : nullptr;
 	centity_t *cent = &cg_entities[entNum];
 
 	if (ci)
 	{
 		if (ci->ghoul2Model == cent->ghoul2)
 		{
-			ci->ghoul2Model = NULL;
+			ci->ghoul2Model = nullptr;
 		}
 		else if (ci->ghoul2Model && trap->G2_HaveWeGhoul2Models(ci->ghoul2Model))
 		{
 			trap->G2API_CleanGhoul2Models(&ci->ghoul2Model);
-			ci->ghoul2Model = NULL;
+			ci->ghoul2Model = nullptr;
 		}
 
 		//Clean up any weapon instances for custom saber stuff
@@ -582,7 +582,7 @@ void CG_KillCEntityG2(int entNum)
 			if (ci->ghoul2Weapons[j] && trap->G2_HaveWeGhoul2Models(ci->ghoul2Weapons[j]))
 			{
 				trap->G2API_CleanGhoul2Models(&ci->ghoul2Weapons[j]);
-				ci->ghoul2Weapons[j] = NULL;
+				ci->ghoul2Weapons[j] = nullptr;
 			}
 
 			j++;
@@ -592,19 +592,19 @@ void CG_KillCEntityG2(int entNum)
 	if (cent->ghoul2 && trap->G2_HaveWeGhoul2Models(cent->ghoul2))
 	{
 		trap->G2API_CleanGhoul2Models(&cent->ghoul2);
-		cent->ghoul2 = NULL;
+		cent->ghoul2 = nullptr;
 	}
 
 	if (cent->grip_arm && trap->G2_HaveWeGhoul2Models(cent->grip_arm))
 	{
 		trap->G2API_CleanGhoul2Models(&cent->grip_arm);
-		cent->grip_arm = NULL;
+		cent->grip_arm = nullptr;
 	}
 
 	if (cent->frame_hold && trap->G2_HaveWeGhoul2Models(cent->frame_hold))
 	{
 		trap->G2API_CleanGhoul2Models(&cent->frame_hold);
-		cent->frame_hold = NULL;
+		cent->frame_hold = nullptr;
 	}
 
 	cent->isRagging = false; //just in case.
@@ -640,7 +640,7 @@ void CG_KillCEntityInstances(void)
 		cent->frame_minus1_refreshed = 0;
 		cent->frame_minus2_refreshed = 0;
 		cent->dustTrailTime = 0;
-		cent->ghoul2weapon = NULL;
+		cent->ghoul2weapon = nullptr;
 		//cent->torsoBolt = 0;
 		cent->trailTime = 0;
 		cent->frame_hold_time = 0;
@@ -823,7 +823,7 @@ static void CG_BodyQueueCopy(centity_t *cent, int clientNum, int knownWeapon)
 	if (source->isRagging)
 	{ //just reset it now.
 		source->isRagging = false;
-		trap->G2API_SetRagDoll(source->ghoul2, NULL); //calling with null parms resets to no ragdoll.
+		trap->G2API_SetRagDoll(source->ghoul2, nullptr); //calling with null parms resets to no ragdoll.
 	}
 
 	//either force the weapon from when we died or remove it if it was a dropped weapon
@@ -949,8 +949,8 @@ static void CG_KillLoopSounds_f( void ) {
 	//kill looping sounds
 	int indexNum = 0;
 	int argNum = trap->Cmd_Argc();
-	centity_t *clent = NULL;
-	centity_t *trackerent = NULL;
+	centity_t *clent = nullptr;
+	centity_t *trackerent = nullptr;
 
 	if ( argNum < 1 ) {
 		assert( 0 );
@@ -1036,14 +1036,14 @@ static void CG_RestoreClientGhoul_f( void ) {
 	//make sure ragdoll state is reset
 	if ( clent->isRagging ) {
 		clent->isRagging = false;
-		trap->G2API_SetRagDoll( clent->ghoul2, NULL ); //calling with null parms resets to no ragdoll.
+		trap->G2API_SetRagDoll( clent->ghoul2, nullptr ); //calling with null parms resets to no ragdoll.
 	}
 
 	//clear all the decals as well
 	trap->G2API_ClearSkinGore( clent->ghoul2 );
 
 	clent->weapon = 0;
-	clent->ghoul2weapon = NULL; //force a weapon reinit
+	clent->ghoul2weapon = nullptr; //force a weapon reinit
 }
 
 static void CG_CenterPrint_f( void ) {
@@ -1197,7 +1197,7 @@ static const size_t numCommands = ARRAY_LEN( commands );
 // The string has been tokenized and can be retrieved with Cmd_Argc() / Cmd_Argv()
 static void CG_ServerCommand( void ) {
 	const char		*cmd = CG_Argv( 0 );
-	serverCommand_t	*command = NULL;
+	serverCommand_t	*command = nullptr;
 
 	if ( !cmd[0] ) {
 		// server claimed the command

@@ -267,7 +267,7 @@ struct gentity_t {
 
 	// - - - - - - - - - - - - - - - -
 
-	struct gclient_t *client;                       // NULL if not a client
+	struct gclient_t *client;                       // nullptr if not a client
 	bool         noLumbar;                      // see note in cg_local.h
 	bool         inuse;
 	int              lockCount;                     // used by NPCs
@@ -287,7 +287,7 @@ struct gentity_t {
 	int              painDebounceTime;
 	int              attackDebounceTime;
 	int              alliedTeam;                    // only useable by this team, never target this team
-	int              roffid;                        // if roffname != NULL then set on spawn
+	int              roffid;                        // if roffname != nullptr then set on spawn
 	bool         neverFree;                     // if true, FreeEntity will only unlink. bodyque uses this
 	int              flags;                         // FL_* variables
 	char             *model;

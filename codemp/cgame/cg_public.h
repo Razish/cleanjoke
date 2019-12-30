@@ -339,7 +339,7 @@ typedef struct cgameImport_s {
 	qhandle_t		(*R_RegisterSkin)						( const char *name );
 	void			(*R_RemapShader)						( const char *oldShader, const char *newShader, const char *offsetTime );
 	void			(*R_RenderScene)						( const refdef_t *fd );
-	void			(*R_SetColor)							( const float *rgba );	// NULL = 1,1,1,1
+	void			(*R_SetColor)							( const float *rgba );	// nullptr = 1,1,1,1
 	void			(*R_SetLightStyle)						( int style, int color );
 	void			(*R_SetRangedFog)						( float range );
 	void			(*R_SetRefractionProperties)			( float distortionAlpha, float distortionStretch, bool distortionPrePost, bool distortionNegate );

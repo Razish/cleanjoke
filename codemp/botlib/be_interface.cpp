@@ -218,7 +218,7 @@ botlib_export_t *GetBotLibAPI(int apiVersion, botlib_import_t *import) {
 
 	if ( apiVersion != BOTLIB_API_VERSION ) {
 		botimport.Print( PRT_ERROR, "Mismatched BOTLIB_API_VERSION: expected %i, got %i\n", BOTLIB_API_VERSION, apiVersion );
-		return NULL;
+		return nullptr;
 	}
 
 	Init_EA_Export(&be_botlib_export.ea);

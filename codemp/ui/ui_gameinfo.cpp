@@ -72,7 +72,7 @@ int UI_ParseInfos( char *buf, int max, char *infos[] ) {
 
 			token = COM_ParseExt( (const char **)&buf, false );
 			if ( !token[0] ) {
-				strcpy( token, "<NULL>" );
+				strcpy( token, "<nullptr>" );
 			}
 			Info_SetValueForKey( info, key, token );
 		}
@@ -279,7 +279,7 @@ void UI_LoadBots( void ) {
 char *UI_GetBotInfoByNumber( int num ) {
 	if( num < 0 || num >= ui_numBots ) {
 		trap->Print( S_COLOR_RED "Invalid bot number: %i\n", num );
-		return NULL;
+		return nullptr;
 	}
 	return ui_botInfos[num];
 }
@@ -295,7 +295,7 @@ char *UI_GetBotInfoByName( const char *name ) {
 		}
 	}
 
-	return NULL;
+	return nullptr;
 }
 
 int UI_GetNumBots() {

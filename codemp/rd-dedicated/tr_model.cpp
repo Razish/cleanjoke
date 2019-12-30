@@ -72,7 +72,7 @@ struct CachedEndianedModelBinary_s
 };
 typedef struct CachedEndianedModelBinary_s CachedEndianedModelBinary_t;
 typedef std::map <sstring_t,CachedEndianedModelBinary_t>	CachedModels_t;
-CachedModels_t *CachedModels = NULL;	// the important cache item.
+CachedModels_t *CachedModels = nullptr;	// the important cache item.
 
 void RE_RegisterModels_StoreShaderRequest(const char *psModelFileName, const char *psShaderName, int *piShaderIndexPoke)
 {
@@ -85,7 +85,7 @@ void RE_RegisterModels_StoreShaderRequest(const char *psModelFileName, const cha
 
 	CachedEndianedModelBinary_t &ModelBin = (*CachedModels)[sModelName];
 
-	if (ModelBin.pModelDiskImage == NULL)
+	if (ModelBin.pModelDiskImage == nullptr)
 	{
 		assert(0);	// should never happen, means that we're being called on a model that wasn't loaded
 	}
@@ -137,7 +137,7 @@ bool RE_RegisterModels_GetDiskFile( const char *psModelFileName, void **ppvBuffe
 
 	CachedEndianedModelBinary_t &ModelBin = (*CachedModels)[sModelName];
 
-	if (ModelBin.pModelDiskImage == NULL)
+	if (ModelBin.pModelDiskImage == nullptr)
 	{
 		// didn't have it cached, so try the disk...
 
@@ -188,14 +188,14 @@ void *RE_RegisterModels_Malloc(int iSize, void *pvDiskBufferIfJustLoaded, const 
 
 	CachedEndianedModelBinary_t &ModelBin = (*CachedModels)[sModelName];
 
-	if (ModelBin.pModelDiskImage == NULL)
+	if (ModelBin.pModelDiskImage == nullptr)
 	{
 		// ... then this entry has only just been created, ie we need to load it fully...
 
 		// new, instead of doing a Z_Malloc and assigning that we just morph the disk buffer alloc
 		//	then don't thrown it away on return - cuts down on mem overhead
 
-		// ... groan, but not if doing a limb hierarchy creation (some VV stuff?), in which case it's NULL
+		// ... groan, but not if doing a limb hierarchy creation (some VV stuff?), in which case it's nullptr
 
 		if ( pvDiskBufferIfJustLoaded )
 		{
@@ -240,12 +240,12 @@ void *RE_RegisterServerModels_Malloc(int iSize, void *pvDiskBufferIfJustLoaded, 
 
 	CachedEndianedModelBinary_t &ModelBin = (*CachedModels)[sModelName];
 
-	if (ModelBin.pModelDiskImage == NULL)
+	if (ModelBin.pModelDiskImage == nullptr)
 	{
 		// new, instead of doing a Z_Malloc and assigning that we just morph the disk buffer alloc
 		//	then don't thrown it away on return - cuts down on mem overhead
 
-		// ... groan, but not if doing a limb hierarchy creation (some VV stuff?), in which case it's NULL
+		// ... groan, but not if doing a limb hierarchy creation (some VV stuff?), in which case it's nullptr
 
 		if ( pvDiskBufferIfJustLoaded )
 		{
@@ -357,7 +357,7 @@ bool RE_RegisterModels_LevelLoadEnd(bool bDeleteEverythingNotUsedThisLevel /* = 
 
 				if (CachedModel.pModelDiskImage) {
 					Z_Free(CachedModel.pModelDiskImage);
-					//CachedModel.pModelDiskImage = NULL;	// REM for reference, erase() call below negates the need for it.
+					//CachedModel.pModelDiskImage = nullptr;	// REM for reference, erase() call below negates the need for it.
 					bAtLeastoneModelFreed = true;
 				}
 				CachedModels->erase(itModel++);
@@ -409,7 +409,7 @@ static void RE_RegisterModels_DumpNonPure(void)
 
 				if (CachedModel.pModelDiskImage) {
 					Z_Free(CachedModel.pModelDiskImage);
-					//CachedModel.pModelDiskImage = NULL;	// REM for reference, erase() call below negates the need for it.
+					//CachedModel.pModelDiskImage = nullptr;	// REM for reference, erase() call below negates the need for it.
 				}
 
 				CachedModels->erase(itModel++);
@@ -540,7 +540,7 @@ model_t *R_AllocModel( void ) {
 	model_t		*mod;
 
 	if ( tr.numModels == MAX_MOD_KNOWN ) {
-		return NULL;
+		return nullptr;
 	}
 
 	mod = (struct model_s *)Hunk_Alloc( sizeof( *tr.models[tr.numModels] ), h_low );
@@ -829,7 +829,7 @@ qhandle_t RE_RegisterServerModel( const char *name ) {
 		}
 	}
 
-	if ( ( mod = R_AllocModel() ) == NULL ) {
+	if ( ( mod = R_AllocModel() ) == nullptr ) {
 		return 0;
 	}
 
@@ -943,7 +943,7 @@ static qhandle_t RE_RegisterModel_Actual( const char *name ) {
 	modelHash_t	*mh;
 
 	if ( !name || !name[0] ) {
-		Com_Printf ("RE_RegisterModel: NULL name\n" );
+		Com_Printf ("RE_RegisterModel: nullptr name\n" );
 		return 0;
 	}
 
@@ -1007,7 +1007,7 @@ static qhandle_t RE_RegisterModel_Actual( const char *name ) {
 
 	// allocate a new model_t
 
-	if ( ( mod = R_AllocModel() ) == NULL ) {
+	if ( ( mod = R_AllocModel() ) == nullptr ) {
 		Com_Printf (S_COLOR_YELLOW  "RE_RegisterModel: R_AllocModel() failed for '%s'\n", name);
 		return 0;
 	}
@@ -1275,7 +1275,7 @@ void R_ModelInit( void )
 		CachedModels = new CachedModels_t;
 	}
 
-	// leave a space for NULL model
+	// leave a space for nullptr model
 	tr.numModels = 0;
 	memset(mhHashTable, 0, sizeof(mhHashTable));
 
@@ -1297,7 +1297,7 @@ void R_ModelFree(void)
 	if(CachedModels) {
 		RE_RegisterModels_DeleteAll();
 		delete CachedModels;
-		CachedModels = NULL;
+		CachedModels = nullptr;
 	}
 }
 
@@ -1344,7 +1344,7 @@ static md3Tag_t *R_GetTag( md3Header_t *mod, int frame, const char *tagName ) {
 		}
 	}
 
-	return NULL;
+	return nullptr;
 }
 
 int R_LerpTag( orientation_t *tag, qhandle_t handle, int startFrame, int endFrame,

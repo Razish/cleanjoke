@@ -42,7 +42,7 @@ fielddef_t *FindField(fielddef_t *defs, char *name)
 	{
 		if (!strcmp(defs[i].name, name)) return &defs[i];
 	} //end for
-	return NULL;
+	return nullptr;
 } //end of the function FindField
 
 bool ReadNumber(source_t *source, fielddef_t *fd, void *p)

@@ -160,9 +160,9 @@ static void CG_RegisterItemSounds( int itemNum ) {
 }
 
 static void CG_RegisterSounds( void ) {
-	const resource_t *resource = NULL;
+	const resource_t *resource = nullptr;
 	size_t i;
-	const char *soundName = NULL;
+	const char *soundName = nullptr;
 
 	for ( i = 0, resource = sounds; i < numSounds; i++, resource++ ) {
 		CG_LoadResource( resource, trap->S_RegisterSound );
@@ -205,9 +205,9 @@ static void CG_RegisterSounds( void ) {
 }
 
 static void CG_RegisterEffects( void ) {
-	const resource_t *resource = NULL;
+	const resource_t *resource = nullptr;
 	size_t i;
-	const char *effectName = NULL;
+	const char *effectName = nullptr;
 
 	for ( i = 0, resource = efx; i < numEffects; i++, resource++ ) {
 		CG_LoadResource( resource, trap->FX_RegisterEffect );
@@ -234,7 +234,7 @@ static void CG_RegisterEffects( void ) {
 }
 
 static void CG_RegisterGraphics( void ) {
-	const resource_t *resource = NULL;
+	const resource_t *resource = nullptr;
 	size_t i;
 
 	for ( i = 0, resource = gfx; i < numGraphics; i++, resource++ ) {
@@ -258,9 +258,9 @@ static void CG_RegisterGraphics( void ) {
 }
 
 static void CG_RegisterModels( void ) {
-	const resource_t *resource = NULL;
+	const resource_t *resource = nullptr;
 	size_t i;
-	const char *terrainInfo = NULL;
+	const char *terrainInfo = nullptr;
 	int breakPoint;
 
 	for ( i = 0, resource = models; i < numModels; i++, resource++ ) {

@@ -203,7 +203,7 @@ void ThrowSaberToAttacker(gentity_t *self, gentity_t *attacker)
 		if (!ent)
 		{
 #ifdef _DEBUG
-			Com_Printf("The global pointer was NULL. This is a bad thing.\n");
+			Com_Printf("The global pointer was nullptr. This is a bad thing.\n");
 #endif
 			return;
 		}
@@ -244,7 +244,7 @@ void ThrowSaberToAttacker(gentity_t *self, gentity_t *attacker)
 	ent->s.eFlags &= ~(EF_NODRAW);
 	ent->s.modelGhoul2 = 1;
 	ent->s.eType = ET_MISSILE;
-	ent->enemy = NULL;
+	ent->enemy = nullptr;
 
 	if (!attacker || !attacker->client)
 	{
@@ -289,7 +289,7 @@ void JMSaberThink(gentity_t *ent)
 			ent->s.eFlags &= ~(EF_NODRAW);
 			ent->s.modelGhoul2 = 1;
 			ent->s.eType = ET_MISSILE;
-			ent->enemy = NULL;
+			ent->enemy = nullptr;
 
 			ent->pos2[0] = 1;
 			ent->pos2[1] = 0; //respawn next think
@@ -400,7 +400,7 @@ void JMSaberTouch(gentity_t *self, gentity_t *other, trace_t *trace)
 	return;
 }
 
-gentity_t *gJMSaberEnt = NULL;
+gentity_t *gJMSaberEnt = nullptr;
 
 /*QUAKED info_jedimaster_start (1 0 0) (-16 -16 -24) (16 16 32)
 "jedi master" saber spawn point
@@ -409,12 +409,12 @@ void SP_info_jedimaster_start(gentity_t *ent)
 {
 	if (level.gametype != GT_JEDIMASTER)
 	{
-		gJMSaberEnt = NULL;
+		gJMSaberEnt = nullptr;
 		G_FreeEntity(ent);
 		return;
 	}
 
-	ent->enemy = NULL;
+	ent->enemy = nullptr;
 
 	ent->flags = FL_BOUNCE_HALF;
 
@@ -506,10 +506,10 @@ gentity_t *SelectNearestDeathmatchSpawnPoint( vec3_t from ) {
 	gentity_t	*nearestSpot;
 
 	nearestDist = 999999;
-	nearestSpot = NULL;
-	spot = NULL;
+	nearestSpot = nullptr;
+	spot = nullptr;
 
-	while ((spot = G_Find (spot, FOFS(classname), "info_player_deathmatch")) != NULL) {
+	while ((spot = G_Find (spot, FOFS(classname), "info_player_deathmatch")) != nullptr) {
 
 		VectorSubtract( spot->s.origin, from, delta );
 		dist = VectorLength( delta );
@@ -531,9 +531,9 @@ gentity_t *SelectRandomDeathmatchSpawnPoint( bool isbot ) {
 	gentity_t	*spots[MAX_SPAWN_POINTS];
 
 	count = 0;
-	spot = NULL;
+	spot = nullptr;
 
-	while ((spot = G_Find (spot, FOFS(classname), "info_player_deathmatch")) != NULL && count < MAX_SPAWN_POINTS) {
+	while ((spot = G_Find (spot, FOFS(classname), "info_player_deathmatch")) != nullptr && count < MAX_SPAWN_POINTS) {
 		if ( SpotWouldTelefrag( spot ) ) {
 			continue;
 		}
@@ -550,7 +550,7 @@ gentity_t *SelectRandomDeathmatchSpawnPoint( bool isbot ) {
 	}
 
 	if ( !count ) {	// no spots that won't telefrag
-		return G_Find( NULL, FOFS(classname), "info_player_deathmatch");
+		return G_Find( nullptr, FOFS(classname), "info_player_deathmatch");
 	}
 
 	selection = rand() % count;
@@ -567,14 +567,14 @@ gentity_t *SelectRandomFurthestSpawnPoint ( vec3_t avoidPoint, vec3_t origin, ve
 	int			numSpots, rnd, i, j;
 
 	numSpots = 0;
-	spot = NULL;
+	spot = nullptr;
 
 	//in Team DM, look for a team start spot first, if any
 	if ( level.gametype == GT_TEAM
 		&& team != TEAM_FREE
 		&& team != TEAM_SPECTATOR )
 	{
-		char *classname = NULL;
+		char *classname = nullptr;
 		if ( team == TEAM_RED )
 		{
 			classname = "info_player_start_red";
@@ -583,7 +583,7 @@ gentity_t *SelectRandomFurthestSpawnPoint ( vec3_t avoidPoint, vec3_t origin, ve
 		{
 			classname = "info_player_start_blue";
 		}
-		while ((spot = G_Find (spot, FOFS(classname), classname)) != NULL) {
+		while ((spot = G_Find (spot, FOFS(classname), classname)) != nullptr) {
 			if ( SpotWouldTelefrag( spot ) ) {
 				continue;
 			}
@@ -621,7 +621,7 @@ gentity_t *SelectRandomFurthestSpawnPoint ( vec3_t avoidPoint, vec3_t origin, ve
 
 	if ( !numSpots )
 	{//couldn't find any of the above
-		while ((spot = G_Find (spot, FOFS(classname), "info_player_deathmatch")) != NULL) {
+		while ((spot = G_Find (spot, FOFS(classname), "info_player_deathmatch")) != nullptr) {
 			if ( SpotWouldTelefrag( spot ) ) {
 				continue;
 			}
@@ -656,7 +656,7 @@ gentity_t *SelectRandomFurthestSpawnPoint ( vec3_t avoidPoint, vec3_t origin, ve
 			}
 		}
 		if (!numSpots) {
-			spot = G_Find( NULL, FOFS(classname), "info_player_deathmatch");
+			spot = G_Find( nullptr, FOFS(classname), "info_player_deathmatch");
 			if (!spot)
 				trap->Error( ERR_DROP, "Couldn't find a spawn point" );
 			VectorCopy (spot->s.origin, origin);
@@ -705,9 +705,9 @@ gentity_t *SelectDuelSpawnPoint( int team, vec3_t avoidPoint, vec3_t origin, vec
 tryAgain:
 
 	numSpots = 0;
-	spot = NULL;
+	spot = nullptr;
 
-	while ((spot = G_Find (spot, FOFS(classname), spotName)) != NULL) {
+	while ((spot = G_Find (spot, FOFS(classname), spotName)) != nullptr) {
 		if ( SpotWouldTelefrag( spot ) ) {
 			continue;
 		}
@@ -750,7 +750,7 @@ tryAgain:
 		}
 
 		//If we got here we found no free duel or DM spots, just try the first DM spot
-		spot = G_Find( NULL, FOFS(classname), "info_player_deathmatch");
+		spot = G_Find( nullptr, FOFS(classname), "info_player_deathmatch");
 		if (!spot)
 			trap->Error( ERR_DROP, "Couldn't find a spawn point" );
 		VectorCopy (spot->s.origin, origin);
@@ -778,8 +778,8 @@ gentity_t *SelectSpawnPoint ( vec3_t avoidPoint, vec3_t origin, vec3_t angles, t
 gentity_t *SelectInitialSpawnPoint( vec3_t origin, vec3_t angles, team_t team, bool isbot ) {
 	gentity_t	*spot;
 
-	spot = NULL;
-	while ((spot = G_Find (spot, FOFS(classname), "info_player_deathmatch")) != NULL) {
+	spot = nullptr;
+	while ((spot = G_Find (spot, FOFS(classname), "info_player_deathmatch")) != nullptr) {
 		if(((spot->flags & FL_NO_BOTS) && isbot) ||
 		   ((spot->flags & FL_NO_HUMANS) && !isbot))
 		{
@@ -808,7 +808,7 @@ gentity_t *SelectSpectatorSpawnPoint( vec3_t origin, vec3_t angles ) {
 	VectorCopy( level.intermission_origin, origin );
 	VectorCopy( level.intermission_angle, angles );
 
-	return NULL;
+	return nullptr;
 }
 
 // BODYQUE
@@ -1236,7 +1236,7 @@ bool G_SaberModelSetup(gentity_t *ent)
 	return fallbackForSaber;
 }
 
-void *g2SaberInstance = NULL;
+void *g2SaberInstance = nullptr;
 
 // There are two ghoul2 model instances per player (actually three).
 // One is on the clientinfo (the base for the client side player, and copied for player spawns and for corpses).
@@ -1336,7 +1336,7 @@ void SetupGameGhoul2Model(gentity_t *ent, char *modelname, char *skinName)
 						ent->client->ps.customRGBA[2] = colorOverride[2]*255.0f;
 					}
 
-					//BG_ValidateSkinForTeam( truncModelName, skin, ent->client->sess.sessionTeam, NULL );
+					//BG_ValidateSkinForTeam( truncModelName, skin, ent->client->sess.sessionTeam, nullptr );
 				}
 			}
 
@@ -1366,7 +1366,7 @@ void SetupGameGhoul2Model(gentity_t *ent, char *modelname, char *skinName)
 				{
 					trap->G2API_CleanGhoul2Models(&(ent->ghoul2));
 				}
-				ent->ghoul2 = NULL;
+				ent->ghoul2 = nullptr;
 				trap->G2API_DuplicateGhoul2Instance(precachedKyle, &ent->ghoul2);
 			}
 			else
@@ -1379,7 +1379,7 @@ void SetupGameGhoul2Model(gentity_t *ent, char *modelname, char *skinName)
 				if (!GLAName[0] || (!strstr(GLAName, "players/_humanoid/") && ent->s.number < MAX_CLIENTS))
 				{ //a bad model
 					trap->G2API_CleanGhoul2Models(&(ent->ghoul2));
-					ent->ghoul2 = NULL;
+					ent->ghoul2 = nullptr;
 					trap->G2API_DuplicateGhoul2Instance(precachedKyle, &ent->ghoul2);
 				}
 
@@ -1439,7 +1439,7 @@ void SetupGameGhoul2Model(gentity_t *ent, char *modelname, char *skinName)
 			{
 				strcpy(slash, "/animation.cfg");
 
-				ent->localAnimIndex = BG_ParseAnimationFile(GLAName, NULL, false);
+				ent->localAnimIndex = BG_ParseAnimationFile(GLAName, nullptr, false);
 			}
 		}
 		else
@@ -1489,8 +1489,8 @@ void SetupGameGhoul2Model(gentity_t *ent, char *modelname, char *skinName)
 		trap->G2API_AddBolt(ent->ghoul2, 0, "*l_hand_cap_l_arm");
 
 		trap->G2API_SetBoneAnim(ent->ghoul2, 0, "model_root", 0, 12, BONE_ANIM_OVERRIDE_LOOP, 1.0f, level.time, -1, -1);
-		trap->G2API_SetBoneAngles(ent->ghoul2, 0, "upper_lumbar", tempVec, BONE_ANGLES_POSTMULT, POSITIVE_X, NEGATIVE_Y, NEGATIVE_Z, NULL, 0, level.time);
-		trap->G2API_SetBoneAngles(ent->ghoul2, 0, "cranium", tempVec, BONE_ANGLES_POSTMULT, POSITIVE_Z, NEGATIVE_Y, POSITIVE_X, NULL, 0, level.time);
+		trap->G2API_SetBoneAngles(ent->ghoul2, 0, "upper_lumbar", tempVec, BONE_ANGLES_POSTMULT, POSITIVE_X, NEGATIVE_Y, NEGATIVE_Z, nullptr, 0, level.time);
+		trap->G2API_SetBoneAngles(ent->ghoul2, 0, "cranium", tempVec, BONE_ANGLES_POSTMULT, POSITIVE_Z, NEGATIVE_Y, POSITIVE_X, nullptr, 0, level.time);
 
 		if (!g2SaberInstance)
 		{
@@ -1599,7 +1599,7 @@ void Svcmd_ToggleUserinfoValidation_f( void ) {
 char *G_ValidateUserinfo( const char *userinfo ) {
 	unsigned int		i=0, count=0;
 	size_t				length = strlen( userinfo );
-	userinfoValidate_t	*info = NULL;
+	userinfoValidate_t	*info = nullptr;
 	char				key[BIG_INFO_KEY], value[BIG_INFO_VALUE];
 	const char			*s;
 	unsigned int		fieldCount[ARRAY_LEN( userinfoFields )];
@@ -1686,15 +1686,15 @@ char *G_ValidateUserinfo( const char *userinfo ) {
 		}
 	}
 
-	return NULL;
+	return nullptr;
 }
 
 bool ClientUserinfoChanged( int clientNum ) {
 	gentity_t *ent = g_entities + clientNum;
 	gclient_t *client = ent->client;
 	int teamLeader;
-	const char *s=NULL;
-	char *value=NULL, userinfo[MAX_INFO_STRING], buf[MAX_INFO_STRING], oldClientinfo[MAX_INFO_STRING], model[MAX_QPATH],
+	const char *s=nullptr;
+	char *value=nullptr, userinfo[MAX_INFO_STRING], buf[MAX_INFO_STRING], oldClientinfo[MAX_INFO_STRING], model[MAX_QPATH],
 		forcePowers[DEFAULT_FORCEPOWERS_LEN], oldname[MAX_NETNAME], color1[16], color2[16];
 	bool modelChanged = false;
 	gender_t gender = GENDER_MALE;
@@ -1852,10 +1852,10 @@ bool ClientUserinfoChanged( int clientNum ) {
 	if ( modelChanged ) {
 		// update the server g2 instance if appropriate
 		char *modelname = Info_ValueForKey( userinfo, "model" );
-		SetupGameGhoul2Model( ent, modelname, NULL );
+		SetupGameGhoul2Model( ent, modelname, nullptr );
 
 		if ( ent->ghoul2 && ent->client )
-			ent->client->renderInfo.lastG2 = NULL; //update the renderinfo bolts next update.
+			ent->client->renderInfo.lastG2 = nullptr; //update the renderinfo bolts next update.
 
 		client->torsoAnimExecute = client->legsAnimExecute = -1;
 		client->torsoLastFlip = client->legsLastFlip = false;
@@ -1888,13 +1888,13 @@ static bool CompareIPs( const char *ip1, const char *ip2 )
 // Called when a player begins connecting to the server.
 // Called again for every map change or tournament restart.
 // The session information will be valid after exit.
-// Return NULL if the client should be allowed, otherwise return a string with the reason for denial.
+// Return nullptr if the client should be allowed, otherwise return a string with the reason for denial.
 // Otherwise, the client will be sent the current gamestate and will eventually get to ClientBegin.
 // firstTime will be true the very first time a client connects to the server machine, but false on map changes and
 //	tournament restarts.
 char *ClientConnect( int clientNum, bool firstTime, bool isBot ) {
-	char		*value = NULL;
-	gentity_t	*ent = NULL, *te = NULL;
+	char		*value = nullptr;
+	gentity_t	*ent = nullptr, *te = nullptr;
 	gclient_t	*client;
 	char		userinfo[MAX_INFO_STRING] = {0},
 				tmpIP[NET_ADDRSTRMAXLEN] = {0},
@@ -2027,7 +2027,7 @@ char *ClientConnect( int clientNum, bool firstTime, bool isBot ) {
 	te->r.svFlags |= SVF_BROADCAST;
 	te->s.eventParm = clientNum;
 
-	return NULL;
+	return nullptr;
 }
 
 extern bool g_dontPenalizeTeam; //g_cmds.c
@@ -2148,10 +2148,10 @@ void ClientBegin( int clientNum, bool allowTeamReset ) {
 	// First time model setup for that player.
 	trap->GetUserinfo( clientNum, userinfo, sizeof(userinfo) );
 	modelname = Info_ValueForKey (userinfo, "model");
-	SetupGameGhoul2Model(ent, modelname, NULL);
+	SetupGameGhoul2Model(ent, modelname, nullptr);
 
 	if ( ent->ghoul2 && ent->client )
-		ent->client->renderInfo.lastG2 = NULL; //update the renderinfo bolts next update.
+		ent->client->renderInfo.lastG2 = nullptr; //update the renderinfo bolts next update.
 
 	if ( level.gametype == GT_POWERDUEL && client->sess.sessionTeam != TEAM_SPECTATOR && client->sess.duelTeam == DUELTEAM_FREE )
 		SetTeam( ent, "s" );
@@ -2375,8 +2375,8 @@ tryTorso:
 void ClientSpawn(gentity_t *ent) {
 	int					i = 0, index = 0, saveSaberNum = ENTITYNUM_NONE, wDisable = 0;
 	vec3_t				spawn_origin, spawn_angles;
-	gentity_t			*spawnPoint = NULL, *tent = NULL;
-	gclient_t			*client = NULL;
+	gentity_t			*spawnPoint = nullptr, *tent = nullptr;
+	gclient_t			*client = nullptr;
 	clientPersistant_t	saved;
 	clientSession_t		savedSess;
 	forcedata_t			savedForce;
@@ -2384,7 +2384,7 @@ void ClientSpawn(gentity_t *ent) {
 	int					persistant[MAX_PERSISTANT] = {0};
 	int					flags, gameFlags, savedPing, accuracy_hits, accuracy_shots, eventSequence;
 	void				*g2WeaponPtrs[MAX_SABERS];
-	char				userinfo[MAX_INFO_STRING] = {0}, *key = NULL, *value = NULL, *saber = NULL;
+	char				userinfo[MAX_INFO_STRING] = {0}, *key = nullptr, *value = nullptr, *saber = nullptr;
 	bool			changedSaber = false;
 
 	index = ent - g_entities;
@@ -2894,11 +2894,11 @@ void ClientSpawn(gentity_t *ent) {
 
 			if (client->ps.weapon == WP_SABER)
 			{
-				G_SetAnim(ent, NULL, SETANIM_BOTH, BOTH_STAND1TO2, SETANIM_FLAG_OVERRIDE|SETANIM_FLAG_HOLD|SETANIM_FLAG_HOLDLESS, 0);
+				G_SetAnim(ent, nullptr, SETANIM_BOTH, BOTH_STAND1TO2, SETANIM_FLAG_OVERRIDE|SETANIM_FLAG_HOLD|SETANIM_FLAG_HOLDLESS, 0);
 			}
 			else
 			{
-				G_SetAnim(ent, NULL, SETANIM_TORSO, TORSO_RAISEWEAP1, SETANIM_FLAG_OVERRIDE|SETANIM_FLAG_HOLD|SETANIM_FLAG_HOLDLESS, 0);
+				G_SetAnim(ent, nullptr, SETANIM_TORSO, TORSO_RAISEWEAP1, SETANIM_FLAG_OVERRIDE|SETANIM_FLAG_HOLD|SETANIM_FLAG_HOLDLESS, 0);
 				client->ps.legsAnim = WeaponReadyAnim[client->ps.weapon];
 			}
 			client->ps.weaponstate = WEAPON_RAISING;
@@ -2941,7 +2941,7 @@ void ClientSpawn(gentity_t *ent) {
 	// initialize animations and other things
 	client->ps.commandTime = level.time - 100;
 	ent->client->pers.cmd.serverTime = level.time;
-	ClientThink( ent-g_entities, NULL );
+	ClientThink( ent-g_entities, nullptr );
 
 	// run the presend to set anything else, follow spectators wait
 	// until all clients have been reconnected after map_restart
@@ -3085,7 +3085,7 @@ void ClientDisconnect( int clientNum ) {
 	if ( level.gametype == GT_DUEL && ent->client->sess.sessionTeam == TEAM_FREE && level.intermissiontime ) {
 		trap->SendConsoleCommand( EXEC_APPEND, "map_restart 0\n" );
 		level.restarted = true;
-		level.changemap = NULL;
+		level.changemap = nullptr;
 		level.intermissiontime = 0;
 	}
 

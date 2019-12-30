@@ -97,7 +97,7 @@ static int CL_Milliseconds( void ) {
 }
 
 static void CL_Cvar_Get( const char *var_name, const char *value, uint32_t flags ) {
-	Cvar_Register( NULL, var_name, value, flags );
+	Cvar_Register( nullptr, var_name, value, flags );
 }
 
 static void CL_GetClientState( uiClientState_t *state ) {
@@ -682,7 +682,7 @@ static void UIVM_Cvar_SetValue( const char *var_name, float value ) {
 }
 
 static void CL_AddUICommand( const char *cmdName ) {
-	Cmd_AddCommand( cmdName, NULL );
+	Cmd_AddCommand( cmdName, nullptr );
 }
 
 static void UIVM_Cmd_RemoveCommand( const char *cmd_name ) {
@@ -867,5 +867,5 @@ void CL_BindUI( void ) {
 void CL_UnbindUI( void ) {
 	UIVM_Shutdown();
 	VM_Free( uivm );
-	uivm = NULL;
+	uivm = nullptr;
 }

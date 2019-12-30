@@ -533,7 +533,7 @@ void G2_TransformModel(CGhoul2Info_v &ghoul2, const int frameNum, vec3_t scale, 
 	vec3_t			correctScale;
 	bool		firstModelOnly = false;
 
-	if (cg_g2MarksAllModels == NULL
+	if (cg_g2MarksAllModels == nullptr
 		|| !cg_g2MarksAllModels->integer )
 	{
 		firstModelOnly = true;
@@ -1465,7 +1465,7 @@ void G2_TraceModels(CGhoul2Info_v &ghoul2, vec3_t rayStart, vec3_t rayEnd, Colli
 	shader_t		*cust_shader;
 	bool		firstModelOnly = false;
 
-	if (cg_g2MarksAllModels == NULL
+	if (cg_g2MarksAllModels == nullptr
 		|| !cg_g2MarksAllModels->integer )
 	{
 		firstModelOnly = true;
@@ -1501,7 +1501,7 @@ void G2_TraceModels(CGhoul2Info_v &ghoul2, vec3_t rayStart, vec3_t rayEnd, Colli
 		}
 		else
 		{
-			cust_shader = NULL;
+			cust_shader = nullptr;
 		}
 
 		// figure out the custom skin thing
@@ -1511,7 +1511,7 @@ void G2_TraceModels(CGhoul2Info_v &ghoul2, vec3_t rayStart, vec3_t rayEnd, Colli
 		}
 		else
 		{
-			skin = NULL;
+			skin = nullptr;
 		}
 
 		lod = G2_DecideTraceLod(ghoul2[i],useLod);

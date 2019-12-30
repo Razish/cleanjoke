@@ -230,7 +230,7 @@ void SV_DirectConnect( netadr_t from ) {
 		startIndex = sv_privateClients->integer;
 	}
 
-	newcl = NULL;
+	newcl = nullptr;
 	for ( i = startIndex; i < sv_maxclients->integer ; i++ ) {
 		cl = &svs.clients[i];
 		if (cl->state == CS_FREE) {
@@ -344,7 +344,7 @@ void SV_DropClient( client_t *drop, const char *reason ) {
 	SV_CloseDownload( drop );
 
 	// tell everyone why they got dropped
-	SV_SendServerCommand( NULL, "print \"%s" S_COLOR_WHITE " %s\n\"", drop->name, reason );
+	SV_SendServerCommand( nullptr, "print \"%s" S_COLOR_WHITE " %s\n\"", drop->name, reason );
 
 	// call the prog function for removing a client
 	// this will remove the body, among other things
@@ -548,7 +548,7 @@ static void SV_CloseDownload( client_t *cl ) {
 	for (i = 0; i < MAX_DOWNLOAD_WINDOW; i++) {
 		if (cl->downloadBlocks[i]) {
 			Z_Free( cl->downloadBlocks[i] );
-			cl->downloadBlocks[i] = NULL;
+			cl->downloadBlocks[i] = nullptr;
 		}
 	}
 
@@ -992,7 +992,7 @@ static void SV_ResetPureClient_f( client_t *cl ) {
 
 // Pull specific info from a newly changed userinfo string into a more C friendly form.
 void SV_UserinfoChanged( client_t *cl ) {
-	char	*val=NULL, *ip=NULL;
+	char	*val=nullptr, *ip=nullptr;
 	int		i=0, len=0;
 
 	// name for C code
@@ -1123,7 +1123,7 @@ static const ucmd_t ucmds[] = {
 	{ "nextdl",     SV_NextDownload_f },
 	{ "stopdl",     SV_StopDownload_f },
 	{ "donedl",     SV_DoneDownload_f },
-	{ NULL,         NULL }
+	{ nullptr,         nullptr }
 };
 
 // Also called by bot code
@@ -1224,7 +1224,7 @@ void SV_ClientThink (client_t *cl, usercmd_t *cmd) {
 		return;		// may have been kicked during the last usercmd
 	}
 
-	GVM_ClientThink( cl - svs.clients, NULL );
+	GVM_ClientThink( cl - svs.clients, nullptr );
 }
 
 // The message usually contains all the movement commands that were in the last three packets, so that the information

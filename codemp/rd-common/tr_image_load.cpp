@@ -44,7 +44,7 @@ const ImageLoaderMap *FindImageLoader ( const char *extension )
 		}
 	}
 
-	return NULL;
+	return nullptr;
 }
 
 // Adds a new image loader to load the specified image file extension.
@@ -60,7 +60,7 @@ bool R_ImageLoader_Add ( const char *extension, ImageLoaderFn imageLoader )
 		return false;
 	}
 
-	if ( FindImageLoader (extension) != NULL )
+	if ( FindImageLoader (extension) != nullptr )
 	{
 		ri.Printf (PRINT_DEVELOPER, "R_AddImageLoader: Image loader already exists for extension \"%s\".\n", extension);
 		return false;
@@ -88,14 +88,14 @@ void R_ImageLoader_Init()
 
 // Loads any of the supported image types into a cannonical 32 bit format.
 void R_LoadImage( const char *shortname, byte **pic, int *width, int *height ) {
-	*pic = NULL;
+	*pic = nullptr;
 	*width = 0;
 	*height = 0;
 
 	// Try loading the image with the original extension (if possible).
 	const char *extension = COM_GetExtension (shortname);
 	const ImageLoaderMap *imageLoader = FindImageLoader (extension);
-	if ( imageLoader != NULL )
+	if ( imageLoader != nullptr )
 	{
 		imageLoader->loader (shortname, pic, width, height);
 		if ( *pic )

@@ -87,7 +87,7 @@ typedef struct MusicFile_s {
 } MusicFile_t;
 
 typedef std::map <sstring_t, MusicFile_t>	MusicData_t;			// string is "explore", "action", "boss" etc
-										MusicData_t* MusicData = NULL;
+										MusicData_t* MusicData = nullptr;
 // there are now 2 of these, because of the new "uses" keyword...
 sstring_t	gsLevelNameForLoad;		// eg "kejim_base", formed from literal BSP name, but also used as dir name for music paths
 sstring_t	gsLevelNameForCompare;	// eg "kejim_base", formed from literal BSP name, but also used as dir name for music paths
@@ -96,7 +96,7 @@ sstring_t	gsLevelNameForBossLoad;	// eg "kejim_base', special case for enabling 
 void Music_Free(void)
 {
 	delete MusicData;
-	MusicData = NULL;
+	MusicData = nullptr;
 }
 
 // some sort of error in the music data...
@@ -145,7 +145,7 @@ static const char *Music_BuildFileName(const char *psFileNameBase, MusicState_e 
 	return sFileName.c_str();
 }
 
-// this MUST return NULL for non-base states unless doing debug-query
+// this MUST return nullptr for non-base states unless doing debug-query
 const char *Music_BaseStateToString( MusicState_e eMusicState, bool bDebugPrintQuery /* = false */ )
 {
 	switch (eMusicState)
@@ -169,7 +169,7 @@ const char *Music_BaseStateToString( MusicState_e eMusicState, bool bDebugPrintQ
 		default: break;
 	}
 
-	return NULL;
+	return nullptr;
 }
 
 static bool Music_ParseMusic(CGenericParser2 &Parser, MusicData_t *MusicData, CGPGroup *pgMusicFiles, const char *psMusicName, const char *psMusicNameKey, MusicState_e eMusicState)
@@ -385,7 +385,7 @@ static bool Music_ParseLeveldata(const char *psLevelName)
 {
 	bool bReturn = false;
 
-	if (MusicData == NULL)
+	if (MusicData == nullptr)
 	{
 		MusicData = new MusicData_t;
 	}
@@ -405,7 +405,7 @@ static bool Music_ParseLeveldata(const char *psLevelName)
 	gsLevelNameForCompare	= sLevelName;	// harmless to init here even if we fail to parse dms.dat file
 	gsLevelNameForBossLoad	= sLevelName;	// harmless to init here even if we fail to parse dms.dat file
 
-	char *pText = NULL;
+	char *pText = nullptr;
 	/*int iTotalBytesLoaded = */FS_ReadFile(sFILENAME_DMS, (void **)&pText );
 	if (pText)
 	{
@@ -424,7 +424,7 @@ static bool Music_ParseLeveldata(const char *psLevelName)
 
 					if (pgLevelMusic)
 					{
-						CGPGroup *pgThisLevelMusic = NULL;
+						CGPGroup *pgThisLevelMusic = nullptr;
 						// check for new USE keyword...
 						int iSanityLimit = 0;
 						sstring_t sSearchName(sLevelName);
@@ -462,11 +462,11 @@ static bool Music_ParseLeveldata(const char *psLevelName)
 						if (pgThisLevelMusic && iSanityLimit < 10)
 						{
 							// these are optional fields, so see which ones we find...
-							const char *psName_Explore = NULL;
-							const char *psName_Action  = NULL;
-							const char *psName_Boss	  = NULL;
-							//const char *psName_Death	  = NULL;
-							const char *psName_UseBoss = NULL;
+							const char *psName_Explore = nullptr;
+							const char *psName_Action  = nullptr;
+							const char *psName_Boss	  = nullptr;
+							//const char *psName_Death	  = nullptr;
+							const char *psName_UseBoss = nullptr;
 
 							for (CGPValue *pValue = pgThisLevelMusic->GetPairs(); pValue; pValue = pValue->GetNext())
 							{
@@ -690,7 +690,7 @@ static bool Music_ParseLeveldata(const char *psLevelName)
 	return bReturn;
 }
 
-// returns ptr to music file, or NULL for error/missing...
+// returns ptr to music file, or nullptr for error/missing...
 static MusicFile_t *Music_GetBaseMusicFile( const char *psMusicState )	// where psMusicState is (eg) "explore", "action" or "boss"
 {
 	MusicData_t::iterator it = MusicData->find( psMusicState );
@@ -700,7 +700,7 @@ static MusicFile_t *Music_GetBaseMusicFile( const char *psMusicState )	// where 
 		return pMusicFile;
 	}
 
-	return NULL;
+	return nullptr;
 }
 
 static MusicFile_t *Music_GetBaseMusicFile( MusicState_e eMusicState )
@@ -711,7 +711,7 @@ static MusicFile_t *Music_GetBaseMusicFile( MusicState_e eMusicState )
 		return Music_GetBaseMusicFile( psMusicStateString );
 	}
 
-	return NULL;
+	return nullptr;
 }
 
 // where label is (eg) "kejim_base"...
@@ -736,7 +736,7 @@ bool Music_DynamicDataAvailable(const char *psDynamicMusicLabel)
 
 const char *Music_GetFileNameForState( MusicState_e eMusicState)
 {
-	MusicFile_t *pMusicFile = NULL;
+	MusicFile_t *pMusicFile = nullptr;
 	switch (eMusicState)
 	{
 		case eBGRNDTRACK_EXPLORE:
@@ -791,7 +791,7 @@ const char *Music_GetFileNameForState( MusicState_e eMusicState)
 			break;
 	}
 
-	return NULL;
+	return nullptr;
 }
 
 bool Music_StateIsTransition( MusicState_e eMusicState )
@@ -845,8 +845,8 @@ bool Music_StateCanBeInterrupted( MusicState_e eMusicState, MusicState_e ePropos
 //	float time of entry point of new track *after* transition
 bool Music_AllowedToTransition( float			fPlayingTimeElapsed,
 									MusicState_e	eMusicState,
-									MusicState_e	*peTransition /* = NULL */,
-									float			*pfNewTrackEntryTime /* = NULL */
+									MusicState_e	*peTransition /* = nullptr */,
+									float			*pfNewTrackEntryTime /* = nullptr */
 									)
 {
 	const float fTimeEpsilon = 0.3f;	// arb., how close we have to be to an exit point to take it.

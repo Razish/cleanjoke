@@ -49,7 +49,7 @@ static float *TableForFunc( genFunc_t func )
 	}
 
 	Com_Error( ERR_DROP, "TableForFunc called with invalid function '%d' in shader '%s'\n", func, tess.shader->name );
-	return NULL;
+	return nullptr;
 }
 
 // Evaluates a given waveForm_t, referencing backEnd.refdef.time directly

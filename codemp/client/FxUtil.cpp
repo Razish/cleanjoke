@@ -123,7 +123,7 @@ static void FX_FreeMember( SEffectList *obj )
 }
 
 // Finds an unused effect slot
-// Note - in the editor, this function may return NULL, indicating that all effects are being stopped.
+// Note - in the editor, this function may return nullptr, indicating that all effects are being stopped.
 static SEffectList *FX_GetValidEffect()
 {
 	if ( nextValidEffect->mEffect == 0 )
@@ -201,7 +201,7 @@ void FX_Add( bool portal )
 	}
 }
 
-// Note - in the editor, this function may change *pEffect to NULL, indicating that all effects are being stopped.
+// Note - in the editor, this function may change *pEffect to nullptr, indicating that all effects are being stopped.
 extern bool gEffectsInPortal;	//from FXScheduler.cpp so i don't have to pass it in on EVERY FX_ADD*
 void FX_AddPrimitive( CEffect **pEffect, int killTime )
 {
@@ -237,9 +237,9 @@ CParticle *FX_AddParticle( vec3_t org, vec3_t vel, vec3_t accel, float size1, fl
 
 	if ( fx )
 	{
-		if (flags&FX_RELATIVE && ghoul2 != NULL)
+		if (flags&FX_RELATIVE && ghoul2 != nullptr)
 		{
-			fx->SetOrigin1( NULL );
+			fx->SetOrigin1( nullptr );
 			fx->SetOrgOffset( org );
 			fx->SetBoltinfo( ghoul2, entNum, modelNum, boltNum );
 		}
@@ -327,9 +327,9 @@ CLine *FX_AddLine( vec3_t start, vec3_t end, float size1, float size2, float siz
 
 	if ( fx )
 	{
-		if (flags&FX_RELATIVE && ghoul2 != NULL)
+		if (flags&FX_RELATIVE && ghoul2 != nullptr)
 		{
-			fx->SetOrigin1( NULL );
+			fx->SetOrigin1( nullptr );
 			fx->SetOrgOffset( start ); //offset from bolt pos
 			fx->SetVel( end );	//vel is the vector offset from bolt+orgOffset
 			fx->SetBoltinfo( ghoul2, entNum, modelNum, boltNum );
@@ -409,9 +409,9 @@ CElectricity *FX_AddElectricity( vec3_t start, vec3_t end, float size1, float si
 
 	if ( fx )
 	{
-		if (flags&FX_RELATIVE && ghoul2 != NULL)
+		if (flags&FX_RELATIVE && ghoul2 != nullptr)
 		{
-			fx->SetOrigin1( NULL );
+			fx->SetOrigin1( nullptr );
 			fx->SetOrgOffset( start );//offset
 			fx->SetVel( end );	//vel is the vector offset from bolt+orgOffset
 			fx->SetBoltinfo( ghoul2, entNum, modelNum, boltNum );
@@ -471,7 +471,7 @@ CElectricity *FX_AddElectricity( vec3_t start, vec3_t end, float size1, float si
 		fx->SetSTScale( 1.0f, 1.0f );
 
 		FX_AddPrimitive( (CEffect**)&fx, killTime );
-		// in the editor, fx may now be NULL?
+		// in the editor, fx may now be nullptr?
 		if ( fx )
 		{
 			fx->Initialize();
@@ -501,9 +501,9 @@ CTail *FX_AddTail( vec3_t org, vec3_t vel, vec3_t accel,
 
 	if ( fx )
 	{
-		if (flags&FX_RELATIVE && ghoul2 != NULL)
+		if (flags&FX_RELATIVE && ghoul2 != nullptr)
 		{
-			fx->SetOrigin1( NULL );
+			fx->SetOrigin1( nullptr );
 			fx->SetOrgOffset( org );
 			fx->SetBoltinfo( ghoul2, entNum, modelNum, boltNum );
 		}
@@ -604,9 +604,9 @@ CCylinder *FX_AddCylinder( vec3_t start, vec3_t normal,
 
 	if ( fx )
 	{
-		if (flags&FX_RELATIVE && ghoul2 != NULL)
+		if (flags&FX_RELATIVE && ghoul2 != nullptr)
 		{
-			fx->SetOrigin1( NULL );
+			fx->SetOrigin1( nullptr );
 			fx->SetOrgOffset( start );//offset
 			fx->SetBoltinfo( ghoul2, entNum, modelNum, boltNum );
 		}
@@ -717,7 +717,7 @@ CEmitter *FX_AddEmitter( vec3_t org, vec3_t vel, vec3_t accel,
 
 	if ( fx )
 	{
-		if (flags&FX_RELATIVE && ghoul2 != NULL)
+		if (flags&FX_RELATIVE && ghoul2 != nullptr)
 		{
 			assert(0);//not done
 //			fx->SetBoltinfo( ghoul2, entNum, modelNum, boltNum );
@@ -806,9 +806,9 @@ CLight *FX_AddLight( vec3_t org, float size1, float size2, float sizeParm,
 
 	if ( fx )
 	{
-		if (flags&FX_RELATIVE && ghoul2 != NULL)
+		if (flags&FX_RELATIVE && ghoul2 != nullptr)
 		{
-			fx->SetOrigin1( NULL );
+			fx->SetOrigin1( nullptr );
 			fx->SetOrgOffset( org );//offset
 			fx->SetBoltinfo( ghoul2, entNum, modelNum, boltNum );
 		}
@@ -875,9 +875,9 @@ COrientedParticle *FX_AddOrientedParticle( vec3_t org, vec3_t norm, vec3_t vel, 
 
 	if ( fx )
 	{
-		if (flags&FX_RELATIVE && ghoul2 != NULL)
+		if (flags&FX_RELATIVE && ghoul2 != nullptr)
 		{
-			fx->SetOrigin1( NULL );
+			fx->SetOrigin1( nullptr );
 			fx->SetOrgOffset( org );//offset
 			fx->SetBoltinfo( ghoul2, entNum, modelNum, boltNum );
 		}

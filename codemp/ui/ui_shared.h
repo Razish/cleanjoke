@@ -255,7 +255,7 @@ struct textScrollDef_t {
 	int				maxLineChars;
 	int				drawPadding;
 	int				iLineCount;
-	const char*		pLines[MAX_TEXTSCROLL_LINES];	// can contain NULL ptrs that you should skip over during paint.
+	const char*		pLines[MAX_TEXTSCROLL_LINES];	// can contain nullptr ptrs that you should skip over during paint.
 };
 
 struct itemDef_t {

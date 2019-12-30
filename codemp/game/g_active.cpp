@@ -160,7 +160,7 @@ void P_WorldEffects( gentity_t *ent ) {
 				// don't play a normal pain sound
 				ent->pain_debounce_time = level.time + 200;
 
-				G_Damage (ent, NULL, NULL, NULL, NULL,
+				G_Damage (ent, nullptr, nullptr, nullptr, nullptr,
 					ent->damage, DAMAGE_NO_ARMOR, MOD_WATER);
 			}
 		}
@@ -182,10 +182,10 @@ void P_WorldEffects( gentity_t *ent ) {
 		#endif
 			{
 				if ( ent->watertype & CONTENTS_LAVA )
-					G_Damage( ent, NULL, NULL, NULL, NULL, 30*waterlevel, 0, MOD_LAVA );
+					G_Damage( ent, nullptr, nullptr, nullptr, nullptr, 30*waterlevel, 0, MOD_LAVA );
 
 				if ( ent->watertype & CONTENTS_SLIME )
-					G_Damage( ent, NULL, NULL, NULL, NULL, 10*waterlevel, 0, MOD_SLIME );
+					G_Damage( ent, nullptr, nullptr, nullptr, nullptr, 10*waterlevel, 0, MOD_SLIME );
 			}
 		}
 	}
@@ -368,7 +368,7 @@ void DoImpact( gentity_t *self, gentity_t *other, bool damageSelf )
 						if ( self.classname=="player_sheep "&& self.flags&FL_ONGROUND && self.velocity_z > -50 )
 							return;
 						*/
-						G_Damage( self, NULL, NULL, NULL, self->r.currentOrigin, magnitude/2, DAMAGE_NO_ARMOR, MOD_FALLING );//FIXME: MOD_IMPACT
+						G_Damage( self, nullptr, nullptr, nullptr, self->r.currentOrigin, magnitude/2, DAMAGE_NO_ARMOR, MOD_FALLING );//FIXME: MOD_IMPACT
 					}
 				}
 		}
@@ -600,7 +600,7 @@ void G_MoverTouchPushTriggers( gentity_t *ent, vec3_t oldOrg )
 				continue;
 			}
 
-			if ( hit->touch == NULL )
+			if ( hit->touch == nullptr )
 			{
 				continue;
 			}
@@ -617,7 +617,7 @@ void G_MoverTouchPushTriggers( gentity_t *ent, vec3_t oldOrg )
 
 			memset( &trace, 0, sizeof(trace) );
 
-			if ( hit->touch != NULL )
+			if ( hit->touch != nullptr )
 			{
 				hit->touch(hit, ent, &trace);
 			}
@@ -657,7 +657,7 @@ void SpectatorThink( gentity_t *ent, usercmd_t *ucmd ) {
 
 		pmove.noSpecMove = g_noSpecMove.integer;
 
-		pmove.animations = NULL;
+		pmove.animations = nullptr;
 		pmove.nonHumanoid = false;
 
 		//Set up bg entity data
@@ -853,7 +853,7 @@ void ClientEvents( gentity_t *ent, int oldEventSequence ) {
 
 				VectorSet (dir, 0, 0, 1);
 				ent->pain_debounce_time = level.time + 200;	// no normal pain sound
-				G_Damage (ent, NULL, NULL, NULL, NULL, damage, DAMAGE_NO_ARMOR, MOD_FALLING);
+				G_Damage (ent, nullptr, nullptr, nullptr, nullptr, damage, DAMAGE_NO_ARMOR, MOD_FALLING);
 
 				if (ent->health < 1)
 				{
@@ -1029,7 +1029,7 @@ void G_AddPushVecToUcmd( gentity_t *self, usercmd_t *ucmd )
 		return;
 	}
 
-	AngleVectors(self->client->ps.viewangles, forward, right, NULL);
+	AngleVectors(self->client->ps.viewangles, forward, right, nullptr);
 	VectorScale(forward, ucmd->forwardmove/127.0f * self->client->ps.speed, moveDir);
 	VectorMA(moveDir, ucmd->rightmove/127.0f * self->client->ps.speed, right, moveDir);
 	//moveDir is now our intended move velocity
@@ -1717,7 +1717,7 @@ void ClientThink_real( gentity_t *ent ) {
 
 			VectorSet(tAng, 0, ent->client->ps.viewangles[YAW], 0);
 			trap->G2API_GetBoltMatrix(ent->ghoul2, 0, 0, &rhMat, tAng, ent->client->ps.origin, level.time,
-				NULL, ent->modelScale); //0 is always going to be right hand bolt
+				nullptr, ent->modelScale); //0 is always going to be right hand bolt
 			BG_GiveMeVectorFromMatrix(&rhMat, ORIGIN, rhOrg);
 
 			VectorSubtract(rhOrg, grabbed->r.currentOrigin, bodyDir);
@@ -2117,7 +2117,7 @@ void ClientThink_real( gentity_t *ent ) {
 					otherKiller = ent;
 				}
 			}
-			G_Damage(ent, otherKiller, otherKiller, NULL, ent->client->ps.origin, 9999, DAMAGE_NO_PROTECTION, MOD_FALLING);
+			G_Damage(ent, otherKiller, otherKiller, nullptr, ent->client->ps.origin, 9999, DAMAGE_NO_PROTECTION, MOD_FALLING);
 			//player_die(ent, ent, ent, 100000, MOD_FALLING);
 	//		if (!ent->NPC)
 	//		{
@@ -2174,10 +2174,10 @@ void ClientThink_real( gentity_t *ent ) {
 	pmove.pmove_msec = pmove_msec.integer;
 	pmove.pmove_float = pmove_float.integer;
 
-	pmove.animations = bgAllAnims[ent->localAnimIndex].anims;//NULL;
+	pmove.animations = bgAllAnims[ent->localAnimIndex].anims;//nullptr;
 
 	//rww - bgghoul2
-	pmove.ghoul2 = NULL;
+	pmove.ghoul2 = nullptr;
 
 #ifdef _DEBUG
 	if (g_disableServerG2.integer)
@@ -2190,7 +2190,7 @@ void ClientThink_real( gentity_t *ent ) {
 	{
 		if (ent->localAnimIndex > 1)
 		{ //if it isn't humanoid then we will be having none of this.
-			pmove.ghoul2 = NULL;
+			pmove.ghoul2 = nullptr;
 		}
 		else
 		{

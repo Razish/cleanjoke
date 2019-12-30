@@ -374,7 +374,7 @@ void SV_SpawnServer( char *server, bool killBots, ForceReload_e eForceReload ) {
 	if (svs.snapshotEntities)
 	{
 		delete[] svs.snapshotEntities;
-		svs.snapshotEntities = NULL;
+		svs.snapshotEntities = nullptr;
 	}
 
 	SV_SendMapChange();
@@ -648,7 +648,7 @@ void SV_SpawnServer( char *server, bool killBots, ForceReload_e eForceReload ) {
 #ifdef DEDICATED
 
 #define G2_VERT_SPACE_SERVER_SIZE 256
-IHeapAllocator *G2VertSpaceServer = NULL;
+IHeapAllocator *G2VertSpaceServer = nullptr;
 CMiniHeap IHeapAllocator_singleton(G2_VERT_SPACE_SERVER_SIZE * 1024);
 
 // DLL glue
@@ -686,7 +686,7 @@ static IHeapAllocator *GetG2VertSpaceServer( void ) {
 	return G2VertSpaceServer;
 }
 
-refexport_t	*re = NULL;
+refexport_t	*re = nullptr;
 
 static void SV_InitRef( void ) {
 	static refimport_t ri;
@@ -853,7 +853,7 @@ void SV_Shutdown( char *finalmsg )
 	if (svs.snapshotEntities)
 	{
 		delete[] svs.snapshotEntities;
-		svs.snapshotEntities = NULL;
+		svs.snapshotEntities = nullptr;
 	}
 
 	// free current level

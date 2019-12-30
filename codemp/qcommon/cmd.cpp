@@ -366,7 +366,7 @@ char *Cmd_Cmd(void)
 }*/
 
 // The functions that execute commands get their parameters with these
-// functions. Cmd_Argv () will return an empty string, not a NULL
+// functions. Cmd_Argv () will return an empty string, not a nullptr
 // if arg > argc, so string operations are allways safe.
 void Cmd_Args_Sanitize( size_t length, const char *strip, const char *repl )
 {
@@ -506,13 +506,13 @@ cmd_function_t *Cmd_FindCommand( const char *cmd_name )
 	for( cmd = cmd_functions; cmd; cmd = cmd->next )
 		if( !Q_stricmp( cmd_name, cmd->name ) )
 			return cmd;
-	return NULL;
+	return nullptr;
 }
 
 // called by the init functions of other parts of the program to
 // register commands and functions to call for them.
 // The cmd_name is referenced later, so it should not be in temp memory
-// if function is NULL, the command will be forwarded to the server
+// if function is nullptr, the command will be forwarded to the server
 // as a clc_clientCommand instead of executed locally
 void	Cmd_AddCommand( const char *cmd_name, xcommand_t function, const char *cmd_desc ) {
 	cmd_function_t	*cmd;
@@ -521,7 +521,7 @@ void	Cmd_AddCommand( const char *cmd_name, xcommand_t function, const char *cmd_
 	if( Cmd_FindCommand( cmd_name ) )
 	{
 		// allow completion-only commands to be silently doubled
-		if ( function != NULL ) {
+		if ( function != nullptr ) {
 			Com_Printf ("Cmd_AddCommand: %s already defined\n", cmd_name);
 		}
 		return;
@@ -533,9 +533,9 @@ void	Cmd_AddCommand( const char *cmd_name, xcommand_t function, const char *cmd_
 	if ( VALIDSTRING( cmd_desc ) )
 		cmd->description = CopyString( cmd_desc );
 	else
-		cmd->description = NULL;
+		cmd->description = nullptr;
 	cmd->function = function;
-	cmd->complete = NULL;
+	cmd->complete = nullptr;
 	cmd->next = cmd_functions;
 	cmd_functions = cmd;
 }
@@ -707,9 +707,9 @@ bool CmdSort( const cmd_function_t *cmd1, const cmd_function_t *cmd2 )
 
 static void Cmd_List_f (void)
 {
-	const cmd_function_t	*cmd = NULL;
+	const cmd_function_t	*cmd = nullptr;
 	int				i, j;
-	char			*match = NULL;
+	char			*match = nullptr;
 	CmdFuncVector	cmds;
 
 	if ( Cmd_Argc() > 1 ) {

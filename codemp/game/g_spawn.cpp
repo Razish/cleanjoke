@@ -212,7 +212,7 @@ void SP_item_botroam( gentity_t *ent ) { }
 
 void SP_gametype_item ( gentity_t* ent )
 {
-	gitem_t *item = NULL;
+	gitem_t *item = nullptr;
 	char *value;
 	int team = -1;
 
@@ -259,12 +259,12 @@ void SP_gametype_item ( gentity_t* ent )
 		}
 		else
 		{
-			item = NULL;
+			item = nullptr;
 		}
 
 		if (item)
 		{
-			ent->targetname = NULL;
+			ent->targetname = nullptr;
 			ent->classname = item->classname;
 			G_SpawnItem( ent, item );
 		}
@@ -390,7 +390,7 @@ bool G_CallSpawn( gentity_t *ent ) {
 	gitem_t	*item;
 
 	if ( !ent->classname ) {
-		trap->Print( "G_CallSpawn: NULL classname\n" );
+		trap->Print( "G_CallSpawn: nullptr classname\n" );
 		return false;
 	}
 
@@ -421,7 +421,7 @@ bool G_CallSpawn( gentity_t *ent ) {
 // Builds a copy of the string, translating \n to real linefeeds so message texts can be multi-line
 char *G_NewString( const char *string )
 {
-	char *newb=NULL, *new_p=NULL;
+	char *newb=nullptr, *new_p=nullptr;
 	int i=0, len=0;
 
 	len = strlen( string )+1;
@@ -448,14 +448,14 @@ char *G_NewString( const char *string )
 
 char *G_NewString_Safe( const char *string )
 {
-	char *newb=NULL, *new_p=NULL;
+	char *newb=nullptr, *new_p=nullptr;
 	int i=0, len=0;
 
 	len = strlen( string )+1;
 	new_p = newb = (char *)malloc( len );
 
 	if ( !new_p )
-		return NULL;
+		return nullptr;
 
 	for ( i=0; i<len; i++ )
 	{// turn \n into a real linefeed
@@ -582,7 +582,7 @@ void G_SpawnGEntityFromSpawnVars( bool inSubBSP ) {
 		}
 	}
 
-	if( G_SpawnString( "gametype", NULL, &value ) ) {
+	if( G_SpawnString( "gametype", nullptr, &value ) ) {
 		if( level.gametype >= GT_FFA && level.gametype < GT_MAX_GAME_TYPE ) {
 			gametypeName = gametypeNames[level.gametype];
 
@@ -1157,7 +1157,7 @@ bool SP_bsp_worldspawn ( void )
 
 void G_PrecacheSoundsets( void )
 {
-	gentity_t	*ent = NULL;
+	gentity_t	*ent = nullptr;
 	int i;
 	int countedSets = 0;
 

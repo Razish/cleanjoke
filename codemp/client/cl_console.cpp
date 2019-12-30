@@ -517,7 +517,7 @@ void Con_DrawNotify (void)
 		}
 	}
 
-	re->SetColor( NULL );
+	re->SetColor( nullptr );
 
 	if (Key_GetCatcher( ) & (KEYCATCH_UI | KEYCATCH_CGAME) ) {
 		return;
@@ -579,7 +579,7 @@ void Con_DrawSolidConsole( float frac ) {
 		}
 		else
 		{
-			re->SetColor(NULL);
+			re->SetColor(nullptr);
 		}
 		SCR_DrawPic( 0, 0, SCREEN_WIDTH, (float) y, cls.consoleShader );
 	}
@@ -681,7 +681,7 @@ void Con_DrawSolidConsole( float frac ) {
 	// draw the input prompt, user text, and cursor if desired
 	Con_DrawInput ();
 
-	re->SetColor( NULL );
+	re->SetColor( nullptr );
 }
 
 void Con_DrawConsole( void ) {

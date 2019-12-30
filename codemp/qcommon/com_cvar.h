@@ -66,7 +66,7 @@ char *Cvar_DescriptionString( const char *var_name );
 char *Cvar_InfoString( int bit );
 char *Cvar_InfoString_Big( int bit );
 char *Cvar_VariableString( const char *var_name );
-cvar_t *Cvar_Get( const char *var_name, const char *value, uint32_t flags, const char *var_desc=NULL );
+cvar_t *Cvar_Get( const char *var_name, const char *value, uint32_t flags, const char *var_desc=nullptr );
 cvar_t *Cvar_Set( const char *var_name, const char *value );
 cvar_t *Cvar_Set2(const char *var_name, const char *value, uint32_t defaultFlags, bool force);
 cvar_t *Cvar_SetSafe( const char *var_name, const char *value );

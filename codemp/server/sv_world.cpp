@@ -91,7 +91,7 @@ worldSector_t *SV_CreateworldSector( int depth, vec3_t mins, vec3_t maxs ) {
 
 	if (depth == AREA_DEPTH) {
 		anode->axis = -1;
-		anode->children[0] = anode->children[1] = NULL;
+		anode->children[0] = anode->children[1] = nullptr;
 		return anode;
 	}
 
@@ -145,7 +145,7 @@ void SV_UnlinkEntity( sharedEntity_t *gEnt ) {
 	if ( !ws ) {
 		return;		// not linked in anywhere
 	}
-	ent->worldSector = NULL;
+	ent->worldSector = nullptr;
 
 	if ( ws->entities == ent ) {
 		ws->entities = ent->nextEntityInWorldSector;

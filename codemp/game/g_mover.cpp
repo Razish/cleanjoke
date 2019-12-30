@@ -101,7 +101,7 @@ gentity_t	*G_TestEntityPosition( gentity_t *ent ) {
 	if (tr.startsolid)
 		return &g_entities[ tr.entityNum ];
 
-	return NULL;
+	return nullptr;
 }
 
 void G_CreateRotationMatrix(vec3_t angles, matrix3_t matrix) {
@@ -146,7 +146,7 @@ bool	G_TryPushingEntity( gentity_t *check, gentity_t *pusher, vec3_t move, vec3_
 		&& (pusher->spawnflags&16) //IMPACT
 		&& Q_stricmp( "func_rotating", pusher->classname ) == 0 )
 	{//just blow the fuck out of them
-		G_Damage( check, pusher, pusher, NULL, NULL, pusher->damage, DAMAGE_NO_KNOCKBACK, MOD_CRUSH );
+		G_Damage( check, pusher, pusher, nullptr, nullptr, pusher->damage, DAMAGE_NO_KNOCKBACK, MOD_CRUSH );
 		return true;
 	}
 
@@ -241,7 +241,7 @@ bool G_MoverPush( gentity_t *pusher, vec3_t move, vec3_t amove, gentity_t **obst
 	int			listedEntities;
 	vec3_t		totalMins, totalMaxs;
 
-	*obstacle = NULL;
+	*obstacle = nullptr;
 
 	// mins/maxs are the bounds at the destination
 	// totalMins / totalMaxs are the bounds for the entire move
@@ -317,14 +317,14 @@ bool G_MoverPush( gentity_t *pusher, vec3_t move, vec3_t amove, gentity_t **obst
 
 		if (pusher->damage && check->client && (pusher->spawnflags & 32))
 		{
-			G_Damage( check, pusher, pusher, NULL, NULL, pusher->damage, 0, MOD_CRUSH );
+			G_Damage( check, pusher, pusher, nullptr, nullptr, pusher->damage, 0, MOD_CRUSH );
 			continue;
 		}
 
 		if (check->s.eType == ET_BODY ||
 			(check->s.eType == ET_PLAYER && check->health < 1))
 		{ //whatever, just crush it
-			G_Damage( check, pusher, pusher, NULL, NULL, 999, 0, MOD_CRUSH );
+			G_Damage( check, pusher, pusher, nullptr, nullptr, 999, 0, MOD_CRUSH );
 			continue;
 		}
 
@@ -344,7 +344,7 @@ bool G_MoverPush( gentity_t *pusher, vec3_t move, vec3_t amove, gentity_t **obst
 
 		// bobbing entities are instant-kill and never get blocked
 		if ( pusher->s.pos.trType == TR_SINE || pusher->s.apos.trType == TR_SINE ) {
-			G_Damage( check, pusher, pusher, NULL, NULL, 99999, 0, MOD_CRUSH );
+			G_Damage( check, pusher, pusher, nullptr, nullptr, 99999, 0, MOD_CRUSH );
 			continue;
 		}
 
@@ -374,7 +374,7 @@ void G_MoverTeam( gentity_t *ent ) {
 	gentity_t	*part, *obstacle;
 	vec3_t		origin, angles;
 
-	obstacle = NULL;
+	obstacle = nullptr;
 
 	// make sure all team slaves can move before commiting
 	// any moves or calling any think functions
@@ -743,7 +743,7 @@ void UnLockDoors(gentity_t *const ent)
 	{	// want to allow locked toggle doors, so keep the targetname
 		if( !(slave->spawnflags & MOVER_TOGGLE) )
 		{
-			slave->targetname = NULL;//not usable ever again
+			slave->targetname = nullptr;//not usable ever again
 		}
 		slave->spawnflags &= ~MOVER_LOCKED;
 		slave->s.frame = 1;//second stage of anim
@@ -900,7 +900,7 @@ void Blocked_Door( gentity_t *ent, gentity_t *other )
 	//determines if we need to relock after moving or not.
 	bool relock = (ent->spawnflags & MOVER_LOCKED) ? true : false;
 	if ( ent->damage ) {
-		G_Damage( other, ent, ent, NULL, NULL, ent->damage, 0, MOD_CRUSH );
+		G_Damage( other, ent, ent, nullptr, nullptr, ent->damage, 0, MOD_CRUSH );
 	}
 	if ( ent->spawnflags & MOVER_CRUSHER ) {
 		return;		// crushers don't reverse
@@ -950,7 +950,7 @@ static void Touch_DoorTriggerSpectator( gentity_t *ent, gentity_t *other, trace_
 
 void Touch_DoorTrigger( gentity_t *ent, gentity_t *other, trace_t *trace )
 {
-	gentity_t *relockEnt = NULL;
+	gentity_t *relockEnt = nullptr;
 
 	if ( other->client && other->client->sess.sessionTeam == TEAM_SPECTATOR )
 	{
@@ -986,7 +986,7 @@ void Touch_DoorTrigger( gentity_t *ent, gentity_t *other, trace_t *trace )
 			{
 				relockEnt = ent->parent;
 			}
-			if ( relockEnt != NULL )
+			if ( relockEnt != nullptr )
 			{
 				relockEnt->spawnflags &= ~MOVER_LOCKED;
 			}
@@ -1001,7 +1001,7 @@ void Touch_DoorTrigger( gentity_t *ent, gentity_t *other, trace_t *trace )
 		//If door is closed, opening or open, check this
 		Use_BinaryMover( ent->parent, ent, other );
 	}
-	if ( relockEnt != NULL )
+	if ( relockEnt != nullptr )
 	{//re-lock us
 		relockEnt->spawnflags |= MOVER_LOCKED;
 	}
@@ -1088,7 +1088,7 @@ bool G_EntIsDoor( int entityNum )
 
 gentity_t *G_FindDoorTrigger( gentity_t *ent )
 {
-	gentity_t *owner = NULL;
+	gentity_t *owner = nullptr;
 	gentity_t *door = ent;
 	if ( door->flags & FL_TEAMSLAVE )
 	{//not the master door, get the master door
@@ -1100,15 +1100,15 @@ gentity_t *G_FindDoorTrigger( gentity_t *ent )
 	if ( door->targetname )
 	{//find out what is targeting it
 		//FIXME: if ent->targetname, check what kind of trigger/ent is targetting it?  If a normal trigger (active, etc), then it's okay?
-		while ( (owner = G_Find( owner, FOFS( target ), door->targetname )) != NULL )
+		while ( (owner = G_Find( owner, FOFS( target ), door->targetname )) != nullptr )
 		{
 			if ( owner && (owner->r.contents&CONTENTS_TRIGGER) )
 			{
 				return owner;
 			}
 		}
-		owner = NULL;
-		while ( (owner = G_Find( owner, FOFS( target2 ), door->targetname )) != NULL )
+		owner = nullptr;
+		while ( (owner = G_Find( owner, FOFS( target2 ), door->targetname )) != nullptr )
 		{
 			if ( owner && (owner->r.contents&CONTENTS_TRIGGER) )
 			{
@@ -1117,8 +1117,8 @@ gentity_t *G_FindDoorTrigger( gentity_t *ent )
 		}
 	}
 
-	owner = NULL;
-	while ( (owner = G_Find( owner, FOFS( classname ), "trigger_door" )) != NULL )
+	owner = nullptr;
+	while ( (owner = G_Find( owner, FOFS( classname ), "trigger_door" )) != nullptr )
 	{
 		if ( owner->parent == door )
 		{
@@ -1126,7 +1126,7 @@ gentity_t *G_FindDoorTrigger( gentity_t *ent )
 		}
 	}
 
-	return NULL;
+	return nullptr;
 }
 
 bool G_EntIsUnlockedDoor( int entityNum )
@@ -1139,7 +1139,7 @@ bool G_EntIsUnlockedDoor( int entityNum )
 	if ( G_EntIsDoor( entityNum ) )
 	{
 		gentity_t *ent = &g_entities[entityNum];
-		gentity_t *owner = NULL;
+		gentity_t *owner = nullptr;
 		if ( ent->flags & FL_TEAMSLAVE )
 		{//not the master door, get the master door
 			while ( ent->teammaster && (ent->flags&FL_TEAMSLAVE))
@@ -1149,9 +1149,9 @@ bool G_EntIsUnlockedDoor( int entityNum )
 		}
 		if ( ent->targetname )
 		{//find out what is targetting it
-			owner = NULL;
+			owner = nullptr;
 			//FIXME: if ent->targetname, check what kind of trigger/ent is targetting it?  If a normal trigger (active, etc), then it's okay?
-			while ( (owner = G_Find( owner, FOFS( target ), ent->targetname )) != NULL )
+			while ( (owner = G_Find( owner, FOFS( target ), ent->targetname )) != nullptr )
 			{
 				if ( !Q_stricmp( "trigger_multiple", owner->classname ) )//FIXME: other triggers okay too?
 				{
@@ -1161,8 +1161,8 @@ bool G_EntIsUnlockedDoor( int entityNum )
 					}
 				}
 			}
-			owner = NULL;
-			while ( (owner = G_Find( owner, FOFS( target2 ), ent->targetname )) != NULL )
+			owner = nullptr;
+			while ( (owner = G_Find( owner, FOFS( target2 ), ent->targetname )) != nullptr )
 			{
 				if ( !Q_stricmp( "trigger_multiple", owner->classname ) )//FIXME: other triggers okay too?
 				{
@@ -1537,7 +1537,7 @@ void Reached_Train( gentity_t *ent ) {
 	}
 
 	// fire all other targets
-	G_UseTargets( next, NULL );
+	G_UseTargets( next, nullptr );
 
 	// set the new trajectory
 	ent->nextTrain = next->nextTrain;
@@ -1584,7 +1584,7 @@ void Reached_Train( gentity_t *ent ) {
 void Think_SetupTrainTargets( gentity_t *ent ) {
 	gentity_t		*path, *next, *start;
 
-	ent->nextTrain = G_Find( NULL, FOFS(targetname), ent->target );
+	ent->nextTrain = G_Find( nullptr, FOFS(targetname), ent->target );
 	if ( !ent->nextTrain ) {
 		Com_Printf( "func_train at %s with an unfound target\n",
 			vtos(ent->r.absmin) );
@@ -1597,7 +1597,7 @@ void Think_SetupTrainTargets( gentity_t *ent ) {
 	// t1---->t2---->t3
 	//         ^      |
 	//          \_____|
-	start = NULL;
+	start = nullptr;
 	for ( path = ent->nextTrain ; path != start ; path = next ) {
 		if ( !start ) {
 			start = path;
@@ -1613,7 +1613,7 @@ void Think_SetupTrainTargets( gentity_t *ent ) {
 		// find a path_corner among the targets
 		// there may also be other targets that get fired when the corner
 		// is reached
-		next = NULL;
+		next = nullptr;
 		do {
 			next = G_Find( next, FOFS(targetname), path->target );
 			if ( !next ) {
@@ -2136,7 +2136,7 @@ void funcBBrushDieGo (gentity_t *self)
 	{
 		if ( g_entities[i].s.groundEntityNum == self->s.number && ( g_entities[i].s.eFlags & EF_MISSILE_STICK ))
 		{
-			G_Damage( &g_entities[i], self, self, NULL, NULL, 99999, 0, MOD_CRUSH ); //?? MOD?
+			G_Damage( &g_entities[i], self, self, nullptr, nullptr, 99999, 0, MOD_CRUSH ); //?? MOD?
 		}
 	}
 
@@ -2148,7 +2148,7 @@ void funcBBrushDieGo (gentity_t *self)
 
 	VectorSet(up, 0, 0, 1);
 
-	if ( self->target && attacker != NULL )
+	if ( self->target && attacker != nullptr )
 	{
 		G_UseTargets(self, attacker);
 	}
@@ -2183,7 +2183,7 @@ void funcBBrushDieGo (gentity_t *self)
 	VectorAdd( self->r.absmin,self->r.absmax, org );
 	VectorScale( org, 0.5f, org );
 
-	if ( attacker != NULL && attacker->client )
+	if ( attacker != nullptr && attacker->client )
 	{
 		VectorSubtract( org, attacker->r.currentOrigin, dir );
 		VectorNormalize( dir );
@@ -2210,7 +2210,7 @@ void funcBBrushDieGo (gentity_t *self)
 	{
 		gentity_t *te;
 		//explode
-		G_RadiusDamage( org, self, self->splashDamage, self->splashRadius, self, NULL, MOD_UNKNOWN );
+		G_RadiusDamage( org, self, self->splashDamage, self->splashRadius, self, nullptr, MOD_UNKNOWN );
 
 		te = G_TempEntity( org, EV_GENERAL_SOUND );
 		te->s.eventParm = G_SoundIndex("sound/weapons/explosions/cargoexplode.wav");
@@ -2296,7 +2296,7 @@ void funcBBrushPain(gentity_t *self, gentity_t *attacker, int damage)
 		VectorMA( self->r.absmin, 0.5, org, org );
 		VectorAdd( self->r.absmin,self->r.absmax, org );
 		VectorScale( org, 0.5f, org );
-		if ( attacker != NULL && attacker->client )
+		if ( attacker != nullptr && attacker->client )
 		{
 			VectorSubtract( attacker->r.currentOrigin, org, dir );
 			VectorNormalize( dir );
@@ -2458,7 +2458,7 @@ teamnodmg - if 1, team 1 can't damage this. If 2, team 2 can't damage this.
 void SP_func_breakable( gentity_t *self )
 {
 	int t;
-	char *s = NULL;
+	char *s = nullptr;
 
 	G_SpawnString("playfx", "", &s);
 
@@ -2533,9 +2533,9 @@ void SP_func_breakable( gentity_t *self )
 		}
 	}
 	*/
-	self->team = NULL;
+	self->team = nullptr;
 	if (!self->model) {
-		trap->Error( ERR_DROP, "func_breakable with NULL model\n" );
+		trap->Error( ERR_DROP, "func_breakable with nullptr model\n" );
 	}
 	InitBBrush( self );
 
@@ -2711,7 +2711,7 @@ static void func_wait_return_solid( gentity_t *self )
 {
 	//once a frame, see if it's clear.
 	self->clipmask = CONTENTS_BODY;
-	if ( !(self->spawnflags&16) || G_TestEntityPosition( self ) == NULL )
+	if ( !(self->spawnflags&16) || G_TestEntityPosition( self ) == nullptr )
 	{
 		trap->SetBrushModel( (sharedEntity_t *)self, self->model );
 		InitMover( self );

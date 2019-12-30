@@ -339,7 +339,7 @@ typedef struct mdxmHeader_s {
 						{
 							char		name[MAX_QPATH];	// name of bone
 							unsigned int flags;
-							int			parent;				// index of bone that is parent to this one, -1 = NULL/root
+							int			parent;				// index of bone that is parent to this one, -1 = nullptr/root
 							mdxaBone_t	BasePoseMat;		// base pose
 							mdxaBone_t	BasePoseMatInv;		// inverse, to save run-time calc
 							int			numChildren;		// number of children bones

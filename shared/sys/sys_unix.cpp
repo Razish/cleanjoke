@@ -83,7 +83,7 @@ int Sys_Milliseconds (bool baseTime)
 {
 	struct timeval tp;
 
-	gettimeofday(&tp, NULL);
+	gettimeofday(&tp, nullptr);
 
 	if (!sys_timeBase)
 	{
@@ -120,7 +120,7 @@ bool Sys_RandomBytes( byte *string, int len )
 	if( !fp )
 		return false;
 
-	setvbuf( fp, NULL, _IONBF, 0 ); // don't buffer reads from /dev/urandom
+	setvbuf( fp, nullptr, _IONBF, 0 ); // don't buffer reads from /dev/urandom
 
 	if( !fread( string, sizeof( byte ), len, fp ) )
 	{
@@ -141,7 +141,7 @@ char *Sys_GetCurrentUser( void )
 {
 	struct passwd *p;
 
-	if ( (p = getpwuid( getuid() )) == NULL ) {
+	if ( (p = getpwuid( getuid() )) == nullptr ) {
 		return "player";
 	}
 	return p->pw_name;
@@ -214,11 +214,11 @@ void Sys_ListFilteredFiles( const char *basedir, char *subdirs, char *filter, ch
 		Com_sprintf( search, sizeof(search), "%s", basedir );
 	}
 
-	if ((fdir = opendir(search)) == NULL) {
+	if ((fdir = opendir(search)) == nullptr) {
 		return;
 	}
 
-	while ((d = readdir(fdir)) != NULL) {
+	while ((d = readdir(fdir)) != nullptr) {
 		Com_sprintf(filename, sizeof(filename), "%s/%s", search, d->d_name);
 		if (stat(filename, &st) == -1)
 			continue;
@@ -268,13 +268,13 @@ char **Sys_ListFiles( const char *directory, const char *extension, char *filter
 		*numfiles = nfiles;
 
 		if (!nfiles)
-			return NULL;
+			return nullptr;
 
 		listCopy = (char **)Z_Malloc( ( nfiles + 1 ) * sizeof( *listCopy ), TAG_LISTFILES, false );
 		for ( i = 0 ; i < nfiles ; i++ ) {
 			listCopy[i] = list[i];
 		}
-		listCopy[i] = NULL;
+		listCopy[i] = nullptr;
 
 		return listCopy;
 	}
@@ -292,12 +292,12 @@ char **Sys_ListFiles( const char *directory, const char *extension, char *filter
 	// search
 	nfiles = 0;
 
-	if ((fdir = opendir(directory)) == NULL) {
+	if ((fdir = opendir(directory)) == nullptr) {
 		*numfiles = 0;
-		return NULL;
+		return nullptr;
 	}
 
-	while ((d = readdir(fdir)) != NULL) {
+	while ((d = readdir(fdir)) != nullptr) {
 		Com_sprintf(search, sizeof(search), "%s/%s", directory, d->d_name);
 		if (stat(search, &st) == -1)
 			continue;
@@ -328,14 +328,14 @@ char **Sys_ListFiles( const char *directory, const char *extension, char *filter
 	*numfiles = nfiles;
 
 	if ( !nfiles ) {
-		return NULL;
+		return nullptr;
 	}
 
 	listCopy = (char **)Z_Malloc( ( nfiles + 1 ) * sizeof( *listCopy ), TAG_LISTFILES, false );
 	for ( i = 0 ; i < nfiles ; i++ ) {
 		listCopy[i] = list[i];
 	}
-	listCopy[i] = NULL;
+	listCopy[i] = nullptr;
 
 	return listCopy;
 }
@@ -374,7 +374,7 @@ void Sys_Sleep( int msec )
 		FD_SET(STDIN_FILENO, &fdset);
 		if( msec < 0 )
 		{
-			select(STDIN_FILENO + 1, &fdset, NULL, NULL, NULL);
+			select(STDIN_FILENO + 1, &fdset, nullptr, nullptr, nullptr);
 		}
 		else
 		{
@@ -382,7 +382,7 @@ void Sys_Sleep( int msec )
 
 			timeout.tv_sec = msec/1000;
 			timeout.tv_usec = (msec%1000)*1000;
-			select(STDIN_FILENO + 1, &fdset, NULL, NULL, &timeout);
+			select(STDIN_FILENO + 1, &fdset, nullptr, nullptr, &timeout);
 		}
 	}
 	else
@@ -414,7 +414,7 @@ char *Sys_Cwd( void )
 {
 	static char cwd[MAX_OSPATH];
 
-	if ( getcwd( cwd, sizeof( cwd ) - 1 ) == NULL )
+	if ( getcwd( cwd, sizeof( cwd ) - 1 ) == nullptr )
 		cwd[0] = '\0';
 	else
 		cwd[MAX_OSPATH-1] = '\0';
@@ -429,8 +429,8 @@ bool Sys_PathCmp( const char *path1, const char *path2 )
 {
 	char *r1, *r2;
 
-	r1 = realpath(path1, NULL);
-	r2 = realpath(path2, NULL);
+	r1 = realpath(path1, nullptr);
+	r2 = realpath(path2, nullptr);
 
 	if(r1 && r2 && !Q_stricmp(r1, r2))
 	{
@@ -456,7 +456,7 @@ char *Sys_DefaultHomePath(void)
 
 	if ( !homePath[0] )
 	{
-		if ( (p = getenv( "HOME" )) != NULL )
+		if ( (p = getenv( "HOME" )) != nullptr )
 		{
 			Com_sprintf( homePath, sizeof( homePath ), "%s%c", p, PATH_SEP );
 			Q_strcat( homePath, sizeof( homePath ), "Library/Application Support/" );
@@ -477,7 +477,7 @@ char *Sys_DefaultHomePath(void)
 
 	if ( !homePath[0] )
 	{
-		if ( (p = getenv( "XDG_DATA_HOME" )) != NULL )
+		if ( (p = getenv( "XDG_DATA_HOME" )) != nullptr )
 		{
 			Com_sprintf( homePath, sizeof( homePath ), "%s%c", p, PATH_SEP );
 			if ( fs_homepath && fs_homepath->string[0] )
@@ -488,7 +488,7 @@ char *Sys_DefaultHomePath(void)
 			return homePath;
 		}
 
-		if ( (p = getenv( "HOME" )) != NULL )
+		if ( (p = getenv( "HOME" )) != nullptr )
 		{
 			Com_sprintf( homePath, sizeof( homePath ), "%s%c.local%cshare%c", p, PATH_SEP, PATH_SEP, PATH_SEP );
 			if ( fs_homepath && fs_homepath->string[0] )

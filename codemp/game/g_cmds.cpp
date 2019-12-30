@@ -309,7 +309,7 @@ void Cmd_GiveOther_f( gentity_t *ent )
 	char		name[MAX_TOKEN_CHARS] = {0};
 	int			i;
 	char		otherindex[MAX_TOKEN_CHARS];
-	gentity_t	*otherEnt = NULL;
+	gentity_t	*otherEnt = nullptr;
 
 	if ( trap->Argc () < 3 ) {
 		trap->SendServerCommand( ent-g_entities, "print \"Usage: giveother <player id> <givestring>\n\"" );
@@ -341,7 +341,7 @@ void Cmd_GiveOther_f( gentity_t *ent )
 
 // Sets client to godmode
 void Cmd_God_f( gentity_t *ent ) {
-	char *msg = NULL;
+	char *msg = nullptr;
 
 	ent->flags ^= FL_GODMODE;
 	if ( !(ent->flags & FL_GODMODE) )
@@ -354,7 +354,7 @@ void Cmd_God_f( gentity_t *ent ) {
 
 // Sets client to notarget
 void Cmd_Notarget_f( gentity_t *ent ) {
-	char *msg = NULL;
+	char *msg = nullptr;
 
 	ent->flags ^= FL_NOTARGET;
 	if ( !(ent->flags & FL_NOTARGET) )
@@ -366,7 +366,7 @@ void Cmd_Notarget_f( gentity_t *ent ) {
 }
 
 void Cmd_Noclip_f( gentity_t *ent ) {
-	char *msg = NULL;
+	char *msg = nullptr;
 
 	ent->client->noclip = !ent->client->noclip;
 	if ( !ent->client->noclip )
@@ -416,7 +416,7 @@ void Cmd_KillOther_f( gentity_t *ent )
 {
 	int			i;
 	char		otherindex[MAX_TOKEN_CHARS];
-	gentity_t	*otherEnt = NULL;
+	gentity_t	*otherEnt = nullptr;
 
 	if ( trap->Argc () < 2 ) {
 		trap->SendServerCommand( ent-g_entities, "print \"Usage: killother <player id>\n\"" );
@@ -882,7 +882,7 @@ void Cmd_DuelTeam_f(gentity_t *ent)
 	{ //ok..die
 		int curTeam = ent->client->sess.duelTeam;
 		ent->client->sess.duelTeam = oldTeam;
-		G_Damage(ent, ent, ent, NULL, ent->client->ps.origin, 99999, DAMAGE_NO_PROTECTION, MOD_SUICIDE);
+		G_Damage(ent, ent, ent, nullptr, ent->client->ps.origin, 99999, DAMAGE_NO_PROTECTION, MOD_SUICIDE);
 		ent->client->sess.duelTeam = curTeam;
 	}
 	//reset wins and losses
@@ -1169,7 +1169,7 @@ void G_Say( gentity_t *ent, gentity_t *target, int mode, const char *chatText ) 
 	// don't let text be too long for malicious reasons
 	char		text[MAX_SAY_TEXT];
 	char		location[64];
-	char		*locMsg = NULL;
+	char		*locMsg = nullptr;
 
 	if ( level.gametype < GT_TEAM && mode == SAY_TEAM ) {
 		mode = SAY_ALL;
@@ -1235,7 +1235,7 @@ void G_Say( gentity_t *ent, gentity_t *target, int mode, const char *chatText ) 
 }
 
 static void Cmd_Say_f( gentity_t *ent ) {
-	char *p = NULL;
+	char *p = nullptr;
 
 	if ( trap->Argc () < 2 )
 		return;
@@ -1247,11 +1247,11 @@ static void Cmd_Say_f( gentity_t *ent ) {
 		G_SecurityLogPrintf( "Cmd_Say_f from %d (%s) has been truncated: %s\n", ent->s.number, ent->client->pers.netname, p );
 	}
 
-	G_Say( ent, NULL, SAY_ALL, p );
+	G_Say( ent, nullptr, SAY_ALL, p );
 }
 
 static void Cmd_SayTeam_f( gentity_t *ent ) {
-	char *p = NULL;
+	char *p = nullptr;
 
 	if ( trap->Argc () < 2 )
 		return;
@@ -1263,7 +1263,7 @@ static void Cmd_SayTeam_f( gentity_t *ent ) {
 		G_SecurityLogPrintf( "Cmd_SayTeam_f from %d (%s) has been truncated: %s\n", ent->s.number, ent->client->pers.netname, p );
 	}
 
-	G_Say( ent, NULL, (level.gametype>=GT_TEAM) ? SAY_TEAM : SAY_ALL, p );
+	G_Say( ent, nullptr, (level.gametype>=GT_TEAM) ? SAY_TEAM : SAY_ALL, p );
 }
 
 static void Cmd_Tell_f( gentity_t *ent ) {
@@ -1441,7 +1441,7 @@ bool G_VoteGametype( gentity_t *ent, int numArgs, const char *arg1, const char *
 
 bool G_VoteKick( gentity_t *ent, int numArgs, const char *arg1, const char *arg2 ) {
 	int clientid = ClientNumberFromString( ent, arg2, true );
-	gentity_t *target = NULL;
+	gentity_t *target = nullptr;
 
 	if ( clientid == -1 )
 		return false;
@@ -1480,7 +1480,7 @@ void Cmd_MapList_f( gentity_t *ent ) {
 }
 
 bool G_VoteMap( gentity_t *ent, int numArgs, const char *arg1, const char *arg2 ) {
-	char bspName[MAX_QPATH] = {0}, *mapName = NULL, *mapName2 = NULL;
+	char bspName[MAX_QPATH] = {0}, *mapName = nullptr, *mapName2 = nullptr;
 	fileHandle_t fp = NULL_FILE;
 	const char *arenaInfo;
 
@@ -1579,20 +1579,20 @@ typedef struct voteString_s {
 	int			numArgs;	// number of REQUIRED arguments, not total/optional arguments
 	uint32_t	validGT;	// bit-flag of valid gametypes
 	bool	voteDelay;	// if true, will delay executing the vote string after it's accepted by g_voteDelay
-	const char	*shortHelp;	// NULL if no arguments needed
+	const char	*shortHelp;	// nullptr if no arguments needed
 } voteString_t;
 
 static voteString_t validVoteStrings[] = {
 	//	vote string				aliases										# args	valid gametypes							exec delay		short help
 	{	"capturelimit",			"caps",				G_VoteCapturelimit,		1,		GTB_CTF|GTB_CTY,						true,			"<num>" },
-	{	"clientkick",			NULL,				G_VoteClientkick,		1,		GTB_ALL,								false,			"<clientnum>" },
+	{	"clientkick",			nullptr,				G_VoteClientkick,		1,		GTB_ALL,								false,			"<clientnum>" },
 	{	"fraglimit",			"frags",			G_VoteFraglimit,		1,		GTB_ALL & ~(GTB_CTF|GTB_CTY),			true,			"<num>" },
 	{	"g_doWarmup",			"dowarmup warmup",	G_VoteWarmup,			1,		GTB_ALL,								true,			"<0-1>" },
 	{	"g_gametype",			"gametype gt mode",	G_VoteGametype,			1,		GTB_ALL,								true,			"<num or name>" },
-	{	"kick",					NULL,				G_VoteKick,				1,		GTB_ALL,								false,			"<client name>" },
-	{	"map",					NULL,				G_VoteMap,				0,		GTB_ALL,								true,			"<name>" },
+	{	"kick",					nullptr,				G_VoteKick,				1,		GTB_ALL,								false,			"<client name>" },
+	{	"map",					nullptr,				G_VoteMap,				0,		GTB_ALL,								true,			"<name>" },
 	{	"map_restart",			"restart",			G_VoteMapRestart,		0,		GTB_ALL,								true,			"<optional delay>" },
-	{	"nextmap",				NULL,				G_VoteNextmap,			0,		GTB_ALL,								true,			NULL },
+	{	"nextmap",				nullptr,				G_VoteNextmap,			0,		GTB_ALL,								true,			nullptr },
 	{	"timelimit",			"time",				G_VoteTimelimit,		1,		GTB_ALL,								true,			"<num>" },
 };
 static const int validVoteStringsSize = ARRAY_LEN( validVoteStrings );
@@ -1629,7 +1629,7 @@ void Cmd_CallVote_f( gentity_t *ent ) {
 	int				i=0, numArgs=0;
 	char			arg1[MAX_CVAR_VALUE_STRING] = {0};
 	char			arg2[MAX_CVAR_VALUE_STRING] = {0};
-	voteString_t	*vote = NULL;
+	voteString_t	*vote = nullptr;
 
 	// not allowed to vote at all
 	if ( !g_allowVote.integer ) {
@@ -1671,16 +1671,16 @@ void Cmd_CallVote_f( gentity_t *ent ) {
 
 		// see if they're using an alias, and set arg1 to the actual vote string
 		if ( validVoteStrings[i].aliases ) {
-			char tmp[MAX_TOKEN_CHARS] = {0}, *p = NULL;
+			char tmp[MAX_TOKEN_CHARS] = {0}, *p = nullptr;
 			const char *delim = " ";
 			Q_strncpyz( tmp, validVoteStrings[i].aliases, sizeof( tmp ) );
 			p = strtok( tmp, delim );
-			while ( p != NULL ) {
+			while ( p != nullptr ) {
 				if ( !Q_stricmp( arg1, p ) ) {
 					Q_strncpyz( arg1, validVoteStrings[i].string, sizeof( arg1 ) );
 					goto validVote;
 				}
-				p = strtok( NULL, delim );
+				p = strtok( nullptr, delim );
 			}
 		}
 	}
@@ -1746,7 +1746,7 @@ validVote:
 		Q_strncpyz( level.voteDisplayString, level.voteString, sizeof( level.voteDisplayString ) );
 		Q_strncpyz( level.voteStringClean, level.voteString, sizeof( level.voteStringClean ) );
 	}
-	Q_strstrip( level.voteStringClean, "\"\n\r", NULL );
+	Q_strstrip( level.voteStringClean, "\"\n\r", nullptr );
 
 	trap->SendServerCommand( -1, va( "print \"%s^7 %s (%s)\n\"", ent->client->pers.netname, G_GetStringEdString( "MP_SVGAME", "PLCALLEDVOTE" ), level.voteStringClean ) );
 
@@ -1810,7 +1810,7 @@ void Cmd_Vote_f( gentity_t *ent ) {
 
 bool G_TeamVoteLeader( gentity_t *ent, int cs_offset, team_t team, int numArgs, const char *arg1, const char *arg2 ) {
 	int clientid = numArgs == 2 ? ent->s.number : ClientNumberFromString( ent, arg2, false );
-	gentity_t *target = NULL;
+	gentity_t *target = nullptr;
 
 	if ( clientid == -1 )
 		return false;
@@ -1885,7 +1885,7 @@ void Cmd_CallTeamVote_f( gentity_t *ent ) {
 		return;
 	}
 
-	Q_strstrip( level.teamVoteStringClean[cs_offset], "\"\n\r", NULL );
+	Q_strstrip( level.teamVoteStringClean[cs_offset], "\"\n\r", nullptr );
 
 	for ( i=0; i<level.maxclients; i++ ) {
 		if ( level.clients[i].pers.connected == CON_DISCONNECTED )
@@ -2048,7 +2048,7 @@ int G_ItemUsable(playerState_t *ps, int forcedUse)
 		VectorSet( mins, -8, -8, 0 );
 		VectorSet( maxs, 8, 8, 24 );
 
-		AngleVectors(yawonly, fwd, NULL, NULL);
+		AngleVectors(yawonly, fwd, nullptr, nullptr);
 
 		fwdorg[0] = ps->origin[0] + fwd[0]*64;
 		fwdorg[1] = ps->origin[1] + fwd[1]*64;
@@ -2076,7 +2076,7 @@ int G_ItemUsable(playerState_t *ps, int forcedUse)
 		maxs[1] = 8;
 		maxs[2] = 8;
 
-		AngleVectors (ps->viewangles, fwd, NULL, NULL);
+		AngleVectors (ps->viewangles, fwd, nullptr, nullptr);
 		fwd[2] = 0;
 		VectorMA(ps->origin, 64, fwd, dest);
 		trap->Trace(&tr, ps->origin, mins, maxs, dest, ps->clientNum, MASK_SHOT, false, 0, 0 );
@@ -2462,13 +2462,13 @@ void Cmd_EngageDuel_f(gentity_t *ent)
 		return;
 	}*/
 
-	AngleVectors( ent->client->ps.viewangles, forward, NULL, NULL );
+	AngleVectors( ent->client->ps.viewangles, forward, nullptr, nullptr );
 
 	fwdOrg[0] = ent->client->ps.origin[0] + forward[0]*256;
 	fwdOrg[1] = ent->client->ps.origin[1] + forward[1]*256;
 	fwdOrg[2] = (ent->client->ps.origin[2]+ent->client->ps.viewheight) + forward[2]*256;
 
-	trap->Trace(&tr, ent->client->ps.origin, NULL, NULL, fwdOrg, ent->s.number, MASK_PLAYERSOLID, false, 0, 0);
+	trap->Trace(&tr, ent->client->ps.origin, nullptr, nullptr, fwdOrg, ent->s.number, MASK_PLAYERSOLID, false, 0, 0);
 
 	if (tr.fraction != 1 && tr.entityNum < MAX_CLIENTS)
 	{
@@ -2612,7 +2612,7 @@ void Cmd_DebugSetBodyAnim_f(gentity_t *self)
 		return;
 	}
 
-	G_SetAnim(self, NULL, SETANIM_BOTH, i, SETANIM_FLAG_OVERRIDE|SETANIM_FLAG_HOLD, 0);
+	G_SetAnim(self, nullptr, SETANIM_BOTH, i, SETANIM_FLAG_OVERRIDE|SETANIM_FLAG_HOLD, 0);
 
 	Com_Printf("Set body anim to %s\n", arg);
 }
@@ -2620,7 +2620,7 @@ void Cmd_DebugSetBodyAnim_f(gentity_t *self)
 
 void StandardSetBodyAnim(gentity_t *self, int anim, int flags)
 {
-	G_SetAnim(self, NULL, SETANIM_BOTH, anim, flags, 0);
+	G_SetAnim(self, nullptr, SETANIM_BOTH, anim, flags, 0);
 }
 
 bool TryGrapple(gentity_t *ent)
@@ -2677,7 +2677,7 @@ void Cmd_TargetUse_f( gentity_t *ent )
 		gentity_t *targ;
 
 		trap->Argv( 1, sArg, sizeof( sArg ) );
-		targ = G_Find( NULL, FOFS( targetname ), sArg );
+		targ = G_Find( nullptr, FOFS( targetname ), sArg );
 
 		while ( targ )
 		{
@@ -2739,9 +2739,9 @@ command_t commands[] = {
 static const size_t numCommands = ARRAY_LEN( commands );
 
 void ClientCommand( int clientNum ) {
-	gentity_t	*ent = NULL;
+	gentity_t	*ent = nullptr;
 	char		cmd[MAX_TOKEN_CHARS] = {0};
-	command_t	*command = NULL;
+	command_t	*command = nullptr;
 
 	ent = g_entities + clientNum;
 	if ( !ent->client || ent->client->pers.connected != CON_CONNECTED ) {

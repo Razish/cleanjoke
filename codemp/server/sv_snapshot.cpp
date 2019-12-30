@@ -56,8 +56,8 @@ static void SV_EmitPacketEntities( clientSnapshot_t *from, clientSnapshot_t *to,
 		from_num_entities = from->num_entities;
 	}
 
-	newent = NULL;
-	oldent = NULL;
+	newent = nullptr;
+	oldent = nullptr;
 	newindex = 0;
 	oldindex = 0;
 	while ( newindex < to->num_entities || oldindex < from_num_entities ) {
@@ -94,7 +94,7 @@ static void SV_EmitPacketEntities( clientSnapshot_t *from, clientSnapshot_t *to,
 
 		if ( newnum > oldnum ) {
 			// the old entity isn't present in the new message
-			MSG_WriteDeltaEntity (msg, oldent, NULL, true );
+			MSG_WriteDeltaEntity (msg, oldent, nullptr, true );
 			oldindex++;
 			continue;
 		}
@@ -123,23 +123,23 @@ static void SV_WriteSnapshotToClient( client_t *client, msg_t *msg ) {
 	// try to use a previous frame as the source for delta compressing the snapshot
 	if ( deltaMessage <= 0 || client->state != CS_ACTIVE ) {
 		// client is asking for a retransmit
-		oldframe = NULL;
+		oldframe = nullptr;
 		lastframe = 0;
 	} else if ( client->netchan.outgoingSequence - deltaMessage
 		>= (PACKET_BACKUP - 3) ) {
 		// client hasn't gotten a good message through in a long time
 		Com_DPrintf ("%s: Delta request from out of date packet.\n", client->name);
-		oldframe = NULL;
+		oldframe = nullptr;
 		lastframe = 0;
 	} else if ( client->demo.demorecording && client->demo.demowaiting ) {
 		// demo is waiting for a non-delta-compressed frame for this client, so don't delta compress
-		oldframe = NULL;
+		oldframe = nullptr;
 		lastframe = 0;
 	} else if ( client->demo.minDeltaFrame > deltaMessage ) {
 		// we saved a non-delta frame to the demo and sent it to the client, but the client didn't ack it
 		// we can't delta against an old frame that's not in the demo without breaking the demo.  so send
 		// non-delta frames until the client acks.
-		oldframe = NULL;
+		oldframe = nullptr;
 		lastframe = 0;
 	} else {
 		// we have a valid snapshot to delta from
@@ -149,12 +149,12 @@ static void SV_WriteSnapshotToClient( client_t *client, msg_t *msg ) {
 		// the snapshot's entities may still have rolled off the buffer, though
 		if ( oldframe->first_entity <= svs.nextSnapshotEntities - svs.numSnapshotEntities ) {
 			Com_DPrintf ("%s: Delta request from out of date entities.\n", client->name);
-			oldframe = NULL;
+			oldframe = nullptr;
 			lastframe = 0;
 		}
 	}
 
-	if ( oldframe == NULL ) {
+	if ( oldframe == nullptr ) {
 		if ( client->demo.demowaiting ) {
 			// this is a non-delta frame, so we can delta against it in the demo
 			client->demo.minDeltaFrame = client->netchan.outgoingSequence;
@@ -210,9 +210,9 @@ static void SV_WriteSnapshotToClient( client_t *client, msg_t *msg ) {
 	}
 	else {
 #ifdef _ONEBIT_COMBO
-		MSG_WriteDeltaPlayerstate( msg, NULL, &frame->ps, NULL, NULL );
+		MSG_WriteDeltaPlayerstate( msg, nullptr, &frame->ps, nullptr, nullptr );
 #else
-		MSG_WriteDeltaPlayerstate( msg, NULL, &frame->ps );
+		MSG_WriteDeltaPlayerstate( msg, nullptr, &frame->ps );
 #endif
 	}
 

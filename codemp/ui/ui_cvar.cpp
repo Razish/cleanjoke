@@ -107,7 +107,7 @@ static const size_t uiCvarTableSize = ARRAY_LEN( uiCvarTable );
 
 void UI_RegisterCvars( void ) {
 	size_t i = 0;
-	const cvarTable_t *cv = NULL;
+	const cvarTable_t *cv = nullptr;
 
 	for ( i=0, cv=uiCvarTable; i<uiCvarTableSize; i++, cv++ ) {
 		trap->Cvar_Register( cv->vmCvar, cv->cvarName, cv->defaultString, cv->cvarFlags );
@@ -118,7 +118,7 @@ void UI_RegisterCvars( void ) {
 
 void UI_UpdateCvars( void ) {
 	size_t i = 0;
-	const cvarTable_t *cv = NULL;
+	const cvarTable_t *cv = nullptr;
 
 	for ( i=0, cv=uiCvarTable; i<uiCvarTableSize; i++, cv++ ) {
 		if ( cv->vmCvar ) {

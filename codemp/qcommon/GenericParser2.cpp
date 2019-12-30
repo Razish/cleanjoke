@@ -645,7 +645,7 @@ CGPGroup *CGPGroup::FindSubGroup(const char *name)
 		}
 		group = (CGPGroup *)group->GetNext();
 	}
-	return(NULL);
+	return(nullptr);
 }
 
 bool CGPGroup::Parse(char **dataPtr, CTextPool **textPool)

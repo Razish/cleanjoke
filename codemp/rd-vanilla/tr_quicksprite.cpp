@@ -34,7 +34,7 @@ CQuickSpriteSystem SQuickSprite;
 // Construction/Destruction
 
 CQuickSpriteSystem::CQuickSpriteSystem() :
-	mTexBundle(NULL),
+	mTexBundle(nullptr),
 	mGLStateBits(0),
 	mFogIndex(-1),
 	mUseFog(false),

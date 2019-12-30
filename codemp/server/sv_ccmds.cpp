@@ -54,12 +54,12 @@ static client_t *SV_GetPlayerByHandle( void ) {
 
 	// make sure server is running
 	if ( !sv_running->integer ) {
-		return NULL;
+		return nullptr;
 	}
 
 	if ( Cmd_Argc() < 2 ) {
 		Com_Printf( "No player specified.\n" );
-		return NULL;
+		return nullptr;
 	}
 
 	s = Cmd_Argv(1);
@@ -100,7 +100,7 @@ static client_t *SV_GetPlayerByHandle( void ) {
 
 	Com_Printf( "Player %s is not on the server\n", s );
 
-	return NULL;
+	return nullptr;
 }
 
 // Returns the player with idnum from Cmd_Argv(1)
@@ -112,12 +112,12 @@ static client_t *SV_GetPlayerByNum( void ) {
 
 	// make sure server is running
 	if ( !sv_running->integer ) {
-		return NULL;
+		return nullptr;
 	}
 
 	if ( Cmd_Argc() < 2 ) {
 		Com_Printf( "No player specified.\n" );
-		return NULL;
+		return nullptr;
 	}
 
 	s = Cmd_Argv(1);
@@ -125,26 +125,26 @@ static client_t *SV_GetPlayerByNum( void ) {
 	for (i = 0; s[i]; i++) {
 		if (s[i] < '0' || s[i] > '9') {
 			Com_Printf( "Bad slot number: %s\n", s);
-			return NULL;
+			return nullptr;
 		}
 	}
 	idnum = atoi( s );
 	if ( idnum < 0 || idnum >= sv_maxclients->integer ) {
 		Com_Printf( "Bad client slot: %i\n", idnum );
-		return NULL;
+		return nullptr;
 	}
 
 	cl = &svs.clients[idnum];
 	if ( !cl->state ) {
 		Com_Printf( "Client %i is not active\n", idnum );
-		return NULL;
+		return nullptr;
 	}
 	return cl;
 }
 
 // Restart the server on a different map
 static void SV_Map_f( void ) {
-	char		*cmd = NULL, *map = NULL;
+	char		*cmd = nullptr, *map = nullptr;
 	bool	killBots=false, cheat=false;
 	char		expanded[MAX_QPATH] = {0}, mapname[MAX_QPATH] = {0};
 
@@ -160,7 +160,7 @@ static void SV_Map_f( void ) {
 	}
 
 	Com_sprintf (expanded, sizeof(expanded), "maps/%s.bsp", map);
-	if ( FS_ReadFile (expanded, NULL) == -1 ) {
+	if ( FS_ReadFile (expanded, nullptr) == -1 ) {
 		Com_Printf ("Can't find map %s\n", expanded);
 		return;
 	}
@@ -325,7 +325,7 @@ static void SV_MapRestart_f( void ) {
 			// If we don't reset client->lastUsercmd and are restarting during map load,
 			// the client will hang because we'll use the last Usercmd from the previous map,
 			// which is wrong obviously.
-			SV_ClientEnterWorld(client, NULL);
+			SV_ClientEnterWorld(client, nullptr);
 		}
 	}
 
@@ -1120,7 +1120,7 @@ static void SV_ConSay_f(void) {
 	Cmd_ArgsBuffer( text, sizeof(text) );
 
 	Com_Printf ("broadcast: chat \"" SVSAY_PREFIX "%s\\n\"\n", SV_ExpandNewlines((char *)text) );
-	SV_SendServerCommand(NULL, "chat \"" SVSAY_PREFIX "%s\"\n", text);
+	SV_SendServerCommand(nullptr, "chat \"" SVSAY_PREFIX "%s\"\n", text);
 }
 
 #define SVTELL_PREFIX "\x19[Server^7\x19]\x19: "
@@ -1250,7 +1250,7 @@ static void SV_WeaponToggle_f( void ) {
 	int bits = 0;
 	int i, val;
 	char *s;
-	const char *cvarStr = NULL;
+	const char *cvarStr = nullptr;
 
 	if ( g_gametype->integer == GT_DUEL || g_gametype->integer == GT_POWERDUEL ) {
 		cvarStr = "g_duelWeaponDisable";
@@ -1408,7 +1408,7 @@ void SV_StopAutoRecordDemos() {
 void SV_StopRecord_f( void ) {
 	int		i;
 
-	client_t *cl = NULL;
+	client_t *cl = nullptr;
 	if ( Cmd_Argc() == 2 ) {
 		int clIndex = atoi( Cmd_Argv( 1 ) );
 		if ( clIndex < 0 || clIndex >= sv_maxclients->integer ) {
@@ -1423,7 +1423,7 @@ void SV_StopRecord_f( void ) {
 				break;
 			}
 		}
-		if ( cl == NULL ) {
+		if ( cl == nullptr ) {
 			Com_Printf( "No demo being recorded.\n" );
 			return;
 		}
@@ -1520,7 +1520,7 @@ void SV_AutoRecordDemo( client_t *cl ) {
 	Com_sprintf( demoFolderName, sizeof( demoFolderName ), "%s %s", mapname->string, folderDate );
 	// sanitize filename
 	for ( char **start = demoNames; start - demoNames < (ptrdiff_t)ARRAY_LEN( demoNames ); start++ ) {
-		Q_strstrip( *start, "\n\r;:.?*<>|\\/\"", NULL );
+		Q_strstrip( *start, "\n\r;:.?*<>|\\/\"", nullptr );
 	}
 	Com_sprintf( demoName, sizeof( demoName ), "autorecord/%s/%s/%s", folderTreeDate, demoFolderName, demoFileName );
 	SV_RecordDemo( cl, demoName );
@@ -1562,7 +1562,7 @@ static int QDECL SV_DemoFolderTimeComparator( const void *arg1, const void *arg2
 	return rightTime - leftTime;
 }
 
-// returns number of folders found.  pass NULL result pointer for just a count.
+// returns number of folders found.  pass nullptr result pointer for just a count.
 static int SV_FindLeafFolders( const char *baseFolder, char *result, int maxResults, int maxFolderLength ) {
 	char *fileList = (char *)Z_Malloc( MAX_OSPATH * maxResults, TAG_FILESYS ); // too big for stack since this is recursive
 	char fullFolder[MAX_OSPATH];
@@ -1574,22 +1574,22 @@ static int SV_FindLeafFolders( const char *baseFolder, char *result, int maxResu
 	fileName = fileList;
 	for ( i = 0; i < numFiles; i++ ) {
 		if ( Q_stricmp( fileName, "." ) && Q_stricmp( fileName, ".." ) ) {
-			char *nextResult = NULL;
+			char *nextResult = nullptr;
 			Com_sprintf( fullFolder, sizeof( fullFolder ), "%s/%s", baseFolder, fileName );
-			if ( result != NULL ) {
+			if ( result != nullptr ) {
 				nextResult = &result[maxFolderLength * resultCount];
 			}
 			int newResults = SV_FindLeafFolders( fullFolder, nextResult, maxResults - resultCount, maxFolderLength );
 			resultCount += newResults;
-			if ( result != NULL && resultCount >= maxResults ) {
+			if ( result != nullptr && resultCount >= maxResults ) {
 				break;
 			}
 			if ( newResults == 0 ) {
-				if ( result != NULL ) {
+				if ( result != nullptr ) {
 					Q_strncpyz( &result[maxFolderLength * resultCount], fullFolder, maxFolderLength );
 				}
 				resultCount++;
-				if ( result != NULL && resultCount >= maxResults ) {
+				if ( result != nullptr && resultCount >= maxResults ) {
 					break;
 				}
 			}
@@ -1619,13 +1619,13 @@ void SV_BeginAutoRecordDemos() {
 
 			qsort( autorecordDirList, autorecordDirListCount, MAX_OSPATH, SV_DemoFolderTimeComparator );
 			for ( i = sv_autoDemoMaxMaps->integer; i < autorecordDirListCount; i++ ) {
-				char *folder = &autorecordDirList[i * MAX_OSPATH], *slash = NULL;
+				char *folder = &autorecordDirList[i * MAX_OSPATH], *slash = nullptr;
 				FS_HomeRmdir( folder, true );
 				// if this folder was the last thing in its parent folder (and its parent isn't the root folder),
 				// also delete the parent.
 				for (;;) {
 					slash = strrchr( folder, '/' );
-					if ( slash == NULL ) {
+					if ( slash == nullptr ) {
 						break;
 					}
 					slash[0] = '\0';
@@ -1656,7 +1656,7 @@ static void SV_Record_f( void ) {
 	char		*s;
 	client_t	*cl;
 
-	if ( svs.clients == NULL ) {
+	if ( svs.clients == nullptr ) {
 		Com_Printf( "cannot record server demo - null svs.clients\n" );
 		return;
 	}

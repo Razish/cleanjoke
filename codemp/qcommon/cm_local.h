@@ -209,7 +209,7 @@ typedef struct clipMap_s
 	int* areaPortals;	// [ numAreas*numAreas ] reference counts
 
 	int			numSurfaces;
-	cPatch_t** surfaces;			// non-patches will be NULL
+	cPatch_t** surfaces;			// non-patches will be nullptr
 
 	int			floodvalid;
 	int			checkcount;					// incremented on each trace

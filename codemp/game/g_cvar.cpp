@@ -56,7 +56,7 @@ static const size_t gameCvarTableSize = ARRAY_LEN( gameCvarTable );
 
 void G_RegisterCvars( void ) {
 	size_t i = 0;
-	const cvarTable_t *cv = NULL;
+	const cvarTable_t *cv = nullptr;
 
 	for ( i=0, cv=gameCvarTable; i<gameCvarTableSize; i++, cv++ ) {
 		trap->Cvar_Register( cv->vmCvar, cv->cvarName, cv->defaultString, cv->cvarFlags );
@@ -67,7 +67,7 @@ void G_RegisterCvars( void ) {
 
 void G_UpdateCvars( void ) {
 	size_t i = 0;
-	const cvarTable_t *cv = NULL;
+	const cvarTable_t *cv = nullptr;
 
 	for ( i=0, cv=gameCvarTable; i<gameCvarTableSize; i++, cv++ ) {
 		if ( cv->vmCvar ) {

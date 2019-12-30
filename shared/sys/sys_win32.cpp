@@ -117,7 +117,7 @@ bool Sys_RandomBytes( byte *string, int len )
 {
 	HCRYPTPROV  prov;
 
-	if( !CryptAcquireContext( &prov, NULL, NULL,
+	if( !CryptAcquireContext( &prov, nullptr, nullptr,
 		PROV_RSA_FULL, CRYPT_VERIFYCONTEXT ) )  {
 
 		return false;
@@ -159,16 +159,16 @@ char *Sys_DefaultHomePath( void )
 {
 #if defined(_PORTABLE_VERSION)
 	Com_Printf( "Portable install requested, skipping homepath support\n" );
-	return NULL;
+	return nullptr;
 #else
 	if ( !homePath[0] )
 	{
 		TCHAR homeDirectory[MAX_PATH];
 
-		if( !SUCCEEDED( SHGetFolderPath( NULL, CSIDL_PERSONAL, NULL, 0, homeDirectory ) ) )
+		if( !SUCCEEDED( SHGetFolderPath( nullptr, CSIDL_PERSONAL, nullptr, 0, homeDirectory ) ) )
 		{
 			Com_Printf( "Unable to determine your home directory.\n" );
-			return NULL;
+			return nullptr;
 		}
 
 		Com_sprintf( homePath, sizeof( homePath ), "%s%cMy Games%c", homeDirectory, PATH_SEP, PATH_SEP );
@@ -190,7 +190,7 @@ static const char *GetErrorString( DWORD error ) {
 	if ( error ) {
 		LPVOID lpMsgBuf;
 		DWORD bufLen = FormatMessage( FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
-			NULL, error, MAKELANGID( LANG_NEUTRAL, SUBLANG_DEFAULT ), (LPTSTR)&lpMsgBuf, 0, NULL );
+			nullptr, error, MAKELANGID( LANG_NEUTRAL, SUBLANG_DEFAULT ), (LPTSTR)&lpMsgBuf, 0, nullptr );
 		if ( bufLen ) {
 			LPCSTR lpMsgStr = (LPCSTR)lpMsgBuf;
 			Q_strncpyz( buf, lpMsgStr, Q_min( (size_t)(lpMsgStr + bufLen), sizeof(buf) ) );
@@ -251,7 +251,7 @@ Sys_Mkdir
 ==============
 */
 bool Sys_Mkdir( const char *path ) {
-	if( !CreateDirectory( path, NULL ) )
+	if( !CreateDirectory( path, nullptr ) )
 	{
 		if( GetLastError( ) != ERROR_ALREADY_EXISTS )
 			return false;
@@ -279,8 +279,8 @@ char *Sys_Cwd( void ) {
 bool Sys_PathCmp( const char *path1, const char *path2 ) {
 	char *r1, *r2;
 
-	r1 = _fullpath(NULL, path1, MAX_OSPATH);
-	r2 = _fullpath(NULL, path2, MAX_OSPATH);
+	r1 = _fullpath(nullptr, path1, MAX_OSPATH);
+	r2 = _fullpath(nullptr, path2, MAX_OSPATH);
 
 	if(r1 && r2 && !Q_stricmp(r1, r2))
 	{
@@ -392,13 +392,13 @@ char **Sys_ListFiles( const char *directory, const char *extension, char *filter
 		*numfiles = nfiles;
 
 		if (!nfiles)
-			return NULL;
+			return nullptr;
 
 		listCopy = (char **)Z_Malloc( ( nfiles + 1 ) * sizeof( *listCopy ), TAG_LISTFILES );
 		for ( i = 0 ; i < nfiles ; i++ ) {
 			listCopy[i] = list[i];
 		}
-		listCopy[i] = NULL;
+		listCopy[i] = nullptr;
 
 		return listCopy;
 	}
@@ -425,7 +425,7 @@ char **Sys_ListFiles( const char *directory, const char *extension, char *filter
 	findhandle = _findfirst (search, &findinfo);
 	if (findhandle == -1) {
 		*numfiles = 0;
-		return NULL;
+		return nullptr;
 	}
 
 	do {
@@ -454,14 +454,14 @@ char **Sys_ListFiles( const char *directory, const char *extension, char *filter
 	*numfiles = nfiles;
 
 	if ( !nfiles ) {
-		return NULL;
+		return nullptr;
 	}
 
 	listCopy = (char **)Z_Malloc( ( nfiles + 1 ) * sizeof( *listCopy ), TAG_LISTFILES );
 	for ( i = 0 ; i < nfiles ; i++ ) {
 		listCopy[i] = list[i];
 	}
-	listCopy[i] = NULL;
+	listCopy[i] = nullptr;
 
 	do {
 		flag = 0;
@@ -512,7 +512,7 @@ UnpackDLLResult Sys_UnpackDLL(const char *name)
 
 	if (len >= 1)
 	{
-		if (FS_FileIsInPAK(name, NULL) == 1)
+		if (FS_FileIsInPAK(name, nullptr) == 1)
 		{
 			char *tempFileName;
 			if ( FS_WriteToTemporaryFile(data, len, &tempFileName) )

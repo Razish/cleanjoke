@@ -226,7 +226,7 @@ static const size_t numCommands = ARRAY_LEN( commands );
 
 // The string has been tokenized and can be retrieved with Cmd_Argc() / Cmd_Argv()
 bool CG_ConsoleCommand( void ) {
-	consoleCommand_t	*command = NULL;
+	consoleCommand_t	*command = nullptr;
 
 	command = (consoleCommand_t *)Q_LinearSearch( CG_Argv( 0 ), commands, numCommands, sizeof( commands[0] ), cmdcmp );
 

@@ -113,15 +113,15 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 #define WORLD_SIZE			( MAX_WORLD_COORD - MIN_WORLD_COORD )
 
 //Pointer safety utilities
-#define VALID( a )		( a != NULL )
+#define VALID( a )		( a != nullptr )
 #define	VALIDATE( a )	( assert( a ) )
 
-#define	VALIDATEV( a )	if ( a == NULL ) {	assert(0);	return;			}
-#define	VALIDATEB( a )	if ( a == NULL ) {	assert(0);	return false;	}
-#define VALIDATEP( a )	if ( a == NULL ) {	assert(0);	return NULL;	}
+#define	VALIDATEV( a )	if ( a == nullptr ) {	assert(0);	return;			}
+#define	VALIDATEB( a )	if ( a == nullptr ) {	assert(0);	return false;	}
+#define VALIDATEP( a )	if ( a == nullptr ) {	assert(0);	return nullptr;	}
 
-#define VALIDSTRING( a )	( ( a != NULL ) && ( a[0] != '\0' ) )
-#define VALIDENT( e )		( ( e != NULL ) && ( (e)->inuse ) )
+#define VALIDSTRING( a )	( ( a != nullptr ) && ( a[0] != '\0' ) )
+#define VALIDENT( e )		( ( e != nullptr ) && ( (e)->inuse ) )
 
 #define ARRAY_LEN( x ) ( sizeof( x ) / sizeof( *(x) ) )
 #define STRING( a ) #a

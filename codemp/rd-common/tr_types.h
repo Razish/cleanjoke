@@ -246,7 +246,7 @@ typedef struct refEntity_s {
 
 	// texturing
 	int			skinNum;			// inline skin index
-	qhandle_t	customSkin;			// NULL for default skin
+	qhandle_t	customSkin;			// nullptr for default skin
 
 	// texturing
 	union

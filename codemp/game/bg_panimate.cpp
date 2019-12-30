@@ -1728,7 +1728,7 @@ stringID_table_t animEventTypeTable[MAX_ANIM_EVENTS+1] =
 	ENUM2STRING(AEV_SABER_SWING),	//# animID AEV_SABER_SWING framenum CHANNEL randomlow randomhi chancetoplay
 	ENUM2STRING(AEV_SABER_SPIN),	//# animID AEV_SABER_SPIN framenum CHANNEL chancetoplay
 	//must be terminated
-	{ NULL,-1 }
+	{ nullptr,-1 }
 };
 
 stringID_table_t footstepTypeTable[NUM_FOOTSTEP_TYPES+1] =
@@ -1738,7 +1738,7 @@ stringID_table_t footstepTypeTable[NUM_FOOTSTEP_TYPES+1] =
 	ENUM2STRING(FOOTSTEP_HEAVY_R),
 	ENUM2STRING(FOOTSTEP_HEAVY_L),
 	//must be terminated
-	{ NULL,-1 }
+	{ nullptr,-1 }
 };
 
 int CheckAnimFrameForEventType( animevent_t *animEvents, int keyFrame, animEventType_t eventType )
@@ -2030,7 +2030,7 @@ void ParseAnimationEvtBlock(const char *aeb_filename, animevent_t *animEvents, a
 			{
 				break;
 			}
-			if ( Q_stricmp( "none", token ) != 0 && Q_stricmp( "NULL", token ) != 0 )
+			if ( Q_stricmp( "none", token ) != 0 && Q_stricmp( "nullptr", token ) != 0 )
 			{//actually are specifying a bolt to use
 				if (!animEvents[curAnimEvent].stringData)
 				{ //eh, whatever. no dynamic stuff, so this will do.
@@ -2173,9 +2173,9 @@ int BG_ParseAnimationEvtFile( const char *as_filename, int animFileIndex, int ev
 			//Frame to play event on
 			torsoAnimEvents[i].keyFrame = -1;
 			legsAnimEvents[i].keyFrame = -1;
-			//we allow storage of one string, temporarily (in case we have to look up an index later, then make sure to set stringData to NULL so we only do the look-up once)
-			torsoAnimEvents[i].stringData = NULL;
-			legsAnimEvents[i].stringData = NULL;
+			//we allow storage of one string, temporarily (in case we have to look up an index later, then make sure to set stringData to nullptr so we only do the look-up once)
+			torsoAnimEvents[i].stringData = nullptr;
+			legsAnimEvents[i].stringData = nullptr;
 			//Unique IDs, can be soundIndex of sound file to play OR effect index or footstep type, etc.
 			for ( j = 0; j < AED_ARRAY_SIZE; j++ )
 			{
@@ -2226,7 +2226,7 @@ int BG_ParseAnimationEvtFile( const char *as_filename, int animFileIndex, int ev
 		if ( !Q_stricmp(token,"include") )	// grab from another animevents.cfg
 		{//NOTE: you REALLY should NOT do this after the main block of UPPERSOUNDS and LOWERSOUNDS
 			const char	*include_filename = COM_Parse( &text_p );
-			if ( include_filename != NULL )
+			if ( include_filename != nullptr )
 			{
 				char fullIPath[MAX_QPATH];
 				strcpy(fullIPath, va("models/players/%s/", include_filename));
@@ -2454,7 +2454,7 @@ int BG_ParseAnimationFile(const char *filename, animation_t *animset, bool isHum
 	//Check the array, and print the ones that have nothing in them.
 	for(i = 0; i < MAX_ANIMATIONS; i++)
 	{
-		if (animTable[i].name != NULL)		// This animation reference exists.
+		if (animTable[i].name != nullptr)		// This animation reference exists.
 		{
 			if (animset[i].firstFrame <= 0 && animset[i].numFrames <=0)
 			{	// This is an empty animation reference.
@@ -2500,9 +2500,9 @@ int BG_ParseAnimationFile(const char *filename, animation_t *animset, bool isHum
 	if (!wasLoaded && BGPAFtextLoaded)
 	{ //just loaded humanoid skel - we always want the rockettrooper to be after it, in slot 1
 #ifdef _DEBUG
-		assert(BG_ParseAnimationFile("models/players/rockettrooper/animation.cfg", NULL, false) == 1);
+		assert(BG_ParseAnimationFile("models/players/rockettrooper/animation.cfg", nullptr, false) == 1);
 #else
-		BG_ParseAnimationFile("models/players/rockettrooper/animation.cfg", NULL, false);
+		BG_ParseAnimationFile("models/players/rockettrooper/animation.cfg", nullptr, false);
 #endif
 	}
 	*/

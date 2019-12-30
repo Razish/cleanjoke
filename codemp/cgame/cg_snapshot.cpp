@@ -77,7 +77,7 @@ void CG_SetInitialSnapshot( snapshot_t *snap ) {
 
 	cg.snap = snap;
 
-	if ((cg_entities[snap->ps.clientNum].ghoul2 == NULL) && trap->G2_HaveWeGhoul2Models(cgs.clientinfo[snap->ps.clientNum].ghoul2Model))
+	if ((cg_entities[snap->ps.clientNum].ghoul2 == nullptr) && trap->G2_HaveWeGhoul2Models(cgs.clientinfo[snap->ps.clientNum].ghoul2Model))
 	{
 		trap->G2API_DuplicateGhoul2Instance(cgs.clientinfo[snap->ps.clientNum].ghoul2Model, &cg_entities[snap->ps.clientNum].ghoul2);
 		CG_CopyG2WeaponInstance(&cg_entities[snap->ps.clientNum], FIRST_WEAPON, cg_entities[snap->ps.clientNum].ghoul2);
@@ -121,10 +121,10 @@ static void CG_TransitionSnapshot( void ) {
 	int					i;
 
 	if ( !cg.snap ) {
-		trap->Error( ERR_DROP, "CG_TransitionSnapshot: NULL cg.snap" );
+		trap->Error( ERR_DROP, "CG_TransitionSnapshot: nullptr cg.snap" );
 	}
 	if ( !cg.nextSnap ) {
-		trap->Error( ERR_DROP, "CG_TransitionSnapshot: NULL cg.nextSnap" );
+		trap->Error( ERR_DROP, "CG_TransitionSnapshot: nullptr cg.nextSnap" );
 	}
 
 	// execute any server string commands before transitioning entities
@@ -157,7 +157,7 @@ static void CG_TransitionSnapshot( void ) {
 		cent->snapShotTime = cg.snap->serverTime;
 	}
 
-	cg.nextSnap = NULL;
+	cg.nextSnap = nullptr;
 
 	// check for playerstate transition events
 	if ( oldFrame ) {
@@ -281,14 +281,14 @@ static snapshot_t *CG_ReadNextSnapshot( void ) {
 		// buffer in the client system.
 
 		// record as a dropped packet
-		CG_AddLagometerSnapshotInfo( NULL );
+		CG_AddLagometerSnapshotInfo( nullptr );
 
 		// If there are additional snapshots, continue trying to
 		// read them.
 	}
 
 	// nothing left to read
-	return NULL;
+	return nullptr;
 }
 
 // We are trying to set up a renderable view, so determine what the simulated time is, and try to get snapshots both
@@ -359,14 +359,14 @@ void CG_ProcessSnapshots( void ) {
 	} while ( 1 );
 
 	// assert our valid conditions upon exiting
-	if ( cg.snap == NULL ) {
-		trap->Error( ERR_DROP, "CG_ProcessSnapshots: cg.snap == NULL" );
+	if ( cg.snap == nullptr ) {
+		trap->Error( ERR_DROP, "CG_ProcessSnapshots: cg.snap == nullptr" );
 	}
 	if ( cg.time < cg.snap->serverTime ) {
 		// this can happen right after a vid_restart
 		cg.time = cg.snap->serverTime;
 	}
-	if ( cg.nextSnap != NULL && cg.nextSnap->serverTime <= cg.time ) {
+	if ( cg.nextSnap != nullptr && cg.nextSnap->serverTime <= cg.time ) {
 		trap->Error( ERR_DROP, "CG_ProcessSnapshots: cg.nextSnap->serverTime <= cg.time" );
 	}
 

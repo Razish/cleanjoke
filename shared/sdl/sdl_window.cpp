@@ -39,7 +39,7 @@ enum rserr_t
 	RSERR_UNKNOWN
 };
 
-static SDL_Window *screen = NULL;
+static SDL_Window *screen = nullptr;
 static SDL_GLContext opengl_context;
 static float displayAspect;
 
@@ -323,7 +323,7 @@ static rserr_t GLimp_SetMode(glconfig_t *glConfig, const windowDesc_t *windowDes
 	int colorBits, depthBits, stencilBits;
 	int samples;
 	int i = 0;
-	SDL_Surface *icon = NULL;
+	SDL_Surface *icon = nullptr;
 	Uint32 flags = SDL_WINDOW_SHOWN;
 	SDL_DisplayMode desktopMode;
 	int display = 0;
@@ -350,7 +350,7 @@ static rserr_t GLimp_SetMode(glconfig_t *glConfig, const windowDesc_t *windowDes
 		);
 
 	// If a window exists, note its display index
-	if ( screen != NULL )
+	if ( screen != nullptr )
 	{
 		display = SDL_GetWindowDisplayIndex( screen );
 		if ( display < 0 )
@@ -407,18 +407,18 @@ static rserr_t GLimp_SetMode(glconfig_t *glConfig, const windowDesc_t *windowDes
 	}
 
 	// Destroy existing state if it exists
-	if( opengl_context != NULL )
+	if( opengl_context != nullptr )
 	{
 		SDL_GL_DeleteContext( opengl_context );
-		opengl_context = NULL;
+		opengl_context = nullptr;
 	}
 
-	if( screen != NULL )
+	if( screen != nullptr )
 	{
 		SDL_GetWindowPosition( screen, &x, &y );
 		Com_DPrintf( "Existing window at %dx%d before being destroyed\n", x, y );
 		SDL_DestroyWindow( screen );
-		screen = NULL;
+		screen = nullptr;
 	}
 
 	if( fullscreen )
@@ -570,7 +570,7 @@ static rserr_t GLimp_SetMode(glconfig_t *glConfig, const windowDesc_t *windowDes
 			SDL_GL_SetAttribute( SDL_GL_ACCELERATED_VISUAL, !r_allowSoftwareGL->integer );
 
 			if( ( screen = SDL_CreateWindow( windowTitle, x, y,
-					glConfig->vidWidth, glConfig->vidHeight, flags ) ) == NULL )
+					glConfig->vidWidth, glConfig->vidHeight, flags ) ) == nullptr )
 			{
 				Com_DPrintf( "SDL_CreateWindow failed: %s\n", SDL_GetError( ) );
 				continue;
@@ -594,7 +594,7 @@ static rserr_t GLimp_SetMode(glconfig_t *glConfig, const windowDesc_t *windowDes
 				mode.w = glConfig->vidWidth;
 				mode.h = glConfig->vidHeight;
 				mode.refresh_rate = glConfig->displayFrequency = r_displayRefresh->integer;
-				mode.driverdata = NULL;
+				mode.driverdata = nullptr;
 
 				if( SDL_SetWindowDisplayMode( screen, &mode ) < 0 )
 				{
@@ -603,7 +603,7 @@ static rserr_t GLimp_SetMode(glconfig_t *glConfig, const windowDesc_t *windowDes
 				}
 			}
 
-			if( ( opengl_context = SDL_GL_CreateContext( screen ) ) == NULL )
+			if( ( opengl_context = SDL_GL_CreateContext( screen ) ) == nullptr )
 			{
 				Com_Printf( "SDL_GL_CreateContext failed: %s\n", SDL_GetError( ) );
 				continue;
@@ -623,7 +623,7 @@ static rserr_t GLimp_SetMode(glconfig_t *glConfig, const windowDesc_t *windowDes
 			break;
 		}
 
-		if (opengl_context == NULL) {
+		if (opengl_context == nullptr) {
 			SDL_FreeSurface(icon);
 			return RSERR_UNKNOWN;
 		}
@@ -632,7 +632,7 @@ static rserr_t GLimp_SetMode(glconfig_t *glConfig, const windowDesc_t *windowDes
 	{
 		// Just create a regular window
 		if( ( screen = SDL_CreateWindow( windowTitle, x, y,
-				glConfig->vidWidth, glConfig->vidHeight, flags ) ) == NULL )
+				glConfig->vidWidth, glConfig->vidHeight, flags ) ) == nullptr )
 		{
 			Com_DPrintf( "SDL_CreateWindow failed: %s\n", SDL_GetError( ) );
 		}
@@ -643,7 +643,7 @@ static rserr_t GLimp_SetMode(glconfig_t *glConfig, const windowDesc_t *windowDes
 #endif
 			if( fullscreen )
 			{
-				if( SDL_SetWindowDisplayMode( screen, NULL ) < 0 )
+				if( SDL_SetWindowDisplayMode( screen, nullptr ) < 0 )
 				{
 					Com_DPrintf( "SDL_SetWindowDisplayMode failed: %s\n", SDL_GetError( ) );
 				}
@@ -813,7 +813,7 @@ void WIN_Shutdown( void )
 	IN_Shutdown();
 
 	SDL_QuitSubSystem( SDL_INIT_VIDEO );
-	screen = NULL;
+	screen = nullptr;
 }
 
 void GLimp_EnableLogging( bool enable )

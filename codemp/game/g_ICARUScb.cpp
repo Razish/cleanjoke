@@ -285,10 +285,10 @@ static char *Q3_GetAnimLower( gentity_t *ent )
 {
 	int anim = 0;
 
-	if ( ent->client == NULL )
+	if ( ent->client == nullptr )
 	{
 		G_DebugPrint( WL_WARNING, "Q3_GetAnimLower: attempted to read animation state off non-client!\n" );
-		return NULL;
+		return nullptr;
 	}
 
 	anim = ent->client->ps.legsAnim;
@@ -300,10 +300,10 @@ static char *Q3_GetAnimUpper( gentity_t *ent )
 {
 	int anim = 0;
 
-	if ( ent->client == NULL )
+	if ( ent->client == nullptr )
 	{
 		G_DebugPrint( WL_WARNING, "Q3_GetAnimUpper: attempted to read animation state off non-client!\n" );
-		return NULL;
+		return nullptr;
 	}
 
 	anim = ent->client->ps.torsoAnim;
@@ -320,14 +320,14 @@ static char *Q3_GetAnimBoth( gentity_t *ent )
 
 	if ( !lowerName || !lowerName[0] )
 	{
-		G_DebugPrint( WL_WARNING, "Q3_GetAnimBoth: NULL legs animation string found!\n" );
-		return NULL;
+		G_DebugPrint( WL_WARNING, "Q3_GetAnimBoth: nullptr legs animation string found!\n" );
+		return nullptr;
 	}
 
 	if ( !upperName || !upperName[0] )
 	{
-		G_DebugPrint( WL_WARNING, "Q3_GetAnimBoth: NULL torso animation string found!\n" );
-		return NULL;
+		G_DebugPrint( WL_WARNING, "Q3_GetAnimBoth: nullptr torso animation string found!\n" );
+		return nullptr;
 	}
 
 	if ( Q_stricmp( lowerName, upperName ) )
@@ -564,7 +564,7 @@ void Blocked_Mover( gentity_t *ent, gentity_t *other )
 	}
 
 	if ( ent->damage ) {
-		G_Damage( other, ent, ent, NULL, NULL, ent->damage, 0, MOD_CRUSH );
+		G_Damage( other, ent, ent, nullptr, nullptr, ent->damage, 0, MOD_CRUSH );
 	}
 }
 
@@ -717,7 +717,7 @@ void Q3_Lerp2Pos( int taskID, int entID, vec3_t origin, vec3_t angles, float dur
 	//SetMoverState( ent, moverState, level.time );
 
 	//Only do the angles if specified
-	if ( angles != NULL )
+	if ( angles != nullptr )
 	{
 
 		// Rotation
@@ -852,7 +852,7 @@ void Q3_Use( int entID, const char *target )
 
 	if( !target || !target[0] )
 	{
-		G_DebugPrint( WL_WARNING, "Q3_Use: string is NULL!\n" );
+		G_DebugPrint( WL_WARNING, "Q3_Use: string is nullptr!\n" );
 		return;
 	}
 
@@ -862,7 +862,7 @@ void Q3_Use( int entID, const char *target )
 void Q3_Kill( int entID, const char *name )
 {
 	gentity_t	*ent = &g_entities[entID];
-	gentity_t	*victim = NULL;
+	gentity_t	*victim = nullptr;
 	int			o_health;
 
 	if( !Q_stricmp( name, "self") )
@@ -875,7 +875,7 @@ void Q3_Kill( int entID, const char *name )
 	}
 	else
 	{
-		victim = G_Find (NULL, FOFS(targetname), (char *) name );
+		victim = G_Find (nullptr, FOFS(targetname), (char *) name );
 	}
 
 	if ( !victim )
@@ -896,9 +896,9 @@ void Q3_Kill( int entID, const char *name )
 	{
 		victim->flags |= FL_NO_KNOCKBACK;
 	}
-	if( victim->die != NULL )	// check can be omitted
+	if( victim->die != nullptr )	// check can be omitted
 	{
-		//GEntity_DieFunc( victim, NULL, NULL, o_health, MOD_UNKNOWN );
+		//GEntity_DieFunc( victim, nullptr, nullptr, o_health, MOD_UNKNOWN );
 		victim->die(victim, victim, victim, o_health, MOD_UNKNOWN);
 	}
 }
@@ -915,12 +915,12 @@ void Q3_RemoveEnt( gentity_t *victim )
 		victim->s.eType = ET_INVISIBLE;
 		victim->contents = 0;
 		victim->health = 0;
-		victim->targetname = NULL;
+		victim->targetname = nullptr;
 
-		if ( victim->NPC && victim->NPC->tempGoal != NULL )
+		if ( victim->NPC && victim->NPC->tempGoal != nullptr )
 		{
 			G_FreeEntity( victim->NPC->tempGoal );
-			victim->NPC->tempGoal = NULL;
+			victim->NPC->tempGoal = nullptr;
 		}
 		if ( victim->client->ps.saberEntityNum != ENTITYNUM_NONE && victim->client->ps.saberEntityNum > 0 )
 		{
@@ -946,7 +946,7 @@ void Q3_RemoveEnt( gentity_t *victim )
 void Q3_Remove( int entID, const char *name )
 {
 	gentity_t *ent = &g_entities[entID];
-	gentity_t	*victim = NULL;
+	gentity_t	*victim = nullptr;
 
 	if( !Q_stricmp( "self", name ) )
 	{
@@ -970,7 +970,7 @@ void Q3_Remove( int entID, const char *name )
 	}
 	else
 	{
-		victim = G_Find( NULL, FOFS(targetname), (char *) name );
+		victim = G_Find( nullptr, FOFS(targetname), (char *) name );
 		if ( !victim )
 		{
 			G_DebugPrint( WL_WARNING, "Q3_Remove: can't find %s\n", name );
@@ -1017,7 +1017,7 @@ int Q3_GetFloat( int entID, int type, const char *name, float *value )
 	case SET_PARM14:
 	case SET_PARM15:
 	case SET_PARM16:
-		if (ent->parms == NULL)
+		if (ent->parms == nullptr)
 		{
 			G_DebugPrint( WL_ERROR, "GET_PARM: %s %s did not have any parms set!\n", ent->classname, ent->targetname );
 			return 0;	// would prefer false, but I'm fitting in with what's here <sigh>
@@ -1038,7 +1038,7 @@ int Q3_GetFloat( int entID, int type, const char *name, float *value )
 		break;
 
 	case SET_XVELOCITY://## %f="0.0" # Velocity along X axis
-		if ( ent->client == NULL )
+		if ( ent->client == nullptr )
 		{
 			G_DebugPrint( WL_WARNING, "Q3_GetFloat: SET_XVELOCITY, %s not a client\n", ent->targetname );
 			return 0;
@@ -1047,7 +1047,7 @@ int Q3_GetFloat( int entID, int type, const char *name, float *value )
 		break;
 
 	case SET_YVELOCITY://## %f="0.0" # Velocity along Y axis
-		if ( ent->client == NULL )
+		if ( ent->client == nullptr )
 		{
 			G_DebugPrint( WL_WARNING, "Q3_GetFloat: SET_YVELOCITY, %s not a client\n", ent->targetname );
 			return 0;
@@ -1056,7 +1056,7 @@ int Q3_GetFloat( int entID, int type, const char *name, float *value )
 		break;
 
 	case SET_ZVELOCITY://## %f="0.0" # Velocity along Z axis
-		if ( ent->client == NULL )
+		if ( ent->client == nullptr )
 		{
 			G_DebugPrint( WL_WARNING, "Q3_GetFloat: SET_ZVELOCITY, %s not a client\n", ent->targetname );
 			return 0;
@@ -1073,7 +1073,7 @@ int Q3_GetFloat( int entID, int type, const char *name, float *value )
 	case SET_TIMESCALE://## %f="0.0" # Speed-up slow down game (0 - 1.0)
 		return 0;
 		break;
-	case SET_CAMERA_GROUP_Z_OFS://## %s="NULL" # all ents with this cameraGroup will be focused on
+	case SET_CAMERA_GROUP_Z_OFS://## %s="nullptr" # all ents with this cameraGroup will be focused on
 		return 0;
 		break;
 
@@ -1096,7 +1096,7 @@ int Q3_GetFloat( int entID, int type, const char *name, float *value )
 		break;
 	//# #sep ints
 	case SET_ANIM_HOLDTIME_LOWER://## %d="0" # Hold lower anim for number of milliseconds
-		if ( ent->client == NULL )
+		if ( ent->client == nullptr )
 		{
 			G_DebugPrint( WL_WARNING, "Q3_GetFloat: SET_ANIM_HOLDTIME_LOWER, %s not a client\n", ent->targetname );
 			return 0;
@@ -1104,7 +1104,7 @@ int Q3_GetFloat( int entID, int type, const char *name, float *value )
 		*value = ent->client->ps.legsTimer;
 		break;
 	case SET_ANIM_HOLDTIME_UPPER://## %d="0" # Hold upper anim for number of milliseconds
-		if ( ent->client == NULL )
+		if ( ent->client == nullptr )
 		{
 			G_DebugPrint( WL_WARNING, "Q3_GetFloat: SET_ANIM_HOLDTIME_UPPER, %s not a client\n", ent->targetname );
 			return 0;
@@ -1116,7 +1116,7 @@ int Q3_GetFloat( int entID, int type, const char *name, float *value )
 		return 0;
 		break;
 	case SET_ARMOR://## %d="0" # Change armor
-		if ( ent->client == NULL )
+		if ( ent->client == nullptr )
 		{
 			G_DebugPrint( WL_WARNING, "Q3_GetFloat: SET_ARMOR, %s not a client\n", ent->targetname );
 			return 0;
@@ -1362,63 +1362,63 @@ int Q3_GetString( int entID, int type, const char *name, char **value )
 		break;
 
 	//# #sep Scripts and other file paths
-	case SET_SPAWNSCRIPT://## %s="NULL" !!"W:\game\base\scripts\!!#*.txt" # Script to run when spawned //0 - do not change these, these are equal to BSET_SPAWN, etc
+	case SET_SPAWNSCRIPT://## %s="nullptr" !!"W:\game\base\scripts\!!#*.txt" # Script to run when spawned //0 - do not change these, these are equal to BSET_SPAWN, etc
 		*value = ent->behaviorSet[BSET_SPAWN];
 		break;
-	case SET_USESCRIPT://## %s="NULL" !!"W:\game\base\scripts\!!#*.txt" # Script to run when used
+	case SET_USESCRIPT://## %s="nullptr" !!"W:\game\base\scripts\!!#*.txt" # Script to run when used
 		*value = ent->behaviorSet[BSET_USE];
 		break;
-	case SET_AWAKESCRIPT://## %s="NULL" !!"W:\game\base\scripts\!!#*.txt" # Script to run when startled
+	case SET_AWAKESCRIPT://## %s="nullptr" !!"W:\game\base\scripts\!!#*.txt" # Script to run when startled
 		*value = ent->behaviorSet[BSET_AWAKE];
 		break;
-	case SET_ANGERSCRIPT://## %s="NULL" !!"W:\game\base\scripts\!!#*.txt" # Script run when find an enemy for the first time
+	case SET_ANGERSCRIPT://## %s="nullptr" !!"W:\game\base\scripts\!!#*.txt" # Script run when find an enemy for the first time
 		*value = ent->behaviorSet[BSET_ANGER];
 		break;
-	case SET_ATTACKSCRIPT://## %s="NULL" !!"W:\game\base\scripts\!!#*.txt" # Script to run when you shoot
+	case SET_ATTACKSCRIPT://## %s="nullptr" !!"W:\game\base\scripts\!!#*.txt" # Script to run when you shoot
 		*value = ent->behaviorSet[BSET_ATTACK];
 		break;
-	case SET_VICTORYSCRIPT://## %s="NULL" !!"W:\game\base\scripts\!!#*.txt" # Script to run when killed someone
+	case SET_VICTORYSCRIPT://## %s="nullptr" !!"W:\game\base\scripts\!!#*.txt" # Script to run when killed someone
 		*value = ent->behaviorSet[BSET_VICTORY];
 		break;
-	case SET_LOSTENEMYSCRIPT://## %s="NULL" !!"W:\game\base\scripts\!!#*.txt" # Script to run when you can't find your enemy
+	case SET_LOSTENEMYSCRIPT://## %s="nullptr" !!"W:\game\base\scripts\!!#*.txt" # Script to run when you can't find your enemy
 		*value = ent->behaviorSet[BSET_LOSTENEMY];
 		break;
-	case SET_PAINSCRIPT://## %s="NULL" !!"W:\game\base\scripts\!!#*.txt" # Script to run when hit
+	case SET_PAINSCRIPT://## %s="nullptr" !!"W:\game\base\scripts\!!#*.txt" # Script to run when hit
 		*value = ent->behaviorSet[BSET_PAIN];
 		break;
-	case SET_FLEESCRIPT://## %s="NULL" !!"W:\game\base\scripts\!!#*.txt" # Script to run when hit and low health
+	case SET_FLEESCRIPT://## %s="nullptr" !!"W:\game\base\scripts\!!#*.txt" # Script to run when hit and low health
 		*value = ent->behaviorSet[BSET_FLEE];
 		break;
-	case SET_DEATHSCRIPT://## %s="NULL" !!"W:\game\base\scripts\!!#*.txt" # Script to run when killed
+	case SET_DEATHSCRIPT://## %s="nullptr" !!"W:\game\base\scripts\!!#*.txt" # Script to run when killed
 		*value = ent->behaviorSet[BSET_DEATH];
 		break;
-	case SET_DELAYEDSCRIPT://## %s="NULL" !!"W:\game\base\scripts\!!#*.txt" # Script to run after a delay
+	case SET_DELAYEDSCRIPT://## %s="nullptr" !!"W:\game\base\scripts\!!#*.txt" # Script to run after a delay
 		*value = ent->behaviorSet[BSET_DELAYED];
 		break;
-	case SET_BLOCKEDSCRIPT://## %s="NULL" !!"W:\game\base\scripts\!!#*.txt" # Script to run when blocked by teammate
+	case SET_BLOCKEDSCRIPT://## %s="nullptr" !!"W:\game\base\scripts\!!#*.txt" # Script to run when blocked by teammate
 		*value = ent->behaviorSet[BSET_BLOCKED];
 		break;
-	case SET_FFIRESCRIPT://## %s="NULL" !!"W:\game\base\scripts\!!#*.txt" # Script to run when player has shot own team repeatedly
+	case SET_FFIRESCRIPT://## %s="nullptr" !!"W:\game\base\scripts\!!#*.txt" # Script to run when player has shot own team repeatedly
 		*value = ent->behaviorSet[BSET_FFIRE];
 		break;
-	case SET_FFDEATHSCRIPT://## %s="NULL" !!"W:\game\base\scripts\!!#*.txt" # Script to run when player kills a teammate
+	case SET_FFDEATHSCRIPT://## %s="nullptr" !!"W:\game\base\scripts\!!#*.txt" # Script to run when player kills a teammate
 		*value = ent->behaviorSet[BSET_FFDEATH];
 		break;
 
 	//# #sep Standard strings
-	case SET_TARGETNAME://## %s="NULL" # Set/change your targetname
+	case SET_TARGETNAME://## %s="nullptr" # Set/change your targetname
 		*value = ent->targetname;
 		break;
-	case SET_PAINTARGET://## %s="NULL" # Set/change what to use when hit
+	case SET_PAINTARGET://## %s="nullptr" # Set/change what to use when hit
 		return 0;
 		break;
-	case SET_CAMERA_GROUP://## %s="NULL" # all ents with this cameraGroup will be focused on
+	case SET_CAMERA_GROUP://## %s="nullptr" # all ents with this cameraGroup will be focused on
 		return 0;
 		break;
-	case SET_CAMERA_GROUP_TAG://## %s="NULL" # all ents with this cameraGroup will be focused on
+	case SET_CAMERA_GROUP_TAG://## %s="nullptr" # all ents with this cameraGroup will be focused on
 		return 0;
 		break;
-	case SET_TARGET2://## %s="NULL" # Set/change your target2: on NPC's: this fires when they're knocked out by the red hypo
+	case SET_TARGET2://## %s="nullptr" # Set/change your target2: on NPC's: this fires when they're knocked out by the red hypo
 		return 0;
 		break;
 
@@ -1474,7 +1474,7 @@ int Q3_GetString( int entID, int type, const char *name, char **value )
 		return 0;
 		break;
 
-	case SET_FULLNAME://## %s="NULL" # Set/change your targetname
+	case SET_FULLNAME://## %s="nullptr" # Set/change your targetname
 		*value = ent->fullName;
 		break;
 	default:
@@ -1577,7 +1577,7 @@ static void Q3_SetOrigin( int entID, vec3_t origin )
 // Copies origin of found ent into ent running script
 static void Q3_SetCopyOrigin( int entID, const char *name )
 {
-	gentity_t	*found = G_Find( NULL, FOFS(targetname), (char *) name);
+	gentity_t	*found = G_Find( nullptr, FOFS(targetname), (char *) name);
 
 	if(found)
 	{
@@ -1744,7 +1744,7 @@ static void SetLowerAnim( int entID, int animID)
 		return;
 	}
 
-	G_SetAnim(ent,NULL,SETANIM_LEGS,animID,SETANIM_FLAG_RESTART|SETANIM_FLAG_HOLD|SETANIM_FLAG_OVERRIDE,0);
+	G_SetAnim(ent,nullptr,SETANIM_LEGS,animID,SETANIM_FLAG_RESTART|SETANIM_FLAG_HOLD|SETANIM_FLAG_OVERRIDE,0);
 }
 
 static void SetUpperAnim ( int entID, int animID)
@@ -1763,7 +1763,7 @@ static void SetUpperAnim ( int entID, int animID)
 		return;
 	}
 
-	G_SetAnim(ent,NULL,SETANIM_TORSO,animID,SETANIM_FLAG_RESTART|SETANIM_FLAG_HOLD|SETANIM_FLAG_OVERRIDE,0);
+	G_SetAnim(ent,nullptr,SETANIM_TORSO,animID,SETANIM_FLAG_RESTART|SETANIM_FLAG_HOLD|SETANIM_FLAG_OVERRIDE,0);
 }
 
 // Sets the upper animation of an entity
@@ -1965,7 +1965,7 @@ void Q3_SetLoopSound(int entID, const char *name)
 	sfxHandle_t	index;
 	gentity_t	*self  = &g_entities[entID];
 
-	if ( Q_stricmp( "NULL", name ) == 0 || Q_stricmp( "NONE", name )==0)
+	if ( Q_stricmp( "nullptr", name ) == 0 || Q_stricmp( "NONE", name )==0)
 	{
 		self->s.loopSound = 0;
 		self->s.loopIsSoundset = false;
@@ -1987,10 +1987,10 @@ void Q3_SetLoopSound(int entID, const char *name)
 
 void Q3_SetICARUSFreeze( int entID, const char *name, bool freeze )
 {
-	gentity_t	*self  = G_Find( NULL, FOFS(targetname), name );
+	gentity_t	*self  = G_Find( nullptr, FOFS(targetname), name );
 	if ( !self )
 	{//hmm, targetname failed, try script_targetname?
-		self = G_Find( NULL, FOFS(script_targetname), name );
+		self = G_Find( nullptr, FOFS(script_targetname), name );
 	}
 
 	if ( !self )
@@ -2149,9 +2149,9 @@ static void Q3_SetTargetName (int entID, const char *targetname)
 		return;
 	}
 
-	if(!Q_stricmp("NULL", ((char *)targetname)))
+	if(!Q_stricmp("nullptr", ((char *)targetname)))
 	{
-		self->targetname = NULL;
+		self->targetname = nullptr;
 	}
 	else
 	{
@@ -2169,9 +2169,9 @@ static void Q3_SetTarget (int entID, const char *target)
 		return;
 	}
 
-	if(!Q_stricmp("NULL", ((char *)target)))
+	if(!Q_stricmp("nullptr", ((char *)target)))
 	{
-		self->target = NULL;
+		self->target = nullptr;
 	}
 	else
 	{
@@ -2191,9 +2191,9 @@ static void Q3_SetTarget2 (int entID, const char *target2)
 		return;
 	}
 
-	if(!Q_stricmp("NULL", ((char *)target2)))
+	if(!Q_stricmp("nullptr", ((char *)target2)))
 	{
-		self->target2 = NULL;
+		self->target2 = nullptr;
 	}
 	else
 	{
@@ -2214,9 +2214,9 @@ static void Q3_SetPainTarget (int entID, const char *targetname)
 		return;
 	}
 
-	if(Q_stricmp("NULL", ((char *)targetname)) == 0)
+	if(Q_stricmp("nullptr", ((char *)targetname)) == 0)
 	{
-		self->paintarget = NULL;
+		self->paintarget = nullptr;
 	}
 	else
 	{
@@ -2235,9 +2235,9 @@ static void Q3_SetFullName (int entID, const char *fullName)
 		return;
 	}
 
-	if(!Q_stricmp("NULL", ((char *)fullName)))
+	if(!Q_stricmp("nullptr", ((char *)fullName)))
 	{
-		self->fullName = NULL;
+		self->fullName = nullptr;
 	}
 	else
 	{
@@ -2782,21 +2782,21 @@ static bool Q3_SetBehaviorSet( int entID, int toSet, const char *scriptname)
 		return false;
 	}
 
-	if(!Q_stricmp("NULL", scriptname))
+	if(!Q_stricmp("nullptr", scriptname))
 	{
-		if ( ent->behaviorSet[bSet] != NULL )
+		if ( ent->behaviorSet[bSet] != nullptr )
 		{
 //			trap->TagFree( ent->behaviorSet[bSet] );
 		}
 
-		ent->behaviorSet[bSet] = NULL;
+		ent->behaviorSet[bSet] = nullptr;
 		//memset( &ent->behaviorSet[bSet], 0, sizeof(ent->behaviorSet[bSet]) );
 	}
 	else
 	{
 		if ( scriptname )
 		{
-			if ( ent->behaviorSet[bSet] != NULL )
+			if ( ent->behaviorSet[bSet] != nullptr )
 			{
 //				trap->TagFree( ent->behaviorSet[bSet] );
 			}
@@ -3318,7 +3318,7 @@ bool Q3_Set( int taskID, int entID, const char *type_name, const char *data )
 	case SET_TREASONED:
 		G_DebugPrint( WL_VERBOSE, "SET_TREASONED is disabled, do not use\n" );
 		/*
-		G_TeamRetaliation( NULL, SV_GentityNum(0), false );
+		G_TeamRetaliation( nullptr, SV_GentityNum(0), false );
 		ffireLevel = FFIRE_LEVEL_RETALIATION;
 		*/
 		break;

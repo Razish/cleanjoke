@@ -88,7 +88,7 @@ void SV_AddServerCommand( client_t *client, const char *cmd ) {
 }
 
 // Sends a reliable command string to be interpreted by the client game module: "cp", "print", "chat", etc
-// A NULL client will broadcast to all clients
+// A nullptr client will broadcast to all clients
 void QDECL SV_SendServerCommand(client_t *cl, const char *fmt, ...) {
 	va_list		argptr;
 	byte		message[MAX_MSGLEN];
@@ -107,7 +107,7 @@ void QDECL SV_SendServerCommand(client_t *cl, const char *fmt, ...) {
 		return;
 	}
 
-	if ( cl != NULL ) {
+	if ( cl != nullptr ) {
 		SV_AddServerCommand( cl, (char *)message );
 		return;
 	}
@@ -223,7 +223,7 @@ static leakyBucket_t *bucketHashes[ MAX_HASHES ];
 leakyBucket_t outboundLeakyBucket;
 
 static long SVC_HashForAddress( netadr_t address ) {
-	byte 		*ip = NULL;
+	byte 		*ip = nullptr;
 	size_t	size = 0;
 	long		hash = 0;
 
@@ -244,7 +244,7 @@ static long SVC_HashForAddress( netadr_t address ) {
 
 // Find or allocate a bucket for an address
 static leakyBucket_t *SVC_BucketForAddress( netadr_t address, int burst, int period ) {
-	leakyBucket_t	*bucket = NULL;
+	leakyBucket_t	*bucket = nullptr;
 	int						i;
 	long					hash = SVC_HashForAddress( address );
 	int						now = Sys_Milliseconds();
@@ -271,13 +271,13 @@ static leakyBucket_t *SVC_BucketForAddress( netadr_t address, int burst, int per
 		// Reclaim expired buckets
 		if ( bucket->lastTime > 0 && ( interval > ( burst * period ) ||
 					interval < 0 ) ) {
-			if ( bucket->prev != NULL ) {
+			if ( bucket->prev != nullptr ) {
 				bucket->prev->next = bucket->next;
 			} else {
 				bucketHashes[ bucket->hash ] = bucket->next;
 			}
 
-			if ( bucket->next != NULL ) {
+			if ( bucket->next != nullptr ) {
 				bucket->next->prev = bucket->prev;
 			}
 
@@ -297,11 +297,11 @@ static leakyBucket_t *SVC_BucketForAddress( netadr_t address, int burst, int per
 
 			// Add to the head of the relevant hash chain
 			bucket->next = bucketHashes[ hash ];
-			if ( bucketHashes[ hash ] != NULL ) {
+			if ( bucketHashes[ hash ] != nullptr ) {
 				bucketHashes[ hash ]->prev = bucket;
 			}
 
-			bucket->prev = NULL;
+			bucket->prev = nullptr;
 			bucketHashes[ hash ] = bucket;
 
 			return bucket;
@@ -309,11 +309,11 @@ static leakyBucket_t *SVC_BucketForAddress( netadr_t address, int burst, int per
 	}
 
 	// Couldn't allocate a bucket for this address
-	return NULL;
+	return nullptr;
 }
 
 bool SVC_RateLimit( leakyBucket_t *bucket, int burst, int period ) {
-	if ( bucket != NULL ) {
+	if ( bucket != nullptr ) {
 		int now = Sys_Milliseconds();
 		int interval = now - bucket->lastTime;
 		int expired = interval / period;
@@ -817,7 +817,7 @@ void SV_CheckCvars( void ) {
 		if (sv_ratePolicy->integer == 1)
 		{
 			// NOTE: what if server sets some dumb sv_clientRate value?
-			client_t *cl = NULL;
+			client_t *cl = nullptr;
 			int i = 0;
 
 			for (i = 0, cl = svs.clients; i < sv_maxclients->integer; i++, cl++) {
@@ -837,7 +837,7 @@ void SV_CheckCvars( void ) {
 		else if (sv_ratePolicy->integer == 2)
 		{
 			// NOTE: what if server sets some dumb sv_clientRate value?
-			client_t *cl = NULL;
+			client_t *cl = nullptr;
 			int i = 0;
 
 			for (i = 0, cl = svs.clients; i < sv_maxclients->integer; i++, cl++) {
@@ -874,7 +874,7 @@ void SV_CheckCvars( void ) {
 
 		if (sv_snapsPolicy->integer == 1)
 		{
-			client_t *cl = NULL;
+			client_t *cl = nullptr;
 			int i = 0;
 
 			for (i = 0, cl = svs.clients; i < sv_maxclients->integer; i++, cl++) {
@@ -888,7 +888,7 @@ void SV_CheckCvars( void ) {
 		}
 		else if (sv_snapsPolicy->integer == 2)
 		{
-			client_t *cl = NULL;
+			client_t *cl = nullptr;
 			int i = 0;
 			int minSnaps = Com_Clampi(1, sv_snapsMax->integer, sv_snapsMin->integer); // between 1 and sv_snapsMax ( 1 <-> 40 )
 			int maxSnaps = Q_min(sv_fps->integer, sv_snapsMax->integer); // can't produce more than sv_fps snapshots/sec, but can send less than sv_fps snapshots/sec

@@ -130,7 +130,7 @@ void G_RunExPhys(gentity_t *ent, float gravity, float mass, float bounce, bool a
 		while (i < numG2Bolts)
 		{
 			//Get the position of the actual bolt for this frame
-			trap->G2API_GetBoltMatrix(ent->ghoul2, 0, g2Bolts[i], &matrix, gbmAngles, ent->r.currentOrigin, level.time, NULL, ent->modelScale);
+			trap->G2API_GetBoltMatrix(ent->ghoul2, 0, g2Bolts[i], &matrix, gbmAngles, ent->r.currentOrigin, level.time, nullptr, ent->modelScale);
 			BG_GiveMeVectorFromMatrix(&matrix, ORIGIN, boneOrg);
 
 			//Now add the projected positional difference into the result

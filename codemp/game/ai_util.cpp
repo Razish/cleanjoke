@@ -48,7 +48,7 @@ void B_TempFree(int size)
 void *B_Alloc(int size)
 {
 #ifdef BOT_ZMALLOC
-	void *ptr = NULL;
+	void *ptr = nullptr;
 	int i = 0;
 
 #ifdef BOTMEMTRACK
@@ -134,7 +134,7 @@ void B_Free(void *ptr)
 	{
 		if (BAllocList[i] == ptr)
 		{
-			BAllocList[i] = NULL;
+			BAllocList[i] = nullptr;
 			break;
 		}
 
@@ -172,7 +172,7 @@ void B_CleanupAlloc(void)
 		if (BAllocList[i])
 		{
 			trap->BotFreeMemoryGame(BAllocList[i]);
-			BAllocList[i] = NULL;
+			BAllocList[i] = nullptr;
 		}
 
 		i++;
@@ -315,7 +315,7 @@ int GetPairedValue(char *buf, char *key, char *outbuf)
 		}
 		else
 		{
-			place = NULL;
+			place = nullptr;
 			break;
 		}
 
@@ -493,7 +493,7 @@ int BotDoChat(bot_state_t *bs, char *section, int always)
 			}
 			else
 			{
-				cobject = NULL;
+				cobject = nullptr;
 			}
 
 			if (cobject && cobject->client)

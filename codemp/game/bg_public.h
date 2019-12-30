@@ -1119,7 +1119,7 @@ struct animevent_t {
 	animEventType_t  eventType;
 	unsigned short   keyFrame;                  // Frame to play event on
 	signed short     eventData[AED_ARRAY_SIZE];	// Unique IDs, can be soundIndex of sound file to play OR effect index or footstep type, etc.
-	char            *stringData;                // we allow storage of one string, temporarily (in case we have to look up an index later, then make sure to set stringData to NULL so we only do the look-up once)
+	char            *stringData;                // we allow storage of one string, temporarily (in case we have to look up an index later, then make sure to set stringData to nullptr so we only do the look-up once)
 };
 
 struct bgLoadedAnim_t {
