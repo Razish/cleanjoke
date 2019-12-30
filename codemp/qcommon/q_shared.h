@@ -179,10 +179,6 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 #define QALIGN(x)
 #endif
 
-#ifndef NULL
-#define NULL ((void *)0)
-#endif
-
 #define INT_ID( a, b, c, d ) (uint32_t)((((a) & 0xff) << 24) | (((b) & 0xff) << 16) | (((c) & 0xff) << 8) | ((d) & 0xff))
 
 // the game guarantees that no string from the network will ever
