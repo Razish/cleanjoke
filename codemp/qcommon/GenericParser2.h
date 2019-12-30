@@ -36,7 +36,7 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 #ifdef USE_LOCAL_GENERICPARSER
 #include <memory.h>
 #include <malloc.h>
-#include <string.h>
+#include <cstring>
 #endif
 
 // ======================================================================

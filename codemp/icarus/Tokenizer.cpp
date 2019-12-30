@@ -7,8 +7,8 @@
 #pragma warning(disable : 4244) //conversion from x to x, possible loss of data
 
 #ifndef _WIN32
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
 #endif
 
 enum

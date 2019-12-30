@@ -25,7 +25,7 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 // USER INTERFACE MAIN
 
-#include <stdlib.h>
+#include <cstdlib>
 
 #include "ghoul2/G2.h"
 #include "ui/ui_local.h"

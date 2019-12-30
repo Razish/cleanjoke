@@ -28,7 +28,7 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 // this include must remain at the top of every Icarus CPP file
 #include "icarus/icarus.h"
 
-#include <assert.h>
+#include <cassert>
 
 CSequence::CSequence( void )
 {

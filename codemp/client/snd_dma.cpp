@@ -34,7 +34,7 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 #include "sdl/sdl_sound.h"
 
 #define __STDC_FORMAT_MACROS
-#include <inttypes.h>
+#include <cinttypes>
 
 #if defined(_WIN32)
 #include <Windows.h>
@@ -273,7 +273,7 @@ const GUID EAX_REVERB_EFFECT = { 0xcf95c8f, 0xa3cc, 0x4849, { 0xb0, 0xb6, 0x83, 
 
 // instead of clearing a whole channel_t struct, we're going to skip the MP3SlidingDecodeBuffer[] buffer in the middle...
 #ifndef offsetof
-#include <stddef.h>
+#include <cstddef>
 #endif
 static inline void Channel_Clear(channel_t *ch)
 {

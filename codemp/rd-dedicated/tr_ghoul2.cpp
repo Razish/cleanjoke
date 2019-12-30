@@ -95,9 +95,9 @@ void G2Time_ReportTimers(void)
 
 //rww - RAGDOLL_BEGIN
 #ifdef __linux__
-#include <math.h>
+#include <cmath>
 #else
-#include <float.h>
+#include <cfloat>
 #endif
 
 //rww - RAGDOLL_END

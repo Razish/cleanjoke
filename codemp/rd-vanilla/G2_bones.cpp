@@ -28,9 +28,9 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 //rww - RAGDOLL_BEGIN
 #ifndef __linux__
-#include <float.h>
+#include <cfloat>
 #else
-#include <math.h>
+#include <cmath>
 #endif
 
 #include "game/bg_public.h"

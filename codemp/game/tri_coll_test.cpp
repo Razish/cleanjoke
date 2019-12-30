@@ -30,7 +30,7 @@
  *
  */
 
-#include <math.h>
+#include <cmath>
 #include "qcommon/q_shared.h"
 #include "game/g_local.h"
 

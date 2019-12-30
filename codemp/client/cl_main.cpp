@@ -39,7 +39,7 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 #include "qcommon/stringed_ingame.h"
 #include "sys/sys_loadlib.h"
 #include "ui/ui_public.h"
-#include <limits.h>
+#include <climits>
 
 vec3_t cl_windVec;
 

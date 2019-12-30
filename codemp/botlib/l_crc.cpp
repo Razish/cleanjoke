@@ -24,9 +24,9 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 // CRC calculation
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
+#include <cstdlib>
+#include <cstdio>
+#include <cstring>
 
 #include "qcommon/q_shared.h"
 #include "botlib/botlib.h"

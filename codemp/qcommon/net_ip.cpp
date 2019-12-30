@@ -55,7 +55,7 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 #endif
 
 #include <arpa/inet.h>
-#include <errno.h>
+#include <cerrno>
 #include <netdb.h>
 #include <netinet/in.h>
 #include <sys/ioctl.h>

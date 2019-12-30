@@ -9,7 +9,7 @@
 #include <curses.h>
 #include <unistd.h>
 #endif
-#include <stdio.h>
+#include <cstdio>
 
 #include "icarus/tokenizer.h"
 #include "icarus/blockstream.h"

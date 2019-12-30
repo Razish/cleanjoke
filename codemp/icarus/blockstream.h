@@ -28,7 +28,7 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 // ======================================================================
 
 #include "qcommon/q_common.h"
-#include <stdio.h>
+#include <cstdio>
 
 #include <list>
 #include <vector>

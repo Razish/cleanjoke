@@ -26,7 +26,7 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 //#define __FXCHECKER
 
 #ifdef __FXCHECKER
-	#include <float.h>
+	#include <cfloat>
 #endif // __FXCHECKER
 
 int	FX_RegisterEffect(const char *file)

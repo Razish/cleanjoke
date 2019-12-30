@@ -29,19 +29,19 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 // INCLUDE
 // ======================================================================
 
-#include <assert.h>
+#include <cassert>
 #include <cstdint>
-#include <ctype.h>
-#include <errno.h>
-#include <float.h>
-#include <limits.h>
-#include <math.h>
-#include <stdarg.h>
-#include <stddef.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <time.h>
+#include <cctype>
+#include <cerrno>
+#include <cfloat>
+#include <climits>
+#include <cmath>
+#include <cstdarg>
+#include <cstddef>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <ctime>
 
 #include "qcommon/disablewarnings.h"
 #include "qcommon/q_color.h"
