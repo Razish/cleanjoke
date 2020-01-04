@@ -1,6 +1,6 @@
 /*
 ===========================================================================
-Copyright (C) 2019 - 2019, CleanJoKe contributors
+Copyright (C) 2019 - 2020, CleanJoKe contributors
 
 This file is part of the OpenJK source code.
 
