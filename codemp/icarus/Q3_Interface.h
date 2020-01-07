@@ -53,48 +53,48 @@ typedef enum //# setType_e
 	// ICARUS_InterrogateScript() (game/g_ICARUS.cpp), or the script-precacher won't find them.
 
 	//# #sep Scripts and other file paths
-	SET_SPAWNSCRIPT,//## %s="nullptr" !!"W:\game\base\scripts\!!#*.txt" # Script to run when spawned //0 - do not change these, these are equal to BSET_SPAWN, etc
-	SET_USESCRIPT,//## %s="nullptr" !!"W:\game\base\scripts\!!#*.txt" # Script to run when used
-	SET_AWAKESCRIPT,//## %s="nullptr" !!"W:\game\base\scripts\!!#*.txt" # Script to run when startled
-	SET_ANGERSCRIPT,//## %s="nullptr" !!"W:\game\base\scripts\!!#*.txt" # Script run when find an enemy for the first time
-	SET_ATTACKSCRIPT,//## %s="nullptr" !!"W:\game\base\scripts\!!#*.txt" # Script to run when you shoot
-	SET_VICTORYSCRIPT,//## %s="nullptr" !!"W:\game\base\scripts\!!#*.txt" # Script to run when killed someone
-	SET_LOSTENEMYSCRIPT,//## %s="nullptr" !!"W:\game\base\scripts\!!#*.txt" # Script to run when you can't find your enemy
-	SET_PAINSCRIPT,//## %s="nullptr" !!"W:\game\base\scripts\!!#*.txt" # Script to run when hit
-	SET_FLEESCRIPT,//## %s="nullptr" !!"W:\game\base\scripts\!!#*.txt" # Script to run when hit and low health
-	SET_DEATHSCRIPT,//## %s="nullptr" !!"W:\game\base\scripts\!!#*.txt" # Script to run when killed
-	SET_DELAYEDSCRIPT,//## %s="nullptr" !!"W:\game\base\scripts\!!#*.txt" # Script to run after a delay
-	SET_BLOCKEDSCRIPT,//## %s="nullptr" !!"W:\game\base\scripts\!!#*.txt" # Script to run when blocked by teammate
-	SET_FFIRESCRIPT,//## %s="nullptr" !!"W:\game\base\scripts\!!#*.txt" # Script to run when player has shot own team repeatedly
-	SET_FFDEATHSCRIPT,//## %s="nullptr" !!"W:\game\base\scripts\!!#*.txt" # Script to run when player kills a teammate
-	SET_MINDTRICKSCRIPT,//## %s="nullptr" !!"W:\game\base\scripts\!!#*.txt" # Script to run when player kills a teammate
+	SET_SPAWNSCRIPT,//## %s="NULL" !!"W:\game\base\scripts\!!#*.txt" # Script to run when spawned //0 - do not change these, these are equal to BSET_SPAWN, etc
+	SET_USESCRIPT,//## %s="NULL" !!"W:\game\base\scripts\!!#*.txt" # Script to run when used
+	SET_AWAKESCRIPT,//## %s="NULL" !!"W:\game\base\scripts\!!#*.txt" # Script to run when startled
+	SET_ANGERSCRIPT,//## %s="NULL" !!"W:\game\base\scripts\!!#*.txt" # Script run when find an enemy for the first time
+	SET_ATTACKSCRIPT,//## %s="NULL" !!"W:\game\base\scripts\!!#*.txt" # Script to run when you shoot
+	SET_VICTORYSCRIPT,//## %s="NULL" !!"W:\game\base\scripts\!!#*.txt" # Script to run when killed someone
+	SET_LOSTENEMYSCRIPT,//## %s="NULL" !!"W:\game\base\scripts\!!#*.txt" # Script to run when you can't find your enemy
+	SET_PAINSCRIPT,//## %s="NULL" !!"W:\game\base\scripts\!!#*.txt" # Script to run when hit
+	SET_FLEESCRIPT,//## %s="NULL" !!"W:\game\base\scripts\!!#*.txt" # Script to run when hit and low health
+	SET_DEATHSCRIPT,//## %s="NULL" !!"W:\game\base\scripts\!!#*.txt" # Script to run when killed
+	SET_DELAYEDSCRIPT,//## %s="NULL" !!"W:\game\base\scripts\!!#*.txt" # Script to run after a delay
+	SET_BLOCKEDSCRIPT,//## %s="NULL" !!"W:\game\base\scripts\!!#*.txt" # Script to run when blocked by teammate
+	SET_FFIRESCRIPT,//## %s="NULL" !!"W:\game\base\scripts\!!#*.txt" # Script to run when player has shot own team repeatedly
+	SET_FFDEATHSCRIPT,//## %s="NULL" !!"W:\game\base\scripts\!!#*.txt" # Script to run when player kills a teammate
+	SET_MINDTRICKSCRIPT,//## %s="NULL" !!"W:\game\base\scripts\!!#*.txt" # Script to run when player kills a teammate
 	SET_VIDEO_PLAY,//## %s="filename" !!"W:\game\base\video\!!#*.roq" # Play a video (inGame)
 	SET_CINEMATIC_SKIPSCRIPT, //## %s="filename" !!"W:\game\base\scripts\!!#*.txt" # Script to run when skipping the running cinematic
 
 	//# #sep Standard strings
-	SET_TARGETNAME,//## %s="nullptr" # Set/change your targetname
-	SET_PAINTARGET,//## %s="nullptr" # Set/change what to use when hit
-	SET_CAMERA_GROUP,//## %s="nullptr" # all ents with this cameraGroup will be focused on
-	SET_CAMERA_GROUP_TAG,//## %s="nullptr" # What tag on all clients to try to track
-	SET_ADDRHANDBOLT_MODEL,			//## %s="nullptr" # object to place on NPC right hand bolt
-	SET_REMOVERHANDBOLT_MODEL,		//## %s="nullptr" # object to remove from NPC right hand bolt
-	SET_ADDLHANDBOLT_MODEL,			//## %s="nullptr" # object to place on NPC left hand bolt
-	SET_REMOVELHANDBOLT_MODEL,		//## %s="nullptr" # object to remove from NPC left hand bolt
+	SET_TARGETNAME,//## %s="NULL" # Set/change your targetname
+	SET_PAINTARGET,//## %s="NULL" # Set/change what to use when hit
+	SET_CAMERA_GROUP,//## %s="NULL" # all ents with this cameraGroup will be focused on
+	SET_CAMERA_GROUP_TAG,//## %s="NULL" # What tag on all clients to try to track
+	SET_ADDRHANDBOLT_MODEL,			//## %s="NULL" # object to place on NPC right hand bolt
+	SET_REMOVERHANDBOLT_MODEL,		//## %s="NULL" # object to remove from NPC right hand bolt
+	SET_ADDLHANDBOLT_MODEL,			//## %s="NULL" # object to place on NPC left hand bolt
+	SET_REMOVELHANDBOLT_MODEL,		//## %s="NULL" # object to remove from NPC left hand bolt
 	SET_CAPTIONTEXTCOLOR,	//## %s=""  # Color of text RED,WHITE,BLUE, YELLOW
 	SET_CENTERTEXTCOLOR,	//## %s=""  # Color of text RED,WHITE,BLUE, YELLOW
 	SET_SCROLLTEXTCOLOR,	//## %s=""  # Color of text RED,WHITE,BLUE, YELLOW
 	SET_COPY_ORIGIN,//## %s="targetname"  # Copy the origin of the ent with targetname to your origin
 	SET_DEFEND_TARGET,//## %s="targetname"  # This NPC will attack the target NPC's enemies
-	SET_TARGET,//## %s="nullptr" # Set/change your target
-	SET_TARGET2,//## %s="nullptr" # Set/change your target2, on NPC's, this fires when they're knocked out by the red hypo
+	SET_TARGET,//## %s="NULL" # Set/change your target
+	SET_TARGET2,//## %s="NULL" # Set/change your target2, on NPC's, this fires when they're knocked out by the red hypo
 	SET_LOCATION,//## %s="INVALID" # What trigger_location you're in - Can only be gotten, not set!
 	SET_LOADGAME,//## %s="exitholodeck" # Load the savegame that was auto-saved when you started the holodeck
 	SET_LOCKYAW,//## %s="off"  # Lock legs to a certain yaw angle (or "off" or "auto" uses current)
-	SET_FULLNAME,//## %s="nullptr" # This name will appear when ent is scanned by tricorder
-	SET_VIEWENTITY,//## %s="nullptr" # Make the player look through this ent's eyes - also shunts player movement control to this ent
+	SET_FULLNAME,//## %s="NULL" # This name will appear when ent is scanned by tricorder
+	SET_VIEWENTITY,//## %s="NULL" # Make the player look through this ent's eyes - also shunts player movement control to this ent
 	SET_LOOPSOUND,//## %s="FILENAME" !!"W:\game\base\!!#sound\*.*" # Looping sound to play on entity
-	SET_ICARUS_FREEZE,//## %s="nullptr" # Specify name of entity to freeze - !!!NOTE!!! since the ent is frozen, it cannot unfreeze itself, you must have some other entity unfreeze a frozen ent!!!
-	SET_ICARUS_UNFREEZE,//## %s="nullptr" # Specify name of entity to unfreeze - !!!NOTE!!! since the ent is frozen, it cannot unfreeze itself, you must have some other entity unfreeze a frozen ent!!!
+	SET_ICARUS_FREEZE,//## %s="NULL" # Specify name of entity to freeze - !!!NOTE!!! since the ent is frozen, it cannot unfreeze itself, you must have some other entity unfreeze a frozen ent!!!
+	SET_ICARUS_UNFREEZE,//## %s="NULL" # Specify name of entity to unfreeze - !!!NOTE!!! since the ent is frozen, it cannot unfreeze itself, you must have some other entity unfreeze a frozen ent!!!
 
 	SET_SCROLLTEXT,	//## %s="" # key of text string to print
 	SET_LCARSTEXT,	//## %s="" # key of text string to print in LCARS frame
@@ -110,7 +110,7 @@ typedef enum //# setType_e
 	SET_ZVELOCITY,//## %f="0.0" # Velocity along Z axis
 	SET_Z_OFFSET,//## %f="0.0" # Vertical offset from original origin... offset/ent's speed * 1000ms is duration
 	SET_TIMESCALE,//## %f="0.0" # Speed-up slow down game (0 - 1.0)
-	SET_CAMERA_GROUP_Z_OFS,//## %s="nullptr" # when following an ent with the camera, apply this z ofs
+	SET_CAMERA_GROUP_Z_OFS,//## %s="NULL" # when following an ent with the camera, apply this z ofs
 	SET_GRAVITY,//## %f="0.0" # Change this ent's gravity - 800 default
 	SET_FACEAUX,		//## %f="0.0" # Set face to Aux expression for number of seconds
 	SET_FACEBLINK,		//## %f="0.0" # Set face to Blink expression for number of seconds

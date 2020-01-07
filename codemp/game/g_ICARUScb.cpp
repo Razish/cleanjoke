@@ -1073,7 +1073,7 @@ int Q3_GetFloat( int entID, int type, const char *name, float *value )
 	case SET_TIMESCALE://## %f="0.0" # Speed-up slow down game (0 - 1.0)
 		return 0;
 		break;
-	case SET_CAMERA_GROUP_Z_OFS://## %s="nullptr" # all ents with this cameraGroup will be focused on
+	case SET_CAMERA_GROUP_Z_OFS://## %s="NULL" # all ents with this cameraGroup will be focused on
 		return 0;
 		break;
 
@@ -1362,63 +1362,63 @@ int Q3_GetString( int entID, int type, const char *name, char **value )
 		break;
 
 	//# #sep Scripts and other file paths
-	case SET_SPAWNSCRIPT://## %s="nullptr" !!"W:\game\base\scripts\!!#*.txt" # Script to run when spawned //0 - do not change these, these are equal to BSET_SPAWN, etc
+	case SET_SPAWNSCRIPT://## %s="NULL" !!"W:\game\base\scripts\!!#*.txt" # Script to run when spawned //0 - do not change these, these are equal to BSET_SPAWN, etc
 		*value = ent->behaviorSet[BSET_SPAWN];
 		break;
-	case SET_USESCRIPT://## %s="nullptr" !!"W:\game\base\scripts\!!#*.txt" # Script to run when used
+	case SET_USESCRIPT://## %s="NULL" !!"W:\game\base\scripts\!!#*.txt" # Script to run when used
 		*value = ent->behaviorSet[BSET_USE];
 		break;
-	case SET_AWAKESCRIPT://## %s="nullptr" !!"W:\game\base\scripts\!!#*.txt" # Script to run when startled
+	case SET_AWAKESCRIPT://## %s="NULL" !!"W:\game\base\scripts\!!#*.txt" # Script to run when startled
 		*value = ent->behaviorSet[BSET_AWAKE];
 		break;
-	case SET_ANGERSCRIPT://## %s="nullptr" !!"W:\game\base\scripts\!!#*.txt" # Script run when find an enemy for the first time
+	case SET_ANGERSCRIPT://## %s="NULL" !!"W:\game\base\scripts\!!#*.txt" # Script run when find an enemy for the first time
 		*value = ent->behaviorSet[BSET_ANGER];
 		break;
-	case SET_ATTACKSCRIPT://## %s="nullptr" !!"W:\game\base\scripts\!!#*.txt" # Script to run when you shoot
+	case SET_ATTACKSCRIPT://## %s="NULL" !!"W:\game\base\scripts\!!#*.txt" # Script to run when you shoot
 		*value = ent->behaviorSet[BSET_ATTACK];
 		break;
-	case SET_VICTORYSCRIPT://## %s="nullptr" !!"W:\game\base\scripts\!!#*.txt" # Script to run when killed someone
+	case SET_VICTORYSCRIPT://## %s="NULL" !!"W:\game\base\scripts\!!#*.txt" # Script to run when killed someone
 		*value = ent->behaviorSet[BSET_VICTORY];
 		break;
-	case SET_LOSTENEMYSCRIPT://## %s="nullptr" !!"W:\game\base\scripts\!!#*.txt" # Script to run when you can't find your enemy
+	case SET_LOSTENEMYSCRIPT://## %s="NULL" !!"W:\game\base\scripts\!!#*.txt" # Script to run when you can't find your enemy
 		*value = ent->behaviorSet[BSET_LOSTENEMY];
 		break;
-	case SET_PAINSCRIPT://## %s="nullptr" !!"W:\game\base\scripts\!!#*.txt" # Script to run when hit
+	case SET_PAINSCRIPT://## %s="NULL" !!"W:\game\base\scripts\!!#*.txt" # Script to run when hit
 		*value = ent->behaviorSet[BSET_PAIN];
 		break;
-	case SET_FLEESCRIPT://## %s="nullptr" !!"W:\game\base\scripts\!!#*.txt" # Script to run when hit and low health
+	case SET_FLEESCRIPT://## %s="NULL" !!"W:\game\base\scripts\!!#*.txt" # Script to run when hit and low health
 		*value = ent->behaviorSet[BSET_FLEE];
 		break;
-	case SET_DEATHSCRIPT://## %s="nullptr" !!"W:\game\base\scripts\!!#*.txt" # Script to run when killed
+	case SET_DEATHSCRIPT://## %s="NULL" !!"W:\game\base\scripts\!!#*.txt" # Script to run when killed
 		*value = ent->behaviorSet[BSET_DEATH];
 		break;
-	case SET_DELAYEDSCRIPT://## %s="nullptr" !!"W:\game\base\scripts\!!#*.txt" # Script to run after a delay
+	case SET_DELAYEDSCRIPT://## %s="NULL" !!"W:\game\base\scripts\!!#*.txt" # Script to run after a delay
 		*value = ent->behaviorSet[BSET_DELAYED];
 		break;
-	case SET_BLOCKEDSCRIPT://## %s="nullptr" !!"W:\game\base\scripts\!!#*.txt" # Script to run when blocked by teammate
+	case SET_BLOCKEDSCRIPT://## %s="NULL" !!"W:\game\base\scripts\!!#*.txt" # Script to run when blocked by teammate
 		*value = ent->behaviorSet[BSET_BLOCKED];
 		break;
-	case SET_FFIRESCRIPT://## %s="nullptr" !!"W:\game\base\scripts\!!#*.txt" # Script to run when player has shot own team repeatedly
+	case SET_FFIRESCRIPT://## %s="NULL" !!"W:\game\base\scripts\!!#*.txt" # Script to run when player has shot own team repeatedly
 		*value = ent->behaviorSet[BSET_FFIRE];
 		break;
-	case SET_FFDEATHSCRIPT://## %s="nullptr" !!"W:\game\base\scripts\!!#*.txt" # Script to run when player kills a teammate
+	case SET_FFDEATHSCRIPT://## %s="NULL" !!"W:\game\base\scripts\!!#*.txt" # Script to run when player kills a teammate
 		*value = ent->behaviorSet[BSET_FFDEATH];
 		break;
 
 	//# #sep Standard strings
-	case SET_TARGETNAME://## %s="nullptr" # Set/change your targetname
+	case SET_TARGETNAME://## %s="NULL" # Set/change your targetname
 		*value = ent->targetname;
 		break;
-	case SET_PAINTARGET://## %s="nullptr" # Set/change what to use when hit
+	case SET_PAINTARGET://## %s="NULL" # Set/change what to use when hit
 		return 0;
 		break;
-	case SET_CAMERA_GROUP://## %s="nullptr" # all ents with this cameraGroup will be focused on
+	case SET_CAMERA_GROUP://## %s="NULL" # all ents with this cameraGroup will be focused on
 		return 0;
 		break;
-	case SET_CAMERA_GROUP_TAG://## %s="nullptr" # all ents with this cameraGroup will be focused on
+	case SET_CAMERA_GROUP_TAG://## %s="NULL" # all ents with this cameraGroup will be focused on
 		return 0;
 		break;
-	case SET_TARGET2://## %s="nullptr" # Set/change your target2: on NPC's: this fires when they're knocked out by the red hypo
+	case SET_TARGET2://## %s="NULL" # Set/change your target2: on NPC's: this fires when they're knocked out by the red hypo
 		return 0;
 		break;
 
@@ -1474,7 +1474,7 @@ int Q3_GetString( int entID, int type, const char *name, char **value )
 		return 0;
 		break;
 
-	case SET_FULLNAME://## %s="nullptr" # Set/change your targetname
+	case SET_FULLNAME://## %s="NULL" # Set/change your targetname
 		*value = ent->fullName;
 		break;
 	default:
@@ -1965,7 +1965,7 @@ void Q3_SetLoopSound(int entID, const char *name)
 	sfxHandle_t	index;
 	gentity_t	*self  = &g_entities[entID];
 
-	if ( Q_stricmp( "nullptr", name ) == 0 || Q_stricmp( "NONE", name )==0)
+	if ( Q_stricmp( "NULL", name ) == 0 || Q_stricmp( "NONE", name )==0)
 	{
 		self->s.loopSound = 0;
 		self->s.loopIsSoundset = false;
@@ -2149,7 +2149,7 @@ static void Q3_SetTargetName (int entID, const char *targetname)
 		return;
 	}
 
-	if(!Q_stricmp("nullptr", ((char *)targetname)))
+	if(!Q_stricmp("NULL", ((char *)targetname)))
 	{
 		self->targetname = nullptr;
 	}
@@ -2169,7 +2169,7 @@ static void Q3_SetTarget (int entID, const char *target)
 		return;
 	}
 
-	if(!Q_stricmp("nullptr", ((char *)target)))
+	if(!Q_stricmp("NULL", ((char *)target)))
 	{
 		self->target = nullptr;
 	}
@@ -2191,7 +2191,7 @@ static void Q3_SetTarget2 (int entID, const char *target2)
 		return;
 	}
 
-	if(!Q_stricmp("nullptr", ((char *)target2)))
+	if(!Q_stricmp("NULL", ((char *)target2)))
 	{
 		self->target2 = nullptr;
 	}
@@ -2214,7 +2214,7 @@ static void Q3_SetPainTarget (int entID, const char *targetname)
 		return;
 	}
 
-	if(Q_stricmp("nullptr", ((char *)targetname)) == 0)
+	if(Q_stricmp("NULL", ((char *)targetname)) == 0)
 	{
 		self->paintarget = nullptr;
 	}
@@ -2235,7 +2235,7 @@ static void Q3_SetFullName (int entID, const char *fullName)
 		return;
 	}
 
-	if(!Q_stricmp("nullptr", ((char *)fullName)))
+	if(!Q_stricmp("NULL", ((char *)fullName)))
 	{
 		self->fullName = nullptr;
 	}
@@ -2782,7 +2782,7 @@ static bool Q3_SetBehaviorSet( int entID, int toSet, const char *scriptname)
 		return false;
 	}
 
-	if(!Q_stricmp("nullptr", scriptname))
+	if(!Q_stricmp("NULL", scriptname))
 	{
 		if ( ent->behaviorSet[bSet] != nullptr )
 		{

@@ -50,7 +50,7 @@ stringID_table_t StanceTable[] =
 //Weapon and force power tables are also used in NPC parsing code and some other places.
 stringID_table_t WPTable[] =
 {
-	{"nullptr",WP_NONE},
+	{"NULL",WP_NONE},
 	ENUM2STRING(WP_NONE),
 	// Player weapons
 	ENUM2STRING(WP_STUN_BATON),

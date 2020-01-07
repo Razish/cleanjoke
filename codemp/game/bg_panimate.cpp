@@ -2030,7 +2030,7 @@ void ParseAnimationEvtBlock(const char *aeb_filename, animevent_t *animEvents, a
 			{
 				break;
 			}
-			if ( Q_stricmp( "none", token ) != 0 && Q_stricmp( "nullptr", token ) != 0 )
+			if ( Q_stricmp( "none", token ) != 0 && Q_stricmp( "NULL", token ) != 0 )
 			{//actually are specifying a bolt to use
 				if (!animEvents[curAnimEvent].stringData)
 				{ //eh, whatever. no dynamic stuff, so this will do.

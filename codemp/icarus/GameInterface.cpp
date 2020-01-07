@@ -362,7 +362,7 @@ void ICARUS_InterrogateScript( const char *filename )
 	CBlockMember	*blockMember;
 	CBlock			block;
 
-	if (!Q_stricmp(filename,"nullptr") || !Q_stricmp(filename,"default"))
+	if (!Q_stricmp(filename,"NULL") || !Q_stricmp(filename,"default"))
 		return;
 
 	// ensure "scripts" (Q3_SCRIPT_DIR), which will be missing if this was called recursively...
